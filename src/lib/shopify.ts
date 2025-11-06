@@ -3,7 +3,7 @@ import { toast } from "sonner";
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = '6b5c8a09b89d98e971910f1e1cc33208';
+const SHOPIFY_STOREFRONT_TOKEN = '7cbe5db692c6e99cace4349ec8ac749a';
 
 export interface ShopifyProduct {
   node: {
