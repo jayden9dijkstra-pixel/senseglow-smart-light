@@ -178,10 +178,14 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
 
 export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[]> {
   try {
+    console.log('🛍️ Fetching products from Shopify...');
     const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: limit });
-    return data?.data?.products?.edges || [];
+    console.log('📦 Products data received:', data);
+    const products = data?.data?.products?.edges || [];
+    console.log('✅ Found', products.length, 'products');
+    return products;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('❌ Error fetching products:', error);
     return [];
   }
 }
