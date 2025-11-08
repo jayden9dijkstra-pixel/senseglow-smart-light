@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
-import { toast } from "sonner";
 
-export const CartDrawer = () => {
+export const CartDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { 
     items, 
@@ -36,9 +35,6 @@ export const CartDrawer = () => {
       }
     } catch (error) {
       console.error('Checkout failed:', error);
-      toast.error('Checkout failed', {
-        description: 'Unable to create checkout. Please try again.',
-      });
     }
   };
 
