@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
+import { toast } from 'sonner';
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -53,8 +54,14 @@ export const useCartStore = create<CartStore>()(
                 : i
             )
           });
+          toast.success('Toegevoegd aan winkelwagen', {
+            description: `${item.product.node.title} (${existingItem.quantity + item.quantity}x)`,
+          });
         } else {
           set({ items: [...items, item] });
+          toast.success('Toegevoegd aan winkelwagen', {
+            description: item.product.node.title,
+          });
         }
       },
 
@@ -75,6 +82,7 @@ export const useCartStore = create<CartStore>()(
         set({
           items: get().items.filter(item => item.variantId !== variantId)
         });
+        toast.info('Verwijderd uit winkelwagen');
       },
 
       clearCart: () => {
@@ -95,6 +103,10 @@ export const useCartStore = create<CartStore>()(
           setCheckoutUrl(checkoutUrl);
         } catch (error) {
           console.error('Failed to create checkout:', error);
+          toast.error('Checkout mislukt', {
+            description: 'Probeer het opnieuw.',
+          });
+          throw error;
         } finally {
           setLoading(false);
         }
