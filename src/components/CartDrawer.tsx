@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,8 +12,8 @@ import {
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 
-export const CartDrawer: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export function CartDrawer() {
+  const [isOpen, setIsOpen] = React.useState(false);
   const { 
     items, 
     isLoading, 
@@ -161,4 +161,4 @@ export const CartDrawer: React.FC = () => {
       </SheetContent>
     </Sheet>
   );
-};
+}
