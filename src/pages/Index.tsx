@@ -31,11 +31,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-20 items-center justify-center relative">
+        <div className="container flex h-24 items-center justify-center relative">
           <img 
             src={logo} 
             alt="SenseGlow Logo" 
-            className="h-12 w-auto"
+            className="h-16 w-auto object-contain"
           />
           <div className="absolute right-0">
             <CartDrawer />
