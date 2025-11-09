@@ -31,7 +31,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-24 items-center justify-center relative">
+        <div className="container flex h-28 items-center justify-center relative py-3">
           <button 
             onClick={() => navigate("/")}
             className="cursor-pointer hover:opacity-80 transition-opacity"
