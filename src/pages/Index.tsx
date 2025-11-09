@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { WhySection } from "@/components/WhySection";
 import { LifestyleSection } from "@/components/LifestyleSection";
 import { FAQSection } from "@/components/FAQSection";
+import heroImage from "@/assets/hero-background.jpg";
 
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -37,32 +38,58 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-accent/5">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_hsl(var(--glow)/0.15)_0%,_transparent_65%)]" />
-        
-        <div className="relative z-10 text-center px-4 py-20">
-          <div className="inline-block px-4 py-2 bg-glow/10 rounded-full mb-6 animate-pulse">
-            <span className="text-sm font-medium text-glow">Premium LED-verlichting met bewegingssensor</span>
+      {/* USP Banner */}
+      <section className="bg-brand-orange py-3">
+        <div className="container">
+          <div className="flex flex-wrap justify-center gap-6 text-white text-sm font-medium">
+            <span>✓ Gratis Verzending</span>
+            <span>✓ 30 dagen bedenktijd</span>
+            <span>✓ Veilig Betalen</span>
+            <span>✓ Altijd Gratis Verzending</span>
           </div>
-          
-          <h2 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Licht dat meegaat
-            <br />
-            <span className="text-glow">met je leven</span>
-          </h2>
-          
-          <p className="text-xl md:text-2xl mb-10 text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Veiligheid, gemak en design — automatisch
-          </p>
-          
-          <Button
-            onClick={() => navigate("/quiz")}
-            size="lg"
-            className="bg-glow hover:bg-glow/90 text-white shadow-2xl shadow-glow/30 hover:shadow-glow/50 transition-all text-lg px-8 py-6 h-auto"
-          >
-            Ontdek jouw ideale SenseGlow
-          </Button>
+        </div>
+      </section>
+
+      {/* Hero Section */}
+      <section className="bg-brand-orange py-12 md:py-20">
+        <div className="container">
+          <div className="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+            {/* Left - Product Image */}
+            <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-2xl">
+              <img 
+                src={heroImage} 
+                alt="SenseGlow LED lamp in actie"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            {/* Right - Content */}
+            <div className="bg-brand-orange-light rounded-3xl p-8 md:p-12">
+              <div className="flex items-center gap-1 mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-brand-orange text-xl">⭐</span>
+                ))}
+                <span className="ml-2 font-semibold text-foreground">Gebaseerd op 1000+ Reviews</span>
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-brand-orange leading-tight">
+                Automatisch licht. Precies wanneer jij het nodig hebt.
+              </h2>
+              
+              <p className="text-lg mb-6 text-foreground leading-relaxed">
+                Onze slimme LED lamp met bewegings-sensor combineert <strong>veiligheid</strong> en <strong>design</strong> in één oplossing. 
+                Zodra je beweegt, verschijnt er een <strong>warme gloed</strong> die je huis veiliger, rustiger en stijlvoller maakt.
+              </p>
+              
+              <Button
+                onClick={() => navigate("/quiz")}
+                size="lg"
+                className="bg-brand-orange hover:bg-brand-orange/90 text-white shadow-xl text-lg px-10 py-6 h-auto rounded-full font-semibold"
+              >
+                Ontdek de SenseGlow nu!
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 

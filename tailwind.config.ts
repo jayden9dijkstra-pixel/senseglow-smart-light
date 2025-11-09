@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--glow))",
           light: "hsl(var(--glow-light))",
         },
+        brand: {
+          orange: "hsl(var(--brand-orange))",
+          "orange-light": "hsl(var(--brand-orange-light))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
