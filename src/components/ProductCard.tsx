@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ShoppingCart } from "lucide-react";
@@ -37,7 +38,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="aspect-square bg-secondary/20 overflow-hidden">
+      <Link to={`/product/${product.node.handle}`}>
+        <div className="aspect-square bg-secondary/20 overflow-hidden cursor-pointer">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -49,7 +51,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             No image
           </div>
         )}
-      </div>
+        </div>
+      </Link>
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg mb-2">{product.node.title}</h3>
         {product.node.description && (
