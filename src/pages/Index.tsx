@@ -30,21 +30,51 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-32 items-center justify-center relative py-2">
-          <button 
-            onClick={() => navigate("/")}
-            className="cursor-pointer hover:opacity-80 transition-opacity"
-            aria-label="Ga naar homepage"
-          >
-            <img 
-              src={logo} 
-              alt="SenseGlow Logo" 
-              className="h-28 w-auto object-contain"
-            />
-          </button>
-          <div className="absolute right-0">
-            <CartDrawer />
+      <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+        <div className="container">
+          <div className="flex h-32 items-center justify-between relative py-2">
+            <button 
+              onClick={() => navigate("/")}
+              className="cursor-pointer hover:opacity-80 transition-opacity"
+              aria-label="Ga naar homepage"
+            >
+              <img 
+                src={logo} 
+                alt="SenseGlow Logo" 
+                className="h-28 w-auto object-contain"
+              />
+            </button>
+            
+            <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+              <a 
+                href="#home" 
+                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
+              >
+                Home
+              </a>
+              <a 
+                href="#waarom" 
+                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
+              >
+                Waarom
+              </a>
+              <a 
+                href="#products" 
+                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
+              >
+                Producten
+              </a>
+              <a 
+                href="#faq" 
+                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
+              >
+                FAQ
+              </a>
+            </nav>
+            
+            <div className="flex items-center gap-4">
+              <CartDrawer />
+            </div>
           </div>
         </div>
       </header>
@@ -62,7 +92,7 @@ const Index = () => {
       </section>
 
       {/* Hero Section */}
-      <section className="bg-brand-orange py-12 md:py-20">
+      <section id="home" className="bg-brand-orange py-12 md:py-20">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
             {/* Left - Product Image */}
@@ -105,7 +135,9 @@ const Index = () => {
       </section>
 
       {/* Why SenseGlow */}
-      <WhySection />
+      <div id="waarom">
+        <WhySection />
+      </div>
 
       {/* Lifestyle & Reviews */}
       <LifestyleSection />
@@ -140,7 +172,9 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <FAQSection />
+      <div id="faq">
+        <FAQSection />
+      </div>
 
       {/* Footer */}
       <footer className="border-t bg-muted/30">
