@@ -9,6 +9,7 @@ import { WhySection } from "@/components/WhySection";
 import { LifestyleSection } from "@/components/LifestyleSection";
 import { FAQSection } from "@/components/FAQSection";
 import { MobileMenu } from "@/components/MobileMenu";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import heroImage from "@/assets/hero-lifestyle.png";
 import logo from "@/assets/logo.png";
 
@@ -179,6 +180,9 @@ const Index = () => {
       <div id="faq">
         <FAQSection />
       </div>
+
+      {/* Scroll to Top */}
+      <ScrollToTop />
 
       {/* Footer */}
       <footer className="border-t bg-muted/30">
