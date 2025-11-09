@@ -9,6 +9,7 @@ import { WhySection } from "@/components/WhySection";
 import { LifestyleSection } from "@/components/LifestyleSection";
 import { FAQSection } from "@/components/FAQSection";
 import heroImage from "@/assets/hero-lifestyle.png";
+import logo from "@/assets/logo.png";
 
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -29,12 +30,16 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold">SenseGlow™</h1>
+      <header className="sticky top-0 z-50 w-full border-b bg-white">
+        <div className="container flex h-20 items-center justify-center relative">
+          <img 
+            src={logo} 
+            alt="SenseGlow Logo" 
+            className="h-12 w-auto"
+          />
+          <div className="absolute right-0">
+            <CartDrawer />
           </div>
-          <CartDrawer />
         </div>
       </header>
 
