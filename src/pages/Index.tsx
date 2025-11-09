@@ -31,7 +31,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-20 items-center justify-center relative py-2">
+        <div className="container flex h-20 items-center justify-center relative">
           <button 
             onClick={() => navigate("/")}
             className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -40,7 +40,7 @@ const Index = () => {
             <img 
               src={logo} 
               alt="SenseGlow Logo" 
-              className="h-full w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
           </button>
           <div className="absolute right-0">
