@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { WhySection } from "@/components/WhySection";
 import { LifestyleSection } from "@/components/LifestyleSection";
 import { FAQSection } from "@/components/FAQSection";
+import { MobileMenu } from "@/components/MobileMenu";
 import heroImage from "@/assets/hero-lifestyle.png";
 import logo from "@/assets/logo.png";
 
@@ -72,7 +73,8 @@ const Index = () => {
               </a>
             </nav>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <MobileMenu />
               <CartDrawer />
             </div>
           </div>
