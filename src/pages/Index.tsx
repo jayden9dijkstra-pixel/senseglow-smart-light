@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { WhySection } from "@/components/WhySection";
 import { LifestyleSection } from "@/components/LifestyleSection";
 import { FAQSection } from "@/components/FAQSection";
-import heroImage from "@/assets/hero-background.jpg";
+import heroImage from "@/assets/hero-lifestyle.png";
 
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
