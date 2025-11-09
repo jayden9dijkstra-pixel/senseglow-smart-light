@@ -31,16 +31,16 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-32 items-center justify-center relative py-1">
+        <div className="container flex h-37 items-center justify-center relative py-1">
           <button 
             onClick={() => navigate("/")}
-            className="cursor-pointer hover:opacity-80 transition-opacity h-full py-1"
+            className="cursor-pointer hover:opacity-80 transition-opacity"
             aria-label="Ga naar homepage"
           >
             <img 
               src={logo} 
               alt="SenseGlow Logo" 
-              className="h-full w-auto object-contain"
+              className="h-36 w-auto object-contain"
             />
           </button>
           <div className="absolute right-0">
