@@ -25,6 +25,7 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [bundleQuantity, setBundleQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -244,21 +245,31 @@ const ProductDetail = () => {
               {/* Thumbnails */}
               <div className="flex flex-col gap-3 w-20">
                 {[imageUrl, productDetail1, productDetail2, productDetail3, productDetail4].slice(0, 5).map((img, idx) => (
-                  <div key={idx} className="aspect-square bg-muted/30 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImageIndex(idx)}
+                    className={`aspect-square bg-muted/30 rounded-md overflow-hidden cursor-pointer border-2 transition-all hover:border-brand-orange ${
+                      selectedImageIndex === idx ? 'border-brand-orange ring-2 ring-brand-orange ring-offset-2' : 'border-transparent'
+                    }`}
+                  >
                     <img src={img} alt={`Beeld ${idx + 1}`} className="w-full h-full object-cover" />
-                  </div>
+                  </button>
                 ))}
               </div>
               
               {/* Main Image */}
               <div className="flex-1 aspect-square bg-muted/30 rounded-lg overflow-hidden">
-                {imageUrl && (
-                  <img
-                    src={imageUrl}
-                    alt={product.node.title}
-                    className="w-full h-full object-cover"
-                  />
-                )}
+                {(() => {
+                  const images = [imageUrl, productDetail1, productDetail2, productDetail3, productDetail4].slice(0, 5);
+                  const currentImage = images[selectedImageIndex];
+                  return currentImage && (
+                    <img
+                      src={currentImage}
+                      alt={product.node.title}
+                      className="w-full h-full object-cover animate-fade-in"
+                    />
+                  );
+                })()}
               </div>
             </div>
 
