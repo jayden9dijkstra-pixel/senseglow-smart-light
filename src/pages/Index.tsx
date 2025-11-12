@@ -11,6 +11,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { MobileMenu } from "@/components/MobileMenu";
 import { DesktopMenu } from "@/components/DesktopMenu";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { PageTransition } from "@/components/PageTransition";
 import heroImage from "@/assets/hero-lifestyle.png";
 import logo from "@/assets/logo.png";
 import logoNew from "@/assets/logo-new.png";
@@ -32,7 +33,8 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageTransition>
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
@@ -238,6 +240,7 @@ const Index = () => {
         </div>
       </footer>
     </div>
+    </PageTransition>
   );
 };
 

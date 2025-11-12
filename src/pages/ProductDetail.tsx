@@ -9,6 +9,7 @@ import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, C
 import { CartDrawer } from "@/components/CartDrawer";
 import { MobileMenu } from "@/components/MobileMenu";
 import { DesktopMenu } from "@/components/DesktopMenu";
+import { PageTransition } from "@/components/PageTransition";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShopifyProduct, fetchProducts } from "@/lib/shopify";
@@ -180,7 +181,8 @@ const ProductDetail = () => {
   const imageUrl = product.node.images?.edges?.[0]?.node?.url;
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageTransition>
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
@@ -786,6 +788,7 @@ const ProductDetail = () => {
         </div>
       </section>
     </div>
+    </PageTransition>
   );
 };
 
