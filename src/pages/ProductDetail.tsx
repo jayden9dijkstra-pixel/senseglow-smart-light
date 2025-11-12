@@ -184,10 +184,10 @@ const ProductDetail = () => {
       <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
         {/* Top bar with icons and logo */}
         <div className="container">
-          <div className="flex h-24 items-center justify-between">
+          <div className="flex h-32 items-center justify-between py-4">
             {/* Left - Search Icon */}
             <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
+              <Search className="h-6 w-6" />
             </Button>
             
             {/* Center - Logo */}
@@ -199,14 +199,14 @@ const ProductDetail = () => {
               <img 
                 src={logo} 
                 alt="SenseGlow Logo" 
-                className="h-16 w-auto object-contain"
+                className="h-24 w-auto object-contain"
               />
             </button>
             
             {/* Right - Account & Cart */}
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
+                <User className="h-6 w-6" />
               </Button>
               <CartDrawer />
             </div>
@@ -216,7 +216,7 @@ const ProductDetail = () => {
         {/* Bottom bar with navigation */}
         <div className="border-t bg-white">
           <div className="container">
-            <nav className="flex items-center justify-center gap-8 py-3">
+            <nav className="flex items-center justify-center gap-8 py-4">
               <a 
                 href="/#home" 
                 className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
