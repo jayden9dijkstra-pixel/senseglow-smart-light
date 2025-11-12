@@ -6,10 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, CreditCard } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
+import { MobileMenu } from "@/components/MobileMenu";
+import { DesktopMenu } from "@/components/DesktopMenu";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShopifyProduct, fetchProducts } from "@/lib/shopify";
 import logo from "@/assets/logo.png";
+import { useNavigate } from "react-router-dom";
 import productDetail1 from "@/assets/product-detail-1.png";
 import productDetail2 from "@/assets/product-detail-2.png";
 import productDetail3 from "@/assets/product-detail-3.png";
@@ -17,6 +20,7 @@ import productDetail4 from "@/assets/product-detail-4.png";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
@@ -103,13 +107,32 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b sticky top-0 bg-white shadow-sm z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <img src={logo} alt="SenseGlow" className="h-12" />
-            </Link>
-            <CartDrawer />
+      <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+        <div className="container">
+          <div className="flex h-20 items-center justify-between">
+            {/* Left - Menu Dropdown */}
+            <div className="flex items-center gap-2">
+              <DesktopMenu />
+              <MobileMenu />
+            </div>
+            
+            {/* Center - Logo */}
+            <button 
+              onClick={() => navigate("/")}
+              className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer hover:opacity-80 transition-opacity"
+              aria-label="Ga naar homepage"
+            >
+              <img 
+                src={logo} 
+                alt="SenseGlow Logo" 
+                className="h-16 w-auto object-contain"
+              />
+            </button>
+            
+            {/* Right - Cart */}
+            <div className="flex items-center">
+              <CartDrawer />
+            </div>
           </div>
         </div>
       </header>

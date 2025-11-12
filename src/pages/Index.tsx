@@ -9,6 +9,7 @@ import { WhySection } from "@/components/WhySection";
 import { LifestyleSection } from "@/components/LifestyleSection";
 import { FAQSection } from "@/components/FAQSection";
 import { MobileMenu } from "@/components/MobileMenu";
+import { DesktopMenu } from "@/components/DesktopMenu";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import heroImage from "@/assets/hero-lifestyle.png";
 import logo from "@/assets/logo.png";
@@ -35,9 +36,16 @@ const Index = () => {
       <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
         <div className="container">
           <div className="flex h-20 items-center justify-between">
+            {/* Left - Menu Dropdown */}
+            <div className="flex items-center gap-2">
+              <DesktopMenu />
+              <MobileMenu />
+            </div>
+            
+            {/* Center - Logo */}
             <button 
               onClick={() => navigate("/")}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
+              className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer hover:opacity-80 transition-opacity"
               aria-label="Ga naar homepage"
             >
               <img 
@@ -47,35 +55,8 @@ const Index = () => {
               />
             </button>
             
-            <nav className="hidden md:flex items-center gap-8 text-sm uppercase tracking-wide font-medium">
-              <a 
-                href="#home" 
-                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
-              >
-                Homepagina
-              </a>
-              <a 
-                href="#waarom" 
-                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
-              >
-                Winkel
-              </a>
-              <a 
-                href="#products" 
-                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
-              >
-                Contact
-              </a>
-              <a 
-                href="#faq" 
-                className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
-              >
-                Over ons
-              </a>
-            </nav>
-            
-            <div className="flex items-center gap-2">
-              <MobileMenu />
+            {/* Right - Cart */}
+            <div className="flex items-center">
               <CartDrawer />
             </div>
           </div>
