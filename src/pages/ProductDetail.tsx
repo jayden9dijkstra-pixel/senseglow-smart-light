@@ -95,6 +95,17 @@ const ProductDetail = () => {
     }
   }, [selectedColor, selectedSize, product]);
 
+  // Debug: Log product options
+  useEffect(() => {
+    if (product) {
+      console.log('🎨 Product options:', product.node.options);
+      console.log('🎨 Product variants:', product.node.variants.edges.map(e => ({
+        title: e.node.title,
+        options: e.node.selectedOptions
+      })));
+    }
+  }, [product]);
+
   const handleAddToCart = () => {
     if (!product || !selectedVariant) return;
 
