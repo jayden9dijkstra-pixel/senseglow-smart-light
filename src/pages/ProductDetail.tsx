@@ -3,8 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, CreditCard, Search, User } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, CreditCard, Search, User, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { MobileMenu } from "@/components/MobileMenu";
 import { DesktopMenu } from "@/components/DesktopMenu";
@@ -26,6 +27,7 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [bundleQuantity, setBundleQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -258,7 +260,10 @@ const ProductDetail = () => {
               </div>
               
               {/* Main Image */}
-              <div className="flex-1 bg-muted/30 rounded-lg overflow-hidden flex items-center justify-center min-h-[500px]">
+              <div 
+                className="flex-1 bg-muted/30 rounded-lg overflow-hidden flex items-center justify-center min-h-[500px] cursor-pointer hover:bg-muted/40 transition-colors"
+                onClick={() => setLightboxOpen(true)}
+              >
                 {product.node.images.edges[selectedImageIndex] && (
                   <img
                     src={product.node.images.edges[selectedImageIndex].node.url}
@@ -267,6 +272,63 @@ const ProductDetail = () => {
                   />
                 )}
               </div>
+              
+              {/* Lightbox Modal */}
+              <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+                <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
+                  <div className="relative w-full h-[95vh] flex items-center justify-center">
+                    {/* Close button */}
+                    <button
+                      onClick={() => setLightboxOpen(false)}
+                      className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                    >
+                      <X className="w-6 h-6 text-white" />
+                    </button>
+                    
+                    {/* Previous button */}
+                    {product.node.images.edges.length > 1 && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedImageIndex((prev) => 
+                            prev === 0 ? product.node.images.edges.length - 1 : prev - 1
+                          );
+                        }}
+                        className="absolute left-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                      >
+                        <ChevronLeft className="w-8 h-8 text-white" />
+                      </button>
+                    )}
+                    
+                    {/* Image */}
+                    <img
+                      src={product.node.images.edges[selectedImageIndex].node.url}
+                      alt={product.node.images.edges[selectedImageIndex].node.altText || product.node.title}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                    
+                    {/* Next button */}
+                    {product.node.images.edges.length > 1 && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedImageIndex((prev) => 
+                            prev === product.node.images.edges.length - 1 ? 0 : prev + 1
+                          );
+                        }}
+                        className="absolute right-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                      >
+                        <ChevronRight className="w-8 h-8 text-white" />
+                      </button>
+                    )}
+                    
+                    {/* Image counter */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-white/10 text-white text-sm">
+                      {selectedImageIndex + 1} / {product.node.images.edges.length}
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Product Info */}
