@@ -13,6 +13,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ShopifyProduct, fetchProducts } from "@/lib/shopify";
 import logo from "@/assets/logo.png";
+import logoNew from "@/assets/logo-new.png";
 import { useNavigate } from "react-router-dom";
 import productDetail1 from "@/assets/product-detail-1.png";
 import productDetail2 from "@/assets/product-detail-2.png";
@@ -181,25 +182,26 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+      <header className="sticky top-0 z-50 w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
         <div className="container">
-          <div className="flex h-32 items-center justify-between py-4">
+          <div className="flex h-40 items-center justify-between py-6">
             {/* Left - Search Icon */}
             <Button variant="ghost" size="icon">
               <Search className="h-6 w-6" />
             </Button>
             
-            {/* Center - Logo */}
+            {/* Center - Logo with gradient background */}
             <button 
               onClick={() => navigate("/")}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
+              className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
               aria-label="Ga naar homepage"
             >
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
               <img 
-                src={logo} 
+                src={logoNew} 
                 alt="SenseGlow Logo" 
-                className="h-24 w-auto object-contain"
+                className="relative h-32 w-auto object-contain drop-shadow-lg"
               />
             </button>
             
