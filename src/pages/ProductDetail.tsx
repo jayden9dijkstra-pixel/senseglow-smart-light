@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, CreditCard } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
+  const [bundleQuantity, setBundleQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const addItem = useCartStore(state => state.addItem);
 
@@ -49,15 +50,28 @@ const ProductDetail = () => {
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
-      quantity,
+      quantity: bundleQuantity,
       selectedOptions: selectedVariant.selectedOptions || []
     };
     
     addItem(cartItem);
     toast.success('Toegevoegd aan winkelmandje', {
-      description: `${product.node.title} is toegevoegd.`,
+      description: `${bundleQuantity}x ${product.node.title} is toegevoegd.`,
     });
   };
+
+  // Calculate bundle pricing
+  const basePrice = parseFloat(selectedVariant?.price?.amount || product?.node.priceRange.minVariantPrice.amount || "0");
+  const bundles = [
+    { qty: 1, discount: 0, label: "1 Stuk", tag: "" },
+    { qty: 2, discount: 0.25, label: "2 Stuks", tag: "25% Korting!" },
+    { qty: 4, discount: 0.33, label: "4 Stuks", tag: "33% Korting! Meest gekozen!" }
+  ];
+  
+  const selectedBundle = bundles.find(b => b.qty === bundleQuantity) || bundles[0];
+  const originalBundlePrice = basePrice * bundleQuantity;
+  const discountedBundlePrice = originalBundlePrice * (1 - selectedBundle.discount);
+  const hasDiscount = selectedBundle.discount > 0;
 
   if (loading) {
     return (
@@ -148,45 +162,56 @@ const ProductDetail = () => {
                   <span className="text-sm text-muted-foreground">Beoordeeld</span>
                 </div>
 
-                {/* Trust Icons */}
-                <div className="flex flex-col gap-2 text-sm mb-4">
-                  <div className="flex items-center gap-2 text-foreground">
-                    <Check className="w-4 h-4 text-brand-orange" />
-                    <span className="font-medium">Gratis verzending aan huis</span>
+                {/* Trust Icons with Images */}
+                <div className="flex flex-col gap-3 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-brand-orange/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Truck className="w-5 h-5 text-brand-orange" />
+                    </div>
+                    <span className="text-sm font-medium">Gratis verzending aan huis</span>
                   </div>
-                  <div className="flex items-center gap-2 text-foreground">
-                    <Check className="w-4 h-4 text-brand-orange" />
-                    <span>Voor 23:00 besteld, <strong>vandaag verstuurd</strong></span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-brand-orange/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-5 h-5 text-brand-orange" />
+                    </div>
+                    <span className="text-sm">Voor 23:00 besteld, <strong>vandaag verstuurd</strong></span>
                   </div>
-                  <div className="flex items-center gap-2 text-foreground">
-                    <Check className="w-4 h-4 text-brand-orange" />
-                    <span>Veilig betalen met <strong>iDEAL & Bancontact</strong></span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-brand-orange/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CreditCard className="w-5 h-5 text-brand-orange" />
+                    </div>
+                    <span className="text-sm">Veilig betalen met <strong>iDEAL & Bancontact</strong></span>
                   </div>
                 </div>
               </div>
 
               {/* Price */}
-              <div className="text-3xl font-bold text-foreground">
-                €{parseFloat(price.amount).toFixed(2)}
+              <div className="space-y-1">
+                <div className="text-sm text-muted-foreground">Normale prijs</div>
+                <div className="text-3xl font-bold text-foreground">
+                  €{basePrice.toFixed(2)}
+                </div>
               </div>
 
               {/* Low Stock Warning */}
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-brand-orange font-medium">⚠️ Bijna uitverkocht!</span>
-                <span className="text-muted-foreground">Slechts enkele stuks over!</span>
+              <div className="bg-brand-orange/10 border border-brand-orange/20 rounded-lg p-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-brand-orange font-bold">⚠️ Bijna uitverkocht!</span>
+                  <span className="text-foreground">Slechts enkele stuks over!</span>
+                </div>
               </div>
 
               {/* Variant Selection */}
               {product.node.variants.edges.length > 1 && (
                 <div className="space-y-3">
-                  <label className="text-sm font-semibold uppercase tracking-wide">Maat</label>
-                  <div className="flex gap-2">
+                  <label className="text-sm font-bold uppercase tracking-wide">Maat</label>
+                  <div className="flex flex-wrap gap-2">
                     {product.node.variants.edges.map(({ node: variant }) => (
                       <Button
                         key={variant.id}
                         variant={selectedVariant?.id === variant.id ? "default" : "outline"}
                         onClick={() => setSelectedVariant(variant)}
-                        className={`px-6 ${selectedVariant?.id === variant.id ? 'bg-foreground text-background' : ''}`}
+                        className={`px-6 ${selectedVariant?.id === variant.id ? 'bg-foreground text-background hover:bg-foreground/90' : 'hover:border-foreground'}`}
                       >
                         {variant.title}
                       </Button>
@@ -195,23 +220,89 @@ const ProductDetail = () => {
                 </div>
               )}
 
+              {/* Bundle Selection */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-bold uppercase tracking-wide">Tijdelijke aanbieding!</label>
+                </div>
+                <div className="space-y-2">
+                  {bundles.map((bundle) => {
+                    const isSelected = bundleQuantity === bundle.qty;
+                    const bundlePrice = basePrice * bundle.qty * (1 - bundle.discount);
+                    const originalPrice = basePrice * bundle.qty;
+                    
+                    return (
+                      <button
+                        key={bundle.qty}
+                        onClick={() => setBundleQuantity(bundle.qty)}
+                        className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                          isSelected 
+                            ? 'border-brand-orange bg-brand-orange/5' 
+                            : 'border-muted hover:border-muted-foreground'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              isSelected ? 'border-brand-orange' : 'border-muted-foreground'
+                            }`}>
+                              {isSelected && <div className="w-3 h-3 rounded-full bg-brand-orange" />}
+                            </div>
+                            <span className="font-bold text-base">{bundle.label}</span>
+                          </div>
+                          {bundle.tag && (
+                            <Badge className="bg-brand-orange text-white text-xs">
+                              {bundle.tag}
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="ml-8">
+                          <div className="text-xs text-muted-foreground mb-1">Incl. Gratis verzending</div>
+                          <div className="flex items-baseline gap-2">
+                            {bundle.discount > 0 && (
+                              <span className="text-sm text-muted-foreground line-through">
+                                €{originalPrice.toFixed(2)}
+                              </span>
+                            )}
+                            <span className="text-xl font-bold text-foreground">
+                              €{bundlePrice.toFixed(2)}
+                            </span>
+                          </div>
+                          {bundle.discount > 0 && (
+                            <div className="text-xs text-green-600 font-medium mt-1">
+                              Bespaar €{(originalPrice - bundlePrice).toFixed(2)}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Add to Cart Button */}
               <Button
                 onClick={handleAddToCart}
                 size="lg"
-                className="w-full bg-foreground hover:bg-foreground/90 text-background font-bold text-base py-6"
+                className="w-full bg-foreground hover:bg-foreground/90 text-background font-bold text-base py-7 uppercase tracking-wide"
                 disabled={!selectedVariant?.availableForSale}
               >
                 {selectedVariant?.availableForSale ? 'VOEG TOE AAN WINKELWAGEN' : 'UITVERKOCHT'}
               </Button>
 
               {/* Money Back Guarantee */}
-              <div className="border rounded-lg p-4 bg-muted/20">
-                <button className="w-full text-left flex items-center justify-between font-medium">
-                  <span>NIET TEVREDEN = GELD TERUG</span>
-                  <span className="text-xl">▼</span>
-                </button>
-              </div>
+              <Accordion type="single" collapsible className="border rounded-lg">
+                <AccordionItem value="guarantee" className="border-none">
+                  <AccordionTrigger className="px-4 py-3 hover:no-underline">
+                    <span className="font-bold uppercase text-sm tracking-wide">NIET TEVREDEN = GELD TERUG</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      We staan 100% achter onze producten. Niet tevreden? Stuur het binnen 30 dagen retour en ontvang je geld terug. Geen vragen gesteld.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
               {/* Description */}
               <div className="pt-4 border-t">
