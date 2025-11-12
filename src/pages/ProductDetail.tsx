@@ -372,17 +372,8 @@ const ProductDetail = () => {
 
               {/* Price */}
               <div className="space-y-1">
-                <div className="text-sm text-muted-foreground">Normale prijs</div>
                 <div className="text-3xl font-bold text-foreground">
                   €{basePrice.toFixed(2)}
-                </div>
-              </div>
-
-              {/* Low Stock Warning */}
-              <div className="bg-brand-orange/10 border border-brand-orange/20 rounded-lg p-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-brand-orange font-bold">⚠️ Bijna uitverkocht!</span>
-                  <span className="text-foreground">Slechts enkele stuks over!</span>
                 </div>
               </div>
 
