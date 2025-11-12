@@ -109,7 +109,7 @@ const ProductDetail = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
         <div className="container">
-          <div className="flex h-20 items-center justify-between">
+          <div className="flex h-24 items-center justify-between">
             {/* Left - Menu Dropdown */}
             <div className="flex items-center gap-2">
               <DesktopMenu />
@@ -125,7 +125,7 @@ const ProductDetail = () => {
               <img 
                 src={logo} 
                 alt="SenseGlow Logo" 
-                className="h-16 w-auto object-contain"
+                className="h-20 w-auto object-contain"
               />
             </button>
             
@@ -224,21 +224,119 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Variant Selection */}
-              {product.node.variants.edges.length > 1 && (
+              {/* Color Selection */}
+              {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && (
+                <div className="space-y-3">
+                  <label className="text-sm font-bold uppercase tracking-wide">
+                    Kleur - {selectedVariant?.selectedOptions.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur')?.value || 'WIT'}
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {(() => {
+                      const colorOption = product.node.options.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur');
+                      if (!colorOption) return null;
+                      
+                      return colorOption.values.map((colorValue) => {
+                        // Find variant with this color
+                        const variantWithColor = product.node.variants.edges.find(({ node: v }) => 
+                          v.selectedOptions.some(opt => 
+                            (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === colorValue
+                          )
+                        );
+                        
+                        const isSelected = selectedVariant?.selectedOptions.some(opt => 
+                          (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === colorValue
+                        );
+                        
+                        const colorMap: Record<string, string> = {
+                          'silver': 'bg-gray-300',
+                          'zilver': 'bg-gray-300',
+                          'black': 'bg-black',
+                          'zwart': 'bg-black',
+                          'white': 'bg-white',
+                          'wit': 'bg-white',
+                        };
+                        
+                        const colorClass = colorMap[colorValue.toLowerCase()] || 'bg-gray-400';
+                        
+                        return (
+                          <button
+                            key={colorValue}
+                            onClick={() => {
+                              if (variantWithColor) {
+                                // Keep the same size but change color
+                                const currentSize = selectedVariant?.selectedOptions.find(opt => 
+                                  opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur'
+                                )?.value;
+                                
+                                if (currentSize) {
+                                  const newVariant = product.node.variants.edges.find(({ node: v }) => 
+                                    v.selectedOptions.some(opt => 
+                                      (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === colorValue
+                                    ) && v.selectedOptions.some(opt => opt.value === currentSize)
+                                  );
+                                  if (newVariant) setSelectedVariant(newVariant.node);
+                                } else {
+                                  setSelectedVariant(variantWithColor.node);
+                                }
+                              }
+                            }}
+                            className={`w-14 h-14 rounded-md border-2 transition-all ${
+                              isSelected ? 'border-foreground' : 'border-muted hover:border-muted-foreground'
+                            } ${colorClass} ${colorClass === 'bg-white' ? 'shadow-sm' : ''}`}
+                            title={colorValue}
+                          >
+                            <span className="sr-only">{colorValue}</span>
+                          </button>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* Size Selection */}
+              {product.node.options.some(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') && (
                 <div className="space-y-3">
                   <label className="text-sm font-bold uppercase tracking-wide">Maat</label>
                   <div className="flex flex-wrap gap-2">
-                    {product.node.variants.edges.map(({ node: variant }) => (
-                      <Button
-                        key={variant.id}
-                        variant={selectedVariant?.id === variant.id ? "default" : "outline"}
-                        onClick={() => setSelectedVariant(variant)}
-                        className={`px-6 ${selectedVariant?.id === variant.id ? 'bg-foreground text-background hover:bg-foreground/90' : 'hover:border-foreground'}`}
-                      >
-                        {variant.title}
-                      </Button>
-                    ))}
+                    {(() => {
+                      const sizeOption = product.node.options.find(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur');
+                      if (!sizeOption) return null;
+                      
+                      return sizeOption.values.map((sizeValue) => {
+                        const isSelected = selectedVariant?.selectedOptions.some(opt => opt.value === sizeValue);
+                        
+                        return (
+                          <Button
+                            key={sizeValue}
+                            variant={isSelected ? "default" : "outline"}
+                            onClick={() => {
+                              // Keep the same color but change size
+                              const currentColor = selectedVariant?.selectedOptions.find(opt => 
+                                opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur'
+                              )?.value;
+                              
+                              if (currentColor) {
+                                const newVariant = product.node.variants.edges.find(({ node: v }) => 
+                                  v.selectedOptions.some(opt => 
+                                    (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === currentColor
+                                  ) && v.selectedOptions.some(opt => opt.value === sizeValue)
+                                );
+                                if (newVariant) setSelectedVariant(newVariant.node);
+                              } else {
+                                const newVariant = product.node.variants.edges.find(({ node: v }) => 
+                                  v.selectedOptions.some(opt => opt.value === sizeValue)
+                                );
+                                if (newVariant) setSelectedVariant(newVariant.node);
+                              }
+                            }}
+                            className={`px-6 ${isSelected ? 'bg-foreground text-background hover:bg-foreground/90' : 'hover:border-foreground'}`}
+                          >
+                            {sizeValue}
+                          </Button>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               )}

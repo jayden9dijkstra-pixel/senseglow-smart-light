@@ -35,7 +35,7 @@ const Index = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
         <div className="container">
-          <div className="flex h-20 items-center justify-between">
+          <div className="flex h-24 items-center justify-between">
             {/* Left - Menu Dropdown */}
             <div className="flex items-center gap-2">
               <DesktopMenu />
@@ -51,7 +51,7 @@ const Index = () => {
               <img 
                 src={logo} 
                 alt="SenseGlow Logo" 
-                className="h-16 w-auto object-contain"
+                className="h-20 w-auto object-contain"
               />
             </button>
             
