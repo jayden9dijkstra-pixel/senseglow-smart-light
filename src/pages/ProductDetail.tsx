@@ -393,6 +393,9 @@ const ProductDetail = () => {
                         const colorMap: Record<string, string> = {
                           'silver': 'bg-gray-300',
                           'zilver': 'bg-gray-300',
+                          'grey': 'bg-gray-500',
+                          'grijs': 'bg-gray-500',
+                          'gray': 'bg-gray-500',
                           'black': 'bg-black',
                           'zwart': 'bg-black',
                           'white': 'bg-white',
