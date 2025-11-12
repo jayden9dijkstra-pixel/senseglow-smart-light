@@ -23,10 +23,28 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [bundleQuantity, setBundleQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const addItem = useCartStore(state => state.addItem);
+
+  // Find variant based on color and size
+  const findVariant = (color: string, size: string) => {
+    if (!product) return null;
+    return product.node.variants.edges.find(({ node: v }) => {
+      const hasColor = v.selectedOptions.some(opt => 
+        (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && 
+        opt.value.toLowerCase() === color.toLowerCase()
+      );
+      const hasSize = v.selectedOptions.some(opt => 
+        (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') && 
+        opt.value.toLowerCase().includes(size.toLowerCase())
+      );
+      return hasColor && hasSize;
+    })?.node;
+  };
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -35,7 +53,25 @@ const ProductDetail = () => {
         const found = products.find(p => p.node.handle === handle);
         if (found) {
           setProduct(found);
-          setSelectedVariant(found.node.variants.edges[0]?.node);
+          const firstVariant = found.node.variants.edges[0]?.node;
+          setSelectedVariant(firstVariant);
+          
+          // Set initial color and size from first variant
+          if (firstVariant) {
+            const colorOpt = firstVariant.selectedOptions.find(opt => 
+              opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur'
+            );
+            const sizeOpt = firstVariant.selectedOptions.find(opt => 
+              opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur'
+            );
+            
+            if (colorOpt) setSelectedColor(colorOpt.value);
+            if (sizeOpt) {
+              // Extract just the size number
+              const sizeMatch = sizeOpt.value.match(/\d+/);
+              if (sizeMatch) setSelectedSize(sizeMatch[0] + 'cm');
+            }
+          }
         }
       } catch (error) {
         console.error("Error loading product:", error);
@@ -45,6 +81,16 @@ const ProductDetail = () => {
     };
     loadProduct();
   }, [handle]);
+
+  // Update variant when color or size changes
+  useEffect(() => {
+    if (selectedColor && selectedSize && product) {
+      const variant = findVariant(selectedColor, selectedSize);
+      if (variant) {
+        setSelectedVariant(variant);
+      }
+    }
+  }, [selectedColor, selectedSize, product]);
 
   const handleAddToCart = () => {
     if (!product || !selectedVariant) return;
@@ -228,24 +274,21 @@ const ProductDetail = () => {
               {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && (
                 <div className="space-y-3">
                   <label className="text-sm font-bold uppercase tracking-wide">
-                    Kleur - {selectedVariant?.selectedOptions.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur')?.value || 'WIT'}
+                    Kleur - {selectedColor.toUpperCase()}
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {(() => {
                       const colorOption = product.node.options.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur');
                       if (!colorOption) return null;
                       
-                      return colorOption.values.map((colorValue) => {
-                        // Find variant with this color
-                        const variantWithColor = product.node.variants.edges.find(({ node: v }) => 
-                          v.selectedOptions.some(opt => 
-                            (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === colorValue
-                          )
-                        );
-                        
-                        const isSelected = selectedVariant?.selectedOptions.some(opt => 
-                          (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === colorValue
-                        );
+                      // Get unique colors
+                      const uniqueColors = Array.from(new Set(colorOption.values.map(v => {
+                        // Extract just the color name (remove size info)
+                        return v.split('-')[0].trim();
+                      })));
+                      
+                      return uniqueColors.map((colorValue) => {
+                        const isSelected = selectedColor.toLowerCase() === colorValue.toLowerCase();
                         
                         const colorMap: Record<string, string> = {
                           'silver': 'bg-gray-300',
@@ -261,27 +304,9 @@ const ProductDetail = () => {
                         return (
                           <button
                             key={colorValue}
-                            onClick={() => {
-                              if (variantWithColor) {
-                                // Keep the same size but change color
-                                const currentSize = selectedVariant?.selectedOptions.find(opt => 
-                                  opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur'
-                                )?.value;
-                                
-                                if (currentSize) {
-                                  const newVariant = product.node.variants.edges.find(({ node: v }) => 
-                                    v.selectedOptions.some(opt => 
-                                      (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === colorValue
-                                    ) && v.selectedOptions.some(opt => opt.value === currentSize)
-                                  );
-                                  if (newVariant) setSelectedVariant(newVariant.node);
-                                } else {
-                                  setSelectedVariant(variantWithColor.node);
-                                }
-                              }
-                            }}
+                            onClick={() => setSelectedColor(colorValue)}
                             className={`w-14 h-14 rounded-md border-2 transition-all ${
-                              isSelected ? 'border-foreground' : 'border-muted hover:border-muted-foreground'
+                              isSelected ? 'border-foreground ring-2 ring-foreground ring-offset-2' : 'border-muted hover:border-muted-foreground'
                             } ${colorClass} ${colorClass === 'bg-white' ? 'shadow-sm' : ''}`}
                             title={colorValue}
                           >
@@ -300,36 +325,32 @@ const ProductDetail = () => {
                   <label className="text-sm font-bold uppercase tracking-wide">Maat</label>
                   <div className="flex flex-wrap gap-2">
                     {(() => {
-                      const sizeOption = product.node.options.find(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur');
-                      if (!sizeOption) return null;
+                      // Get unique sizes from all variants
+                      const sizes = new Set<string>();
+                      product.node.variants.edges.forEach(({ node: v }) => {
+                        v.selectedOptions.forEach(opt => {
+                          if (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') {
+                            // Extract size number
+                            const sizeMatch = opt.value.match(/(\d+)\s*cm/i);
+                            if (sizeMatch) {
+                              sizes.add(sizeMatch[1] + 'cm');
+                            }
+                          }
+                        });
+                      });
                       
-                      return sizeOption.values.map((sizeValue) => {
-                        const isSelected = selectedVariant?.selectedOptions.some(opt => opt.value === sizeValue);
+                      return Array.from(sizes).sort((a, b) => {
+                        const numA = parseInt(a);
+                        const numB = parseInt(b);
+                        return numA - numB;
+                      }).map((sizeValue) => {
+                        const isSelected = selectedSize === sizeValue;
                         
                         return (
                           <Button
                             key={sizeValue}
                             variant={isSelected ? "default" : "outline"}
-                            onClick={() => {
-                              // Keep the same color but change size
-                              const currentColor = selectedVariant?.selectedOptions.find(opt => 
-                                opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur'
-                              )?.value;
-                              
-                              if (currentColor) {
-                                const newVariant = product.node.variants.edges.find(({ node: v }) => 
-                                  v.selectedOptions.some(opt => 
-                                    (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && opt.value === currentColor
-                                  ) && v.selectedOptions.some(opt => opt.value === sizeValue)
-                                );
-                                if (newVariant) setSelectedVariant(newVariant.node);
-                              } else {
-                                const newVariant = product.node.variants.edges.find(({ node: v }) => 
-                                  v.selectedOptions.some(opt => opt.value === sizeValue)
-                                );
-                                if (newVariant) setSelectedVariant(newVariant.node);
-                              }
-                            }}
+                            onClick={() => setSelectedSize(sizeValue)}
                             className={`px-6 ${isSelected ? 'bg-foreground text-background hover:bg-foreground/90' : 'hover:border-foreground'}`}
                           >
                             {sizeValue}
