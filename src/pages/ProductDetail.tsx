@@ -370,100 +370,103 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Color Selection */}
-              {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && (
-                <div className="space-y-3">
-                  <label className="text-sm font-bold uppercase tracking-wide">
-                    Kleur - {selectedColor.toUpperCase()}
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {(() => {
-                      const colorOption = product.node.options.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur');
-                      if (!colorOption) return null;
-                      
-                      // Get unique colors
-                      const uniqueColors = Array.from(new Set(colorOption.values.map(v => {
-                        // Extract just the color name (remove size info)
-                        return v.split('-')[0].trim();
-                      })));
-                      
-                      return uniqueColors.map((colorValue) => {
-                        const isSelected = selectedColor.toLowerCase() === colorValue.toLowerCase();
-                        
-                        const colorMap: Record<string, string> = {
-                          'silver': 'bg-gray-300',
-                          'zilver': 'bg-gray-300',
-                          'grey': 'bg-gray-500',
-                          'grijs': 'bg-gray-500',
-                          'gray': 'bg-gray-500',
-                          'black': 'bg-black',
-                          'zwart': 'bg-black',
-                          'white': 'bg-white',
-                          'wit': 'bg-white',
-                        };
-                        
-                        const colorClass = colorMap[colorValue.toLowerCase()] || 'bg-gray-400';
-                        
-                        return (
-                          <button
-                            key={colorValue}
-                            onClick={() => setSelectedColor(colorValue)}
-                            className={`w-14 h-14 rounded-md border-2 transition-all ${
-                              isSelected ? 'border-foreground ring-2 ring-foreground ring-offset-2' : 'border-muted hover:border-muted-foreground'
-                            } ${colorClass} ${colorClass === 'bg-white' ? 'shadow-sm' : ''}`}
-                            title={colorValue}
-                          >
-                            <span className="sr-only">{colorValue}</span>
-                          </button>
-                        );
-                      });
-                    })()}
-                  </div>
-                </div>
-              )}
-
-              {/* Size Selection */}
-              {product.node.options.some(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') && (
-                <div className="space-y-3">
-                  <label className="text-sm font-bold uppercase tracking-wide">Maat</label>
-                  <div className="flex flex-wrap gap-2">
-                    {(() => {
-                      // Get unique sizes from all variants
-                      const sizes = new Set<string>();
-                      product.node.variants.edges.forEach(({ node: v }) => {
-                        v.selectedOptions.forEach(opt => {
-                          if (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') {
-                            // Extract size number
-                            const sizeMatch = opt.value.match(/(\d+)\s*cm/i);
-                            if (sizeMatch) {
-                              sizes.add(sizeMatch[1] + 'cm');
+              {/* Color and Size Selection - Side by Side */}
+              <div className="grid grid-cols-2 gap-6">
+                {/* Size Selection */}
+                {product.node.options.some(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') && (
+                  <div className="space-y-3">
+                    <label className="text-sm font-bold uppercase tracking-wide">Maat</label>
+                    <div className="flex flex-wrap gap-2">
+                      {(() => {
+                        // Get unique sizes from all variants
+                        const sizes = new Set<string>();
+                        product.node.variants.edges.forEach(({ node: v }) => {
+                          v.selectedOptions.forEach(opt => {
+                            if (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') {
+                              // Extract size number
+                              const sizeMatch = opt.value.match(/(\d+)\s*cm/i);
+                              if (sizeMatch) {
+                                sizes.add(sizeMatch[1] + 'cm');
+                              }
                             }
-                          }
+                          });
                         });
-                      });
-                      
-                      return Array.from(sizes).sort((a, b) => {
-                        const numA = parseInt(a);
-                        const numB = parseInt(b);
-                        return numA - numB;
-                      }).map((sizeValue) => {
-                        const isSelected = selectedSize === sizeValue;
                         
-                        return (
-                          <Button
-                            key={sizeValue}
-                            variant={isSelected ? "default" : "outline"}
-                            onClick={() => setSelectedSize(sizeValue)}
-                            className={`px-6 ${isSelected ? 'bg-foreground text-background hover:bg-foreground/90' : 'hover:border-foreground'}`}
-                          >
-                            {sizeValue}
-                          </Button>
-                        );
-                      });
-                    })()}
+                        return Array.from(sizes).sort((a, b) => {
+                          const numA = parseInt(a);
+                          const numB = parseInt(b);
+                          return numA - numB;
+                        }).map((sizeValue) => {
+                          const isSelected = selectedSize === sizeValue;
+                          
+                          return (
+                            <Button
+                              key={sizeValue}
+                              variant={isSelected ? "default" : "outline"}
+                              onClick={() => setSelectedSize(sizeValue)}
+                              className={`px-6 ${isSelected ? 'bg-foreground text-background hover:bg-foreground/90' : 'hover:border-foreground'}`}
+                            >
+                              {sizeValue}
+                            </Button>
+                          );
+                        });
+                      })()}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {/* Color Selection */}
+                {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && (
+                  <div className="space-y-3">
+                    <label className="text-sm font-bold uppercase tracking-wide">
+                      Kleur - {selectedColor.toUpperCase()}
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {(() => {
+                        const colorOption = product.node.options.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur');
+                        if (!colorOption) return null;
+                        
+                        // Get unique colors
+                        const uniqueColors = Array.from(new Set(colorOption.values.map(v => {
+                          // Extract just the color name (remove size info)
+                          return v.split('-')[0].trim();
+                        })));
+                        
+                        return uniqueColors.map((colorValue) => {
+                          const isSelected = selectedColor.toLowerCase() === colorValue.toLowerCase();
+                          
+                          const colorMap: Record<string, string> = {
+                            'silver': 'bg-gray-300',
+                            'zilver': 'bg-gray-300',
+                            'grey': 'bg-gray-500',
+                            'grijs': 'bg-gray-500',
+                            'gray': 'bg-gray-500',
+                            'black': 'bg-black',
+                            'zwart': 'bg-black',
+                            'white': 'bg-white',
+                            'wit': 'bg-white',
+                          };
+                          
+                          const colorClass = colorMap[colorValue.toLowerCase()] || 'bg-gray-400';
+                          
+                          return (
+                            <button
+                              key={colorValue}
+                              onClick={() => setSelectedColor(colorValue)}
+                              className={`w-14 h-14 rounded-md border-2 transition-all ${
+                                isSelected ? 'border-foreground ring-2 ring-foreground ring-offset-2' : 'border-muted hover:border-muted-foreground'
+                              } ${colorClass} ${colorClass === 'bg-white' ? 'shadow-sm' : ''}`}
+                              title={colorValue}
+                            >
+                              <span className="sr-only">{colorValue}</span>
+                            </button>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Bundle Selection */}
               <div className="space-y-3">
