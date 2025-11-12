@@ -248,22 +248,22 @@ const ProductDetail = () => {
                   <button
                     key={idx}
                     onClick={() => setSelectedImageIndex(idx)}
-                    className={`aspect-square bg-muted/30 rounded-md overflow-hidden cursor-pointer border-2 transition-all hover:border-brand-orange ${
+                    className={`aspect-square bg-muted/30 rounded-md overflow-hidden cursor-pointer border-2 transition-all hover:border-brand-orange flex items-center justify-center ${
                       selectedImageIndex === idx ? 'border-brand-orange ring-2 ring-brand-orange ring-offset-2' : 'border-transparent'
                     }`}
                   >
-                    <img src={image.url} alt={image.altText || `Productafbeelding ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img src={image.url} alt={image.altText || `Productafbeelding ${idx + 1}`} className="w-full h-full object-contain" />
                   </button>
                 ))}
               </div>
               
               {/* Main Image */}
-              <div className="flex-1 aspect-square bg-muted/30 rounded-lg overflow-hidden">
+              <div className="flex-1 bg-muted/30 rounded-lg overflow-hidden flex items-center justify-center min-h-[500px]">
                 {product.node.images.edges[selectedImageIndex] && (
                   <img
                     src={product.node.images.edges[selectedImageIndex].node.url}
                     alt={product.node.images.edges[selectedImageIndex].node.altText || product.node.title}
-                    className="w-full h-full object-cover animate-fade-in"
+                    className="max-w-full max-h-full object-contain animate-fade-in"
                   />
                 )}
               </div>
