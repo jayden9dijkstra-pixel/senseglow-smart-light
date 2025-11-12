@@ -34,31 +34,32 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full shadow-lg bg-brand-orange">
+      <header className="sticky top-0 z-50 w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
         <div className="container">
           <div className="flex h-40 items-center justify-between py-6">
             {/* Left - Search Icon */}
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon">
               <Search className="h-6 w-6" />
             </Button>
             
-            {/* Center - Logo (white version using filter) */}
+            {/* Center - Logo with gradient background */}
             <button 
               onClick={() => navigate("/")}
-              className="cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
               aria-label="Ga naar homepage"
             >
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
               <img 
                 src={logoNew} 
                 alt="SenseGlow Logo" 
-                className="h-32 w-auto object-contain brightness-0 invert"
+                className="relative h-32 w-auto object-contain drop-shadow-lg"
               />
             </button>
             
             {/* Right - Account & Cart */}
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon">
                 <User className="h-6 w-6" />
               </Button>
               <CartDrawer />
@@ -67,12 +68,12 @@ const Index = () => {
         </div>
         
         {/* Bottom bar with navigation */}
-        <div className="border-t border-white/20 bg-brand-orange-light">
+        <div className="border-t bg-white">
           <div className="container">
             <nav className="flex items-center justify-center gap-8 py-4">
               <a 
                 href="#home" 
-                className="text-sm uppercase tracking-wide font-medium text-white hover:text-white/80 transition-colors"
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
               >
                 HOME
               </a>
@@ -82,13 +83,13 @@ const Index = () => {
                     navigate(`/product/${products[0].node.handle}`);
                   }
                 }}
-                className="text-sm uppercase tracking-wide font-medium text-white hover:text-white/80 transition-colors cursor-pointer bg-transparent border-none"
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors cursor-pointer bg-transparent border-none"
               >
                 PRODUCTEN
               </button>
               <a 
                 href="#contact" 
-                className="text-sm uppercase tracking-wide font-medium text-white hover:text-white/80 transition-colors"
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
               >
                 CONTACT
               </a>
