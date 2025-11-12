@@ -370,13 +370,6 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Price */}
-              <div className="space-y-1">
-                <div className="text-3xl font-bold text-foreground">
-                  €{basePrice.toFixed(2)}
-                </div>
-              </div>
-
               {/* Color Selection */}
               {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && (
                 <div className="space-y-3">
