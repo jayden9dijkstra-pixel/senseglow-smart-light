@@ -244,7 +244,7 @@ const ProductDetail = () => {
             <div className="flex gap-4">
               {/* Thumbnails */}
               <div className="flex flex-col gap-3 w-20">
-                {[imageUrl, productDetail1, productDetail2, productDetail3, productDetail4].slice(0, 5).map((img, idx) => (
+                {product.node.images.edges.map(({ node: image }, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImageIndex(idx)}
@@ -252,24 +252,20 @@ const ProductDetail = () => {
                       selectedImageIndex === idx ? 'border-brand-orange ring-2 ring-brand-orange ring-offset-2' : 'border-transparent'
                     }`}
                   >
-                    <img src={img} alt={`Beeld ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img src={image.url} alt={image.altText || `Productafbeelding ${idx + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
               
               {/* Main Image */}
               <div className="flex-1 aspect-square bg-muted/30 rounded-lg overflow-hidden">
-                {(() => {
-                  const images = [imageUrl, productDetail1, productDetail2, productDetail3, productDetail4].slice(0, 5);
-                  const currentImage = images[selectedImageIndex];
-                  return currentImage && (
-                    <img
-                      src={currentImage}
-                      alt={product.node.title}
-                      className="w-full h-full object-cover animate-fade-in"
-                    />
-                  );
-                })()}
+                {product.node.images.edges[selectedImageIndex] && (
+                  <img
+                    src={product.node.images.edges[selectedImageIndex].node.url}
+                    alt={product.node.images.edges[selectedImageIndex].node.altText || product.node.title}
+                    className="w-full h-full object-cover animate-fade-in"
+                  />
+                )}
               </div>
             </div>
 
