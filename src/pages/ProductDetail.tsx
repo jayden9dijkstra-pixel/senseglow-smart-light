@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, CreditCard } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Check, Battery, Zap, Moon, Lightbulb, Truck, CreditCard, Search, User } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { MobileMenu } from "@/components/MobileMenu";
 import { DesktopMenu } from "@/components/DesktopMenu";
@@ -154,31 +154,78 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+        {/* Top bar with icons and logo */}
         <div className="container">
           <div className="flex h-24 items-center justify-between">
-            {/* Left - Menu Dropdown */}
-            <div className="flex items-center gap-2">
-              <DesktopMenu />
-              <MobileMenu />
-            </div>
+            {/* Left - Search Icon */}
+            <Button variant="ghost" size="icon">
+              <Search className="h-5 w-5" />
+            </Button>
             
             {/* Center - Logo */}
             <button 
               onClick={() => navigate("/")}
-              className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer hover:opacity-80 transition-opacity"
+              className="cursor-pointer hover:opacity-80 transition-opacity"
               aria-label="Ga naar homepage"
             >
               <img 
                 src={logo} 
                 alt="SenseGlow Logo" 
-                className="h-20 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </button>
             
-            {/* Right - Cart */}
-            <div className="flex items-center">
+            {/* Right - Account & Cart */}
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
               <CartDrawer />
             </div>
+          </div>
+        </div>
+        
+        {/* Bottom bar with navigation */}
+        <div className="border-t bg-white">
+          <div className="container">
+            <nav className="flex items-center justify-center gap-8 py-3">
+              <a 
+                href="/#home" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
+                HOMEPAGINA
+              </a>
+              <a 
+                href="/#waarom" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
+                WINKEL
+              </a>
+              <a 
+                href="/#products" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
+                CONTACT
+              </a>
+              <a 
+                href="/#faq" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
+                OVER ONS
+              </a>
+              <a 
+                href="#" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
+                VOLG JE BESTELLING
+              </a>
+              <a 
+                href="#" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
+                VEEL GESTELDE VRAGEN
+              </a>
+            </nav>
           </div>
         </div>
       </header>
