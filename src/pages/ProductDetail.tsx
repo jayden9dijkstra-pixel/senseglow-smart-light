@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,7 @@ import productDetail4 from "@/assets/product-detail-4.png";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
@@ -56,10 +57,15 @@ const ProductDetail = () => {
         const found = products.find(p => p.node.handle === handle);
         if (found) {
           setProduct(found);
+          
+          // Check if URL params exist (from quiz)
+          const urlSize = searchParams.get('size');
+          const urlColor = searchParams.get('color');
+          
           const firstVariant = found.node.variants.edges[0]?.node;
           setSelectedVariant(firstVariant);
           
-          // Set initial color and size from first variant
+          // Set initial color and size from URL params or first variant
           if (firstVariant) {
             const colorOpt = firstVariant.selectedOptions.find(opt => 
               opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur' || opt.name.toLowerCase() === 'variant'
@@ -68,8 +74,16 @@ const ProductDetail = () => {
               opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur' && opt.name.toLowerCase() !== 'variant'
             );
             
-            if (colorOpt) setSelectedColor(colorOpt.value);
-            if (sizeOpt) {
+            // Use URL params if available, otherwise use first variant
+            if (urlColor) {
+              setSelectedColor(urlColor);
+            } else if (colorOpt) {
+              setSelectedColor(colorOpt.value);
+            }
+            
+            if (urlSize) {
+              setSelectedSize(urlSize);
+            } else if (sizeOpt) {
               // Extract just the size number
               const sizeMatch = sizeOpt.value.match(/\d+/);
               if (sizeMatch) setSelectedSize(sizeMatch[0] + 'cm');
@@ -83,7 +97,7 @@ const ProductDetail = () => {
       }
     };
     loadProduct();
-  }, [handle]);
+  }, [handle, searchParams]);
 
   // Update variant when color or size changes
   useEffect(() => {

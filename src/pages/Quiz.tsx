@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import { fetchProducts } from "@/lib/shopify";
 
 const questions = [
   {
@@ -37,6 +38,17 @@ const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
+  const [productHandle, setProductHandle] = useState<string>("");
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      const products = await fetchProducts(1);
+      if (products.length > 0) {
+        setProductHandle(products[0].node.handle);
+      }
+    };
+    loadProduct();
+  }, []);
 
   const handleAnswer = (value: string) => {
     const newAnswers = [...answers, value];
@@ -50,10 +62,17 @@ const Quiz = () => {
   };
 
   const getRecommendation = () => {
-    // Simple logic: if room is large, recommend 45cm, if small 15cm, otherwise 30cm
-    if (answers.includes("large")) return "45cm";
-    if (answers.includes("small")) return "15cm";
-    return "30cm";
+    // Determine size based on room size
+    let size = "20cm";
+    if (answers.includes("large")) size = "40cm";
+    else if (answers.includes("small")) size = "20cm";
+    else if (answers.includes("medium")) size = "40cm";
+    
+    // Determine color based on preferences
+    let color = "Zwart";
+    if (answers.includes("design")) color = "Zilver";
+    
+    return { size, color };
   };
 
   const resetQuiz = () => {
@@ -64,6 +83,8 @@ const Quiz = () => {
 
   if (showResult) {
     const recommendation = getRecommendation();
+    const productUrl = `/product/${productHandle}?size=${recommendation.size}&color=${recommendation.color}`;
+    
     return (
       <div className="min-h-screen bg-background">
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -89,20 +110,23 @@ const Quiz = () => {
           <Card className="p-8 bg-gradient-to-br from-background to-accent/10 border-2 border-glow/20">
             <div className="text-center">
               <div className="inline-block px-6 py-3 bg-glow/10 rounded-full mb-6">
-                <span className="text-3xl font-bold text-glow">{recommendation}</span>
+                <span className="text-3xl font-bold text-glow">{recommendation.size} - {recommendation.color}</span>
               </div>
               <h2 className="text-2xl font-bold mb-4">
-                Motion Sensor LED Light - {recommendation}
+                Motion Sensor LED Light
               </h2>
+              <p className="text-muted-foreground mb-2">
+                <strong>Maat:</strong> {recommendation.size}
+              </p>
               <p className="text-muted-foreground mb-8">
-                Perfect voor jouw ruimte en behoeften
+                <strong>Kleur:</strong> {recommendation.color}
               </p>
               <div className="flex gap-4 justify-center">
                 <Button
-                  onClick={() => navigate("/#products")}
+                  onClick={() => navigate(productUrl)}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-glow/20 transition-all hover:shadow-glow/40"
                 >
-                  Bekijk producten
+                  Bekijk product
                 </Button>
                 <Button onClick={resetQuiz} variant="outline">
                   Opnieuw doen
