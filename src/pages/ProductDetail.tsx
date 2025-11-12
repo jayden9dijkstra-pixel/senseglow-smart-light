@@ -254,7 +254,7 @@ const ProductDetail = () => {
           
           <div className="grid lg:grid-cols-2 gap-12 items-start max-w-7xl mx-auto">
             {/* Product Images */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 sticky top-8 self-start">
               {/* Thumbnails */}
               <div className="flex flex-col gap-3 w-20">
                 {product.node.images.edges.map(({ node: image }, idx) => (
