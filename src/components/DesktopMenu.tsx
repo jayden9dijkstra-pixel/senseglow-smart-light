@@ -9,10 +9,9 @@ import {
 
 export const DesktopMenu = () => {
   const menuItems = [
-    { label: "Homepagina", href: "#home" },
-    { label: "Winkel", href: "#waarom" },
-    { label: "Contact", href: "#products" },
-    { label: "Over ons", href: "#faq" },
+    { label: "HOME", href: "/" },
+    { label: "PRODUCTEN", href: "/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58" },
+    { label: "CONTACT", href: "#contact" },
   ];
 
   return (

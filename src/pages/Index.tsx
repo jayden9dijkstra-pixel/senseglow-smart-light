@@ -73,37 +73,23 @@ const Index = () => {
                 href="#home" 
                 className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
               >
-                HOMEPAGINA
+                HOME
               </a>
-              <a 
-                href="#waarom" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              <button
+                onClick={() => {
+                  if (products.length > 0) {
+                    navigate(`/product/${products[0].node.handle}`);
+                  }
+                }}
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors cursor-pointer bg-transparent border-none"
               >
-                WINKEL
-              </a>
+                PRODUCTEN
+              </button>
               <a 
-                href="#products" 
+                href="#contact" 
                 className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
               >
                 CONTACT
-              </a>
-              <a 
-                href="#faq" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                OVER ONS
-              </a>
-              <a 
-                href="#" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                VOLG JE BESTELLING
-              </a>
-              <a 
-                href="#" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                VEEL GESTELDE VRAGEN
               </a>
             </nav>
           </div>
