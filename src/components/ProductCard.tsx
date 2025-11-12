@@ -28,8 +28,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     };
     
     addItem(cartItem);
-    toast.success('Added to cart', {
-      description: `${product.node.title} has been added to your cart.`,
+    toast.success('Toegevoegd aan winkelmandje', {
+      description: `${product.node.title} is toegevoegd.`,
     });
   };
 
@@ -37,37 +37,42 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const price = selectedVariant?.price || product.node.priceRange.minVariantPrice;
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-md transition-all border-muted/40 bg-white">
       <Link to={`/product/${product.node.handle}`}>
-        <div className="aspect-square bg-secondary/20 overflow-hidden cursor-pointer">
+        <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={product.node.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-            No image
+            Geen afbeelding
           </div>
         )}
         </div>
       </Link>
-      <CardContent className="p-4">
-        <h3 className="font-semibold text-lg mb-2">{product.node.title}</h3>
-        {product.node.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-            {product.node.description}
-          </p>
-        )}
-        <p className="text-2xl font-bold text-primary">
-          {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+      <CardContent className="p-5">
+        <Link to={`/product/${product.node.handle}`}>
+          <h3 className="font-bold text-base mb-2 hover:text-brand-orange transition-colors uppercase tracking-wide">
+            {product.node.title}
+          </h3>
+        </Link>
+        <div className="flex items-center gap-1 mb-3">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} className="text-brand-orange text-sm">★</span>
+          ))}
+          <span className="text-xs text-muted-foreground ml-1">4.7/5</span>
+        </div>
+        <p className="text-xl font-bold text-foreground mb-4">
+          €{parseFloat(price.amount).toFixed(2)}
         </p>
         
         {product.node.variants.edges.length > 1 && (
-          <div className="mt-3">
+          <div className="mb-3">
             <select
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border border-muted rounded text-sm"
               value={selectedVariant?.id}
               onChange={(e) => {
                 const variant = product.node.variants.edges.find(v => v.node.id === e.target.value)?.node;
@@ -76,21 +81,21 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             >
               {product.node.variants.edges.map(({ node: variant }) => (
                 <option key={variant.id} value={variant.id}>
-                  {variant.title} - {variant.price.currencyCode} {parseFloat(variant.price.amount).toFixed(2)}
+                  {variant.title} - €{parseFloat(variant.price.amount).toFixed(2)}
                 </option>
               ))}
             </select>
           </div>
         )}
       </CardContent>
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-5 pt-0">
         <Button 
           onClick={handleAddToCart}
-          className="w-full"
+          className="w-full bg-foreground hover:bg-foreground/90 text-background font-bold uppercase text-sm tracking-wide"
           disabled={!selectedVariant?.availableForSale}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
-          {selectedVariant?.availableForSale ? 'Add to Cart' : 'Out of Stock'}
+          {selectedVariant?.availableForSale ? 'Voeg toe' : 'Uitverkocht'}
         </Button>
       </CardFooter>
     </Card>

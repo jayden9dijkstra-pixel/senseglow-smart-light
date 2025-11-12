@@ -34,7 +34,7 @@ const Index = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
         <div className="container">
-          <div className="flex h-32 items-center justify-between relative py-2">
+          <div className="flex h-20 items-center justify-between">
             <button 
               onClick={() => navigate("/")}
               className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -43,34 +43,34 @@ const Index = () => {
               <img 
                 src={logo} 
                 alt="SenseGlow Logo" 
-                className="h-28 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </button>
             
-            <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <nav className="hidden md:flex items-center gap-8 text-sm uppercase tracking-wide font-medium">
               <a 
                 href="#home" 
                 className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
               >
-                Home
+                Homepagina
               </a>
               <a 
                 href="#waarom" 
                 className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
               >
-                Waarom
+                Winkel
               </a>
               <a 
                 href="#products" 
                 className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
               >
-                Producten
+                Contact
               </a>
               <a 
                 href="#faq" 
                 className="text-foreground hover:text-brand-orange transition-colors cursor-pointer"
               >
-                FAQ
+                Over ons
               </a>
             </nav>
             
@@ -83,13 +83,12 @@ const Index = () => {
       </header>
 
       {/* USP Banner */}
-      <section className="bg-brand-orange py-3">
+      <section className="bg-foreground py-2.5">
         <div className="container">
-          <div className="flex flex-wrap justify-center gap-6 text-white text-sm font-medium">
-            <span>✓ Gratis Verzending</span>
-            <span>✓ 30 dagen bedenktijd</span>
-            <span>✓ Veilig Betalen</span>
-            <span>✓ Altijd Gratis Verzending</span>
+          <div className="flex flex-wrap justify-center gap-6 text-background text-xs uppercase tracking-wide font-medium">
+            <span>Gratis verzending</span>
+            <span>Voor 23:00 besteld, vandaag verstuurd</span>
+            <span>30 dagen retourrecht</span>
           </div>
         </div>
       </section>
@@ -148,20 +147,20 @@ const Index = () => {
       <LifestyleSection />
 
       {/* Products Section */}
-      <section id="products" className="container py-24">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Onze Collectie</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+      <section id="products" className="container py-20 bg-background">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Onze Producten</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Kies de perfecte maat voor jouw ruimte
           </p>
         </div>
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-glow" />
+            <Loader2 className="w-8 h-8 animate-spin text-brand-orange" />
           </div>
         ) : products.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {products.map((product) => (
               <ProductCard key={product.node.id} product={product} />
             ))}
@@ -170,14 +169,14 @@ const Index = () => {
           <div className="text-center py-20">
             <p className="text-xl text-muted-foreground mb-4">Geen producten gevonden</p>
             <p className="text-muted-foreground">
-              Producten worden binnenkort toegevoegd via de Shopify Storefront API.
+              Voeg producten toe via de Shopify Storefront API.
             </p>
           </div>
         )}
       </section>
 
       {/* FAQ Section */}
-      <div id="faq">
+      <div id="faq" className="bg-muted/20">
         <FAQSection />
       </div>
 
@@ -185,31 +184,39 @@ const Index = () => {
       <ScrollToTop />
 
       {/* Footer */}
-      <footer className="border-t bg-muted/30">
+      <footer className="border-t bg-foreground text-background">
         <div className="container py-12">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-bold text-lg mb-4">SenseGlow™</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Premium LED-bewegingssensorlampen voor moderne woningen
-              </p>
+              <h3 className="font-bold text-base mb-4 uppercase">KLANTENSERVICE</h3>
+              <ul className="text-sm space-y-2 text-background/80">
+                <li><a href="#" className="hover:text-background">Contact</a></li>
+                <li><a href="#" className="hover:text-background">Verzending</a></li>
+                <li><a href="#" className="hover:text-background">Retourneren</a></li>
+              </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <p className="text-sm text-muted-foreground">
-                Email: info@senseglow.nl
-                <br />
-                Tel: +31 20 123 4567
-              </p>
+              <h4 className="font-bold text-base mb-4 uppercase">OVER ONS</h4>
+              <ul className="text-sm space-y-2 text-background/80">
+                <li><a href="#" className="hover:text-background">Over SenseGlow</a></li>
+                <li><a href="#" className="hover:text-background">Duurzaamheid</a></li>
+              </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Volg ons</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="font-bold text-base mb-4 uppercase">JURIDISCH</h4>
+              <ul className="text-sm space-y-2 text-background/80">
+                <li><a href="#" className="hover:text-background">Privacybeleid</a></li>
+                <li><a href="#" className="hover:text-background">Algemene voorwaarden</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-base mb-4 uppercase">VOLG ONS</h4>
+              <p className="text-sm text-background/80">
                 Instagram | Facebook | Pinterest
               </p>
             </div>
           </div>
-          <div className="text-center text-sm text-muted-foreground pt-8 border-t">
+          <div className="text-center text-xs text-background/60 pt-8 border-t border-background/20">
             <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
           </div>
         </div>

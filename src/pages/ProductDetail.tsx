@@ -89,29 +89,39 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
+      <header className="border-b sticky top-0 bg-white shadow-sm z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
-              <img src={logo} alt="SenseGlow" className="h-8" />
+              <img src={logo} alt="SenseGlow" className="h-12" />
             </Link>
             <CartDrawer />
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-12 bg-gradient-to-b from-brand-orange/5 to-background">
+      {/* Product Section */}
+      <section className="py-8">
         <div className="container mx-auto px-4">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Terug naar overzicht
           </Link>
           
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Product Image */}
-            <div className="space-y-4">
-              <div className="aspect-square bg-secondary/20 rounded-lg overflow-hidden">
+          <div className="grid lg:grid-cols-2 gap-12 items-start max-w-7xl mx-auto">
+            {/* Product Images */}
+            <div className="flex gap-4">
+              {/* Thumbnails */}
+              <div className="flex flex-col gap-3 w-20">
+                {[imageUrl, productDetail1, productDetail2, productDetail3, productDetail4].slice(0, 5).map((img, idx) => (
+                  <div key={idx} className="aspect-square bg-muted/30 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">
+                    <img src={img} alt={`Beeld ${idx + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+              
+              {/* Main Image */}
+              <div className="flex-1 aspect-square bg-muted/30 rounded-lg overflow-hidden">
                 {imageUrl && (
                   <img
                     src={imageUrl}
@@ -120,39 +130,63 @@ const ProductDetail = () => {
                   />
                 )}
               </div>
-              <div className="grid grid-cols-4 gap-2">
-                {[productDetail1, productDetail2, productDetail3, productDetail4].map((img, idx) => (
-                  <div key={idx} className="aspect-square bg-secondary/20 rounded-md overflow-hidden cursor-pointer hover:opacity-75 transition-opacity">
-                    <img src={img} alt={`Detail ${idx + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <h1 className="text-4xl font-bold mb-2">{product.node.title}</h1>
-                <p className="text-lg text-muted-foreground">
-                  Slim Licht. Warm Welkom.
-                </p>
+                <h1 className="text-3xl md:text-4xl font-bold mb-3">{product.node.title}</h1>
+                
+                {/* Star Rating */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-brand-orange text-lg">★</span>
+                    ))}
+                  </div>
+                  <span className="text-sm font-medium">4.7/5</span>
+                  <span className="text-sm text-muted-foreground">Beoordeeld</span>
+                </div>
+
+                {/* Trust Icons */}
+                <div className="flex flex-col gap-2 text-sm mb-4">
+                  <div className="flex items-center gap-2 text-foreground">
+                    <Check className="w-4 h-4 text-brand-orange" />
+                    <span className="font-medium">Gratis verzending aan huis</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-foreground">
+                    <Check className="w-4 h-4 text-brand-orange" />
+                    <span>Voor 23:00 besteld, <strong>vandaag verstuurd</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-foreground">
+                    <Check className="w-4 h-4 text-brand-orange" />
+                    <span>Veilig betalen met <strong>iDEAL & Bancontact</strong></span>
+                  </div>
+                </div>
               </div>
 
-              <div className="text-3xl font-bold text-brand-orange">
-                {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+              {/* Price */}
+              <div className="text-3xl font-bold text-foreground">
+                €{parseFloat(price.amount).toFixed(2)}
+              </div>
+
+              {/* Low Stock Warning */}
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-brand-orange font-medium">⚠️ Bijna uitverkocht!</span>
+                <span className="text-muted-foreground">Slechts enkele stuks over!</span>
               </div>
 
               {/* Variant Selection */}
               {product.node.variants.edges.length > 1 && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Kies je variant:</label>
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold uppercase tracking-wide">Maat</label>
+                  <div className="flex gap-2">
                     {product.node.variants.edges.map(({ node: variant }) => (
                       <Button
                         key={variant.id}
                         variant={selectedVariant?.id === variant.id ? "default" : "outline"}
                         onClick={() => setSelectedVariant(variant)}
-                        className="justify-start"
+                        className={`px-6 ${selectedVariant?.id === variant.id ? 'bg-foreground text-background' : ''}`}
                       >
                         {variant.title}
                       </Button>
@@ -161,62 +195,31 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              {/* Quantity Selector */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Aantal:</label>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    -
-                  </Button>
-                  <span className="w-12 text-center">{quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setQuantity(quantity + 1)}
-                  >
-                    +
-                  </Button>
-                </div>
-              </div>
-
-              {/* Add to Cart */}
+              {/* Add to Cart Button */}
               <Button
                 onClick={handleAddToCart}
                 size="lg"
-                className="w-full"
+                className="w-full bg-foreground hover:bg-foreground/90 text-background font-bold text-base py-6"
                 disabled={!selectedVariant?.availableForSale}
               >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {selectedVariant?.availableForSale ? 'Voeg toe aan winkelmandje' : 'Uitverkocht'}
+                {selectedVariant?.availableForSale ? 'VOEG TOE AAN WINKELWAGEN' : 'UITVERKOCHT'}
               </Button>
 
-              {/* Trust Badges */}
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span className="text-sm">Gratis verzending</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span className="text-sm">2 jaar garantie</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span className="text-sm">30 dagen retour</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span className="text-sm">Veilig betalen</span>
-                </div>
+              {/* Money Back Guarantee */}
+              <div className="border rounded-lg p-4 bg-muted/20">
+                <button className="w-full text-left flex items-center justify-between font-medium">
+                  <span>NIET TEVREDEN = GELD TERUG</span>
+                  <span className="text-xl">▼</span>
+                </button>
               </div>
 
-              <p className="text-sm text-muted-foreground">
-                {product.node.description}
-              </p>
+              {/* Description */}
+              <div className="pt-4 border-t">
+                <h3 className="font-bold text-xl mb-3 uppercase">Bespaar moeite en energie zonder gedoe met schakelaars</h3>
+                <p className="text-foreground leading-relaxed">
+                  {product.node.description}
+                </p>
+              </div>
             </div>
           </div>
         </div>
