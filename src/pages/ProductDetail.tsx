@@ -207,37 +207,19 @@ const ProductDetail = () => {
                 href="/#home" 
                 className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
               >
-                HOMEPAGINA
-              </a>
-              <a 
-                href="/#waarom" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                WINKEL
+                HOME
               </a>
               <a 
                 href="/#products" 
                 className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
               >
+                PRODUCTEN
+              </a>
+              <a 
+                href="/#contact" 
+                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
+              >
                 CONTACT
-              </a>
-              <a 
-                href="/#faq" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                OVER ONS
-              </a>
-              <a 
-                href="#" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                VOLG JE BESTELLING
-              </a>
-              <a 
-                href="#" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-brand-orange transition-colors"
-              >
-                VEEL GESTELDE VRAGEN
               </a>
             </nav>
           </div>
