@@ -38,11 +38,11 @@ const ProductDetail = () => {
     if (!product) return null;
     return product.node.variants.edges.find(({ node: v }) => {
       const hasColor = v.selectedOptions.some(opt => 
-        (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && 
+        (opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur' || opt.name.toLowerCase() === 'variant') && 
         opt.value.toLowerCase() === color.toLowerCase()
       );
       const hasSize = v.selectedOptions.some(opt => 
-        (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') && 
+        (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur' && opt.name.toLowerCase() !== 'variant') && 
         opt.value.toLowerCase().includes(size.toLowerCase())
       );
       return hasColor && hasSize;
@@ -62,10 +62,10 @@ const ProductDetail = () => {
           // Set initial color and size from first variant
           if (firstVariant) {
             const colorOpt = firstVariant.selectedOptions.find(opt => 
-              opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur'
+              opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur' || opt.name.toLowerCase() === 'variant'
             );
             const sizeOpt = firstVariant.selectedOptions.find(opt => 
-              opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur'
+              opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur' && opt.name.toLowerCase() !== 'variant'
             );
             
             if (colorOpt) setSelectedColor(colorOpt.value);
@@ -384,7 +384,7 @@ const ProductDetail = () => {
               {/* Color and Size Selection - Side by Side */}
               <div className="grid grid-cols-2 gap-6">
                 {/* Size Selection */}
-                {product.node.options.some(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') && (
+                {product.node.options.some(opt => opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur' && opt.name.toLowerCase() !== 'variant') && (
                   <div className="space-y-3">
                     <label className="text-sm font-bold uppercase tracking-wide">Maat</label>
                     <div className="flex flex-wrap gap-2">
@@ -393,7 +393,7 @@ const ProductDetail = () => {
                         const sizes = new Set<string>();
                         product.node.variants.edges.forEach(({ node: v }) => {
                           v.selectedOptions.forEach(opt => {
-                            if (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur') {
+                            if (opt.name.toLowerCase() !== 'color' && opt.name.toLowerCase() !== 'kleur' && opt.name.toLowerCase() !== 'variant') {
                               // Extract size number
                               const sizeMatch = opt.value.match(/(\d+)\s*cm/i);
                               if (sizeMatch) {
@@ -427,14 +427,14 @@ const ProductDetail = () => {
                 )}
 
                 {/* Color Selection */}
-                {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur') && (
+                {product.node.options.some(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur' || opt.name.toLowerCase() === 'variant') && (
                   <div className="space-y-3">
                     <label className="text-sm font-bold uppercase tracking-wide">
                       Kleur - {selectedColor.toUpperCase()}
                     </label>
                     <div className="flex flex-wrap gap-2">
                       {(() => {
-                        const colorOption = product.node.options.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur');
+                        const colorOption = product.node.options.find(opt => opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'kleur' || opt.name.toLowerCase() === 'variant');
                         if (!colorOption) return null;
                         
                         // Get unique colors
