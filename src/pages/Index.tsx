@@ -34,7 +34,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
+      <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
         <div className="container">
           <div className="flex h-40 items-center justify-between py-6">
