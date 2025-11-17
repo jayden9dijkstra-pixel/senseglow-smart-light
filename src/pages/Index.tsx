@@ -5,15 +5,17 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { Loader2, Search, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { WhySection } from "@/components/WhySection";
-import { LifestyleSection } from "@/components/LifestyleSection";
-import { FAQSection } from "@/components/FAQSection";
-import { MobileMenu } from "@/components/MobileMenu";
-import { DesktopMenu } from "@/components/DesktopMenu";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageTransition } from "@/components/PageTransition";
-import heroImage from "@/assets/hero-lifestyle.png";
-import logo from "@/assets/logo.png";
+import { HeroSection } from "@/components/homepage/HeroSection";
+import { StorytellingSection } from "@/components/homepage/StorytellingSection";
+import { ProblemSolutionSection } from "@/components/homepage/ProblemSolutionSection";
+import { WarmGlowSection } from "@/components/homepage/WarmGlowSection";
+import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
+import { SafetySection } from "@/components/homepage/SafetySection";
+import { ReviewsTeaserSection } from "@/components/homepage/ReviewsTeaserSection";
+import { FinalCTASection } from "@/components/homepage/FinalCTASection";
+import { FAQSection } from "@/components/FAQSection";
 import logoNew from "@/assets/logo-new.png";
 
 const Index = () => {
@@ -111,58 +113,15 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Hero Section */}
-      <section id="home" className="bg-brand-orange py-12 md:py-20">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
-            {/* Left - Product Image */}
-            <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-2xl mx-auto w-full max-w-sm md:max-w-none">
-              <img 
-                src={heroImage} 
-                alt="SenseGlow LED lamp in actie"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            {/* Right - Content */}
-            <div className="bg-brand-orange-light rounded-3xl p-8 md:p-12 mx-auto w-full max-w-sm md:max-w-none">
-              <div className="flex items-center justify-center md:justify-start gap-1 mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-brand-orange text-xl">⭐</span>
-                ))}
-                <span className="ml-2 font-semibold text-foreground text-center md:text-left">Gebaseerd op 1000+ Reviews</span>
-              </div>
-              
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-brand-orange leading-tight text-center md:text-left">
-                Automatisch licht. Precies wanneer jij het nodig hebt.
-              </h2>
-              
-              <p className="text-base md:text-lg mb-6 text-foreground leading-relaxed text-center md:text-left">
-                Onze slimme LED lamp met bewegings-sensor combineert <strong>veiligheid</strong> en <strong>design</strong> in één oplossing. 
-                Zodra je beweegt, verschijnt er een <strong>warme gloed</strong> die je huis veiliger, rustiger en stijlvoller maakt.
-              </p>
-              
-              <div className="flex justify-center md:justify-start">
-                <Button
-                  onClick={() => navigate("/quiz")}
-                  size="lg"
-                  className="bg-brand-orange hover:bg-brand-orange/90 text-white shadow-xl text-lg px-10 py-6 h-auto rounded-full font-semibold"
-                >
-                  Ontdek de SenseGlow nu!
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why SenseGlow */}
-      <div id="waarom">
-        <WhySection />
-      </div>
-
-      {/* Lifestyle & Reviews */}
-      <LifestyleSection />
+      {/* New Homepage Sections */}
+      <HeroSection />
+      <StorytellingSection />
+      <ProblemSolutionSection />
+      <WarmGlowSection />
+      <QuizIntroSection />
+      <SafetySection />
+      <ReviewsTeaserSection />
+      <FinalCTASection />
 
       {/* Products Section */}
       <section id="products" className="container py-20 bg-background">
