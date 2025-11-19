@@ -135,13 +135,37 @@ const Index = () => {
         </div>
       </header>
 
-      {/* USP Banner */}
-      <section className="bg-foreground py-2.5">
-        <div className="container">
-          <div className="flex flex-wrap justify-center gap-6 text-background text-xs uppercase tracking-wide font-medium">
-            <span>Gratis verzending</span>
-            <span>Voor 23:00 besteld, vandaag verstuurd</span>
-            <span>30 dagen retourrecht</span>
+      {/* USP Banner - Scrolling */}
+      <section className="bg-brand-orange py-3 overflow-hidden relative">
+        <div className="flex whitespace-nowrap animate-[scroll_40s_linear_infinite]">
+          {/* First set of items */}
+          <div className="flex items-center gap-8 px-4">
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
+            <span className="text-white/60">•</span>
+          </div>
+          
+          {/* Duplicate for seamless loop */}
+          <div className="flex items-center gap-8 px-4">
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
+            <span className="text-white/60">•</span>
+          </div>
+          
+          {/* Second duplicate for seamless loop */}
+          <div className="flex items-center gap-8 px-4">
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
+            <span className="text-white/60">•</span>
           </div>
         </div>
       </section>
