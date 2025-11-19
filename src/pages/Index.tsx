@@ -41,32 +41,65 @@ const Index = () => {
       <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
         <div className="container">
-          <div className="flex h-40 items-center justify-between py-6">
-            {/* Left - Search Icon */}
-            <Button variant="ghost" size="icon">
-              <Search className="h-6 w-6" />
-            </Button>
-            
-            {/* Center - Logo with gradient background */}
-            <button 
-              onClick={() => navigate("/")}
-              className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
-              aria-label="Ga naar homepage"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
-              <img 
-                src={logoNew} 
-                alt="SenseGlow Logo" 
-                className="relative h-32 w-auto object-contain drop-shadow-lg"
-              />
-            </button>
-            
-            {/* Right - Account & Cart */}
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon">
-                <User className="h-6 w-6" />
-              </Button>
+          <div className="flex h-40 items-center py-6">
+            {/* Mobile Layout */}
+            <div className="flex md:hidden w-full items-center">
+              {/* Left - Search & User */}
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon">
+                  <Search className="h-6 w-6" />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <User className="h-6 w-6" />
+                </Button>
+              </div>
+              
+              {/* Center - Logo */}
+              <button 
+                onClick={() => navigate("/")}
+                className="flex-1 flex justify-center relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                aria-label="Ga naar homepage"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
+                <img 
+                  src={logoNew} 
+                  alt="SenseGlow Logo" 
+                  className="relative h-28 w-auto object-contain drop-shadow-lg"
+                />
+              </button>
+              
+              {/* Right - Cart */}
               <CartDrawer />
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden md:flex w-full items-center justify-between">
+              {/* Left - Search Icon */}
+              <Button variant="ghost" size="icon">
+                <Search className="h-6 w-6" />
+              </Button>
+              
+              {/* Center - Logo with gradient background */}
+              <button 
+                onClick={() => navigate("/")}
+                className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                aria-label="Ga naar homepage"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
+                <img 
+                  src={logoNew} 
+                  alt="SenseGlow Logo" 
+                  className="relative h-32 w-auto object-contain drop-shadow-lg"
+                />
+              </button>
+              
+              {/* Right - Account & Cart */}
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon">
+                  <User className="h-6 w-6" />
+                </Button>
+                <CartDrawer />
+              </div>
             </div>
           </div>
         </div>
