@@ -2,14 +2,14 @@ export const StorytellingSection = () => {
   return (
     <section className="py-20 md:py-32 bg-background">
       <div className="container">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
               Waarom we SenseGlow™ maakten
             </h2>
           </div>
 
-          <div className="space-y-8 text-lg leading-relaxed text-muted-foreground">
+          <div className="space-y-8 text-lg leading-relaxed text-muted-foreground text-center">
             <p>
               Mensen struikelen verrassend vaak in donkere gangen en trappen.
             </p>
@@ -33,7 +33,7 @@ export const StorytellingSection = () => {
           </div>
 
           {/* Placeholder voor close-up foto */}
-          <div className="mt-16 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-gradient-to-br from-brand-orange/20 to-muted flex items-center justify-center">
+          <div className="mt-16 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-gradient-to-br from-brand-orange/20 to-muted flex items-center justify-center max-w-2xl mx-auto">
             <div className="text-center space-y-2 p-8">
               <div className="text-4xl">💡</div>
               <p className="text-sm text-muted-foreground">
