@@ -141,10 +141,10 @@ const ProductDetail = () => {
 
         {/* Product Sections */}
         <ProductHeroSection product={product} />
+        <BundlesSection />
         <OutcomeSection />
         <ProblemSolutionProductSection />
         <UseCaseSection />
-        <BundlesSection />
         <TechBenefitsSection />
         <ProductFAQSection />
         <ProductReviewsSection />

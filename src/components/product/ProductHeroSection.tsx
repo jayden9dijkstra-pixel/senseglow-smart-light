@@ -129,7 +129,7 @@ export const ProductHeroSection = ({ product }: ProductHeroSectionProps) => {
               size="lg"
               className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
             >
-              Voeg toe aan winkelmand + Krijg directe korting op bundels
+              Voeg toe aan winkelmand
             </Button>
           </div>
         </div>
