@@ -8,9 +8,9 @@ export const HeroSection = () => {
   return (
     <section className="relative bg-gradient-to-b from-background to-muted/20 py-16 md:py-24">
       <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          {/* Left - Content */}
-          <div className="space-y-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Content - Centered */}
+          <div className="space-y-8 text-center">
             <div className="space-y-4">
               <p className="text-sm uppercase tracking-wider text-brand-orange font-medium">
                 Premium bewegingssensor verlichting voor elk huis
@@ -20,9 +20,25 @@ export const HeroSection = () => {
                 Veilig licht precies wanneer jij beweegt.
               </h1>
               
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
                 Van diepe duisternis naar een zachte, warme glow die jou veilig begeleidt – zonder iemand wakker te maken.
               </p>
+            </div>
+
+            {/* Hero Image - Smaller and centered */}
+            <div className="relative max-w-md mx-auto">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/5]">
+                <img 
+                  src={heroImage}
+                  alt="SenseGlow LED lamp met warme glow in donkere ruimte"
+                  className="w-full h-full object-cover"
+                />
+                {/* Gradient overlay voor extra warmte */}
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-orange/20 via-transparent to-transparent pointer-events-none" />
+              </div>
+              
+              {/* Glow effect achter image */}
+              <div className="absolute inset-0 bg-brand-orange/10 blur-3xl -z-10 scale-95" />
             </div>
 
             <div className="space-y-6">
@@ -36,32 +52,16 @@ export const HeroSection = () => {
 
               {/* Microtrust */}
               <div className="space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                   <span className="text-brand-orange text-lg">⭐</span>
                   <span>+11.000 veilige nachtbewegingen gefaciliteerd</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                   <span className="text-brand-orange text-lg">✓</span>
                   <span>97% van klanten voelt zich veiliger in huis</span>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Right - Hero Image */}
-          <div className="relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/4]">
-              <img 
-                src={heroImage}
-                alt="SenseGlow LED lamp met warme glow in donkere ruimte"
-                className="w-full h-full object-cover"
-              />
-              {/* Gradient overlay voor extra warmte */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-orange/20 via-transparent to-transparent pointer-events-none" />
-            </div>
-            
-            {/* Glow effect achter image */}
-            <div className="absolute inset-0 bg-brand-orange/10 blur-3xl -z-10 scale-95" />
           </div>
         </div>
       </div>

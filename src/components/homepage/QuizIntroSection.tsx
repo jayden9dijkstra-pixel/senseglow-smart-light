@@ -14,26 +14,26 @@ export const QuizIntroSection = () => {
   return (
     <section className="py-20 md:py-32 bg-brand-orange text-white">
       <div className="container">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left - Content */}
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center space-y-12">
+            {/* Content - Centered */}
             <div className="space-y-8">
               <div className="space-y-4">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
                   Welke SenseGlow™ heb jij nodig?
                 </h2>
                 
-                <p className="text-xl text-white/90">
+                <p className="text-xl text-white/90 max-w-2xl mx-auto">
                   Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past.
                 </p>
               </div>
 
               {/* Location icons */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
                 {locations.map((location, index) => (
-                  <div key={index} className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-2xl p-4">
+                  <div key={index} className="flex flex-col items-center gap-2 bg-white/10 backdrop-blur-sm rounded-2xl p-4">
                     <span className="text-3xl">{location.icon}</span>
-                    <span className="font-medium">{location.label}</span>
+                    <span className="font-medium text-sm">{location.label}</span>
                   </div>
                 ))}
               </div>
@@ -47,9 +47,9 @@ export const QuizIntroSection = () => {
               </Button>
             </div>
 
-            {/* Right - Placeholder voor smartphone mockup */}
-            <div className="relative">
-              <div className="rounded-3xl overflow-hidden shadow-2xl aspect-[9/16] max-w-sm mx-auto bg-white/10 backdrop-blur-sm border-2 border-white/20 flex items-center justify-center">
+            {/* Placeholder voor smartphone mockup - smaller */}
+            <div className="relative max-w-xs mx-auto">
+              <div className="rounded-3xl overflow-hidden shadow-2xl aspect-[9/16] bg-white/10 backdrop-blur-sm border-2 border-white/20 flex items-center justify-center">
                 <div className="text-center space-y-4 p-8">
                   <div className="text-6xl">📱</div>
                   <p className="text-sm text-white/70">
