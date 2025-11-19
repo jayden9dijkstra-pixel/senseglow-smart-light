@@ -38,13 +38,15 @@ export const QuizIntroSection = () => {
                 ))}
               </div>
 
-              <Button
-                onClick={() => navigate("/quiz")}
-                size="lg"
-                className="bg-white text-brand-orange hover:bg-white/90 text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-              >
-                Start mijn 15-seconden Lichtadvies
-              </Button>
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => navigate("/quiz")}
+                  size="lg"
+                  className="bg-white text-brand-orange hover:bg-white/90 text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                >
+                  Start mijn 15-seconden Lichtadvies
+                </Button>
+              </div>
             </div>
 
             {/* Placeholder voor smartphone mockup - smaller */}
