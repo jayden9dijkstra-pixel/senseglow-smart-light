@@ -42,13 +42,15 @@ export const HeroSection = () => {
             </div>
 
             <div className="space-y-6">
-              <Button
-                onClick={() => navigate("/quiz")}
-                size="lg"
-                className="bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-              >
-                Ontdek jouw ideale SenseGlow™ setup
-              </Button>
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => navigate("/quiz")}
+                  size="lg"
+                  className="bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                >
+                  Ontdek jouw ideale SenseGlow™ setup
+                </Button>
+              </div>
 
               {/* Microtrust */}
               <div className="space-y-2 text-sm text-muted-foreground">
