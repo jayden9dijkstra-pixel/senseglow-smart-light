@@ -8,7 +8,8 @@ import { PageTransition } from "@/components/PageTransition";
 
 const questions = [
   {
-    question: "Waar wil je de lamp gebruiken?",
+    question: "Waar wil je de lamp gebruiken? (meerdere opties mogelijk)",
+    multiSelect: true,
     options: [
       { text: "Gang of trappenhuizen", value: "hallway" },
       { text: "Slaapkamer", value: "bedroom" },
@@ -38,6 +39,7 @@ const Quiz = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [productHandle, setProductHandle] = useState<string>("");
 
@@ -52,9 +54,27 @@ const Quiz = () => {
   }, []);
 
   const handleAnswer = (value: string) => {
-    const newAnswers = [...answers, value];
-    setAnswers(newAnswers);
+    const currentQ = questions[currentQuestion];
+    
+    if (currentQ.multiSelect) {
+      // Toggle selection for multi-select
+      const newLocations = selectedLocations.includes(value)
+        ? selectedLocations.filter(v => v !== value)
+        : [...selectedLocations, value];
+      setSelectedLocations(newLocations);
+    } else {
+      const newAnswers = [...answers, value];
+      setAnswers(newAnswers);
 
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+      } else {
+        setShowResult(true);
+      }
+    }
+  };
+
+  const handleContinue = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -63,6 +83,8 @@ const Quiz = () => {
   };
 
   const getRecommendation = () => {
+    const locationCount = selectedLocations.length;
+    
     // Determine size based on room size
     let size = "20cm";
     if (answers.includes("large")) size = "40cm";
@@ -73,12 +95,52 @@ const Quiz = () => {
     let color = "Zwart";
     if (answers.includes("design")) color = "Zilver";
     
-    return { size, color };
+    // Determine bundle based on number of locations
+    let bundle = null;
+    if (locationCount === 2) {
+      bundle = {
+        name: "Night Safety Pack",
+        quantity: 2,
+        price: "79.99",
+        originalPrice: "99.98",
+        discount: "20%",
+        ideal: "Ideaal voor " + selectedLocations.map(loc => {
+          if (loc === "hallway") return "gang/trap";
+          if (loc === "bedroom") return "slaapkamer";
+          if (loc === "bathroom") return "badkamer";
+          if (loc === "kitchen") return "keuken";
+          return loc;
+        }).slice(0, 2).join(" + ")
+      };
+    } else if (locationCount === 3) {
+      bundle = {
+        name: "Home Glow Pack",
+        quantity: 3,
+        price: "109.99",
+        originalPrice: "149.97",
+        discount: "27%",
+        badge: "Meest gekozen",
+        ideal: "Perfect voor trap + gang + slaapkamer"
+      };
+    } else if (locationCount >= 4) {
+      bundle = {
+        name: "Whole Home Security Pack",
+        quantity: 5,
+        price: "169.99",
+        originalPrice: "249.95",
+        discount: "32%",
+        badge: "Meest voordelig",
+        ideal: "Complete woning bescherming"
+      };
+    }
+    
+    return { size, color, bundle, locationCount };
   };
 
   const resetQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
+    setSelectedLocations([]);
     setShowResult(false);
   };
 
@@ -100,7 +162,7 @@ const Quiz = () => {
           </div>
         </header>
 
-        <div className="container py-16 max-w-2xl">
+        <div className="container py-16 max-w-3xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">Jouw perfecte SenseGlow</h1>
             <p className="text-xl text-muted-foreground">
@@ -108,33 +170,94 @@ const Quiz = () => {
             </p>
           </div>
 
-          <Card className="p-8 bg-gradient-to-br from-background to-accent/10 border-2 border-glow/20">
-            <div className="text-center">
-              <div className="inline-block px-6 py-3 bg-glow/10 rounded-full mb-6">
-                <span className="text-3xl font-bold text-glow">{recommendation.size} - {recommendation.color}</span>
+          {recommendation.bundle ? (
+            <Card className="p-8 bg-gradient-to-br from-background to-brand-orange/10 border-2 border-brand-orange/30 mb-6">
+              <div className="text-center space-y-6">
+                {recommendation.bundle.badge && (
+                  <div className="inline-block px-4 py-2 bg-brand-orange/20 rounded-full">
+                    <span className="text-sm font-semibold text-brand-orange">{recommendation.bundle.badge}</span>
+                  </div>
+                )}
+                
+                <div>
+                  <h2 className="text-3xl font-bold text-foreground mb-2">{recommendation.bundle.name}</h2>
+                  <p className="text-lg text-muted-foreground">{recommendation.bundle.ideal}</p>
+                </div>
+
+                <div className="py-6 border-y border-border">
+                  <div className="flex items-baseline justify-center gap-3 mb-2">
+                    <span className="text-5xl font-bold text-foreground">€{recommendation.bundle.price}</span>
+                    <span className="text-xl text-muted-foreground line-through">€{recommendation.bundle.originalPrice}</span>
+                  </div>
+                  <div className="inline-block px-4 py-1 bg-brand-orange/10 rounded-full">
+                    <span className="text-sm font-semibold text-brand-orange">Bespaar {recommendation.bundle.discount}</span>
+                  </div>
+                </div>
+
+                <div className="text-left space-y-3 bg-background/50 rounded-lg p-6">
+                  <p className="font-semibold text-foreground">✓ {recommendation.bundle.quantity}x SenseGlow™ LED strip</p>
+                  <p className="text-sm text-muted-foreground">
+                    Perfect voor de {recommendation.locationCount} ruimtes die je hebt geselecteerd
+                  </p>
+                  <p className="text-sm text-muted-foreground">• Gratis verzending</p>
+                  <p className="text-sm text-muted-foreground">• 30 dagen retourrecht</p>
+                  <p className="text-sm text-muted-foreground">• Aanbevolen: {recommendation.size} - {recommendation.color}</p>
+                </div>
+
+                <div className="flex flex-col gap-3 pt-4">
+                  <Button
+                    onClick={() => navigate(productUrl)}
+                    size="lg"
+                    className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white"
+                  >
+                    Bekijk {recommendation.bundle.name}
+                  </Button>
+                  
+                  <Button
+                    onClick={resetQuiz}
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                  >
+                    Opnieuw beginnen
+                  </Button>
+                </div>
               </div>
-              <h2 className="text-2xl font-bold mb-4">
-                Motion Sensor LED Light
-              </h2>
-              <p className="text-muted-foreground mb-2">
-                <strong>Maat:</strong> {recommendation.size}
-              </p>
-              <p className="text-muted-foreground mb-8">
-                <strong>Kleur:</strong> {recommendation.color}
-              </p>
-              <div className="flex gap-4 justify-center">
-                <Button
-                  onClick={() => navigate(productUrl)}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-glow/20 transition-all hover:shadow-glow/40"
-                >
-                  Bekijk product
-                </Button>
-                <Button onClick={resetQuiz} variant="outline">
-                  Opnieuw doen
-                </Button>
+            </Card>
+          ) : (
+            <Card className="p-8 bg-gradient-to-br from-background to-accent/10 border-2 border-glow/20">
+              <div className="text-center">
+                <div className="inline-block px-6 py-3 bg-glow/10 rounded-full mb-6">
+                  <p className="text-2xl font-bold text-glow">
+                    SenseGlow™ {recommendation.size} - {recommendation.color}
+                  </p>
+                </div>
+                
+                <p className="text-muted-foreground mb-8">
+                  Deze configuratie past perfect bij jouw wensen.
+                </p>
+
+                <div className="flex flex-col gap-4">
+                  <Button
+                    onClick={() => navigate(productUrl)}
+                    size="lg"
+                    className="w-full bg-glow hover:bg-glow/90"
+                  >
+                    Bekijk dit product
+                  </Button>
+                  
+                  <Button
+                    onClick={resetQuiz}
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                  >
+                    Opnieuw beginnen
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          )}
         </div>
       </div>
     );
@@ -177,16 +300,33 @@ const Quiz = () => {
             {questions[currentQuestion].question}
           </h1>
           <div className="grid gap-4">
-            {questions[currentQuestion].options.map((option) => (
-              <Card
-                key={option.value}
-                className="p-6 cursor-pointer hover:border-glow hover:shadow-lg hover:shadow-glow/10 transition-all"
-                onClick={() => handleAnswer(option.value)}
-              >
-                <p className="text-lg font-medium">{option.text}</p>
-              </Card>
-            ))}
+            {questions[currentQuestion].options.map((option) => {
+              const isSelected = questions[currentQuestion].multiSelect && selectedLocations.includes(option.value);
+              return (
+                <Card
+                  key={option.value}
+                  className={`p-6 cursor-pointer transition-all ${
+                    isSelected 
+                      ? "border-brand-orange border-2 bg-brand-orange/5 shadow-lg shadow-brand-orange/10" 
+                      : "hover:border-glow hover:shadow-lg hover:shadow-glow/10"
+                  }`}
+                  onClick={() => handleAnswer(option.value)}
+                >
+                  <p className="text-lg font-medium">{option.text}</p>
+                </Card>
+              );
+            })}
           </div>
+          
+          {questions[currentQuestion].multiSelect && selectedLocations.length > 0 && (
+            <Button
+              onClick={handleContinue}
+              size="lg"
+              className="w-full mt-6 bg-brand-orange hover:bg-brand-orange/90 text-white"
+            >
+              Ga verder ({selectedLocations.length} geselecteerd)
+            </Button>
+          )}
         </div>
       </div>
     </div>
