@@ -47,11 +47,11 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
       <div className="space-y-4">
         {/* Main Image */}
         <div className="relative group">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-square bg-gradient-to-br from-muted to-background">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-square bg-gradient-to-br from-muted to-background flex items-center justify-center p-4">
             <img
               src={currentImage.url}
               alt={currentImage.altText || productTitle}
-              className="w-full h-full object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105"
+              className="max-w-full max-h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-105"
               onClick={() => setIsZoomed(true)}
             />
 
