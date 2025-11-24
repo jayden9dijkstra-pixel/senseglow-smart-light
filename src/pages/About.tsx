@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Mail, Clock, Globe } from "lucide-react";
+import { ArrowLeft, Lightbulb, Shield, Zap } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Search, User } from "lucide-react";
 import logoNew from "@/assets/logo-new.png";
 
-const Contact = () => {
+const About = () => {
   const navigate = useNavigate();
 
   return (
     <PageTransition>
       <div className="min-h-screen bg-background">
-        {/* Header - same as homepage */}
+        {/* Header */}
         <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
           <div className="container">
             <div className="flex h-40 items-center py-6">
@@ -104,97 +104,60 @@ const Contact = () => {
           <div className="space-y-8">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-brand-orange to-brand-orange/70 bg-clip-text text-transparent">
-                Contact & Support
+                Over SenseGlow
               </h1>
-              <p className="text-lg text-muted-foreground">
-                Bij SenseGlow staat klanttevredenheid centraal. Ons supportteam helpt je graag met al je vragen over bestellingen, garantie of technische ondersteuning.
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                SenseGlow is ontwikkeld vanuit één visie: verlichting moet slim, stijlvol en zorgeloos zijn.
               </p>
             </div>
 
             <Card className="border-brand-orange/20">
-              <CardContent className="p-8 space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-brand-orange/10 rounded-lg">
-                    <Mail className="h-6 w-6 text-brand-orange" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">E-mail</h3>
-                    <a 
-                      href="mailto:support@senseglow.nl" 
-                      className="text-brand-orange hover:underline"
-                    >
-                      support@senseglow.nl
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-brand-orange/10 rounded-lg">
-                    <Clock className="h-6 w-6 text-brand-orange" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Reactietijd</h3>
-                    <p className="text-muted-foreground">Binnen 24 uur (ma–vr)</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-brand-orange/10 rounded-lg">
-                    <Globe className="h-6 w-6 text-brand-orange" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Taal</h3>
-                    <p className="text-muted-foreground">Nederlands & Engels</p>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Tip:</strong> Vermeld je ordernummer voor een snelle afhandeling.
-                  </p>
-                </div>
+              <CardContent className="p-8">
+                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                  Onze LED-sensorverlichting combineert modern design met betrouwbare technologie, waardoor elke ruimte direct comfortabeler en veiliger aanvoelt.
+                </p>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Wij ontwerpen producten die jouw dagelijkse routine ondersteunen — automatisch, energiezuinig en zonder overbodige complexiteit.
+                </p>
               </CardContent>
             </Card>
 
-            {/* FAQ Section */}
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Veelgestelde vragen</h2>
-              <div className="space-y-4">
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Hoe snel wordt mijn bestelling verzonden?</h3>
-                    <p className="text-muted-foreground">Binnen 24–48 uur verwerkt. Levertijd 5–10 werkdagen.</p>
-                  </CardContent>
-                </Card>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-brand-orange/10 rounded-full flex items-center justify-center">
+                    <Lightbulb className="h-8 w-8 text-brand-orange" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Slim Design</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Modern en minimalistisch, past in elke ruimte
+                  </p>
+                </CardContent>
+              </Card>
 
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Moet ik verzendkosten betalen?</h3>
-                    <p className="text-muted-foreground">Nee. Bij SenseGlow is verzending altijd gratis.</p>
-                  </CardContent>
-                </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-brand-orange/10 rounded-full flex items-center justify-center">
+                    <Zap className="h-8 w-8 text-brand-orange" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Energiezuinig</h3>
+                  <p className="text-sm text-muted-foreground">
+                    LED-technologie met lange levensduur
+                  </p>
+                </CardContent>
+              </Card>
 
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Krijg ik een Track & Trace?</h3>
-                    <p className="text-muted-foreground">Ja, automatisch na verwerking van je bestelling.</p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Mijn lamp werkt niet goed. Wat kan ik doen?</h3>
-                    <p className="text-muted-foreground">Neem contact met ons op met een korte video. Je valt onder onze 12 maanden garantie.</p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Kan ik retourneren?</h3>
-                    <p className="text-muted-foreground">Ja, binnen 30 dagen, mits het product ongebruikt is.</p>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-brand-orange/10 rounded-full flex items-center justify-center">
+                    <Shield className="h-8 w-8 text-brand-orange" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Betrouwbaar</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Kwaliteit waar je op kunt vertrouwen
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </main>
@@ -242,4 +205,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default About;
