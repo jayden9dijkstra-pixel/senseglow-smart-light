@@ -5,6 +5,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { ProductImageGallery } from "./ProductImageGallery";
 
 interface ProductHeroSectionProps {
   product: ShopifyProduct;
@@ -32,38 +33,21 @@ export const ProductHeroSection = ({ product }: ProductHeroSectionProps) => {
     });
   };
 
-  const imageUrl = product.node.images?.edges?.[0]?.node?.url;
+  const productImages = product.node.images?.edges?.map(edge => ({
+    url: edge.node.url,
+    altText: edge.node.altText
+  })) || [];
 
   return (
     <section className="py-12 md:py-20 bg-gradient-to-b from-background to-muted/20">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          {/* Left - Product Image */}
+          {/* Left - Product Image Gallery */}
           <div className="relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-square bg-gradient-to-br from-muted to-background">
-              {imageUrl ? (
-                <img 
-                  src={imageUrl}
-                  alt={product.node.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center space-y-4 p-8">
-                    <div className="text-6xl">💡</div>
-                    <p className="text-sm text-muted-foreground">
-                      [Product foto op warme donkere achtergrond]
-                    </p>
-                  </div>
-                </div>
-              )}
-              
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-orange/30 via-transparent to-transparent pointer-events-none" />
-            </div>
-            
-            {/* Outer glow */}
-            <div className="absolute inset-0 bg-brand-orange/10 blur-3xl -z-10 scale-95" />
+            <ProductImageGallery 
+              images={productImages} 
+              productTitle={product.node.title}
+            />
           </div>
 
           {/* Right - Product Info */}
