@@ -272,15 +272,15 @@ const Shipping = () => {
               <div>
                 <h4 className="font-bold text-base mb-4 uppercase">OVER ONS</h4>
                 <ul className="text-sm space-y-2 text-background/80">
-                  <li><a href="#" className="hover:text-background">Over SenseGlow</a></li>
-                  <li><a href="#" className="hover:text-background">Duurzaamheid</a></li>
+                  <li><a href="/over" className="hover:text-background">Over SenseGlow</a></li>
+                  <li><a href="/duurzaamheid" className="hover:text-background">Duurzaamheid</a></li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-bold text-base mb-4 uppercase">JURIDISCH</h4>
                 <ul className="text-sm space-y-2 text-background/80">
-                  <li><a href="#" className="hover:text-background">Privacybeleid</a></li>
-                  <li><a href="#" className="hover:text-background">Algemene voorwaarden</a></li>
+                  <li><a href="/privacy" className="hover:text-background">Privacybeleid</a></li>
+                  <li><a href="/voorwaarden" className="hover:text-background">Algemene voorwaarden</a></li>
                 </ul>
               </div>
               <div>

@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, RefreshCw, Mail, CheckCircle } from "lucide-react";
+import { ArrowLeft, Lock, Shield, Eye } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Search, User } from "lucide-react";
 import logoNew from "@/assets/logo-new.png";
 
-const Returns = () => {
+const Privacy = () => {
   const navigate = useNavigate();
 
   return (
@@ -104,117 +104,143 @@ const Returns = () => {
           <div className="space-y-8">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-brand-orange to-brand-orange/70 bg-clip-text text-transparent">
-                Retourneren & Ruilen
+                Privacybeleid
               </h1>
-              <p className="text-lg text-muted-foreground">
-                Wij willen dat je volledig tevreden bent met je aankoop.
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Wij gaan zorgvuldig om met jouw persoonsgegevens.
               </p>
             </div>
 
             <Card className="border-brand-orange/20">
               <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-6">Retourvoorwaarden</h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-brand-orange flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-semibold mb-1">30 dagen bedenktijd</h3>
-                      <p className="text-muted-foreground">Je hebt 30 dagen de tijd om te beslissen of je het product wilt behouden.</p>
-                    </div>
-                  </div>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                  SenseGlow gebruikt alleen de gegevens die nodig zijn om je bestelling veilig te verwerken, te verzenden en te ondersteunen.
+                </p>
+                <p className="text-lg font-semibold text-foreground">
+                  Je informatie wordt beschermd, veilig opgeslagen en nooit verkocht aan derden.
+                </p>
+              </CardContent>
+            </Card>
 
-                  <div className="flex items-start gap-3">
-                    <Package className="h-6 w-6 text-brand-orange flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-semibold mb-1">Product moet ongebruikt zijn</h3>
-                      <p className="text-muted-foreground">Het product moet in originele staat zijn, met alle originele verpakkingen en labels.</p>
-                    </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="w-16 h-16 mb-4 bg-brand-orange/10 rounded-full flex items-center justify-center">
+                    <Lock className="h-8 w-8 text-brand-orange" />
                   </div>
+                  <h3 className="font-semibold text-lg mb-2">Veilig Opgeslagen</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Alle gegevens worden versleuteld en veilig bewaard volgens de hoogste beveiligingsstandaarden.
+                  </p>
+                </CardContent>
+              </Card>
 
-                  <div className="flex items-start gap-3">
-                    <RefreshCw className="h-6 w-6 text-brand-orange flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-semibold mb-1">Retourkosten</h3>
-                      <p className="text-muted-foreground">Retourkosten zijn voor de klant. Wij adviseren track & trace verzending.</p>
-                    </div>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="w-16 h-16 mb-4 bg-brand-orange/10 rounded-full flex items-center justify-center">
+                    <Shield className="h-8 w-8 text-brand-orange" />
                   </div>
+                  <h3 className="font-semibold text-lg mb-2">Beschermd</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    We nemen strikte maatregelen om jouw persoonsgegevens te beschermen tegen ongeautoriseerde toegang.
+                  </p>
+                </CardContent>
+              </Card>
 
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-brand-orange flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-semibold mb-1">Ruilen of terugbetaling</h3>
-                      <p className="text-muted-foreground">Je kunt kiezen voor een ander product of volledige terugbetaling.</p>
-                    </div>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="w-16 h-16 mb-4 bg-brand-orange/10 rounded-full flex items-center justify-center">
+                    <Eye className="h-8 w-8 text-brand-orange" />
                   </div>
+                  <h3 className="font-semibold text-lg mb-2">Transparant</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Je hebt altijd inzage in welke gegevens we van je bewaren en kunt deze aanpassen of verwijderen.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="border-brand-orange/20">
+              <CardContent className="p-8 space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold mb-4">Welke gegevens verzamelen wij?</h2>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Contactgegevens (naam, e-mailadres, telefoonnummer)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Bezorgadres</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Bestelgegevens en ordergeschiedenis</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Betalingsinformatie (via beveiligde betalingsproviders)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h2 className="text-2xl font-bold mb-4">Waarvoor gebruiken wij deze gegevens?</h2>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Het verwerken en verzenden van je bestelling</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Communicatie over je bestelling en klantenservice</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Het verbeteren van onze dienstverlening</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Nieuwsbrieven (alleen met jouw toestemming)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h2 className="text-2xl font-bold mb-4">Jouw rechten</h2>
+                  <p className="text-muted-foreground mb-4">
+                    Je hebt het recht om:
+                  </p>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Inzage te vragen in je persoonsgegevens</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Je gegevens te laten wijzigen of verwijderen</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Bezwaar te maken tegen het gebruik van je gegevens</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-brand-orange mt-1">•</span>
+                      <span>Je toestemming in te trekken</span>
+                    </li>
+                  </ul>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="border-brand-orange bg-gradient-to-br from-brand-orange/5 to-transparent">
               <CardContent className="p-8">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-brand-orange/10 rounded-lg">
-                    <Mail className="h-6 w-6 text-brand-orange" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold mb-2">Hoe retourneren?</h2>
-                    <p className="text-muted-foreground">
-                      Stuur een e-mail naar <a href="mailto:support@senseglow.nl" className="text-brand-orange hover:underline font-semibold">support@senseglow.nl</a>
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="bg-background/50 p-6 rounded-lg">
-                  <p className="text-muted-foreground mb-4">
-                    Ons team stuurt je het juiste retouradres op basis van je fulfilmentlocatie.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Tip:</strong> Vermeld je ordernummer in de e-mail voor een snelle afhandeling.
-                  </p>
-                </div>
+                <h2 className="text-2xl font-bold mb-4">Vragen over privacy?</h2>
+                <p className="text-muted-foreground mb-4">
+                  Bekijk ons volledige privacybeleid voor meer details over hoe wij jouw gegevens beschermen, of neem contact met ons op via <a href="mailto:support@senseglow.nl" className="text-brand-orange hover:underline font-semibold">support@senseglow.nl</a>
+                </p>
               </CardContent>
             </Card>
-
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Veel gestelde vragen over retourneren</h2>
-              <div className="space-y-4">
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Hoe lang duurt het voordat ik mijn geld terugkrijg?</h3>
-                    <p className="text-muted-foreground">
-                      Zodra we je retour hebben ontvangen en gecontroleerd, verwerken we de terugbetaling binnen 5–7 werkdagen.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Kan ik mijn product ruilen voor een ander formaat?</h3>
-                    <p className="text-muted-foreground">
-                      Ja, dat is mogelijk. Vermeld dit in je retour-e-mail en we helpen je graag verder.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Wat als mijn product defect is?</h3>
-                    <p className="text-muted-foreground">
-                      Bij een defect product vallen de retourkosten voor ons. Neem contact op via support@senseglow.nl met foto's of een video van het defect.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">Moet ik de originele verpakking gebruiken?</h3>
-                    <p className="text-muted-foreground">
-                      Wij adviseren de originele verpakking te gebruiken om schade tijdens transport te voorkomen, maar dit is niet verplicht. Zorg wel voor stevige verpakking.
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
           </div>
         </main>
 
@@ -261,4 +287,4 @@ const Returns = () => {
   );
 };
 
-export default Returns;
+export default Privacy;

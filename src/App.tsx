@@ -9,6 +9,10 @@ import ProductDetail from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
 import Shipping from "./pages/Shipping";
 import Returns from "./pages/Returns";
+import About from "./pages/About";
+import Sustainability from "./pages/Sustainability";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +30,10 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/verzending" element={<Shipping />} />
           <Route path="/retourneren" element={<Returns />} />
+          <Route path="/over" element={<About />} />
+          <Route path="/duurzaamheid" element={<Sustainability />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/voorwaarden" element={<Terms />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
