@@ -120,7 +120,7 @@ export const BundlesSection = () => {
                   {/* CTA */}
                   <Button 
                     className={`w-full ${
-                      bundle.popular 
+                      selectedBundle === index
                         ? 'bg-brand-orange hover:bg-brand-orange/90 text-white' 
                         : 'bg-foreground hover:bg-foreground/90 text-background'
                     }`}
