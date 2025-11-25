@@ -214,7 +214,7 @@ const Terms = () => {
                 <CardContent className="p-8">
                   <h2 className="text-2xl font-bold mb-4">5. Garantie</h2>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    SenseGlow biedt 12 maanden garantie op fabricagefouten en defecten die niet het gevolg zijn van normaal gebruik.
+                    SenseGlow biedt 1 jaar garantie op fabricagefouten en defecten die niet het gevolg zijn van normaal gebruik.
                   </p>
                   <ul className="space-y-3 text-muted-foreground">
                     <li className="flex items-start gap-2">

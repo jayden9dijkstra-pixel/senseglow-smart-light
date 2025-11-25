@@ -188,7 +188,7 @@ const Shipping = () => {
               <Card className="border-brand-orange/20">
                 <CardContent className="p-8 space-y-6">
                   <p className="text-lg">
-                    Wij staan achter de kwaliteit van onze producten. <strong>SenseGlow biedt 12 maanden functionele garantie</strong> op alle producten.
+                    Wij staan achter de kwaliteit van onze producten. <strong>SenseGlow biedt 1 jaar functionele garantie</strong> op alle producten.
                   </p>
 
                   <div>
@@ -204,7 +204,7 @@ const Shipping = () => {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-brand-orange mt-1">✓</span>
-                        <span>LED die uitvalt binnen 12 maanden (zonder gebruikersschade)</span>
+                        <span>LED die uitvalt binnen 1 jaar (zonder gebruikersschade)</span>
                       </li>
                     </ul>
                   </div>
