@@ -184,7 +184,7 @@ const Contact = () => {
                 <Card>
                   <CardContent className="p-6">
                     <h3 className="font-semibold mb-2">Mijn lamp werkt niet goed. Wat kan ik doen?</h3>
-                    <p className="text-muted-foreground">Neem contact met ons op met een korte video. Je valt onder onze 12 maanden garantie.</p>
+                    <p className="text-muted-foreground">Neem contact met ons op met een korte video. Je valt onder onze 1 jaar garantie.</p>
                   </CardContent>
                 </Card>
 
