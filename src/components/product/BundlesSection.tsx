@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +54,8 @@ const bundles = [
 ];
 
 export const BundlesSection = () => {
+  const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
+
   return (
     <section className="py-20 md:py-32 bg-gradient-to-b from-background to-brand-orange/5">
       <div className="container">
@@ -70,8 +73,9 @@ export const BundlesSection = () => {
             {bundles.map((bundle, index) => (
               <Card 
                 key={index} 
-                className={`p-8 relative overflow-hidden transition-all duration-300 hover:-translate-y-2 ${
-                  bundle.popular 
+                onClick={() => setSelectedBundle(index)}
+                className={`p-8 relative overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-pointer ${
+                  selectedBundle === index
                     ? 'border-brand-orange border-2 shadow-2xl bg-gradient-to-b from-background to-brand-orange/5' 
                     : 'bg-background border-border hover:shadow-xl'
                 }`}
