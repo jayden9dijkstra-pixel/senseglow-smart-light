@@ -37,7 +37,7 @@ const faqs = [
 const trustIcons = [
   {
     icon: Shield,
-    text: "2 jaar garantie",
+    text: "1 jaar garantie",
   },
   {
     icon: Truck,
