@@ -9,11 +9,19 @@ import { ProductImageGallery } from "./ProductImageGallery";
 
 interface ProductHeroSectionProps {
   product: ShopifyProduct;
+  selectedVariant?: ShopifyProduct['node']['variants']['edges'][0]['node'] | null;
+  onVariantChange?: (variant: ShopifyProduct['node']['variants']['edges'][0]['node']) => void;
 }
 
-export const ProductHeroSection = ({ product }: ProductHeroSectionProps) => {
-  const [selectedVariant, setSelectedVariant] = useState(product.node.variants.edges[0]?.node);
+export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVariantChange }: ProductHeroSectionProps) => {
+  const [localVariant, setLocalVariant] = useState(product.node.variants.edges[0]?.node);
+  const selectedVariant = propVariant ?? localVariant;
   const addItem = useCartStore((state) => state.addItem);
+
+  const handleVariantChange = (variant: ShopifyProduct['node']['variants']['edges'][0]['node']) => {
+    setLocalVariant(variant);
+    onVariantChange?.(variant);
+  };
 
   const handleAddToCart = () => {
     if (!selectedVariant) return;
@@ -82,7 +90,7 @@ export const ProductHeroSection = ({ product }: ProductHeroSectionProps) => {
                       <Button
                         key={variant.node.id}
                         variant={selectedVariant?.id === variant.node.id ? "default" : "outline"}
-                        onClick={() => setSelectedVariant(variant.node)}
+                        onClick={() => handleVariantChange(variant.node)}
                         className={selectedVariant?.id === variant.node.id ? "bg-brand-orange hover:bg-brand-orange/90" : ""}
                       >
                         {variant.node.title}

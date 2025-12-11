@@ -22,6 +22,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedVariant, setSelectedVariant] = useState<ShopifyProduct['node']['variants']['edges'][0]['node'] | null>(null);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -29,6 +30,9 @@ const ProductDetail = () => {
         const products = await fetchProducts(50);
         const found = products.find(p => p.node.handle === handle);
         setProduct(found || null);
+        if (found) {
+          setSelectedVariant(found.node.variants.edges[0]?.node || null);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error loading product:', error);
@@ -164,8 +168,8 @@ const ProductDetail = () => {
         </section>
 
         {/* Product Sections */}
-        <ProductHeroSection product={product} />
-        <BundlesSection />
+        <ProductHeroSection product={product} selectedVariant={selectedVariant} onVariantChange={setSelectedVariant} />
+        <BundlesSection product={product} selectedVariant={selectedVariant || undefined} />
         <OutcomeSection />
         <ProblemSolutionProductSection />
         <UseCaseSection />
