@@ -3,11 +3,15 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
+import { useCartStore } from "@/stores/cartStore";
+import { ShopifyProduct } from "@/lib/shopify";
+import { toast } from "sonner";
 
 const bundles = [
   {
     name: "Night Safety Pack",
-    quantity: "2 stuks",
+    quantity: 2,
+    quantityLabel: "2 stuks",
     ideal: "Ideaal voor trap + gang",
     price: "99.99",
     originalPrice: "109.90",
@@ -22,7 +26,8 @@ const bundles = [
   },
   {
     name: "Home Glow Pack",
-    quantity: "3 stuks",
+    quantity: 3,
+    quantityLabel: "3 stuks",
     ideal: "Trap + gang + slaapkamer",
     price: "139.99",
     originalPrice: "164.85",
@@ -37,7 +42,8 @@ const bundles = [
   },
   {
     name: "Whole Home Security Pack",
-    quantity: "5 stuks",
+    quantity: 5,
+    quantityLabel: "5 stuks",
     ideal: "Complete woningverlichting",
     price: "219.99",
     originalPrice: "274.75",
@@ -53,8 +59,51 @@ const bundles = [
   }
 ];
 
-export const BundlesSection = () => {
+interface BundlesSectionProps {
+  product?: ShopifyProduct;
+  selectedVariant?: {
+    id: string;
+    title: string;
+    price: {
+      amount: string;
+      currencyCode: string;
+    };
+    selectedOptions: Array<{
+      name: string;
+      value: string;
+    }>;
+  };
+}
+
+export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleAddBundleToCart = (bundleIndex: number) => {
+    if (!product || !selectedVariant) {
+      toast.error("Selecteer eerst een productvariant");
+      return;
+    }
+
+    const bundle = bundles[bundleIndex];
+    
+    addItem({
+      product,
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: {
+        amount: (parseFloat(bundle.price) / bundle.quantity).toFixed(2),
+        currencyCode: selectedVariant.price.currencyCode,
+      },
+      quantity: bundle.quantity,
+      selectedOptions: selectedVariant.selectedOptions,
+    });
+
+    toast.success(`${bundle.name} toegevoegd!`, {
+      description: `${bundle.quantity}x ${product.node.title} - €${bundle.price}`,
+      position: "top-center",
+    });
+  };
 
   return (
     <section className="py-20 md:py-32 bg-gradient-to-b from-background to-brand-orange/5">
@@ -90,7 +139,7 @@ export const BundlesSection = () => {
                   {/* Header */}
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold text-foreground">{bundle.name}</h3>
-                    <p className="text-sm text-muted-foreground">{bundle.quantity}</p>
+                    <p className="text-sm text-muted-foreground">{bundle.quantityLabel}</p>
                     <p className="text-sm font-medium text-brand-orange">{bundle.ideal}</p>
                   </div>
 
@@ -119,6 +168,11 @@ export const BundlesSection = () => {
 
                   {/* CTA */}
                   <Button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedBundle(index);
+                      handleAddBundleToCart(index);
+                    }}
                     className={`w-full ${
                       selectedBundle === index
                         ? 'bg-brand-orange hover:bg-brand-orange/90 text-white' 
@@ -126,7 +180,7 @@ export const BundlesSection = () => {
                     }`}
                     size="lg"
                   >
-                    Kies {bundle.quantity}
+                    Kies {bundle.quantityLabel}
                   </Button>
                 </div>
               </Card>
