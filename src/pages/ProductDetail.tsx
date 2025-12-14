@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, User } from "lucide-react";
+import { Search } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { PageTransition } from "@/components/PageTransition";
 import { ShopifyProduct, fetchProducts } from "@/lib/shopify";
@@ -75,7 +75,7 @@ const ProductDetail = () => {
         <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
           {/* Top bar with icons and logo */}
           <div className="container">
-            <div className="flex h-40 items-center justify-between py-6">
+            <div className="flex h-40 items-center justify-between py-6 relative">
               {/* Left - Search Icon */}
               <Button variant="ghost" size="icon">
                 <Search className="h-6 w-6" />
@@ -84,7 +84,7 @@ const ProductDetail = () => {
               {/* Center - Logo with gradient background */}
               <button 
                 onClick={() => navigate("/")}
-                className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:scale-105 transition-transform duration-300"
                 aria-label="Ga naar homepage"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
@@ -95,13 +95,8 @@ const ProductDetail = () => {
                 />
               </button>
               
-              {/* Right - Account & Cart */}
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon">
-                  <User className="h-6 w-6" />
-                </Button>
-                <CartDrawer />
-              </div>
+              {/* Right - Cart */}
+              <CartDrawer />
             </div>
           </div>
           
