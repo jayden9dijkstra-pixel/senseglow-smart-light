@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { ProductCard } from "@/components/ProductCard";
 import { CartDrawer } from "@/components/CartDrawer";
-import { Loader2, Search, User } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -43,21 +43,16 @@ const Index = () => {
         <div className="container">
           <div className="flex h-40 items-center py-6">
             {/* Mobile Layout */}
-            <div className="flex md:hidden w-full items-center">
-              {/* Left - Search & User */}
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon">
-                  <Search className="h-6 w-6" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <User className="h-6 w-6" />
-                </Button>
-              </div>
+            <div className="flex md:hidden w-full items-center justify-between">
+              {/* Left - Search */}
+              <Button variant="ghost" size="icon">
+                <Search className="h-6 w-6" />
+              </Button>
               
               {/* Center - Logo */}
               <button 
                 onClick={() => navigate("/")}
-                className="flex-1 flex justify-center relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="absolute left-1/2 -translate-x-1/2 relative cursor-pointer hover:scale-105 transition-transform duration-300"
                 aria-label="Ga naar homepage"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
@@ -82,7 +77,7 @@ const Index = () => {
               {/* Center - Logo with gradient background */}
               <button 
                 onClick={() => navigate("/")}
-                className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="absolute left-1/2 -translate-x-1/2 relative cursor-pointer hover:scale-105 transition-transform duration-300"
                 aria-label="Ga naar homepage"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
@@ -93,13 +88,8 @@ const Index = () => {
                 />
               </button>
               
-              {/* Right - Account & Cart */}
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon">
-                  <User className="h-6 w-6" />
-                </Button>
-                <CartDrawer />
-              </div>
+              {/* Right - Cart */}
+              <CartDrawer />
             </div>
           </div>
         </div>
