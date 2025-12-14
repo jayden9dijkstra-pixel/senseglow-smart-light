@@ -41,7 +41,7 @@ const Index = () => {
       <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
         {/* Top bar with icons and logo */}
         <div className="container">
-          <div className="flex h-40 items-center py-6">
+          <div className="flex h-40 items-center py-6 relative">
             {/* Mobile Layout */}
             <div className="flex md:hidden w-full items-center justify-between">
               {/* Left - Search */}
@@ -52,7 +52,7 @@ const Index = () => {
               {/* Center - Logo */}
               <button 
                 onClick={() => navigate("/")}
-                className="absolute left-1/2 -translate-x-1/2 relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:scale-105 transition-transform duration-300"
                 aria-label="Ga naar homepage"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
@@ -77,7 +77,7 @@ const Index = () => {
               {/* Center - Logo with gradient background */}
               <button 
                 onClick={() => navigate("/")}
-                className="absolute left-1/2 -translate-x-1/2 relative cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:scale-105 transition-transform duration-300"
                 aria-label="Ga naar homepage"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
