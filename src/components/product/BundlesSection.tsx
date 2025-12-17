@@ -12,7 +12,8 @@ const bundles = [
     name: "Night Safety Pack",
     quantity: 2,
     quantityLabel: "2 stuks",
-    ideal: "Ideaal voor trap + gang",
+    label: "Ideaal voor trap & gang",
+    subtekst: "Meest gekozen voor nachtveiligheid",
     price: "99.99",
     originalPrice: "109.90",
     discount: "9%",
@@ -28,7 +29,8 @@ const bundles = [
     name: "Home Glow Pack",
     quantity: 3,
     quantityLabel: "3 stuks",
-    ideal: "Trap + gang + slaapkamer",
+    label: "Beste balans",
+    subtekst: "Veiligheid én comfort voor dagelijks gebruik",
     price: "139.99",
     originalPrice: "164.85",
     discount: "15%",
@@ -44,7 +46,8 @@ const bundles = [
     name: "Whole Home Security Pack",
     quantity: 5,
     quantityLabel: "5 stuks",
-    ideal: "Complete woningverlichting",
+    label: "Volledige gemoedsrust",
+    subtekst: "Voor wie alles in één keer goed wil doen",
     price: "219.99",
     originalPrice: "274.75",
     discount: "20%",
@@ -110,6 +113,10 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
       <div className="container">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
+            {/* Social Proof Header */}
+            <p className="text-sm uppercase tracking-wider text-brand-orange font-medium">
+              90% van onze klanten kiest meer dan 1 SenseGlow™
+            </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
               Bespaar met bundels
             </h2>
@@ -139,8 +146,8 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   {/* Header */}
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold text-foreground">{bundle.name}</h3>
-                    <p className="text-sm text-muted-foreground">{bundle.quantityLabel}</p>
-                    <p className="text-sm font-medium text-brand-orange">{bundle.ideal}</p>
+                    <p className="text-sm font-medium text-brand-orange">{bundle.label}</p>
+                    <p className="text-sm text-muted-foreground">{bundle.subtekst}</p>
                   </div>
 
                   {/* Pricing */}

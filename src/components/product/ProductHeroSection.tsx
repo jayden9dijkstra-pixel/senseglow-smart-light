@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ProductImageGallery } from "./ProductImageGallery";
+import { Check } from "lucide-react";
 
 interface ProductHeroSectionProps {
   product: ShopifyProduct;
@@ -59,60 +60,95 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
           </div>
 
           {/* Right - Product Info */}
-          <div className="space-y-8">
-            <div className="space-y-4">
+          <div className="space-y-6">
+            <div className="space-y-3">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
-                {product.node.title} – Automatisch licht waar jij beweegt.
+                Veilig licht. Precies wanneer jij beweegt.
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground">
-                Warm, veilig, energiezuinig. Voor trappen, gangen en slaapkamers.
+                Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken.
               </p>
             </div>
 
-            {/* Price & Variants */}
-            <div className="space-y-4">
-              <div className="flex items-baseline gap-4">
-                <span className="text-4xl font-bold text-foreground">
-                  €{parseFloat(selectedVariant?.price.amount || "0").toFixed(2)}
-                </span>
-                {product.node.variants.edges.length > 1 && (
-                  <Badge variant="secondary">Meerdere opties beschikbaar</Badge>
-                )}
-              </div>
-
-              {/* Variant selector */}
-              {product.node.variants.edges.length > 1 && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Kies maat:</label>
-                  <div className="flex flex-wrap gap-2">
-                    {product.node.variants.edges.map((variant) => (
-                      <Button
-                        key={variant.node.id}
-                        variant={selectedVariant?.id === variant.node.id ? "default" : "outline"}
-                        onClick={() => handleVariantChange(variant.node)}
-                        className={selectedVariant?.id === variant.node.id ? "bg-brand-orange hover:bg-brand-orange/90" : ""}
-                      >
-                        {variant.node.title}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* Price */}
+            <div className="flex items-baseline gap-4">
+              <span className="text-4xl font-bold text-foreground">
+                €{parseFloat(selectedVariant?.price.amount || "0").toFixed(2)}
+              </span>
             </div>
 
+            {/* Visual Variant Selector - Cards */}
+            {product.node.variants.edges.length > 1 && (
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-foreground">Kies je variant:</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {product.node.variants.edges.map((variant, index) => {
+                    const isSelected = selectedVariant?.id === variant.node.id;
+                    const microcopy = index === 0 ? "Meest gekozen" : index === 1 ? "Beste waarde" : "Voor grotere ruimtes";
+                    
+                    return (
+                      <div
+                        key={variant.node.id}
+                        onClick={() => handleVariantChange(variant.node)}
+                        className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                          isSelected 
+                            ? 'border-brand-orange bg-brand-orange/5 shadow-lg' 
+                            : 'border-border hover:border-brand-orange/50 bg-background hover:bg-muted/30'
+                        }`}
+                      >
+                        {index === 0 && (
+                          <Badge className="absolute -top-2 -right-2 bg-brand-orange text-white text-xs">
+                            Populair
+                          </Badge>
+                        )}
+                        <div className="space-y-1">
+                          <p className="font-semibold text-foreground">{variant.node.title}</p>
+                          <p className="text-sm text-muted-foreground">{microcopy}</p>
+                          <p className="text-lg font-bold text-brand-orange">
+                            €{parseFloat(variant.node.price.amount).toFixed(2)}
+                          </p>
+                        </div>
+                        {isSelected && (
+                          <div className="absolute top-3 left-3 w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center">
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* 3 Bullets */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               {[
-                "✓ Automatische sensor",
-                "✓ Warm licht (2700K)",
-                "✓ Installatie zonder gereedschap"
+                "Automatische bewegingssensor",
+                "Warm licht (2700K) - slaapvriendelijk",
+                "Installatie zonder gereedschap"
               ].map((bullet, i) => (
-                <div key={i} className="flex items-center gap-3 text-lg">
-                  <span className="text-brand-orange font-bold">{bullet.split(' ')[0]}</span>
-                  <span className="text-foreground">{bullet.substring(2)}</span>
+                <div key={i} className="flex items-center gap-3">
+                  <Check className="w-5 h-5 text-brand-orange flex-shrink-0" />
+                  <span className="text-foreground">{bullet}</span>
                 </div>
               ))}
+            </div>
+
+            {/* Trust Guarantees before CTA */}
+            <div className="flex flex-wrap gap-4 py-3 border-y border-border">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="text-brand-orange">✓</span>
+                <span>Gratis verzending</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="text-brand-orange">✓</span>
+                <span>30 dagen retour</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="text-brand-orange">✓</span>
+                <span>1 jaar garantie</span>
+              </div>
             </div>
 
             {/* CTA */}
@@ -121,7 +157,7 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
               size="lg"
               className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
             >
-              Voeg toe aan winkelmand
+              Maak je huis 's nachts veilig
             </Button>
           </div>
         </div>

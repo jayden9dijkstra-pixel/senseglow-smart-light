@@ -165,12 +165,12 @@ const ProductDetail = () => {
         {/* Product Sections */}
         <ProductHeroSection product={product} selectedVariant={selectedVariant} onVariantChange={setSelectedVariant} />
         <BundlesSection product={product} selectedVariant={selectedVariant || undefined} />
+        <ProductReviewsSection />
         <OutcomeSection />
         <ProblemSolutionProductSection />
         <UseCaseSection />
         <TechBenefitsSection />
         <ProductFAQSection />
-        <ProductReviewsSection />
         <FinalProductCTA />
 
         {/* Footer */}
