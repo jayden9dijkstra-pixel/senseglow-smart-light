@@ -6,61 +6,136 @@ import { Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const bundles = [
-  {
-    name: "Night Safety Pack",
-    quantity: 2,
-    quantityLabel: "2 stuks",
-    label: "Ideaal voor trap & gang",
-    subtekst: "Meest gekozen voor nachtveiligheid",
-    price: "99.99",
-    originalPrice: "109.90",
-    discount: "9%",
-    badge: "Meest gekozen",
-    popular: true,
-    features: [
-      "2x SenseGlow™ LED strip",
-      "Gratis verzending",
-      "30 dagen retourrecht"
-    ]
-  },
-  {
-    name: "Home Glow Pack",
-    quantity: 3,
-    quantityLabel: "3 stuks",
-    label: "Beste balans",
-    subtekst: "Veiligheid én comfort voor dagelijks gebruik",
-    price: "139.99",
-    originalPrice: "164.85",
-    discount: "15%",
-    badge: "Beste waarde",
-    features: [
-      "3x SenseGlow™ LED strip",
-      "Gratis verzending",
-      "Extra voordeel",
-      "30 dagen retourrecht"
-    ]
-  },
-  {
-    name: "Whole Home Security Pack",
-    quantity: 5,
-    quantityLabel: "5 stuks",
-    label: "Volledige gemoedsrust",
-    subtekst: "Voor wie alles in één keer goed wil doen",
-    price: "219.99",
-    originalPrice: "274.75",
-    discount: "20%",
-    badge: "Maximaal voordeel",
-    features: [
-      "5x SenseGlow™ LED strip",
-      "Gratis verzending",
-      "Maximaal voordeel",
-      "Premium support",
-      "30 dagen retourrecht"
-    ]
-  }
-];
+const bundleData = {
+  "20cm": [
+    {
+      name: "Night Safety Pack",
+      quantity: 2,
+      quantityLabel: "2 stuks",
+      sizeLabel: "20cm modellen",
+      sizeDescription: "Ideaal voor trap & gang",
+      label: "Ideaal voor trap & gang",
+      subtekst: "Meest gekozen voor nachtveiligheid",
+      price: "59.99",
+      originalPrice: "69.90",
+      discount: "14%",
+      badge: "Meest gekozen",
+      popular: true,
+      features: [
+        "2x SenseGlow™ 20cm LED strip",
+        "Gratis verzending",
+        "30 dagen retourrecht"
+      ]
+    },
+    {
+      name: "Home Glow Pack",
+      quantity: 3,
+      quantityLabel: "3 stuks",
+      sizeLabel: "20cm modellen",
+      sizeDescription: "Ideaal voor trap & gang",
+      label: "Beste balans",
+      subtekst: "Veiligheid én comfort voor dagelijks gebruik",
+      price: "84.99",
+      originalPrice: "104.85",
+      discount: "19%",
+      badge: "Beste waarde",
+      features: [
+        "3x SenseGlow™ 20cm LED strip",
+        "Gratis verzending",
+        "Extra voordeel",
+        "30 dagen retourrecht"
+      ]
+    },
+    {
+      name: "Whole Home Security Pack",
+      quantity: 5,
+      quantityLabel: "5 stuks",
+      sizeLabel: "20cm modellen",
+      sizeDescription: "Ideaal voor trap & gang",
+      label: "Volledige gemoedsrust",
+      subtekst: "Voor wie alles in één keer goed wil doen",
+      price: "134.99",
+      originalPrice: "174.75",
+      discount: "23%",
+      badge: "Maximaal voordeel",
+      features: [
+        "5x SenseGlow™ 20cm LED strip",
+        "Gratis verzending",
+        "Maximaal voordeel",
+        "Premium support",
+        "30 dagen retourrecht"
+      ]
+    }
+  ],
+  "40cm": [
+    {
+      name: "Night Safety Pack",
+      quantity: 2,
+      quantityLabel: "2 stuks",
+      sizeLabel: "40cm modellen",
+      sizeDescription: "Meer licht voor grotere ruimtes",
+      label: "Ideaal voor trap & gang",
+      subtekst: "Meest gekozen voor nachtveiligheid",
+      price: "99.99",
+      originalPrice: "109.90",
+      discount: "9%",
+      badge: "Meest gekozen",
+      popular: true,
+      features: [
+        "2x SenseGlow™ 40cm LED strip",
+        "Gratis verzending",
+        "30 dagen retourrecht"
+      ]
+    },
+    {
+      name: "Home Glow Pack",
+      quantity: 3,
+      quantityLabel: "3 stuks",
+      sizeLabel: "40cm modellen",
+      sizeDescription: "Meer licht voor grotere ruimtes",
+      label: "Beste balans",
+      subtekst: "Veiligheid én comfort voor dagelijks gebruik",
+      price: "139.99",
+      originalPrice: "164.85",
+      discount: "15%",
+      badge: "Beste waarde",
+      features: [
+        "3x SenseGlow™ 40cm LED strip",
+        "Gratis verzending",
+        "Extra voordeel",
+        "30 dagen retourrecht"
+      ]
+    },
+    {
+      name: "Whole Home Security Pack",
+      quantity: 5,
+      quantityLabel: "5 stuks",
+      sizeLabel: "40cm modellen",
+      sizeDescription: "Meer licht voor grotere ruimtes",
+      label: "Volledige gemoedsrust",
+      subtekst: "Voor wie alles in één keer goed wil doen",
+      price: "219.99",
+      originalPrice: "274.75",
+      discount: "20%",
+      badge: "Maximaal voordeel",
+      features: [
+        "5x SenseGlow™ 40cm LED strip",
+        "Gratis verzending",
+        "Maximaal voordeel",
+        "Premium support",
+        "30 dagen retourrecht"
+      ]
+    }
+  ]
+};
 
 interface BundlesSectionProps {
   product?: ShopifyProduct;
@@ -80,7 +155,10 @@ interface BundlesSectionProps {
 
 export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
+  const [selectedSize, setSelectedSize] = useState<"20cm" | "40cm">("20cm");
   const addItem = useCartStore((state) => state.addItem);
+
+  const bundles = bundleData[selectedSize];
 
   const handleAddBundleToCart = (bundleIndex: number) => {
     if (!product || !selectedVariant) {
@@ -103,7 +181,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
     });
 
     toast.success(`${bundle.name} toegevoegd!`, {
-      description: `${bundle.quantity}x ${product.node.title} - €${bundle.price}`,
+      description: `${bundle.quantity}x ${product.node.title} (${selectedSize}) - €${bundle.price}`,
       position: "top-center",
     });
   };
@@ -112,7 +190,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
     <section className="py-20 md:py-32 bg-gradient-to-b from-background to-brand-orange/5">
       <div className="container">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
+          <div className="text-center mb-12 space-y-4">
             {/* Social Proof Header */}
             <p className="text-sm uppercase tracking-wider text-brand-orange font-medium">
               90% van onze klanten kiest meer dan 1 SenseGlow™
@@ -125,10 +203,38 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
             </p>
           </div>
 
+          {/* Size Selector */}
+          <div className="flex justify-center mb-10">
+            <div className="bg-background border border-border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-foreground">Kies je maat:</span>
+                <Select value={selectedSize} onValueChange={(value: "20cm" | "40cm") => setSelectedSize(value)}>
+                  <SelectTrigger className="w-[200px] bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border">
+                    <SelectItem value="20cm">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">20cm</span>
+                        <span className="text-xs text-muted-foreground">Ideaal voor trap & gang</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="40cm">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">40cm</span>
+                        <span className="text-xs text-muted-foreground">Meer licht voor grotere ruimtes</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-8">
             {bundles.map((bundle, index) => (
               <Card 
-                key={index} 
+                key={`${selectedSize}-${index}`}
                 onClick={() => setSelectedBundle(index)}
                 className={`p-8 relative overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-pointer ${
                   selectedBundle === index
@@ -146,6 +252,11 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   {/* Header */}
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold text-foreground">{bundle.name}</h3>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-xs border-brand-orange/30 text-brand-orange">
+                        {bundle.sizeLabel}
+                      </Badge>
+                    </div>
                     <p className="text-sm font-medium text-brand-orange">{bundle.label}</p>
                     <p className="text-sm text-muted-foreground">{bundle.subtekst}</p>
                   </div>
