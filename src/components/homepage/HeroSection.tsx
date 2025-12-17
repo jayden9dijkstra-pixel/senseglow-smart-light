@@ -17,11 +17,11 @@ export const HeroSection = () => {
               </p>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-                Veilig licht precies wanneer jij beweegt.
+                Veilig licht. Precies wanneer jij beweegt.
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                Van diepe duisternis naar een zachte, warme glow die jou veilig begeleidt – zonder iemand wakker te maken.
+                Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken.
               </p>
             </div>
 
@@ -48,8 +48,24 @@ export const HeroSection = () => {
                   size="lg"
                   className="bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                 >
-                  Ontdek jouw ideale SenseGlow™ setup
+                  Maak je huis 's nachts veilig
                 </Button>
+              </div>
+
+              {/* Trust Icons - 3 second trust */}
+              <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-orange font-bold">✓</span>
+                  <span>Gratis verzending</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-orange font-bold">✓</span>
+                  <span>30 dagen retour</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-orange font-bold">✓</span>
+                  <span>1 jaar garantie</span>
+                </div>
               </div>
 
               {/* Microtrust */}
@@ -57,10 +73,6 @@ export const HeroSection = () => {
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-brand-orange text-lg">⭐</span>
                   <span>+11.000 veilige nachtbewegingen gefaciliteerd</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-brand-orange text-lg">✓</span>
-                  <span>97% van klanten voelt zich veiliger in huis</span>
                 </div>
               </div>
             </div>
