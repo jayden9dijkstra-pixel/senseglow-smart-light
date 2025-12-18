@@ -34,12 +34,14 @@ export const StorytellingSection = () => {
             </div>
           </div>
 
-          <div className="mt-16 rounded-3xl overflow-hidden shadow-2xl aspect-video max-w-2xl mx-auto">
-            <img 
-              src={storytellingImage} 
-              alt="SenseGlow LED strip die warm oplicht in het donker" 
-              className="w-full h-full object-cover"
-            />
+          <div className="mt-16 flex justify-center">
+            <div className="rounded-3xl overflow-hidden shadow-2xl max-w-md">
+              <img 
+                src={storytellingImage} 
+                alt="SenseGlow LED strip die warm oplicht in het donker" 
+                className="w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </div>
