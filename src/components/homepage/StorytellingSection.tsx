@@ -1,3 +1,5 @@
+import storytellingImage from "@/assets/storytelling-glow.jpg";
+
 export const StorytellingSection = () => {
   return (
     <section className="py-20 md:py-32 bg-background">
@@ -32,14 +34,12 @@ export const StorytellingSection = () => {
             </div>
           </div>
 
-          {/* Placeholder voor close-up foto */}
-          <div className="mt-16 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-gradient-to-br from-brand-orange/20 to-muted flex items-center justify-center max-w-2xl mx-auto">
-            <div className="text-center space-y-2 p-8">
-              <div className="text-4xl">💡</div>
-              <p className="text-sm text-muted-foreground">
-                [Close-up foto: lichtstrip die oplicht vanuit duisternis]
-              </p>
-            </div>
+          <div className="mt-16 rounded-3xl overflow-hidden shadow-2xl aspect-video max-w-2xl mx-auto">
+            <img 
+              src={storytellingImage} 
+              alt="SenseGlow LED strip die warm oplicht in het donker" 
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
