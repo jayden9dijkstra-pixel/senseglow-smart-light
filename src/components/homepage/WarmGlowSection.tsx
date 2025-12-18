@@ -32,20 +32,6 @@ export const WarmGlowSection = () => {
               </div>
             </div>
 
-            {/* Image - Centered and smaller */}
-            <div className="relative max-w-md mx-auto">
-              <div className="rounded-3xl overflow-hidden shadow-2xl aspect-square bg-gradient-to-br from-brand-orange/30 via-brand-orange/20 to-background flex items-center justify-center">
-                <div className="text-center space-y-4 p-8">
-                  <div className="text-6xl">✨</div>
-                  <p className="text-sm text-muted-foreground">
-                    [Luxe warme glow foto]
-                  </p>
-                </div>
-              </div>
-              
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-brand-orange/20 blur-3xl -z-10 scale-90" />
-            </div>
           </div>
         </div>
       </div>
