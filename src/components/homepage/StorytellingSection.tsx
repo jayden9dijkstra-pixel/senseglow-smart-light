@@ -1,4 +1,4 @@
-import storytellingImage from "@/assets/storytelling-glow.jpg";
+import storytellingImage from "@/assets/storytelling-glow.png";
 
 export const StorytellingSection = () => {
   return (
