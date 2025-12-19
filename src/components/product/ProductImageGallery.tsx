@@ -44,23 +44,20 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Main Image */}
         <div className="relative group">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-square bg-gradient-to-br from-muted to-background flex items-center justify-center p-4">
+          <div className="relative rounded-2xl overflow-hidden bg-neutral-900">
             <img
               src={currentImage.url}
               alt={currentImage.altText || productTitle}
-              className="max-w-full max-h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-auto object-contain cursor-pointer transition-transform duration-300 group-hover:scale-[1.02]"
               onClick={() => setIsZoomed(true)}
             />
 
-            {/* Glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-orange/30 via-transparent to-transparent pointer-events-none" />
-
             {/* Zoom hint */}
-            <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <ZoomIn className="h-5 w-5 text-foreground" />
+            <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <ZoomIn className="h-4 w-4 text-foreground" />
             </div>
 
             {/* Navigation arrows */}
@@ -69,74 +66,68 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 hover:bg-background backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 h-10 w-10"
                   onClick={handlePrevious}
                 >
-                  <ChevronLeft className="h-6 w-6" />
+                  <ChevronLeft className="h-5 w-5" />
                 </Button>
 
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 hover:bg-background backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 h-10 w-10"
                   onClick={handleNext}
                 >
-                  <ChevronRight className="h-6 w-6" />
+                  <ChevronRight className="h-5 w-5" />
                 </Button>
               </>
             )}
 
             {/* Image counter */}
             {images.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
                 {selectedIndex + 1} / {images.length}
               </div>
             )}
           </div>
-
-          {/* Outer glow */}
-          <div className="absolute inset-0 bg-brand-orange/10 blur-3xl -z-10 scale-95" />
         </div>
 
         {/* Thumbnails */}
         {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <div className="flex gap-2 overflow-x-auto pb-1">
             {images.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedIndex(index)}
-                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-neutral-900 ${
                   selectedIndex === index
-                    ? "border-brand-orange shadow-lg scale-105"
+                    ? "border-brand-orange ring-1 ring-brand-orange/50"
                     : "border-transparent hover:border-muted-foreground/30"
                 }`}
               >
                 <img
                   src={image.url}
                   alt={`${productTitle} ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
-                {selectedIndex === index && (
-                  <div className="absolute inset-0 bg-brand-orange/10" />
-                )}
               </button>
             ))}
           </div>
         )}
       </div>
 
-      {/* Zoomed Modal */}
+      {/* Zoomed Modal - Full screen clean view */}
       <Dialog open={isZoomed} onOpenChange={setIsZoomed}>
-        <DialogContent className="max-w-7xl w-full h-[90vh] p-0 bg-background/95 backdrop-blur-sm">
-          <div className="relative w-full h-full flex items-center justify-center p-8">
+        <DialogContent className="max-w-[95vw] w-full max-h-[95vh] p-0 bg-neutral-950/98 backdrop-blur-md border-none">
+          <div className="relative w-full h-[90vh] flex items-center justify-center">
             {/* Close button */}
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-4 right-4 bg-background/80 hover:bg-background backdrop-blur-sm rounded-full z-50"
+              className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full z-50 h-10 w-10"
               onClick={() => setIsZoomed(false)}
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5 text-white" />
             </Button>
 
             {/* Navigation in zoom */}
@@ -145,41 +136,41 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background backdrop-blur-sm rounded-full shadow-lg z-50"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full shadow-lg z-50 h-12 w-12"
                   onClick={(e) => {
                     e.stopPropagation();
                     handlePrevious();
                   }}
                 >
-                  <ChevronLeft className="h-8 w-8" />
+                  <ChevronLeft className="h-6 w-6 text-white" />
                 </Button>
 
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background backdrop-blur-sm rounded-full shadow-lg z-50"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full shadow-lg z-50 h-12 w-12"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleNext();
                   }}
                 >
-                  <ChevronRight className="h-8 w-8" />
+                  <ChevronRight className="h-6 w-6 text-white" />
                 </Button>
               </>
             )}
 
             {/* Counter in zoom */}
             {images.length > 1 && (
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium z-50">
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium z-50 text-white">
                 {selectedIndex + 1} / {images.length}
               </div>
             )}
 
-            {/* Zoomed image */}
+            {/* Zoomed image - true to size */}
             <img
               src={currentImage.url}
               alt={currentImage.altText || productTitle}
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+              className="max-w-[90vw] max-h-[85vh] w-auto h-auto object-contain"
             />
           </div>
         </DialogContent>
