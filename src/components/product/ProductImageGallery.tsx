@@ -71,10 +71,10 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
   return (
     <>
       <div className="space-y-3">
-        {/* Main Image */}
+        {/* Main Image - Fixed aspect ratio to prevent layout shifts */}
         <div className="relative group">
           <div 
-            className="relative rounded-2xl overflow-hidden bg-neutral-900"
+            className="relative rounded-2xl overflow-hidden bg-neutral-900 aspect-square"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -82,7 +82,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
             <img
               src={currentImage.url}
               alt={currentImage.altText || productTitle}
-              className="w-full h-auto object-contain cursor-pointer transition-transform duration-300 group-hover:scale-[1.02]"
+              className="absolute inset-0 w-full h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-[1.02]"
               onClick={() => setIsZoomed(true)}
             />
 
