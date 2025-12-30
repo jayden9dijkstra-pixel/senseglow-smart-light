@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -16,6 +16,9 @@ interface ProductImageGalleryProps {
 export const ProductImageGallery = ({ images, productTitle }: ProductImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const minSwipeDistance = 50;
 
   if (!images || images.length === 0) {
     return (
@@ -42,12 +45,40 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
     setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && images.length > 1) {
+      handleNext();
+    }
+    if (isRightSwipe && images.length > 1) {
+      handlePrevious();
+    }
+  };
+
   return (
     <>
       <div className="space-y-3">
         {/* Main Image */}
         <div className="relative group">
-          <div className="relative rounded-2xl overflow-hidden bg-neutral-900">
+          <div 
+            className="relative rounded-2xl overflow-hidden bg-neutral-900"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <img
               src={currentImage.url}
               alt={currentImage.altText || productTitle}
