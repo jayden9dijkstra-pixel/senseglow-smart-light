@@ -9,39 +9,37 @@ export const SafetySection = () => {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-background animate-fade-in">
+    <section className="py-12 md:py-20 bg-background animate-fade-in">
       <div className="container">
         <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Image - Left side */}
             <div className="relative order-2 md:order-1">
-              <div className="rounded-3xl overflow-hidden">
+              <div className="aspect-[4/5] overflow-hidden">
                 <img 
                   src={stairsSafetyGlow}
                   alt="Voeten op trap met warme SenseGlow LED verlichting"
-                  className="w-full h-auto"
+                  className="w-full h-full object-cover"
                 />
               </div>
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-glow/20 blur-3xl -z-10 scale-90" />
             </div>
 
-            {/* Content - Right side */}
-            <div className="space-y-8 order-1 md:order-2">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+            {/* Content - Right side, left aligned */}
+            <div className="space-y-6 order-1 md:order-2 text-left">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                 Veiligheid is geen luxe. Het is basis.
               </h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {stats.map((stat, index) => (
                   <div 
                     key={index} 
-                    className="flex items-start gap-4 p-5 bg-muted/50 rounded-2xl transition-colors duration-300"
+                    className="flex items-start gap-3 text-base"
                   >
-                    <span className="text-glow font-bold text-xl flex-shrink-0">
+                    <span className="text-glow flex-shrink-0 mt-1">
                       {index === stats.length - 1 ? "✓" : "•"}
                     </span>
-                    <p className="text-lg text-foreground leading-relaxed">
+                    <p className="text-foreground/80 leading-relaxed">
                       {stat}
                     </p>
                   </div>

@@ -51,22 +51,22 @@ const trustIcons = [
 
 export const FAQSection = () => {
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-12 md:py-20 bg-background">
       <div className="container max-w-4xl">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Veelgestelde vragen</h2>
-          <p className="text-xl text-muted-foreground">
+        <div className="text-left mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">Veelgestelde vragen</h2>
+          <p className="text-base text-muted-foreground">
             Alles wat je moet weten over SenseGlow
           </p>
         </div>
 
-        <Accordion type="single" collapsible className="mb-16">
+        <Accordion type="single" collapsible className="mb-10 space-y-0">
           {faqs.map((faq, idx) => (
-            <AccordionItem key={idx} value={`item-${idx}`}>
-              <AccordionTrigger className="text-left text-lg font-medium">
+            <AccordionItem key={idx} value={`item-${idx}`} className="border-b border-foreground/10 py-0">
+              <AccordionTrigger className="text-left text-base font-medium py-4 hover:text-glow hover:no-underline">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed">
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
@@ -74,13 +74,13 @@ export const FAQSection = () => {
         </Accordion>
 
         {/* Trust Icons */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="flex flex-wrap gap-8 pt-6 border-t border-foreground/10">
           {trustIcons.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div key={idx} className="flex items-center justify-center gap-3">
-                <Icon className="w-6 h-6 text-glow" />
-                <span className="font-medium">{item.text}</span>
+              <div key={idx} className="flex items-center gap-2">
+                <Icon className="w-4 h-4 text-glow" />
+                <span className="text-sm font-medium text-foreground/70">{item.text}</span>
               </div>
             );
           })}

@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const reviews = [
@@ -18,42 +17,40 @@ const reviews = [
 
 export const ReviewsTeaserSection = () => {
   return (
-    <section className="py-20 md:py-32 bg-background-secondary animate-fade-in">
+    <section className="py-12 md:py-20 bg-background animate-fade-in">
       <div className="container">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-left mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
               Wat SenseGlow™ verandert in huizen zoals dat van jou:
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-px bg-foreground/10 mb-8">
             {reviews.map((review, index) => (
-              <Card key={index} className="p-8 bg-background border-border transition-all duration-300">
-                <div className="space-y-6">
-                  <div className="flex gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-glow text-xl">⭐</span>
-                    ))}
-                  </div>
-                  
-                  <p className="text-lg font-medium text-foreground leading-relaxed">
-                    "{review.text}"
-                  </p>
-                  
-                  <p className="text-sm text-muted-foreground">
-                    — {review.author}
-                  </p>
+              <div key={index} className="bg-background p-6 space-y-4">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-glow text-sm">⭐</span>
+                  ))}
                 </div>
-              </Card>
+                
+                <p className="text-base font-medium text-foreground leading-relaxed">
+                  "{review.text}"
+                </p>
+                
+                <p className="text-xs text-muted-foreground">
+                  — {review.author}
+                </p>
+              </div>
             ))}
           </div>
 
-          <div className="text-center">
+          <div className="text-left">
             <Button 
               variant="outline" 
-              size="lg"
-              className="border-glow text-glow hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+              size="default"
+              className="text-xs uppercase tracking-[0.15em]"
             >
               Zie alle ervaringen →
             </Button>

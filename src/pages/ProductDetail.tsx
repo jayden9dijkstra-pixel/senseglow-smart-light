@@ -48,7 +48,7 @@ const ProductDetail = () => {
     return (
       <PageTransition>
         <div className="min-h-screen flex items-center justify-center bg-background">
-          <p className="text-xl text-muted-foreground">Product laden...</p>
+          <p className="text-base text-muted-foreground">Product laden...</p>
         </div>
       </PageTransition>
     );
@@ -58,8 +58,8 @@ const ProductDetail = () => {
     return (
       <PageTransition>
         <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="text-center">
-            <p className="text-xl text-muted-foreground mb-4">Product niet gevonden</p>
+          <div className="text-left">
+            <p className="text-base text-muted-foreground mb-4">Product niet gevonden</p>
             <Button onClick={() => navigate("/")}>
               Terug naar home
             </Button>
@@ -76,10 +76,10 @@ const ProductDetail = () => {
         <header className="w-full bg-background">
           {/* Top bar with icons and logo */}
           <div className="container">
-            <div className="flex h-40 items-center justify-between py-6 relative">
+            <div className="flex h-32 items-center justify-between py-4 relative">
               {/* Left - Search Icon */}
               <Button variant="ghost" size="icon">
-                <Search className="h-6 w-6" />
+                <Search className="h-5 w-5" />
               </Button>
               
               {/* Center - Logo */}
@@ -91,7 +91,7 @@ const ProductDetail = () => {
                 <img 
                   src={logoNew} 
                   alt="SenseGlow Logo" 
-                  className="relative h-32 w-auto object-contain"
+                  className="relative h-24 w-auto object-contain"
                 />
               </button>
               
@@ -105,25 +105,25 @@ const ProductDetail = () => {
             </div>
           </div>
           
-          {/* Bottom bar with navigation - subtle separator */}
-          <div className="border-t border-border/30 bg-background">
+          {/* Bottom bar with navigation - editorial line separator */}
+          <div className="border-t border-foreground/10 bg-background">
             <div className="container">
               <nav className="flex items-center justify-center gap-12 py-4">
                 <a 
                   href="/#home" 
-                  className="text-xs uppercase tracking-[0.2em] font-medium text-foreground/80 hover:text-glow transition-colors duration-500"
+                  className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-500"
                 >
                   HOME
                 </a>
                 <a 
                   href="/#products" 
-                  className="text-xs uppercase tracking-[0.2em] font-medium text-foreground/80 hover:text-glow transition-colors duration-500"
+                  className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-500"
                 >
                   PRODUCTEN
                 </a>
                 <a 
                   href="/#contact" 
-                  className="text-xs uppercase tracking-[0.2em] font-medium text-foreground/80 hover:text-glow transition-colors duration-500"
+                  className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-500"
                 >
                   CONTACT
                 </a>
@@ -136,86 +136,75 @@ const ProductDetail = () => {
           </div>
         </header>
 
-        {/* USP Banner - Scrolling with Charcoal */}
-        <section className="bg-secondary py-3 overflow-hidden relative">
+        {/* USP Banner */}
+        <section className="border-y border-foreground/10 py-3 overflow-hidden relative bg-background">
           <div className="flex whitespace-nowrap animate-scroll">
-            {/* First set of items */}
-            <div className="flex items-center gap-8 px-4">
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
-              <span className="text-secondary-foreground/40">•</span>
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
-              <span className="text-secondary-foreground/40">•</span>
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
-              <span className="text-secondary-foreground/40">•</span>
-            </div>
-            
-            {/* Duplicate for seamless loop */}
-            <div className="flex items-center gap-8 px-4">
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
-              <span className="text-secondary-foreground/40">•</span>
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
-              <span className="text-secondary-foreground/40">•</span>
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
-              <span className="text-secondary-foreground/40">•</span>
-            </div>
-            
-            {/* Second duplicate for seamless loop */}
-            <div className="flex items-center gap-8 px-4">
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
-              <span className="text-secondary-foreground/40">•</span>
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
-              <span className="text-secondary-foreground/40">•</span>
-              <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
-              <span className="text-secondary-foreground/40">•</span>
-            </div>
+            {[1, 2, 3].map((set) => (
+              <div key={set} className="flex items-center gap-8 px-4">
+                <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">✓ Gratis verzending</span>
+                <span className="text-foreground/20">•</span>
+                <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
+                <span className="text-foreground/20">•</span>
+                <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">✓ 30 dagen retourrecht</span>
+                <span className="text-foreground/20">•</span>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Product Sections */}
+        {/* Product Sections with editorial line separators */}
         <ProductHeroSection product={product} selectedVariant={selectedVariant} onVariantChange={setSelectedVariant} />
+        <div className="border-t border-foreground/10" />
         <BundlesSection product={product} selectedVariant={selectedVariant || undefined} />
+        <div className="border-t border-foreground/10" />
         <ProductReviewsSection />
+        <div className="border-t border-foreground/10" />
         <OutcomeSection />
+        <div className="border-t border-foreground/10" />
         <ProblemSolutionProductSection />
+        <div className="border-t border-foreground/10" />
         <UseCaseSection />
+        <div className="border-t border-foreground/10" />
         <TechBenefitsSection />
+        <div className="border-t border-foreground/10" />
         <ProductFAQSection />
+        <div className="border-t border-foreground/10" />
         <FinalProductCTA />
 
         {/* Footer */}
-        <footer className="border-t bg-secondary text-secondary-foreground">
+        <footer className="border-t border-foreground/10 bg-background text-foreground">
           <div className="container py-12">
             <div className="grid md:grid-cols-4 gap-8 mb-8">
               <div>
-                <h3 className="font-bold text-base mb-4 uppercase">KLANTENSERVICE</h3>
-                <ul className="text-sm space-y-2 text-secondary-foreground/80">
+                <h3 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">KLANTENSERVICE</h3>
+                <ul className="text-sm space-y-2 text-foreground/60">
                   <li><a href="/contact" className="hover:text-glow transition-colors duration-300">Contact</a></li>
                   <li><a href="/verzending" className="hover:text-glow transition-colors duration-300">Verzending</a></li>
                   <li><a href="/retourneren" className="hover:text-glow transition-colors duration-300">Retourneren</a></li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-base mb-4 uppercase">OVER ONS</h4>
-                <ul className="text-sm space-y-2 text-secondary-foreground/80">
+                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">OVER ONS</h4>
+                <ul className="text-sm space-y-2 text-foreground/60">
                   <li><a href="/over" className="hover:text-glow transition-colors duration-300">Over SenseGlow</a></li>
                   <li><a href="/duurzaamheid" className="hover:text-glow transition-colors duration-300">Duurzaamheid</a></li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-base mb-4 uppercase">JURIDISCH</h4>
-                <ul className="text-sm space-y-2 text-secondary-foreground/80">
+                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">JURIDISCH</h4>
+                <ul className="text-sm space-y-2 text-foreground/60">
                   <li><a href="/privacy" className="hover:text-glow transition-colors duration-300">Privacybeleid</a></li>
                   <li><a href="/voorwaarden" className="hover:text-glow transition-colors duration-300">Algemene voorwaarden</a></li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-base mb-4 uppercase">VOLG ONS</h4>
-                <p className="text-sm text-secondary-foreground/80">
+                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">VOLG ONS</h4>
+                <p className="text-sm text-foreground/60">
                   Instagram | Facebook | Pinterest
                 </p>
               </div>
             </div>
-            <div className="text-center text-xs text-secondary-foreground/60 pt-8 border-t border-secondary-foreground/20">
+            <div className="text-left text-xs text-foreground/40 pt-8 border-t border-foreground/10">
               <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
             </div>
           </div>
