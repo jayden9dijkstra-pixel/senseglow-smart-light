@@ -5,11 +5,11 @@ export const FinalCTASection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-b from-background to-brand-orange/10">
+    <section className="py-20 md:py-32 bg-background-secondary animate-fade-in">
       <div className="container">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
-            Klaar om jouw huis veiliger te maken?
+            Ontdek SenseGlow
           </h2>
           
           <div className="flex justify-center">
@@ -21,9 +21,9 @@ export const FinalCTASection = () => {
                 }
               }}
               size="lg"
-              className="bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              className="bg-secondary text-secondary-foreground text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-[0_0_30px_hsl(var(--glow)/0.4)] transition-all duration-300"
             >
-              Bekijk SenseGlow™ producten
+              Bekijk SenseGlow
             </Button>
           </div>
         </div>
