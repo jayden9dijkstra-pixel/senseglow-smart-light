@@ -48,7 +48,7 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
   })) || [];
 
   return (
-    <section className="py-12 md:py-20 bg-gradient-to-b from-background to-muted/20">
+    <section className="py-12 md:py-20 bg-background animate-fade-in-slow">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
           {/* Left - Product Image Gallery */}
@@ -91,27 +91,27 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
                       <div
                         key={variant.node.id}
                         onClick={() => handleVariantChange(variant.node)}
-                        className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                        className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
                           isSelected 
-                            ? 'border-brand-orange bg-brand-orange/5 shadow-lg' 
-                            : 'border-border hover:border-brand-orange/50 bg-background hover:bg-muted/30'
+                            ? 'border-glow bg-glow/5' 
+                            : 'border-border hover:border-glow/50 bg-background hover:bg-muted/30'
                         }`}
                       >
                         {index === 0 && (
-                          <Badge className="absolute -top-2 -right-2 bg-brand-orange text-white text-xs">
+                          <Badge className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs">
                             Populair
                           </Badge>
                         )}
                         <div className="space-y-1">
                           <p className="font-semibold text-foreground">{variant.node.title}</p>
                           <p className="text-sm text-muted-foreground">{microcopy}</p>
-                          <p className="text-lg font-bold text-brand-orange">
+                          <p className="text-lg font-bold text-glow">
                             €{parseFloat(variant.node.price.amount).toFixed(2)}
                           </p>
                         </div>
                         {isSelected && (
-                          <div className="absolute top-3 left-3 w-5 h-5 bg-brand-orange rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
+                          <div className="absolute top-3 left-3 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                            <Check className="w-3 h-3 text-primary-foreground" />
                           </div>
                         )}
                       </div>
@@ -129,7 +129,7 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
                 "Installatie zonder gereedschap"
               ].map((bullet, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-brand-orange flex-shrink-0" />
+                  <Check className="w-5 h-5 text-glow flex-shrink-0" />
                   <span className="text-foreground">{bullet}</span>
                 </div>
               ))}
@@ -138,15 +138,15 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
             {/* Trust Guarantees before CTA */}
             <div className="flex flex-wrap gap-4 py-3 border-y border-border">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="text-brand-orange">✓</span>
+                <span className="text-glow">✓</span>
                 <span>Gratis verzending</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="text-brand-orange">✓</span>
+                <span className="text-glow">✓</span>
                 <span>30 dagen retour</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="text-brand-orange">✓</span>
+                <span className="text-glow">✓</span>
                 <span>1 jaar garantie</span>
               </div>
             </div>
@@ -155,9 +155,9 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
             <Button
               onClick={handleAddToCart}
               size="lg"
-              className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              className="w-full text-lg px-12 py-7 h-auto rounded-full font-semibold"
             >
-              Maak je huis 's nachts veilig
+              Ervaar het licht
             </Button>
           </div>
         </div>

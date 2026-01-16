@@ -187,12 +187,12 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
   };
 
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-b from-background to-brand-orange/5">
+    <section className="py-20 md:py-32 bg-background-secondary animate-fade-in">
       <div className="container">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 space-y-4">
             {/* Social Proof Header */}
-            <p className="text-sm uppercase tracking-wider text-brand-orange font-medium">
+            <p className="text-sm uppercase tracking-wider text-glow font-medium">
               90% van onze klanten kiest meer dan 1 SenseGlow™
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
@@ -205,7 +205,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
 
           {/* Size Selector */}
           <div className="flex justify-center mb-10">
-            <div className="bg-background border border-border rounded-xl p-4 shadow-sm">
+            <div className="bg-background border border-border rounded-xl p-4">
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium text-foreground">Kies je maat:</span>
                 <Select value={selectedSize} onValueChange={(value: "20cm" | "40cm") => setSelectedSize(value)}>
@@ -236,14 +236,14 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
               <Card 
                 key={`${selectedSize}-${index}`}
                 onClick={() => setSelectedBundle(index)}
-                className={`p-8 relative overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-pointer ${
+                className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer ${
                   selectedBundle === index
-                    ? 'border-brand-orange border-2 shadow-2xl bg-gradient-to-b from-background to-brand-orange/5' 
-                    : 'bg-background border-border hover:shadow-xl'
+                    ? 'border-glow border-2 bg-background' 
+                    : 'bg-background border-border hover:border-glow/50'
                 }`}
               >
                 {bundle.badge && (
-                  <Badge className="absolute top-4 right-4 bg-brand-orange text-white">
+                  <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground">
                     {bundle.badge}
                   </Badge>
                 )}
@@ -253,11 +253,11 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold text-foreground">{bundle.name}</h3>
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs border-brand-orange/30 text-brand-orange">
+                      <Badge variant="outline" className="text-xs border-glow/30 text-glow">
                         {bundle.sizeLabel}
                       </Badge>
                     </div>
-                    <p className="text-sm font-medium text-brand-orange">{bundle.label}</p>
+                    <p className="text-sm font-medium text-glow">{bundle.label}</p>
                     <p className="text-sm text-muted-foreground">{bundle.subtekst}</p>
                   </div>
 
@@ -265,7 +265,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   <div className="space-y-2">
                     <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-bold text-foreground">€{bundle.price}</span>
-                      <Badge variant="secondary" className="bg-brand-orange/10 text-brand-orange">
+                      <Badge variant="secondary" className="bg-glow/10 text-glow">
                         -{bundle.discount}
                       </Badge>
                     </div>
@@ -278,7 +278,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   <div className="space-y-3 py-4 border-y border-border">
                     {bundle.features.map((feature, i) => (
                       <div key={i} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 text-brand-orange flex-shrink-0 mt-0.5" />
+                        <Check className="w-5 h-5 text-glow flex-shrink-0 mt-0.5" />
                         <span className="text-sm text-foreground">{feature}</span>
                       </div>
                     ))}
@@ -291,11 +291,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                       setSelectedBundle(index);
                       handleAddBundleToCart(index);
                     }}
-                    className={`w-full ${
-                      selectedBundle === index
-                        ? 'bg-brand-orange hover:bg-brand-orange/90 text-white' 
-                        : 'bg-foreground hover:bg-foreground/90 text-background'
-                    }`}
+                    className="w-full"
                     size="lg"
                   >
                     Kies {bundle.quantityLabel}

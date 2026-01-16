@@ -1,21 +1,18 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
 export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
     return (
-      <button className="flex items-center gap-2 text-sm text-foreground-muted opacity-0">
-        <span className="w-4 h-4 rounded-full border border-foreground-muted" />
-        <span>Nacht</span>
-      </button>
+      <div className="w-16 h-8 bg-muted rounded-full opacity-0" />
     );
   }
 
@@ -24,19 +21,32 @@ export const ThemeToggle = () => {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors duration-300"
+      className="relative w-16 h-8 bg-muted rounded-full transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       aria-label={isDark ? "Schakel naar dagmodus" : "Schakel naar nachtmodus"}
     >
-      <span 
+      {/* Track icons */}
+      <div className="absolute inset-0 flex items-center justify-between px-2">
+        <Sun 
+          className={`w-4 h-4 transition-opacity duration-300 ${
+            isDark ? "text-muted-foreground opacity-50" : "text-glow opacity-100"
+          }`} 
+        />
+        <Moon 
+          className={`w-4 h-4 transition-opacity duration-300 ${
+            isDark ? "text-glow opacity-100" : "text-muted-foreground opacity-50"
+          }`} 
+        />
+      </div>
+      
+      {/* Slider thumb */}
+      <div
         className={`
-          w-4 h-4 rounded-full border transition-all duration-300
-          ${isDark 
-            ? "bg-glow border-glow shadow-[0_0_8px_hsl(var(--glow)/0.5)]" 
-            : "border-foreground-muted bg-transparent"
-          }
+          absolute top-1 w-6 h-6 rounded-full 
+          bg-background border border-border
+          transition-all duration-500 ease-out
+          ${isDark ? "left-9" : "left-1"}
         `}
       />
-      <span className="tracking-wide">Nacht</span>
     </button>
   );
 };
