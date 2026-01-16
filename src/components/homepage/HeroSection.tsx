@@ -27,7 +27,7 @@ export const HeroSection = () => {
 
             {/* Hero Image - Smaller and centered */}
             <div className="relative max-w-md mx-auto">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/5]">
+              <div className="relative rounded-3xl overflow-hidden aspect-[4/5]">
                 <img 
                   src={heroImage}
                   alt="SenseGlow LED lamp met warme glow in donkere ruimte"
@@ -46,7 +46,7 @@ export const HeroSection = () => {
                 <Button
                   onClick={() => navigate("/quiz")}
                   size="lg"
-                  className="bg-secondary text-secondary-foreground text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-[0_0_30px_hsl(var(--glow)/0.4)] transition-all duration-300"
+                  className="text-lg px-12 py-7 h-auto rounded-full font-semibold"
                 >
                   Ontdek SenseGlow
                 </Button>

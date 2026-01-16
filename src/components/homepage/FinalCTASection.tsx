@@ -21,7 +21,7 @@ export const FinalCTASection = () => {
                 }
               }}
               size="lg"
-              className="bg-secondary text-secondary-foreground text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-[0_0_30px_hsl(var(--glow)/0.4)] transition-all duration-300"
+              className="text-lg px-12 py-7 h-auto rounded-full font-semibold"
             >
               Bekijk SenseGlow
             </Button>

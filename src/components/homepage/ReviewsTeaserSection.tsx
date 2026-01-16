@@ -18,7 +18,7 @@ const reviews = [
 
 export const ReviewsTeaserSection = () => {
   return (
-    <section className="py-20 md:py-32 bg-muted/20">
+    <section className="py-20 md:py-32 bg-background-secondary animate-fade-in">
       <div className="container">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -29,11 +29,11 @@ export const ReviewsTeaserSection = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {reviews.map((review, index) => (
-              <Card key={index} className="p-8 bg-background border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Card key={index} className="p-8 bg-background border-border transition-all duration-300">
                 <div className="space-y-6">
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-brand-orange text-xl">⭐</span>
+                      <span key={i} className="text-glow text-xl">⭐</span>
                     ))}
                   </div>
                   
@@ -53,7 +53,7 @@ export const ReviewsTeaserSection = () => {
             <Button 
               variant="outline" 
               size="lg"
-              className="border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white transition-all duration-300"
+              className="border-glow text-glow hover:bg-primary hover:text-primary-foreground transition-all duration-300"
             >
               Zie alle ervaringen →
             </Button>
