@@ -120,27 +120,42 @@ html {
     @apply border-border;
   }
 
+  /* Vloeiende theme transitie zonder haperingen */
+  :root {
+    color-scheme: light;
+  }
+  
+  .dark {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
-    transition: background-color 1200ms ease-out, color 1200ms ease-out;
   }
 
-  /* Zachte transitie voor alle kleuren bij theme switch */
-  *,
-  *::before,
-  *::after {
-    transition-property: background-color, border-color, color, fill, stroke, box-shadow;
-    transition-duration: 1200ms;
-    transition-timing-function: ease-out;
+  /* GPU-accelerated smooth theme transition */
+  html {
+    transition: none;
+  }
+  
+  html.transitioning *,
+  html.transitioning *::before,
+  html.transitioning *::after {
+    transition: background-color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                fill 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                stroke 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 1200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
-  /* Snellere transitie voor interactieve elementen */
-  button,
-  a,
-  input,
-  select,
-  textarea {
-    transition-duration: 300ms;
+  /* Interactieve elementen behouden snelle feedback */
+  html.transitioning button,
+  html.transitioning a {
+    transition: background-color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 200ms ease-out,
+                transform 200ms ease-out !important;
   }
 }
 
