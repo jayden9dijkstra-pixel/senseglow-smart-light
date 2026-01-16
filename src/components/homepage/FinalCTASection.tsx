@@ -2,12 +2,16 @@ import { Button } from "@/components/ui/button";
 
 export const FinalCTASection = () => {
   return (
-    <section className="py-12 md:py-20 bg-background animate-fade-in">
+    <section className="py-16 md:py-24 bg-background animate-fade-in">
       <div className="container">
-        <div className="max-w-3xl mx-auto md:mx-0 text-left space-y-6">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
             Ontdek SenseGlow
           </h2>
+          
+          <p className="text-base text-muted-foreground max-w-md mx-auto">
+            Bekijk onze producten en vind de perfecte oplossing voor jouw ruimte.
+          </p>
           
           <Button
             onClick={() => {

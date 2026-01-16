@@ -17,23 +17,24 @@ const problems = [
 
 export const ProblemSolutionSection = () => {
   return (
-    <section className="py-12 md:py-20 bg-background animate-fade-in">
+    <section className="py-16 md:py-24 bg-background animate-fade-in">
       <div className="container">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-left mb-10">
+        <div className="max-w-6xl mx-auto">
+          {/* Centered headline */}
+          <div className="text-center mb-12 max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
               Het gevaar zit in de duisternis, niet in de trap.
             </h2>
           </div>
 
-          {/* Problems as compact list */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          {/* Problems grid with lines */}
+          <div className="grid md:grid-cols-3 gap-8 mb-14">
             {problems.map((problem, index) => (
               <div 
                 key={index} 
-                className="border-l border-foreground/10 pl-4 space-y-2"
+                className="border-t border-foreground/10 pt-6 space-y-3"
               >
-                <h3 className="text-base font-semibold text-foreground">{problem.title}</h3>
+                <h3 className="text-lg font-semibold text-foreground">{problem.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {problem.description}
                 </p>
@@ -41,14 +42,15 @@ export const ProblemSolutionSection = () => {
             ))}
           </div>
 
-          <div className="text-left mb-8">
-            <p className="text-lg font-medium text-glow">
+          {/* Solution statement - centered */}
+          <div className="text-center mb-10">
+            <p className="text-xl md:text-2xl font-medium text-glow">
               Daarom creëerden we SenseGlow™
             </p>
           </div>
 
-          {/* Problem/Solution Image */}
-          <div className="max-w-4xl">
+          {/* Problem/Solution Image - full width */}
+          <div className="mb-8">
             <div className="overflow-hidden">
               <img 
                 src={problemSolutionSplit} 
@@ -56,23 +58,21 @@ export const ProblemSolutionSection = () => {
                 className="w-full h-auto" 
               />
             </div>
-            <div className="mt-6 grid md:grid-cols-2 gap-6 text-left">
-              <div className="space-y-1 border-l border-foreground/10 pl-4">
-                <p className="text-sm font-medium text-muted-foreground">
-                  "95% van mensen schat diepte slecht in het donker."
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Donkere gangen creëren stress.
-                </p>
-              </div>
-              <div className="space-y-1 border-l border-glow/50 pl-4">
-                <p className="text-sm font-medium text-foreground">
-                  "SenseGlow™ springt automatisch aan"
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  en begeleidt je kalm door de nacht.
-                </p>
-              </div>
+          </div>
+
+          {/* Comparison captions */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="text-center md:text-left">
+              <p className="text-sm text-muted-foreground">
+                "95% van mensen schat diepte slecht in het donker." <br />
+                <span className="text-xs">Donkere gangen creëren stress.</span>
+              </p>
+            </div>
+            <div className="text-center md:text-right">
+              <p className="text-sm text-foreground font-medium">
+                "SenseGlow™ springt automatisch aan" <br />
+                <span className="text-xs text-muted-foreground">en begeleidt je kalm door de nacht.</span>
+              </p>
             </div>
           </div>
         </div>

@@ -17,18 +17,23 @@ const reviews = [
 
 export const ReviewsTeaserSection = () => {
   return (
-    <section className="py-12 md:py-20 bg-background animate-fade-in">
+    <section className="py-16 md:py-24 bg-background animate-fade-in">
       <div className="container">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-left mb-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
-              Wat SenseGlow™ verandert in huizen zoals dat van jou:
+        <div className="max-w-6xl mx-auto">
+          {/* Centered headline */}
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight max-w-2xl mx-auto">
+              Wat SenseGlow™ verandert in huizen zoals dat van jou
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-px bg-foreground/10 mb-8">
+          {/* Reviews grid */}
+          <div className="grid md:grid-cols-3 gap-8 mb-10">
             {reviews.map((review, index) => (
-              <div key={index} className="bg-background p-6 space-y-4">
+              <div 
+                key={index} 
+                className="border-t border-foreground/10 pt-6 space-y-4"
+              >
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className="text-glow text-sm">⭐</span>
@@ -46,7 +51,8 @@ export const ReviewsTeaserSection = () => {
             ))}
           </div>
 
-          <div className="text-left">
+          {/* CTA centered */}
+          <div className="text-center">
             <Button 
               variant="outline" 
               size="default"
