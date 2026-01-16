@@ -13,54 +13,53 @@ export const QuizIntroSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 md:py-32 bg-secondary text-secondary-foreground animate-fade-in">
+    <section className="py-12 md:py-20 bg-background-secondary animate-fade-in">
       <div className="container">
         <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Content */}
-            <div className="space-y-8 text-center md:text-left">
-              <div className="space-y-4">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            {/* Content - Left aligned */}
+            <div className="space-y-6 text-left">
+              <div className="space-y-3">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                   Welke SenseGlow™ heb jij nodig?
                 </h2>
                 
-                <p className="text-xl text-secondary-foreground/80">
+                <p className="text-base text-muted-foreground leading-relaxed">
                   Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past.
                 </p>
               </div>
 
               {/* Location icons */}
-              <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto md:mx-0">
+              <div className="grid grid-cols-4 gap-3 max-w-sm">
                 {locations.map((location, index) => (
-                  <div key={index} className="flex flex-col items-center gap-2 bg-background/10 backdrop-blur-sm rounded-2xl p-4">
-                    <span className="text-3xl">{location.icon}</span>
-                    <span className="font-medium text-sm">{location.label}</span>
+                  <div 
+                    key={index} 
+                    className="flex flex-col items-center gap-1 border border-foreground/10 p-3"
+                  >
+                    <span className="text-2xl">{location.icon}</span>
+                    <span className="font-medium text-xs text-foreground/70">{location.label}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="flex justify-center md:justify-start">
-                <Button
-                  onClick={() => navigate("/quiz")}
-                  size="lg"
-                  className="text-lg px-12 py-7 h-auto rounded-full font-semibold"
-                >
-                  Start mijn Lichtadvies
-                </Button>
-              </div>
+              <Button
+                onClick={() => navigate("/quiz")}
+                size="lg"
+                className="text-sm px-10 py-6 h-auto font-medium tracking-wide"
+              >
+                Start mijn Lichtadvies
+              </Button>
             </div>
 
             {/* Smartphone Image */}
-            <div className="relative flex justify-center">
-              <div className="rounded-3xl overflow-hidden max-w-sm">
+            <div className="relative flex justify-center md:justify-end">
+              <div className="max-w-xs overflow-hidden">
                 <img 
                   src={quizSmartphone}
                   alt="Smartphone met SenseGlow quiz interface"
                   className="w-full h-auto"
                 />
               </div>
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-glow/20 blur-3xl -z-10 scale-75" />
             </div>
           </div>
         </div>

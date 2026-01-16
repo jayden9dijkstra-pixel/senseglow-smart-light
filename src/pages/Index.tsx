@@ -39,15 +39,15 @@ const Index = () => {
     <PageTransition>
       <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="w-full border-b shadow-sm bg-background">
+      <header className="w-full bg-background">
         {/* Top bar with icons and logo */}
         <div className="container">
-          <div className="flex h-40 items-center py-6 relative">
+          <div className="flex h-32 items-center py-4 relative">
             {/* Mobile Layout */}
             <div className="flex md:hidden w-full items-center justify-between">
               {/* Left - Search */}
               <Button variant="ghost" size="icon">
-                <Search className="h-6 w-6" />
+                <Search className="h-5 w-5" />
               </Button>
               
               {/* Center - Logo */}
@@ -59,7 +59,7 @@ const Index = () => {
                 <img 
                   src={logoNew} 
                   alt="SenseGlow Logo" 
-                  className="relative h-28 w-auto object-contain"
+                  className="relative h-20 w-auto object-contain"
                 />
               </button>
               
@@ -71,7 +71,7 @@ const Index = () => {
             <div className="hidden md:flex w-full items-center justify-between">
               {/* Left - Search Icon */}
               <Button variant="ghost" size="icon">
-                <Search className="h-6 w-6" />
+                <Search className="h-5 w-5" />
               </Button>
               
               {/* Center - Logo */}
@@ -83,7 +83,7 @@ const Index = () => {
                 <img 
                   src={logoNew} 
                   alt="SenseGlow Logo" 
-                  className="relative h-32 w-auto object-contain"
+                  className="relative h-24 w-auto object-contain"
                 />
               </button>
               
@@ -96,13 +96,13 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Bottom bar with navigation */}
-        <div className="border-t bg-background">
+        {/* Bottom bar with navigation - editorial line separator */}
+        <div className="border-t border-foreground/10 bg-background">
           <div className="container">
-            <nav className="flex items-center justify-center gap-8 py-4">
+            <nav className="flex items-center justify-center gap-12 py-4">
               <a 
                 href="#home" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-glow transition-colors duration-300"
+                className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-300"
               >
                 HOME
               </a>
@@ -112,13 +112,13 @@ const Index = () => {
                     navigate(`/product/${products[0].node.handle}`);
                   }
                 }}
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-glow transition-colors duration-300 cursor-pointer bg-transparent border-none"
+                className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-300 cursor-pointer bg-transparent border-none"
               >
                 PRODUCTEN
               </button>
               <a 
                 href="#contact" 
-                className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-glow transition-colors duration-300"
+                className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-300"
               >
                 CONTACT
               </a>
@@ -131,82 +131,74 @@ const Index = () => {
         </div>
       </header>
 
-      {/* USP Banner - Scrolling with Amber */}
-      <section className="bg-secondary py-3 overflow-hidden relative">
+      {/* USP Banner */}
+      <section className="border-y border-foreground/10 py-3 overflow-hidden relative bg-background">
         <div className="flex whitespace-nowrap animate-scroll">
-          {/* First set of items */}
-          <div className="flex items-center gap-8 px-4">
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
-            <span className="text-secondary-foreground/40">•</span>
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
-            <span className="text-secondary-foreground/40">•</span>
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
-            <span className="text-secondary-foreground/40">•</span>
-          </div>
-          
-          {/* Duplicate for seamless loop */}
-          <div className="flex items-center gap-8 px-4">
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
-            <span className="text-secondary-foreground/40">•</span>
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
-            <span className="text-secondary-foreground/40">•</span>
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
-            <span className="text-secondary-foreground/40">•</span>
-          </div>
-          
-          {/* Second duplicate for seamless loop */}
-          <div className="flex items-center gap-8 px-4">
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Gratis verzending</span>
-            <span className="text-secondary-foreground/40">•</span>
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
-            <span className="text-secondary-foreground/40">•</span>
-            <span className="text-secondary-foreground text-sm uppercase tracking-wide font-medium">✓ 30 dagen retourrecht</span>
-            <span className="text-secondary-foreground/40">•</span>
-          </div>
+          {[1, 2, 3].map((set) => (
+            <div key={set} className="flex items-center gap-8 px-4">
+              <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">✓ Gratis verzending</span>
+              <span className="text-foreground/20">•</span>
+              <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">✓ Voor 23:00 besteld, vandaag verstuurd</span>
+              <span className="text-foreground/20">•</span>
+              <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">✓ 30 dagen retourrecht</span>
+              <span className="text-foreground/20">•</span>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* New Homepage Sections */}
+      {/* Editorial Homepage Sections with line separators */}
       <HeroSection />
+      <div className="border-t border-foreground/10" />
       <StorytellingSection />
+      <div className="border-t border-foreground/10" />
       <ProblemSolutionSection />
+      <div className="border-t border-foreground/10" />
       <WarmGlowSection />
+      <div className="border-t border-foreground/10" />
       <QuizIntroSection />
+      <div className="border-t border-foreground/10" />
       <SafetySection />
+      <div className="border-t border-foreground/10" />
       <ReviewsTeaserSection />
+      <div className="border-t border-foreground/10" />
       <FinalCTASection />
 
       {/* Products Section */}
-      <section id="products" className="container py-20 bg-background">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Onze Producten</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Kies de juiste maat voor jouw ruimte
-          </p>
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-glow" />
-          </div>
-        ) : products.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {products.map((product) => (
-              <ProductCard key={product.node.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground mb-4">Geen producten gevonden</p>
-            <p className="text-muted-foreground">
-              Voeg producten toe via de Shopify Storefront API.
+      <section id="products" className="border-t border-foreground/10 py-16 bg-background">
+        <div className="container">
+          <div className="text-left mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">Onze Producten</h2>
+            <p className="text-base text-muted-foreground">
+              Kies de juiste maat voor jouw ruimte
             </p>
           </div>
-        )}
+
+          {loading ? (
+            <div className="flex justify-center items-center py-16">
+              <Loader2 className="w-6 h-6 animate-spin text-foreground/40" />
+            </div>
+          ) : products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/10">
+              {products.map((product) => (
+                <div key={product.node.id} className="bg-background p-6">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-left py-16">
+              <p className="text-lg text-muted-foreground mb-2">Geen producten gevonden</p>
+              <p className="text-sm text-muted-foreground">
+                Voeg producten toe via de Shopify Storefront API.
+              </p>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* FAQ Section */}
-      <div id="faq" className="bg-background-secondary">
+      <div id="faq" className="border-t border-foreground/10">
         <FAQSection />
       </div>
 
@@ -214,39 +206,39 @@ const Index = () => {
       <ScrollToTop />
 
       {/* Footer */}
-      <footer className="border-t bg-secondary text-secondary-foreground">
+      <footer className="border-t border-foreground/10 bg-background text-foreground">
         <div className="container py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-bold text-base mb-4 uppercase">KLANTENSERVICE</h3>
-              <ul className="text-sm space-y-2 text-secondary-foreground/80">
+              <h3 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">KLANTENSERVICE</h3>
+              <ul className="text-sm space-y-2 text-foreground/60">
                 <li><a href="/contact" className="hover:text-glow transition-colors duration-300">Contact</a></li>
                 <li><a href="/verzending" className="hover:text-glow transition-colors duration-300">Verzending</a></li>
                 <li><a href="/retourneren" className="hover:text-glow transition-colors duration-300">Retourneren</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-base mb-4 uppercase">OVER ONS</h4>
-              <ul className="text-sm space-y-2 text-secondary-foreground/80">
+              <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">OVER ONS</h4>
+              <ul className="text-sm space-y-2 text-foreground/60">
                 <li><a href="/over" className="hover:text-glow transition-colors duration-300">Over SenseGlow</a></li>
                 <li><a href="/duurzaamheid" className="hover:text-glow transition-colors duration-300">Duurzaamheid</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-base mb-4 uppercase">JURIDISCH</h4>
-              <ul className="text-sm space-y-2 text-secondary-foreground/80">
+              <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">JURIDISCH</h4>
+              <ul className="text-sm space-y-2 text-foreground/60">
                 <li><a href="/privacy" className="hover:text-glow transition-colors duration-300">Privacybeleid</a></li>
                 <li><a href="/voorwaarden" className="hover:text-glow transition-colors duration-300">Algemene voorwaarden</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-base mb-4 uppercase">VOLG ONS</h4>
-              <p className="text-sm text-secondary-foreground/80">
+              <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">VOLG ONS</h4>
+              <p className="text-sm text-foreground/60">
                 Instagram | Facebook | Pinterest
               </p>
             </div>
           </div>
-          <div className="text-center text-xs text-secondary-foreground/60 pt-8 border-t border-secondary-foreground/20">
+          <div className="text-left text-xs text-foreground/40 pt-8 border-t border-foreground/10">
             <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
           </div>
         </div>
