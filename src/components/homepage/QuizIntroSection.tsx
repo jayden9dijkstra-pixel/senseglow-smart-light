@@ -13,52 +13,52 @@ export const QuizIntroSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-12 md:py-20 bg-background-secondary animate-fade-in">
+    <section className="py-16 md:py-24 bg-background-secondary animate-fade-in">
       <div className="container">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            {/* Content - Left aligned */}
-            <div className="space-y-6 text-left">
-              <div className="space-y-3">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
-                  Welke SenseGlow™ heb jij nodig?
-                </h2>
-                
-                <p className="text-base text-muted-foreground leading-relaxed">
-                  Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past.
-                </p>
-              </div>
-
-              {/* Location icons */}
-              <div className="grid grid-cols-4 gap-3 max-w-sm">
-                {locations.map((location, index) => (
-                  <div 
-                    key={index} 
-                    className="flex flex-col items-center gap-1 border border-foreground/10 p-3"
-                  >
-                    <span className="text-2xl">{location.icon}</span>
-                    <span className="font-medium text-xs text-foreground/70">{location.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Button
-                onClick={() => navigate("/quiz")}
-                size="lg"
-                className="text-sm px-10 py-6 h-auto font-medium tracking-wide"
-              >
-                Start mijn Lichtadvies
-              </Button>
-            </div>
-
-            {/* Smartphone Image */}
-            <div className="relative flex justify-center md:justify-end">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+            {/* Smartphone Image - Left */}
+            <div className="relative flex justify-center md:justify-start order-1">
               <div className="max-w-xs overflow-hidden">
                 <img 
                   src={quizSmartphone}
                   alt="Smartphone met SenseGlow quiz interface"
                   className="w-full h-auto"
                 />
+              </div>
+            </div>
+
+            {/* Content - Right side, right-aligned on desktop */}
+            <div className="space-y-6 order-2 md:text-right">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
+                Welke SenseGlow™ heb jij nodig?
+              </h2>
+              
+              <p className="text-base text-muted-foreground leading-relaxed max-w-md md:ml-auto">
+                Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past.
+              </p>
+
+              {/* Location icons - aligned right on desktop */}
+              <div className="flex gap-3 justify-start md:justify-end">
+                {locations.map((location, index) => (
+                  <div 
+                    key={index} 
+                    className="flex flex-col items-center gap-1 border border-foreground/10 px-4 py-3"
+                  >
+                    <span className="text-xl">{location.icon}</span>
+                    <span className="text-xs text-foreground/60">{location.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-start md:justify-end">
+                <Button
+                  onClick={() => navigate("/quiz")}
+                  size="lg"
+                  className="text-sm px-10 py-6 h-auto font-medium tracking-wide"
+                >
+                  Start mijn Lichtadvies
+                </Button>
               </div>
             </div>
           </div>
