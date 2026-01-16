@@ -9,11 +9,11 @@ export const SafetySection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-background animate-fade-in">
+    <section className="py-20 md:py-28 bg-background animate-fade-in">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-            {/* Content - Left side */}
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+            {/* Content - Left side, left-aligned */}
             <div className="space-y-8 order-2 md:order-1">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                 Veiligheid is geen luxe. <br className="hidden md:block" />Het is basis.
@@ -40,7 +40,7 @@ export const SafetySection = () => {
 
             {/* Image - Right side */}
             <div className="relative order-1 md:order-2">
-              <div className="aspect-[4/5] overflow-hidden">
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl">
                 <img 
                   src={stairsSafetyGlow}
                   alt="Voeten op trap met warme SenseGlow LED verlichting"

@@ -2,13 +2,13 @@ import storytellingImage from "@/assets/storytelling-glow.png";
 
 export const StorytellingSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-20 md:py-28 bg-background-secondary">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             {/* Image - Left side */}
             <div className="relative">
-              <div className="aspect-square overflow-hidden">
+              <div className="aspect-square overflow-hidden rounded-2xl">
                 <img 
                   src={storytellingImage} 
                   alt="SenseGlow LED strip die warm oplicht in het donker" 
@@ -25,11 +25,11 @@ export const StorytellingSection = () => {
 
               <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
                 <p>
-                  Mensen struikelen verrassend vaak in donkere gangen en trappen. Kinderen durven niet alleen naar de wc in het donker.
+                  Mensen struikelen verrassend vaak in donkere gangen en trappen. Kinderen durven niet alleen naar de wc in het donker. Ouderen voelen zich onzeker bij elke stap.
                 </p>
                 
                 <p>
-                  Felle lampen verstoren slaapcycli en maken gezinnen wakker. We wilden één simpel product dat dit oplost — zonder verbouwing, zonder gedoe.
+                  Felle lampen verstoren slaapcycli en maken gezinnen wakker. We wilden één simpel product dat dit oplost — zonder verbouwing, zonder gedoe, zonder nadenken.
                 </p>
                 
                 <p className="text-foreground font-medium">

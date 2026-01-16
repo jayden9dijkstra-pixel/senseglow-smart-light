@@ -147,99 +147,158 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Editorial Homepage Sections with line separators */}
+      {/* Editorial Homepage Sections with curved transitions */}
       <HeroSection />
-      <div className="border-t border-foreground/10" />
-      <StorytellingSection />
-      <div className="border-t border-foreground/10" />
+      
+      {/* Curved transition */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
+      <div className="bg-background-secondary">
+        <StorytellingSection />
+      </div>
+      
+      {/* Curved transition back */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
       <ProblemSolutionSection />
-      <div className="border-t border-foreground/10" />
+      
+      {/* Horizontal image break - visual pause */}
+      <div className="border-t border-foreground/8" />
+      
       <WarmGlowSection />
-      <div className="border-t border-foreground/10" />
+      
+      {/* Curved transition to secondary */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
       <QuizIntroSection />
-      <div className="border-t border-foreground/10" />
+      
+      {/* Curved transition back */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
       <SafetySection />
-      <div className="border-t border-foreground/10" />
+      
+      <div className="border-t border-foreground/8" />
+      
       <ReviewsTeaserSection />
-      <div className="border-t border-foreground/10" />
-      <FinalCTASection />
+      
+      {/* Curved transition to final CTA */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
+      <div className="bg-background-secondary">
+        <FinalCTASection />
+      </div>
+
+      {/* Curved transition to products */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
 
       {/* Products Section */}
-      <section id="products" className="border-t border-foreground/10 py-16 bg-background">
+      <section id="products" className="py-20 md:py-28 bg-background">
         <div className="container">
-          <div className="text-left mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">Onze Producten</h2>
-            <p className="text-base text-muted-foreground">
-              Kies de juiste maat voor jouw ruimte
-            </p>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center py-16">
-              <Loader2 className="w-6 h-6 animate-spin text-foreground/40" />
-            </div>
-          ) : products.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/10">
-              {products.map((product) => (
-                <div key={product.node.id} className="bg-background p-6">
-                  <ProductCard product={product} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-left py-16">
-              <p className="text-lg text-muted-foreground mb-2">Geen producten gevonden</p>
-              <p className="text-sm text-muted-foreground">
-                Voeg producten toe via de Shopify Storefront API.
+          <div className="max-w-6xl mx-auto">
+            <div className="text-left mb-12">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">Onze Producten</h2>
+              <p className="text-base text-muted-foreground">
+                Kies de juiste maat voor jouw ruimte
               </p>
             </div>
-          )}
+
+            {loading ? (
+              <div className="flex justify-center items-center py-16">
+                <Loader2 className="w-6 h-6 animate-spin text-foreground/40" />
+              </div>
+            ) : products.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/8 rounded-xl overflow-hidden">
+                {products.map((product) => (
+                  <div key={product.node.id} className="bg-background p-8">
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-left py-16">
+                <p className="text-lg text-muted-foreground mb-2">Geen producten gevonden</p>
+                <p className="text-sm text-muted-foreground">
+                  Voeg producten toe via de Shopify Storefront API.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <div id="faq" className="border-t border-foreground/10">
+      {/* FAQ Section with curved transition */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
+      <div id="faq" className="bg-background-secondary">
         <FAQSection />
       </div>
 
       {/* Scroll to Top */}
       <ScrollToTop />
 
-      {/* Footer */}
-      <footer className="border-t border-foreground/10 bg-background text-foreground">
-        <div className="container py-12">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">KLANTENSERVICE</h3>
-              <ul className="text-sm space-y-2 text-foreground/60">
-                <li><a href="/contact" className="hover:text-glow transition-colors duration-300">Contact</a></li>
-                <li><a href="/verzending" className="hover:text-glow transition-colors duration-300">Verzending</a></li>
-                <li><a href="/retourneren" className="hover:text-glow transition-colors duration-300">Retourneren</a></li>
-              </ul>
+      {/* Footer with curved transition */}
+      <div className="relative h-12 md:h-20">
+        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+      </div>
+      
+      <footer className="bg-background text-foreground">
+        <div className="container py-14">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 mb-10">
+              <div>
+                <h3 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">KLANTENSERVICE</h3>
+                <ul className="text-sm space-y-2 text-foreground/60">
+                  <li><a href="/contact" className="hover:text-glow transition-colors duration-300">Contact</a></li>
+                  <li><a href="/verzending" className="hover:text-glow transition-colors duration-300">Verzending</a></li>
+                  <li><a href="/retourneren" className="hover:text-glow transition-colors duration-300">Retourneren</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">OVER ONS</h4>
+                <ul className="text-sm space-y-2 text-foreground/60">
+                  <li><a href="/over" className="hover:text-glow transition-colors duration-300">Over SenseGlow</a></li>
+                  <li><a href="/duurzaamheid" className="hover:text-glow transition-colors duration-300">Duurzaamheid</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">JURIDISCH</h4>
+                <ul className="text-sm space-y-2 text-foreground/60">
+                  <li><a href="/privacy" className="hover:text-glow transition-colors duration-300">Privacybeleid</a></li>
+                  <li><a href="/voorwaarden" className="hover:text-glow transition-colors duration-300">Algemene voorwaarden</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">VOLG ONS</h4>
+                <p className="text-sm text-foreground/60">
+                  Instagram | Facebook | Pinterest
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">OVER ONS</h4>
-              <ul className="text-sm space-y-2 text-foreground/60">
-                <li><a href="/over" className="hover:text-glow transition-colors duration-300">Over SenseGlow</a></li>
-                <li><a href="/duurzaamheid" className="hover:text-glow transition-colors duration-300">Duurzaamheid</a></li>
-              </ul>
+            <div className="text-left text-xs text-foreground/40 pt-10 border-t border-foreground/8">
+              <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
             </div>
-            <div>
-              <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">JURIDISCH</h4>
-              <ul className="text-sm space-y-2 text-foreground/60">
-                <li><a href="/privacy" className="hover:text-glow transition-colors duration-300">Privacybeleid</a></li>
-                <li><a href="/voorwaarden" className="hover:text-glow transition-colors duration-300">Algemene voorwaarden</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">VOLG ONS</h4>
-              <p className="text-sm text-foreground/60">
-                Instagram | Facebook | Pinterest
-              </p>
-            </div>
-          </div>
-          <div className="text-left text-xs text-foreground/40 pt-8 border-t border-foreground/10">
-            <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
           </div>
         </div>
       </footer>

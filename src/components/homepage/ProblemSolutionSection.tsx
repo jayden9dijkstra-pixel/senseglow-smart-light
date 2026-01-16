@@ -3,32 +3,35 @@ import problemSolutionSplit from "@/assets/problem-solution-split.png";
 const problems = [
   {
     title: "Struikelgevaar",
-    description: "Trapranden, hoeken en drempels verdwijnen volledig in het donker."
+    description: "Trapranden, hoeken en drempels verdwijnen volledig in het donker. Jouw ogen kunnen niet inschatten waar de volgende stap is."
   },
   {
     title: "Slaapverstoring",
-    description: "Het grote licht zorgt voor adrenalinepieken midden in de nacht."
+    description: "Het grote licht zorgt voor adrenalinepieken midden in de nacht. Je brein wordt wakker, ook al wil je slapen."
   },
   {
     title: "Onzekerheid bij kinderen",
-    description: "Zonder licht voelt iedere gang eindeloos lang."
+    description: "Zonder licht voelt iedere gang eindeloos lang. Kinderen durven niet alleen naar de badkamer."
   }
 ];
 
 export const ProblemSolutionSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-background animate-fade-in">
+    <section className="py-20 md:py-28 bg-background animate-fade-in">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          {/* Centered headline */}
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
+          {/* Centered headline - visual pause moment */}
+          <div className="text-center mb-14 max-w-3xl mx-auto">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-4">
               Het gevaar zit in de duisternis, niet in de trap.
             </h2>
+            <p className="text-base text-muted-foreground">
+              De meeste nachtelijke ongelukken gebeuren niet door onhandigheid, maar door gebrek aan context.
+            </p>
           </div>
 
           {/* Problems grid with lines */}
-          <div className="grid md:grid-cols-3 gap-8 mb-14">
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
             {problems.map((problem, index) => (
               <div 
                 key={index} 
@@ -42,16 +45,16 @@ export const ProblemSolutionSection = () => {
             ))}
           </div>
 
-          {/* Solution statement - centered */}
-          <div className="text-center mb-10">
-            <p className="text-xl md:text-2xl font-medium text-glow">
-              Daarom creëerden we SenseGlow™
+          {/* Solution statement - centered with amber glow */}
+          <div className="text-center mb-12">
+            <p className="text-xl md:text-2xl font-medium text-foreground">
+              Daarom creëerden we <span className="text-glow">SenseGlow™</span>
             </p>
           </div>
 
-          {/* Problem/Solution Image - full width */}
-          <div className="mb-8">
-            <div className="overflow-hidden">
+          {/* Problem/Solution Image - full width horizontal break */}
+          <div className="mb-10">
+            <div className="overflow-hidden rounded-xl">
               <img 
                 src={problemSolutionSplit} 
                 alt="Links: donkere gang zonder licht, rechts: warme gang met SenseGlow" 
@@ -60,17 +63,19 @@ export const ProblemSolutionSection = () => {
             </div>
           </div>
 
-          {/* Comparison captions */}
+          {/* Comparison captions - left and right aligned */}
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="text-center md:text-left">
-              <p className="text-sm text-muted-foreground">
-                "95% van mensen schat diepte slecht in het donker." <br />
-                <span className="text-xs">Donkere gangen creëren stress.</span>
+            <div className="text-left">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                "95% van mensen schat diepte slecht in het donker."
+                <br />
+                <span className="text-xs text-muted-foreground/70">Donkere gangen creëren stress en onzekerheid.</span>
               </p>
             </div>
-            <div className="text-center md:text-right">
-              <p className="text-sm text-foreground font-medium">
-                "SenseGlow™ springt automatisch aan" <br />
+            <div className="text-left md:text-right">
+              <p className="text-sm text-foreground font-medium leading-relaxed">
+                "SenseGlow™ springt automatisch aan"
+                <br />
                 <span className="text-xs text-muted-foreground">en begeleidt je kalm door de nacht.</span>
               </p>
             </div>

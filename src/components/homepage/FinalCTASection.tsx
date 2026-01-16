@@ -2,15 +2,15 @@ import { Button } from "@/components/ui/button";
 
 export const FinalCTASection = () => {
   return (
-    <section className="py-16 md:py-24 bg-background animate-fade-in">
+    <section className="py-20 md:py-28 bg-background-secondary animate-fade-in">
       <div className="container">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
+        <div className="max-w-3xl mx-auto text-center space-y-7">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
             Ontdek SenseGlow
           </h2>
           
-          <p className="text-base text-muted-foreground max-w-md mx-auto">
-            Bekijk onze producten en vind de perfecte oplossing voor jouw ruimte.
+          <p className="text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
+            Bekijk onze producten en vind de perfecte oplossing voor jouw ruimte. Geen gedoe, geen verbouwing — alleen veilig licht precies waar je het nodig hebt.
           </p>
           
           <Button
@@ -21,7 +21,7 @@ export const FinalCTASection = () => {
               }
             }}
             size="lg"
-            className="text-sm px-10 py-6 h-auto font-medium tracking-wide"
+            className="text-sm font-medium tracking-wide"
           >
             Bekijk SenseGlow
           </Button>
