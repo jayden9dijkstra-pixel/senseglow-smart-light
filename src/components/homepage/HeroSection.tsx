@@ -6,14 +6,14 @@ export const HeroSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative bg-gradient-to-b from-background to-muted/20 py-16 md:py-24">
+    <section className="relative bg-background py-16 md:py-24 animate-fade-in-slow">
       <div className="container">
         <div className="max-w-4xl mx-auto">
           {/* Content - Centered */}
           <div className="space-y-8 text-center">
             <div className="space-y-4">
-              <p className="text-sm uppercase tracking-wider text-brand-orange font-medium">
-                Premium bewegingssensor verlichting voor elk huis
+              <p className="text-sm uppercase tracking-wider text-glow font-medium">
+                Nachtverlichting met bewegingssensor
               </p>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
@@ -34,11 +34,11 @@ export const HeroSection = () => {
                   className="w-full h-full object-cover"
                 />
                 {/* Gradient overlay voor extra warmte */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-orange/20 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-glow/20 via-transparent to-transparent pointer-events-none" />
               </div>
               
               {/* Glow effect achter image */}
-              <div className="absolute inset-0 bg-brand-orange/10 blur-3xl -z-10 scale-95" />
+              <div className="absolute inset-0 bg-glow/10 blur-3xl -z-10 scale-95" />
             </div>
 
             <div className="space-y-6">
@@ -46,24 +46,24 @@ export const HeroSection = () => {
                 <Button
                   onClick={() => navigate("/quiz")}
                   size="lg"
-                  className="bg-brand-orange hover:bg-brand-orange/90 text-white text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                  className="bg-secondary text-secondary-foreground text-lg px-12 py-7 h-auto rounded-full font-semibold shadow-xl hover:shadow-[0_0_30px_hsl(var(--glow)/0.4)] transition-all duration-300"
                 >
-                  Maak je huis 's nachts veilig
+                  Ontdek SenseGlow
                 </Button>
               </div>
 
               {/* Trust Icons - 3 second trust */}
               <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <span className="text-brand-orange font-bold">✓</span>
+                  <span className="text-glow font-bold">✓</span>
                   <span>Gratis verzending</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-brand-orange font-bold">✓</span>
+                  <span className="text-glow font-bold">✓</span>
                   <span>30 dagen retour</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-brand-orange font-bold">✓</span>
+                  <span className="text-glow font-bold">✓</span>
                   <span>1 jaar garantie</span>
                 </div>
               </div>
@@ -71,7 +71,7 @@ export const HeroSection = () => {
               {/* Microtrust */}
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-brand-orange text-lg">⭐</span>
+                  <span className="text-glow text-lg">⭐</span>
                   <span>+11.000 veilige nachtbewegingen gefaciliteerd</span>
                 </div>
               </div>

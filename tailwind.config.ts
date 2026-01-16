@@ -18,7 +18,9 @@ export default {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        "background-secondary": "hsl(var(--background-secondary))",
         foreground: "hsl(var(--foreground))",
+        "foreground-muted": "hsl(var(--foreground-muted))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -52,8 +54,8 @@ export default {
           light: "hsl(var(--glow-light))",
         },
         brand: {
-          orange: "hsl(var(--brand-orange))",
-          "orange-light": "hsl(var(--brand-orange-light))",
+          amber: "hsl(var(--brand-amber))",
+          "amber-light": "hsl(var(--brand-amber-light))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -96,11 +98,21 @@ export default {
             transform: "translateX(-33.333%)",
           },
         },
+        fadeIn: {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        scroll: "scroll 25s linear infinite",
+        scroll: "scroll 40s linear infinite",
+        "fade-in": "fadeIn 800ms ease-out forwards",
+        "fade-in-slow": "fadeIn 1200ms ease-out forwards",
       },
     },
   },
