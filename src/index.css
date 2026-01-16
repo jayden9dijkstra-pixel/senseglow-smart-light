@@ -55,7 +55,10 @@ html {
     --brand-amber: 33 52% 50%;
     --brand-amber-light: 33 52% 85%;
 
-    --radius: 0rem;
+    --radius: 0.5rem;
+    
+    /* Section transition curves */
+    --section-curve: 40px;
 
     --sidebar-background: 100 5% 87%;
     --sidebar-foreground: 0 0% 17%;

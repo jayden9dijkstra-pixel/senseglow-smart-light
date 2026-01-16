@@ -6,45 +6,45 @@ export const HeroSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative bg-background py-16 md:py-24 animate-fade-in-slow">
+    <section className="relative bg-background py-20 md:py-28 animate-fade-in-slow">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-            {/* Content - Left side */}
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+            {/* Content - Left side, left-aligned */}
             <div className="space-y-8 order-2 md:order-1">
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <p className="text-xs uppercase tracking-[0.2em] text-foreground/40 font-medium">
                   Nachtverlichting met bewegingssensor
                 </p>
                 
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.15] text-foreground">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.12] text-foreground">
                   Veilig licht. Precies wanneer jij beweegt.
                 </h1>
                 
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-md">
-                  Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken. Bewegingssensor activeert alleen wanneer nodig.
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg">
+                  Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken. De bewegingssensor activeert alleen wanneer nodig — stil, veilig en intelligent.
                 </p>
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-6">
                 <Button
                   onClick={() => navigate("/quiz")}
                   size="lg"
-                  className="text-sm px-10 py-6 h-auto font-medium tracking-wide"
+                  className="text-sm font-medium tracking-wide"
                 >
                   Ontdek SenseGlow
                 </Button>
 
-                {/* Trust Icons - inline flow */}
-                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted-foreground">
+                {/* Trust Icons - subtle inline flow */}
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted-foreground/70">
                   <span className="flex items-center gap-1.5">
-                    <span className="text-glow">✓</span> Gratis verzending
+                    <span className="text-glow/70">✓</span> Gratis verzending
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="text-glow">✓</span> 30 dagen retour
+                    <span className="text-glow/70">✓</span> 30 dagen retour
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="text-glow">✓</span> 1 jaar garantie
+                    <span className="text-glow/70">✓</span> 1 jaar garantie
                   </span>
                 </div>
               </div>
@@ -52,7 +52,7 @@ export const HeroSection = () => {
 
             {/* Hero Image - Right side */}
             <div className="relative order-1 md:order-2">
-              <div className="aspect-[4/5] overflow-hidden">
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl">
                 <img 
                   src={heroImage}
                   alt="SenseGlow LED lamp met warme glow in donkere ruimte"

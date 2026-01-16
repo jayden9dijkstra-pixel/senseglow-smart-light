@@ -152,60 +152,113 @@ const ProductDetail = () => {
           </div>
         </section>
 
-        {/* Product Sections with editorial line separators */}
+        {/* Product Sections with curved transitions */}
         <ProductHeroSection product={product} selectedVariant={selectedVariant} onVariantChange={setSelectedVariant} />
-        <div className="border-t border-foreground/10" />
-        <BundlesSection product={product} selectedVariant={selectedVariant || undefined} />
-        <div className="border-t border-foreground/10" />
+        
+        {/* Curved transition */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
+        <div className="bg-background-secondary">
+          <BundlesSection product={product} selectedVariant={selectedVariant || undefined} />
+        </div>
+        
+        {/* Curved transition back */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
         <ProductReviewsSection />
-        <div className="border-t border-foreground/10" />
+        
+        <div className="border-t border-foreground/8" />
+        
         <OutcomeSection />
-        <div className="border-t border-foreground/10" />
-        <ProblemSolutionProductSection />
-        <div className="border-t border-foreground/10" />
+        
+        {/* Curved transition */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
+        <div className="bg-background-secondary">
+          <ProblemSolutionProductSection />
+        </div>
+        
+        {/* Curved transition back */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
         <UseCaseSection />
-        <div className="border-t border-foreground/10" />
+        
+        <div className="border-t border-foreground/8" />
+        
         <TechBenefitsSection />
-        <div className="border-t border-foreground/10" />
-        <ProductFAQSection />
-        <div className="border-t border-foreground/10" />
+        
+        {/* Curved transition */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
+        <div className="bg-background-secondary">
+          <ProductFAQSection />
+        </div>
+        
+        {/* Curved transition back */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
         <FinalProductCTA />
 
-        {/* Footer */}
-        <footer className="border-t border-foreground/10 bg-background text-foreground">
-          <div className="container py-12">
-            <div className="grid md:grid-cols-4 gap-8 mb-8">
-              <div>
-                <h3 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">KLANTENSERVICE</h3>
-                <ul className="text-sm space-y-2 text-foreground/60">
-                  <li><a href="/contact" className="hover:text-glow transition-colors duration-300">Contact</a></li>
-                  <li><a href="/verzending" className="hover:text-glow transition-colors duration-300">Verzending</a></li>
-                  <li><a href="/retourneren" className="hover:text-glow transition-colors duration-300">Retourneren</a></li>
-                </ul>
+        {/* Footer with curved transition */}
+        <div className="relative h-12 md:h-20">
+          <div className="absolute inset-x-0 top-0 h-full bg-background" />
+          <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
+        </div>
+        
+        <footer className="bg-background-secondary text-foreground">
+          <div className="container py-14">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-4 gap-8 mb-10">
+                <div>
+                  <h3 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">KLANTENSERVICE</h3>
+                  <ul className="text-sm space-y-2 text-foreground/60">
+                    <li><a href="/contact" className="hover:text-glow transition-colors duration-300">Contact</a></li>
+                    <li><a href="/verzending" className="hover:text-glow transition-colors duration-300">Verzending</a></li>
+                    <li><a href="/retourneren" className="hover:text-glow transition-colors duration-300">Retourneren</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">OVER ONS</h4>
+                  <ul className="text-sm space-y-2 text-foreground/60">
+                    <li><a href="/over" className="hover:text-glow transition-colors duration-300">Over SenseGlow</a></li>
+                    <li><a href="/duurzaamheid" className="hover:text-glow transition-colors duration-300">Duurzaamheid</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">JURIDISCH</h4>
+                  <ul className="text-sm space-y-2 text-foreground/60">
+                    <li><a href="/privacy" className="hover:text-glow transition-colors duration-300">Privacybeleid</a></li>
+                    <li><a href="/voorwaarden" className="hover:text-glow transition-colors duration-300">Algemene voorwaarden</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">VOLG ONS</h4>
+                  <p className="text-sm text-foreground/60">
+                    Instagram | Facebook | Pinterest
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">OVER ONS</h4>
-                <ul className="text-sm space-y-2 text-foreground/60">
-                  <li><a href="/over" className="hover:text-glow transition-colors duration-300">Over SenseGlow</a></li>
-                  <li><a href="/duurzaamheid" className="hover:text-glow transition-colors duration-300">Duurzaamheid</a></li>
-                </ul>
+              <div className="text-left text-xs text-foreground/40 pt-10 border-t border-foreground/8">
+                <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
               </div>
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">JURIDISCH</h4>
-                <ul className="text-sm space-y-2 text-foreground/60">
-                  <li><a href="/privacy" className="hover:text-glow transition-colors duration-300">Privacybeleid</a></li>
-                  <li><a href="/voorwaarden" className="hover:text-glow transition-colors duration-300">Algemene voorwaarden</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.2em] font-medium mb-4">VOLG ONS</h4>
-                <p className="text-sm text-foreground/60">
-                  Instagram | Facebook | Pinterest
-                </p>
-              </div>
-            </div>
-            <div className="text-left text-xs text-foreground/40 pt-8 border-t border-foreground/10">
-              <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
             </div>
           </div>
         </footer>
