@@ -70,11 +70,11 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
 
   return (
     <>
-      <div className="space-y-3">
-        {/* Main Image - Fixed aspect ratio to prevent layout shifts */}
+      <div className="space-y-4">
+        {/* Main Image - No card, floats in page background */}
         <div className="relative group">
           <div 
-            className="relative rounded-2xl overflow-hidden bg-neutral-900 aspect-square"
+            className="relative aspect-square"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -82,22 +82,22 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
             <img
               src={currentImage.url}
               alt={currentImage.altText || productTitle}
-              className="absolute inset-0 w-full h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-[1.02]"
+              className="absolute inset-0 w-full h-full object-contain cursor-pointer transition-transform duration-500 group-hover:scale-[1.01]"
               onClick={() => setIsZoomed(true)}
             />
 
-            {/* Zoom hint */}
-            <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <ZoomIn className="h-4 w-4 text-foreground" />
+            {/* Zoom hint - subtle */}
+            <div className="absolute top-4 right-4 bg-background/60 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <ZoomIn className="h-4 w-4 text-foreground/70" />
             </div>
 
-            {/* Navigation arrows */}
+            {/* Navigation arrows - minimal */}
             {images.length > 1 && (
               <>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 hover:bg-background backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 h-10 w-10"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-background/60 hover:bg-background/80 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 h-10 w-10"
                   onClick={handlePrevious}
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -106,7 +106,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 hover:bg-background backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 h-10 w-10"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-background/60 hover:bg-background/80 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 h-10 w-10"
                   onClick={handleNext}
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -114,26 +114,26 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
               </>
             )}
 
-            {/* Image counter */}
+            {/* Image counter - subtle */}
             {images.length > 1 && (
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-foreground/70">
                 {selectedIndex + 1} / {images.length}
               </div>
             )}
           </div>
         </div>
 
-        {/* Thumbnails */}
+        {/* Thumbnails - no borders, same bg as page, subtle amber outline on active */}
         {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="flex gap-3 overflow-x-auto pb-1 pt-2">
             {images.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedIndex(index)}
-                className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-neutral-900 ${
+                className={`relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden transition-all duration-300 ${
                   selectedIndex === index
-                    ? "border-brand-orange ring-1 ring-brand-orange/50"
-                    : "border-transparent hover:border-muted-foreground/30"
+                    ? "ring-1 ring-glow"
+                    : "opacity-60 hover:opacity-100"
                 }`}
               >
                 <img

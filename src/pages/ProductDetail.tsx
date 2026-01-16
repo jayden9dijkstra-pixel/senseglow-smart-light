@@ -73,7 +73,7 @@ const ProductDetail = () => {
     <PageTransition>
       <div className="min-h-screen bg-background">
         {/* Header */}
-        <header className="w-full border-b shadow-sm bg-background">
+        <header className="w-full bg-background">
           {/* Top bar with icons and logo */}
           <div className="container">
             <div className="flex h-40 items-center justify-between py-6 relative">
@@ -85,7 +85,7 @@ const ProductDetail = () => {
               {/* Center - Logo */}
               <button 
                 onClick={() => navigate("/")}
-                className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:opacity-90 transition-opacity duration-500"
                 aria-label="Ga naar homepage"
               >
                 <img 
@@ -105,25 +105,25 @@ const ProductDetail = () => {
             </div>
           </div>
           
-          {/* Bottom bar with navigation */}
-          <div className="border-t bg-background">
+          {/* Bottom bar with navigation - subtle separator */}
+          <div className="border-t border-border/30 bg-background">
             <div className="container">
-              <nav className="flex items-center justify-center gap-8 py-4">
+              <nav className="flex items-center justify-center gap-12 py-4">
                 <a 
                   href="/#home" 
-                  className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-glow transition-colors duration-300"
+                  className="text-xs uppercase tracking-[0.2em] font-medium text-foreground/80 hover:text-glow transition-colors duration-500"
                 >
                   HOME
                 </a>
                 <a 
                   href="/#products" 
-                  className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-glow transition-colors duration-300"
+                  className="text-xs uppercase tracking-[0.2em] font-medium text-foreground/80 hover:text-glow transition-colors duration-500"
                 >
                   PRODUCTEN
                 </a>
                 <a 
                   href="/#contact" 
-                  className="text-sm uppercase tracking-wide font-medium text-foreground hover:text-glow transition-colors duration-300"
+                  className="text-xs uppercase tracking-[0.2em] font-medium text-foreground/80 hover:text-glow transition-colors duration-500"
                 >
                   CONTACT
                 </a>

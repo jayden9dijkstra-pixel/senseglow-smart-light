@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
@@ -51,8 +49,8 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
     <section className="py-12 md:py-20 bg-background animate-fade-in-slow">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          {/* Left - Product Image Gallery */}
-          <div className="relative">
+          {/* Left - Product Image Gallery - breathes in page space */}
+          <div className="relative px-4 md:px-8 lg:px-12">
             <ProductImageGallery 
               images={productImages} 
               productTitle={product.node.title}
@@ -78,10 +76,10 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
               </span>
             </div>
 
-            {/* Visual Variant Selector - Cards */}
+            {/* Visual Variant Selector - Architectural tiles */}
             {product.node.variants.edges.length > 1 && (
               <div className="space-y-3">
-                <label className="text-sm font-medium text-foreground">Kies je variant:</label>
+                <label className="text-sm font-medium text-foreground tracking-wide">Kies je variant:</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {product.node.variants.edges.map((variant, index) => {
                     const isSelected = selectedVariant?.id === variant.node.id;
@@ -91,29 +89,19 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
                       <div
                         key={variant.node.id}
                         onClick={() => handleVariantChange(variant.node)}
-                        className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                        className={`relative p-4 rounded-lg border cursor-pointer transition-all duration-300 bg-secondary ${
                           isSelected 
-                            ? 'border-glow bg-glow/5' 
-                            : 'border-border hover:border-glow/50 bg-background hover:bg-muted/30'
+                            ? 'border-glow' 
+                            : 'border-border hover:border-glow/50'
                         }`}
                       >
-                        {index === 0 && (
-                          <Badge className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs">
-                            Populair
-                          </Badge>
-                        )}
                         <div className="space-y-1">
                           <p className="font-semibold text-foreground">{variant.node.title}</p>
                           <p className="text-sm text-muted-foreground">{microcopy}</p>
-                          <p className="text-lg font-bold text-glow">
+                          <p className="text-lg font-medium text-foreground">
                             €{parseFloat(variant.node.price.amount).toFixed(2)}
                           </p>
                         </div>
-                        {isSelected && (
-                          <div className="absolute top-3 left-3 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-primary-foreground" />
-                          </div>
-                        )}
                       </div>
                     );
                   })}
