@@ -49,8 +49,8 @@ export const SiteHeader = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Ga naar homepage">
-              <img src={logoNew} alt="SenseGlow Logo" className="h-14 w-auto object-contain" />
+            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 translate-x-2 cursor-pointer" aria-label="Ga naar homepage">
+              <img src={logoNew} alt="SenseGlow Logo" className="h-16 w-auto object-contain" />
             </button>
             
             <CartDrawer />
@@ -76,8 +76,8 @@ export const SiteHeader = () => {
             </DropdownMenu>
             
             {/* Center - Logo */}
-            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Ga naar homepage">
-              <img src={logoNew} alt="SenseGlow Logo" className="h-28 w-auto object-contain" />
+            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 translate-x-2 cursor-pointer" aria-label="Ga naar homepage">
+              <img src={logoNew} alt="SenseGlow Logo" className="h-20 w-auto object-contain" />
             </button>
             
             {/* Right - Cart */}
