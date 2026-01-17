@@ -6,12 +6,9 @@ import { PageTransition } from "@/components/PageTransition";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Search, User } from "lucide-react";
 import logoNew from "@/assets/logo-new.png";
-
 const Contact = () => {
   const navigate = useNavigate();
-
-  return (
-    <PageTransition>
+  return <PageTransition>
       <div className="min-h-screen bg-background">
         {/* Header - same as homepage */}
         <header className="w-full border-b shadow-lg bg-gradient-to-r from-white via-brand-orange/5 to-white">
@@ -28,17 +25,9 @@ const Contact = () => {
                   </Button>
                 </div>
                 
-                <button 
-                  onClick={() => navigate("/")}
-                  className="flex-1 flex justify-center relative cursor-pointer hover:scale-105 transition-transform duration-300"
-                  aria-label="Ga naar homepage"
-                >
+                <button onClick={() => navigate("/")} className="flex-1 flex justify-center relative cursor-pointer hover:scale-105 transition-transform duration-300" aria-label="Ga naar homepage">
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
-                  <img 
-                    src={logoNew} 
-                    alt="SenseGlow Logo" 
-                    className="relative h-28 w-auto object-contain drop-shadow-lg"
-                  />
+                  <img src={logoNew} alt="SenseGlow Logo" className="relative h-28 w-auto object-contain drop-shadow-lg" />
                 </button>
                 
                 <CartDrawer />
@@ -50,17 +39,9 @@ const Contact = () => {
                   <Search className="h-6 w-6" />
                 </Button>
                 
-                <button 
-                  onClick={() => navigate("/")}
-                  className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
-                  aria-label="Ga naar homepage"
-                >
+                <button onClick={() => navigate("/")} className="relative cursor-pointer hover:scale-105 transition-transform duration-300" aria-label="Ga naar homepage">
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-brand-orange/10 to-transparent rounded-2xl blur-xl"></div>
-                  <img 
-                    src={logoNew} 
-                    alt="SenseGlow Logo" 
-                    className="relative h-32 w-auto object-contain drop-shadow-lg"
-                  />
+                  <img src={logoNew} alt="SenseGlow Logo" className="relative h-32 w-auto object-contain drop-shadow-lg" />
                 </button>
                 
                 <div className="flex items-center gap-2">
@@ -92,11 +73,7 @@ const Contact = () => {
 
         {/* Main Content */}
         <main className="container py-12 max-w-4xl">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate("/")}
-            className="mb-8"
-          >
+          <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Terug naar home
           </Button>
@@ -119,12 +96,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg mb-2">E-mail</h3>
-                    <a 
-                      href="mailto:support@senseglow.nl" 
-                      className="text-brand-orange hover:underline"
-                    >
-                      support@senseglow.nl
-                    </a>
+                    <a href="mailto:support@senseglow.nl" className="text-brand-orange hover:underline">support@senseglow.shop</a>
                   </div>
                 </div>
 
@@ -238,8 +210,6 @@ const Contact = () => {
           </div>
         </footer>
       </div>
-    </PageTransition>
-  );
+    </PageTransition>;
 };
-
 export default Contact;
