@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ProductImageGallery } from "./ProductImageGallery";
-import { Check } from "lucide-react";
+import { Check, Truck, RotateCcw, Shield } from "lucide-react";
 interface ProductHeroSectionProps {
   product: ShopifyProduct;
   selectedVariant?: ShopifyProduct['node']['variants']['edges'][0]['node'] | null;
@@ -99,17 +99,17 @@ export const ProductHeroSection = ({
               </div>
 
               {/* Trust Guarantees */}
-              <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
+              <div className="flex flex-col gap-2 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <span className="text-glow">✓</span>
+                  <Truck className="w-3.5 h-3.5 text-glow" />
                   <span>Gratis verzending</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-glow">✓</span>
+                  <RotateCcw className="w-3.5 h-3.5 text-glow" />
                   <span>30 dagen retour</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-glow">✓</span>
+                  <Shield className="w-3.5 h-3.5 text-glow" />
                   <span>1 jaar garantie</span>
                 </div>
               </div>
