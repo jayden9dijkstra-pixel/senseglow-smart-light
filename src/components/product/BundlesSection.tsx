@@ -254,12 +254,21 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   {/* Pricing */}
                   <div className="space-y-2">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-bold text-foreground">€{bundle.price}</span>
-                      <Badge variant="secondary" className="bg-glow/10 text-glow">
+                      <span 
+                        key={`price-${selectedSize}-${index}`}
+                        className="text-4xl font-bold text-foreground animate-[scale-in_0.4s_ease-out] origin-left"
+                        style={{
+                          textShadow: '0 0 20px hsl(var(--glow) / 0.3)',
+                          animation: 'scale-in 0.4s ease-out, glow-pulse 0.6s ease-out'
+                        }}
+                      >
+                        €{bundle.price}
+                      </span>
+                      <Badge variant="secondary" className="bg-glow/10 text-glow animate-fade-in">
                         -{bundle.discount}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground line-through">
+                    <p className="text-sm text-muted-foreground line-through animate-fade-in">
                       Was €{bundle.originalPrice}
                     </p>
                   </div>
