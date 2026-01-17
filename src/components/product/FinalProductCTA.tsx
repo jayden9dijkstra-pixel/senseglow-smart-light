@@ -20,7 +20,7 @@ export const FinalProductCTA = () => {
           <Button
             onClick={scrollToTop}
             size="lg"
-            className="text-xl px-16 py-8 h-auto rounded-full font-semibold"
+            className="text-xl px-16 py-8 h-auto rounded-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
           >
             Bekijk SenseGlow
           </Button>
