@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Search } from "lucide-react";
 import logoNew from "@/assets/logo-new.png";
 
 export const SiteHeader = () => {
@@ -10,55 +9,66 @@ export const SiteHeader = () => {
 
   return (
     <header className="w-full bg-background">
-      {/* Top bar with icons and logo */}
       <div className="container">
-        <div className="flex h-32 items-center py-4 relative">
+        <div className="flex h-24 md:h-28 items-center relative">
           {/* Mobile Layout */}
           <div className="flex md:hidden w-full items-center justify-between">
-            {/* Left - Search */}
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
+            <ThemeToggle />
             
-            {/* Center - Logo */}
             <button 
               onClick={() => navigate("/")}
-              className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:opacity-90 transition-opacity duration-300"
+              className="absolute left-1/2 -translate-x-1/2 cursor-pointer"
               aria-label="Ga naar homepage"
             >
               <img 
                 src={logoNew} 
                 alt="SenseGlow Logo" 
-                className="relative h-20 w-auto object-contain"
+                className="h-16 w-auto object-contain opacity-90"
               />
             </button>
             
-            {/* Right - Cart */}
             <CartDrawer />
           </div>
 
-          {/* Desktop Layout */}
+          {/* Desktop Layout - Architectural spacing */}
           <div className="hidden md:flex w-full items-center justify-between">
-            {/* Left - Search Icon */}
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
+            {/* Left - Navigation */}
+            <nav className="flex items-center gap-10">
+              <a 
+                href="/" 
+                className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
+              >
+                Home
+              </a>
+              <a
+                href="/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58"
+                className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
+              >
+                Producten
+              </a>
+              <a 
+                href="/contact" 
+                className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
+              >
+                Contact
+              </a>
+            </nav>
             
             {/* Center - Logo */}
             <button 
               onClick={() => navigate("/")}
-              className="absolute left-1/2 -translate-x-1/2 cursor-pointer hover:opacity-90 transition-opacity duration-300"
+              className="absolute left-1/2 -translate-x-1/2 cursor-pointer"
               aria-label="Ga naar homepage"
             >
               <img 
                 src={logoNew} 
                 alt="SenseGlow Logo" 
-                className="relative h-24 w-auto object-contain"
+                className="h-20 w-auto object-contain opacity-90"
               />
             </button>
             
-            {/* Right - Theme Toggle & Cart */}
-            <div className="flex items-center gap-4">
+            {/* Right - Utilities (subtle) */}
+            <div className="flex items-center gap-6">
               <ThemeToggle />
               <CartDrawer />
             </div>
@@ -66,27 +76,30 @@ export const SiteHeader = () => {
         </div>
       </div>
       
-      {/* Bottom bar with navigation - editorial line separator */}
-      <div className="border-t border-foreground/10 bg-background">
+      {/* Thin editorial separator line */}
+      <div className="border-b border-foreground/8" />
+      
+      {/* Mobile Navigation - Below header */}
+      <div className="md:hidden border-b border-foreground/8 bg-background">
         <div className="container">
-          <nav className="flex items-center justify-center gap-12 py-4">
+          <nav className="flex items-center justify-center gap-8 py-3">
             <a 
               href="/" 
-              className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-300"
+              className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
             >
-              HOME
+              Home
             </a>
             <a
               href="/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58"
-              className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-300"
+              className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
             >
-              PRODUCTEN
+              Producten
             </a>
             <a 
               href="/contact" 
-              className="text-xs uppercase tracking-[0.25em] font-medium text-foreground/70 hover:text-glow transition-colors duration-300"
+              className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
             >
-              CONTACT
+              Contact
             </a>
           </nav>
         </div>
