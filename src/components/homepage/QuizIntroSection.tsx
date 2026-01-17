@@ -13,12 +13,12 @@ export const QuizIntroSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 md:py-28 bg-background-secondary animate-fade-in">
+    <section className="py-24 md:py-32 bg-background-secondary">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+          <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
             {/* Smartphone Image - Left */}
-            <div className="relative flex justify-center md:justify-start order-1">
+            <div className="relative flex justify-center md:justify-start order-1 animate-fade-in-slow">
               <div className="max-w-xs overflow-hidden">
                 <img 
                   src={quizSmartphone}
@@ -29,24 +29,28 @@ export const QuizIntroSection = () => {
             </div>
 
             {/* Content - Right side, right-aligned on desktop */}
-            <div className="space-y-7 order-2 md:text-right">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
+            <div className="space-y-8 order-2 md:text-right animate-fade-in-slow">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
+                Persoonlijk advies
+              </p>
+              
+              <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight">
                 Welke SenseGlow™ heb jij nodig?
               </h2>
               
-              <p className="text-base text-muted-foreground leading-relaxed max-w-md md:ml-auto">
+              <p className="text-base text-foreground/60 leading-relaxed max-w-md md:ml-auto">
                 Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past. Geen verplichtingen, gewoon eerlijk advies.
               </p>
 
               {/* Location icons - aligned right on desktop */}
-              <div className="flex gap-3 justify-start md:justify-end">
+              <div className="flex gap-4 justify-start md:justify-end">
                 {locations.map((location, index) => (
                   <div 
                     key={index} 
-                    className="flex flex-col items-center gap-1.5 border border-foreground/10 px-4 py-3 rounded-lg"
+                    className="flex flex-col items-center gap-2 border border-foreground/8 px-5 py-4 rounded-xl"
                   >
                     <span className="text-xl">{location.icon}</span>
-                    <span className="text-xs text-foreground/60">{location.label}</span>
+                    <span className="text-[11px] text-foreground/50 tracking-wide">{location.label}</span>
                   </div>
                 ))}
               </div>
@@ -55,7 +59,8 @@ export const QuizIntroSection = () => {
                 <Button
                   onClick={() => navigate("/quiz")}
                   size="lg"
-                  className="text-sm font-medium tracking-wide"
+                  variant="outline"
+                  className="text-sm font-medium tracking-wide rounded-full px-8 py-6 border-foreground/20 bg-foreground/5 hover:bg-glow/10 hover:border-glow/30 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.3)] transition-all duration-500"
                 >
                   Start mijn Lichtadvies
                 </Button>
