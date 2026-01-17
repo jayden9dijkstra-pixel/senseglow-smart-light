@@ -315,7 +315,7 @@ const Quiz = () => {
           <h1 className="text-3xl font-bold mb-8">
             {questions[currentQuestion].question}
           </h1>
-          <div className="grid gap-4">
+        <div className="grid gap-4">
             {questions[currentQuestion].options.map((option) => {
               const isSelected = questions[currentQuestion].multiSelect && selectedLocations.includes(option.value);
               return (
@@ -323,8 +323,8 @@ const Quiz = () => {
                   key={option.value}
                   className={`p-6 cursor-pointer transition-all ${
                     isSelected 
-                      ? "border-brand-orange border-2 bg-brand-orange/5 shadow-lg shadow-brand-orange/10" 
-                      : "hover:border-glow hover:shadow-lg hover:shadow-glow/10"
+                      ? "border-primary border-2 bg-primary/10" 
+                      : "border-border hover:border-primary/50"
                   }`}
                   onClick={() => handleAnswer(option.value)}
                 >
