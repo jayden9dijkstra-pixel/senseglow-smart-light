@@ -226,7 +226,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
               <Card 
                 key={`${selectedSize}-${index}`}
                 onClick={() => setSelectedBundle(index)}
-                className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer ${
+                className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full ${
                   selectedBundle === index
                     ? 'border-glow border-2 bg-background' 
                     : 'bg-background border-border hover:border-glow/50'
@@ -238,7 +238,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   </Badge>
                 )}
 
-                <div className="space-y-6">
+                <div className="flex flex-col flex-grow">
                   {/* Header */}
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold text-foreground">{bundle.name}</h3>
@@ -252,7 +252,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                   </div>
 
                   {/* Pricing */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 mt-6">
                     <div className="flex items-baseline gap-2">
                       <span 
                         key={`price-${selectedSize}-${index}`}
@@ -273,8 +273,8 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     </p>
                   </div>
 
-                  {/* Features */}
-                  <div className="space-y-3 py-4 border-y border-border">
+                  {/* Features - grows to push button down */}
+                  <div className="space-y-3 py-4 border-y border-border mt-6 flex-grow">
                     {bundle.features.map((feature, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <Check className="w-5 h-5 text-glow flex-shrink-0 mt-0.5" />
@@ -283,14 +283,14 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     ))}
                   </div>
 
-                  {/* CTA */}
+                  {/* CTA - always at bottom */}
                   <Button 
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedBundle(index);
                       handleAddBundleToCart(index);
                     }}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mt-6"
                     size="lg"
                   >
                     Kies {bundle.quantityLabel}
