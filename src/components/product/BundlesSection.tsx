@@ -213,18 +213,8 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-background border border-border">
-                    <SelectItem value="20cm">
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">20cm</span>
-                        <span className="text-xs text-muted-foreground">Ideaal voor trap & gang</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="40cm">
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">40cm</span>
-                        <span className="text-xs text-muted-foreground">Meer licht voor grotere ruimtes</span>
-                      </div>
-                    </SelectItem>
+                    <SelectItem value="20cm">20cm</SelectItem>
+                    <SelectItem value="40cm">40cm</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
