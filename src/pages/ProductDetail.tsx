@@ -71,28 +71,6 @@ const ProductDetail = () => {
 
   return (
     <PageLayout>
-      {/* USP Banner */}
-      <section className="border-y border-foreground/10 py-3 overflow-hidden relative bg-background">
-        <div className="flex whitespace-nowrap animate-scroll">
-          {[1, 2, 3].map((set) => (
-            <div key={set} className="flex items-center gap-8 px-4">
-              <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">
-                ✓ Gratis verzending
-              </span>
-              <span className="text-foreground/20">•</span>
-              <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">
-                ✓ Voor 23:00 besteld, vandaag verstuurd
-              </span>
-              <span className="text-foreground/20">•</span>
-              <span className="text-foreground/60 text-xs uppercase tracking-[0.2em] font-medium">
-                ✓ 30 dagen retourrecht
-              </span>
-              <span className="text-foreground/20">•</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Product Sections with curved transitions */}
       <ProductHeroSection
         product={product}
