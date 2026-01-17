@@ -224,7 +224,7 @@ const Quiz = () => {
                   <Button
                     onClick={() => navigate(productUrl)}
                     size="lg"
-                    className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     Bekijk {recommendation.bundle.name}
                   </Button>
@@ -257,7 +257,7 @@ const Quiz = () => {
                   <Button
                     onClick={() => navigate(productUrl)}
                     size="lg"
-                    className="w-full bg-glow hover:bg-glow/90"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     Bekijk dit product
                   </Button>
