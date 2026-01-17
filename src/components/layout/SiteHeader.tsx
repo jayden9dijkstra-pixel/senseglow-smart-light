@@ -33,9 +33,9 @@ export const SiteHeader = () => {
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-foreground/50 hover:text-glow">
-                    <Menu className="h-5 w-5" />
-                    <span className="sr-only">Menu openen</span>
+                  <Button variant="ghost" className="text-foreground/50 hover:text-glow hover:bg-transparent gap-2 px-2">
+                    <Menu className="h-4 w-4" />
+                    <span className="text-[10px] uppercase tracking-[0.25em] font-medium">Menu</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
