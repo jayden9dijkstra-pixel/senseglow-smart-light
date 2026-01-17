@@ -338,7 +338,7 @@ const Quiz = () => {
             <Button
               onClick={handleContinue}
               size="lg"
-              className="w-full mt-6 bg-brand-orange hover:bg-brand-orange/90 text-white"
+              className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               Ga verder ({selectedLocations.length} geselecteerd)
             </Button>
