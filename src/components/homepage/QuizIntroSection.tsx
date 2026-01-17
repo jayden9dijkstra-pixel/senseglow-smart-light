@@ -34,7 +34,7 @@ export const QuizIntroSection = () => {
                 Persoonlijk advies
               </p>
               
-              <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight">
+              <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight break-words">
                 Welke SenseGlow™ heb jij nodig?
               </h2>
               
@@ -42,11 +42,11 @@ export const QuizIntroSection = () => {
                 Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past. Geen verplichtingen, gewoon eerlijk advies.
               </p>
 
-              {/* Location icons - aligned right on desktop */}
-              <div className="flex gap-4 justify-start md:justify-end">
+              {/* Location icons - grid on mobile to avoid cut-off */}
+              <div className="grid grid-cols-2 gap-4 md:flex md:gap-4 md:justify-end">
                 {locations.map((location, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="flex flex-col items-center gap-2 border border-foreground/8 px-5 py-4 rounded-xl"
                   >
                     <span className="text-xl">{location.icon}</span>
