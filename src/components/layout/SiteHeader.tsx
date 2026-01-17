@@ -32,8 +32,8 @@ export const SiteHeader = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent gap-2 px-2">
-                  <Menu className="h-4 w-4" />
-                  <span className="text-[10px] uppercase tracking-[0.25em] font-medium">Menu</span>
+                  <Menu className="h-6 w-6" />
+                  <span className="text-xs uppercase tracking-[0.25em] font-medium">Menu</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
@@ -58,7 +58,7 @@ export const SiteHeader = () => {
               <img 
                 src={logoNew} 
                 alt="SenseGlow Logo" 
-                className="h-16 w-auto object-contain opacity-90"
+                className="h-14 w-auto object-contain"
               />
             </button>
             
@@ -70,9 +70,9 @@ export const SiteHeader = () => {
             {/* Left - Navigation Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent gap-2">
-                  <Menu className="h-4 w-4" />
-                  <span className="text-[11px] uppercase tracking-[0.3em] font-medium">Menu</span>
+                <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent gap-3">
+                  <Menu className="h-6 w-6" />
+                  <span className="text-sm uppercase tracking-[0.3em] font-medium">Menu</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56 bg-background border-foreground/10">
@@ -98,7 +98,7 @@ export const SiteHeader = () => {
               <img 
                 src={logoNew} 
                 alt="SenseGlow Logo" 
-                className="h-20 w-auto object-contain opacity-90"
+                className="h-16 w-auto object-contain"
               />
             </button>
             
