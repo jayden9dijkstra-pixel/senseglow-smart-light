@@ -18,12 +18,10 @@ import { FinalCTASection } from "@/components/homepage/FinalCTASection";
 import { FAQSection } from "@/components/FAQSection";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logoNew from "@/assets/logo-new.png";
-
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
@@ -31,12 +29,9 @@ const Index = () => {
       setProducts(fetchedProducts);
       setLoading(false);
     };
-
     loadProducts();
   }, []);
-
-  return (
-    <PageTransition>
+  return <PageTransition>
       <div className="min-h-screen bg-background">
         {/* Architectural Header */}
         <header className="w-full bg-background">
@@ -46,16 +41,8 @@ const Index = () => {
               <div className="flex md:hidden w-full items-center justify-between">
                 <ThemeToggle />
                 
-                <button 
-                  onClick={() => navigate("/")}
-                  className="absolute left-1/2 -translate-x-1/2 cursor-pointer"
-                  aria-label="Ga naar homepage"
-                >
-                  <img 
-                    src={logoNew} 
-                    alt="SenseGlow Logo" 
-                    className="h-16 w-auto object-contain opacity-90"
-                  />
+                <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Ga naar homepage">
+                  <img src={logoNew} alt="SenseGlow Logo" className="h-16 w-auto object-contain opacity-90" />
                 </button>
                 
                 <CartDrawer />
@@ -65,41 +52,23 @@ const Index = () => {
               <div className="hidden md:flex w-full items-center justify-between">
                 {/* Left - Navigation */}
                 <nav className="flex items-center gap-10">
-                  <a 
-                    href="/" 
-                    className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-                  >
+                  <a href="/" className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500">
                     Home
                   </a>
-                  <button
-                    onClick={() => {
-                      if (products.length > 0) {
-                        navigate(`/product/${products[0].node.handle}`);
-                      }
-                    }}
-                    className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500 cursor-pointer bg-transparent border-none"
-                  >
+                  <button onClick={() => {
+                  if (products.length > 0) {
+                    navigate(`/product/${products[0].node.handle}`);
+                  }
+                }} className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500 cursor-pointer bg-transparent border-none">
                     Producten
                   </button>
-                  <a 
-                    href="/contact" 
-                    className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-                  >
-                    Contact
-                  </a>
+                  <a href="/contact" className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500">
+                </a>
                 </nav>
                 
                 {/* Center - Logo */}
-                <button 
-                  onClick={() => navigate("/")}
-                  className="absolute left-1/2 -translate-x-1/2 cursor-pointer"
-                  aria-label="Ga naar homepage"
-                >
-                  <img 
-                    src={logoNew} 
-                    alt="SenseGlow Logo" 
-                    className="h-20 w-auto object-contain opacity-90"
-                  />
+                <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Ga naar homepage">
+                  <img src={logoNew} alt="SenseGlow Logo" className="h-20 w-auto object-contain opacity-90" />
                 </button>
                 
                 {/* Right - Utilities (subtle) */}
@@ -119,26 +88,17 @@ const Index = () => {
         <div className="md:hidden border-b border-foreground/8 bg-background">
           <div className="container">
             <nav className="flex items-center justify-center gap-8 py-3">
-              <a 
-                href="/" 
-                className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-              >
+              <a href="/" className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500">
                 Home
               </a>
-              <button
-                onClick={() => {
-                  if (products.length > 0) {
-                    navigate(`/product/${products[0].node.handle}`);
-                  }
-                }}
-                className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500 cursor-pointer bg-transparent border-none"
-              >
+              <button onClick={() => {
+              if (products.length > 0) {
+                navigate(`/product/${products[0].node.handle}`);
+              }
+            }} className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500 cursor-pointer bg-transparent border-none">
                 Producten
               </button>
-              <a 
-                href="/contact" 
-                className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-              >
+              <a href="/contact" className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500">
                 Contact
               </a>
             </nav>
@@ -227,26 +187,18 @@ const Index = () => {
                 </p>
               </div>
 
-              {loading ? (
-                <div className="flex justify-center items-center py-20">
+              {loading ? <div className="flex justify-center items-center py-20">
                   <Loader2 className="w-5 h-5 animate-spin text-foreground/30" />
-                </div>
-              ) : products.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/6 overflow-hidden">
-                  {products.map((product) => (
-                    <div key={product.node.id} className="bg-background p-10">
+                </div> : products.length > 0 ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/6 overflow-hidden">
+                  {products.map(product => <div key={product.node.id} className="bg-background p-10">
                       <ProductCard product={product} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="py-20">
+                    </div>)}
+                </div> : <div className="py-20">
                   <p className="text-foreground/60 mb-2">Geen producten gevonden</p>
                   <p className="text-sm text-foreground/40">
                     Voeg producten toe via de Shopify Storefront API.
                   </p>
-                </div>
-              )}
+                </div>}
             </div>
           </div>
         </section>
@@ -310,8 +262,6 @@ const Index = () => {
           </div>
         </footer>
       </div>
-    </PageTransition>
-  );
+    </PageTransition>;
 };
-
 export default Index;
