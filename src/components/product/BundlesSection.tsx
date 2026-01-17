@@ -291,7 +291,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                       setSelectedBundle(index);
                       handleAddBundleToCart(index);
                     }}
-                    className="w-full"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     size="lg"
                   >
                     Kies {bundle.quantityLabel}

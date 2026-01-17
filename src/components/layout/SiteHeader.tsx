@@ -31,7 +31,7 @@ export const SiteHeader = () => {
           <div className="flex md:hidden w-full items-center justify-between">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-foreground/50 hover:text-glow hover:bg-transparent gap-2 px-2">
+                <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent gap-2 px-2">
                   <Menu className="h-4 w-4" />
                   <span className="text-[10px] uppercase tracking-[0.25em] font-medium">Menu</span>
                 </Button>
@@ -70,7 +70,7 @@ export const SiteHeader = () => {
             {/* Left - Navigation Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-foreground/50 hover:text-glow hover:bg-transparent gap-2">
+                <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent gap-2">
                   <Menu className="h-4 w-4" />
                   <span className="text-[11px] uppercase tracking-[0.3em] font-medium">Menu</span>
                 </Button>

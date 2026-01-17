@@ -145,7 +145,7 @@ export const ProductHeroSection = ({ product, selectedVariant: propVariant, onVa
               <Button
                 onClick={handleAddToCart}
                 size="lg"
-                className="w-full text-sm px-10 py-6 h-auto font-medium tracking-wide"
+                className="w-full text-sm px-10 py-6 h-auto font-medium tracking-wide rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
               >
                 Ervaar het licht
               </Button>

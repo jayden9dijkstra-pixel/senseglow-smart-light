@@ -22,7 +22,7 @@ export const HeroSection = () => {
               </div>
 
               <div className="space-y-8">
-                <Button onClick={() => navigate("/quiz")} size="lg" variant="outline" className="text-sm font-medium tracking-wide rounded-full px-8 py-6 border-foreground/20 bg-foreground/5 hover:bg-glow/10 hover:border-glow/30 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.3)] transition-all duration-500">
+                <Button onClick={() => navigate("/quiz")} size="lg" className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500">
                   Ontdek SenseGlow
                 </Button>
 

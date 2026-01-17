@@ -138,19 +138,19 @@ export function CartDrawer() {
                 
                 <Button 
                   onClick={handleCheckout}
-                  className="w-full" 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" 
                   size="lg"
                   disabled={items.length === 0 || isLoading}
                 >
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Creating Checkout...
+                      Checkout aanmaken...
                     </>
                   ) : (
                     <>
                       <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout with Shopify
+                      Afrekenen
                     </>
                   )}
                 </Button>
