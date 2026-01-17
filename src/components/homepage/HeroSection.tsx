@@ -28,7 +28,7 @@ export const HeroSection = () => {
                 </Button>
 
                 {/* Trust indicators with amber icons */}
-                <div className="flex flex-col md:flex-row gap-3 md:gap-x-8 text-[11px] text-foreground/50 tracking-wide">
+                <div className="flex flex-col gap-2 text-[11px] text-foreground/50 tracking-wide">
                   <span className="flex items-center gap-2">
                     <Truck className="w-3.5 h-3.5 text-glow" />
                     Gratis verzending
