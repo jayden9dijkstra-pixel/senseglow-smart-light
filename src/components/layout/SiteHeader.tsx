@@ -33,27 +33,33 @@ export const SiteHeader = () => {
         <div className="flex h-24 md:h-28 items-center relative">
           {/* Mobile Layout */}
           <div className="flex md:hidden w-full items-center justify-between">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent gap-2 px-2">
-                  <Menu className="h-6 w-6" />
-                  <span className="text-xs uppercase tracking-[0.25em] font-medium">Menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
-                {menuItems.map(item => <DropdownMenuItem key={item.href} asChild>
-                    <a href={item.href} className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-foreground/70 hover:text-glow transition-colors duration-500">
-                      {item.label}
-                    </a>
-                  </DropdownMenuItem>)}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Left - Menu with fixed width for symmetry */}
+            <div className="w-20 flex justify-start">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-transparent px-0">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
+                  {menuItems.map(item => <DropdownMenuItem key={item.href} asChild>
+                      <a href={item.href} className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-foreground/70 hover:text-glow transition-colors duration-500">
+                        {item.label}
+                      </a>
+                    </DropdownMenuItem>)}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             
-            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Ga naar homepage">
+            {/* Center - Logo */}
+            <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
               <img src={logoNew} alt="SenseGlow Logo" className="h-[76px] w-auto object-contain" />
             </button>
             
-            <CartDrawer />
+            {/* Right - Cart with fixed width for symmetry */}
+            <div className="w-20 flex justify-end">
+              <CartDrawer />
+            </div>
           </div>
 
           {/* Desktop Layout - Architectural spacing */}
