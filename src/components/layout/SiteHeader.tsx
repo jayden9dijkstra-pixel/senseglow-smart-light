@@ -49,7 +49,7 @@ export const SiteHeader = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 cursor-pointer" aria-label="Ga naar homepage">
+            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 translate-x-1 cursor-pointer" aria-label="Ga naar homepage">
               <img src={logoNew} alt="SenseGlow Logo" className="h-[76px] w-auto object-contain" />
             </button>
             
