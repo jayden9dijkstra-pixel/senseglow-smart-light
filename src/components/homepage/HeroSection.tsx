@@ -35,13 +35,11 @@ export const HeroSection = () => {
               </div>
             </div>
 
-            {/* Hero Image - Right side with soft edges */}
+            {/* Hero Image - Right side */}
             <div className="relative order-1 md:order-2 animate-fade-in-slow">
               <div className="aspect-[4/5] overflow-hidden rounded-3xl">
                 <img src={heroImage} alt="SenseGlow LED lamp met warme glow in donkere ruimte" className="w-full h-full object-cover" />
               </div>
-              {/* Soft gradient overlay at bottom for seamless transition */}
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent rounded-b-3xl" />
             </div>
           </div>
         </div>
