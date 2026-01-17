@@ -29,7 +29,7 @@ export const QuizIntroSection = () => {
             </div>
 
             {/* Content - Right side, right-aligned on desktop */}
-            <div className="space-y-8 order-2 md:text-right animate-fade-in-slow">
+            <div className="space-y-8 order-2 md:text-right animate-fade-in-slow px-1">
               <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
                 Persoonlijk advies
               </p>
@@ -38,7 +38,7 @@ export const QuizIntroSection = () => {
                 Welke SenseGlow™ heb jij nodig?
               </h2>
               
-              <p className="text-base text-foreground/60 leading-relaxed max-w-md md:ml-auto">
+              <p className="text-base text-foreground/60 leading-relaxed md:max-w-md md:ml-auto">
                 Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past. Geen verplichtingen, gewoon eerlijk advies.
               </p>
 
