@@ -1,8 +1,25 @@
 import { useNavigate } from "react-router-dom";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logoNew from "@/assets/logo-new.png";
+
+const menuItems = [
+  { label: "Home", href: "/" },
+  { label: "Producten", href: "/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58" },
+  { label: "Duurzaamheid", href: "/duurzaamheid" },
+  { label: "Contact", href: "/contact" },
+  { label: "Verzending", href: "/verzending" },
+  { label: "Retourneren", href: "/retourneren" },
+  { label: "Over Ons", href: "/over" },
+];
 
 export const SiteHeader = () => {
   const navigate = useNavigate();
@@ -13,7 +30,29 @@ export const SiteHeader = () => {
         <div className="flex h-24 md:h-28 items-center relative">
           {/* Mobile Layout */}
           <div className="flex md:hidden w-full items-center justify-between">
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-foreground/50 hover:text-glow">
+                    <Menu className="h-5 w-5" />
+                    <span className="sr-only">Menu openen</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
+                  {menuItems.map((item) => (
+                    <DropdownMenuItem key={item.href} asChild>
+                      <a
+                        href={item.href}
+                        className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-foreground/70 hover:text-glow transition-colors duration-500"
+                      >
+                        {item.label}
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <ThemeToggle />
+            </div>
             
             <button 
               onClick={() => navigate("/")}
@@ -32,27 +71,27 @@ export const SiteHeader = () => {
 
           {/* Desktop Layout - Architectural spacing */}
           <div className="hidden md:flex w-full items-center justify-between">
-            {/* Left - Navigation */}
-            <nav className="flex items-center gap-10">
-              <a 
-                href="/" 
-                className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-              >
-                Home
-              </a>
-              <a
-                href="/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58"
-                className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-              >
-                Producten
-              </a>
-              <a 
-                href="/contact" 
-                className="text-[11px] uppercase tracking-[0.3em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-              >
-                Contact
-              </a>
-            </nav>
+            {/* Left - Navigation Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground/50 hover:text-glow hover:bg-transparent gap-2">
+                  <Menu className="h-4 w-4" />
+                  <span className="text-[11px] uppercase tracking-[0.3em] font-medium">Menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56 bg-background border-foreground/10">
+                {menuItems.map((item) => (
+                  <DropdownMenuItem key={item.href} asChild>
+                    <a
+                      href={item.href}
+                      className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-foreground/70 hover:text-glow transition-colors duration-500 py-2"
+                    >
+                      {item.label}
+                    </a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             {/* Center - Logo */}
             <button 
@@ -78,32 +117,6 @@ export const SiteHeader = () => {
       
       {/* Thin editorial separator line */}
       <div className="border-b border-foreground/8" />
-      
-      {/* Mobile Navigation - Below header */}
-      <div className="md:hidden border-b border-foreground/8 bg-background">
-        <div className="container">
-          <nav className="flex items-center justify-center gap-8 py-3">
-            <a 
-              href="/" 
-              className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-            >
-              Home
-            </a>
-            <a
-              href="/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58"
-              className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-            >
-              Producten
-            </a>
-            <a 
-              href="/contact" 
-              className="text-[10px] uppercase tracking-[0.25em] font-medium text-foreground/50 hover:text-glow transition-colors duration-500"
-            >
-              Contact
-            </a>
-          </nav>
-        </div>
-      </div>
     </header>
   );
 };
