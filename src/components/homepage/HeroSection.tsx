@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Truck, RotateCcw, Shield } from "lucide-react";
 import heroImage from "@/assets/hero-lifestyle.png";
 export const HeroSection = () => {
   const navigate = useNavigate();
@@ -26,11 +27,20 @@ export const HeroSection = () => {
                   Ontdek SenseGlow
                 </Button>
 
-                {/* Trust indicators - minimal, subtle */}
-                <div className="flex flex-wrap gap-x-8 gap-y-2 text-[11px] text-foreground/40 tracking-wide">
-                  <span>Gratis verzending</span>
-                  <span>30 dagen retour</span>
-                  <span>1 jaar garantie</span>
+                {/* Trust indicators with amber icons */}
+                <div className="flex flex-wrap gap-x-8 gap-y-3 text-[11px] text-foreground/50 tracking-wide">
+                  <span className="flex items-center gap-2">
+                    <Truck className="w-3.5 h-3.5 text-glow" />
+                    Gratis verzending
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <RotateCcw className="w-3.5 h-3.5 text-glow" />
+                    30 dagen retour
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <Shield className="w-3.5 h-3.5 text-glow" />
+                    1 jaar garantie
+                  </span>
                 </div>
               </div>
             </div>
