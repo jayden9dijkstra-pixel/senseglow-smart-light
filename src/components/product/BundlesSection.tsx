@@ -221,7 +221,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div key={selectedSize} className="grid md:grid-cols-3 gap-8 animate-fade-in">
             {bundles.map((bundle, index) => (
               <Card 
                 key={`${selectedSize}-${index}`}
