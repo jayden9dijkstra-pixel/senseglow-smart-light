@@ -95,15 +95,31 @@ const Quiz = () => {
     let color = "Zwart";
     if (answers.includes("design")) color = "Zilver";
     
+    // Bundle pricing based on size
+    const bundlePricing = {
+      "20cm": {
+        two: { price: "66.95", originalPrice: "69.90", discount: "5%" },
+        three: { price: "94.95", originalPrice: "104.85", discount: "10%" },
+        five: { price: "149.95", originalPrice: "174.75", discount: "15%" }
+      },
+      "40cm": {
+        two: { price: "99.95", originalPrice: "109.90", discount: "10%" },
+        three: { price: "139.95", originalPrice: "164.85", discount: "15%" },
+        five: { price: "219.95", originalPrice: "274.75", discount: "20%" }
+      }
+    };
+    
+    const pricing = bundlePricing[size as "20cm" | "40cm"];
+    
     // Determine bundle based on number of locations
     let bundle = null;
     if (locationCount === 2) {
       bundle = {
         name: "Night Safety Pack",
         quantity: 2,
-        price: "79.99",
-        originalPrice: "99.98",
-        discount: "20%",
+        price: pricing.two.price,
+        originalPrice: pricing.two.originalPrice,
+        discount: pricing.two.discount,
         ideal: "Ideaal voor " + selectedLocations.map(loc => {
           if (loc === "hallway") return "gang/trap";
           if (loc === "bedroom") return "slaapkamer";
@@ -116,9 +132,9 @@ const Quiz = () => {
       bundle = {
         name: "Home Glow Pack",
         quantity: 3,
-        price: "109.99",
-        originalPrice: "149.97",
-        discount: "27%",
+        price: pricing.three.price,
+        originalPrice: pricing.three.originalPrice,
+        discount: pricing.three.discount,
         badge: "Meest gekozen",
         ideal: "Perfect voor trap + gang + slaapkamer"
       };
@@ -126,9 +142,9 @@ const Quiz = () => {
       bundle = {
         name: "Whole Home Security Pack",
         quantity: 5,
-        price: "169.99",
-        originalPrice: "249.95",
-        discount: "32%",
+        price: pricing.five.price,
+        originalPrice: pricing.five.originalPrice,
+        discount: pricing.five.discount,
         badge: "Meest voordelig",
         ideal: "Complete woning bescherming"
       };
