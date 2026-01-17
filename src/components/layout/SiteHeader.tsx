@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,29 +29,26 @@ export const SiteHeader = () => {
         <div className="flex h-24 md:h-28 items-center relative">
           {/* Mobile Layout */}
           <div className="flex md:hidden w-full items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-foreground/50 hover:text-glow hover:bg-transparent gap-2 px-2">
-                    <Menu className="h-4 w-4" />
-                    <span className="text-[10px] uppercase tracking-[0.25em] font-medium">Menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
-                  {menuItems.map((item) => (
-                    <DropdownMenuItem key={item.href} asChild>
-                      <a
-                        href={item.href}
-                        className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-foreground/70 hover:text-glow transition-colors duration-500"
-                      >
-                        {item.label}
-                      </a>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <ThemeToggle />
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground/50 hover:text-glow hover:bg-transparent gap-2 px-2">
+                  <Menu className="h-4 w-4" />
+                  <span className="text-[10px] uppercase tracking-[0.25em] font-medium">Menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48 bg-background border-foreground/10">
+                {menuItems.map((item) => (
+                  <DropdownMenuItem key={item.href} asChild>
+                    <a
+                      href={item.href}
+                      className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-foreground/70 hover:text-glow transition-colors duration-500"
+                    >
+                      {item.label}
+                    </a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <button 
               onClick={() => navigate("/")}
@@ -106,11 +102,8 @@ export const SiteHeader = () => {
               />
             </button>
             
-            {/* Right - Utilities (subtle) */}
-            <div className="flex items-center gap-6">
-              <ThemeToggle />
-              <CartDrawer />
-            </div>
+            {/* Right - Cart */}
+            <CartDrawer />
           </div>
         </div>
       </div>
