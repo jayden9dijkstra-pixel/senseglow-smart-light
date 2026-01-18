@@ -101,12 +101,11 @@ export const useCartStore = create<CartStore>()(
         try {
           const checkoutUrl = await createStorefrontCheckout(items);
           setCheckoutUrl(checkoutUrl);
-        } catch (error) {
-          console.error('Failed to create checkout:', error);
+        } catch {
           toast.error('Checkout mislukt', {
             description: 'Probeer het opnieuw.',
           });
-          throw error;
+          throw new Error('Checkout failed');
         } finally {
           setLoading(false);
         }

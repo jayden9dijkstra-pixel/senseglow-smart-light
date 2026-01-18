@@ -1,9 +1,19 @@
 import { toast } from "sonner";
+import { z } from "zod";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
+// Shopify Storefront Access Tokens are designed for client-side use (read-only public access)
 const SHOPIFY_STOREFRONT_TOKEN = 'd888e2f5ee17de858e6626f4c34cf9b7';
+
+// Input validation schemas
+const limitSchema = z.number().int().min(1).max(250);
+const checkoutItemSchema = z.object({
+  variantId: z.string().min(1),
+  quantity: z.number().int().min(1).max(100),
+});
+const checkoutItemsSchema = z.array(checkoutItemSchema).min(1).max(100);
 
 export interface ShopifyProduct {
   node: {
@@ -143,7 +153,7 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
-export async function storefrontApiRequest(query: string, variables: any = {}) {
+export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}): Promise<Record<string, unknown> | undefined> {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: 'POST',
     headers: {
@@ -170,7 +180,10 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
   const data = await response.json();
   
   if (data.errors) {
-    throw new Error(`Error calling Shopify: ${data.errors.map((e: any) => e.message).join(', ')}`);
+    const errorMessages = Array.isArray(data.errors) 
+      ? data.errors.map((e: { message?: string }) => e.message || 'Unknown error').join(', ')
+      : 'Unknown API error';
+    throw new Error(`Error calling Shopify: ${errorMessages}`);
   }
 
   return data;
@@ -178,47 +191,62 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
 
 export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[]> {
   try {
-    console.log('🛍️ Fetching products from Shopify...');
-    const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: limit });
-    console.log('📦 Products data received:', data);
-    const products = data?.data?.products?.edges || [];
-    console.log('✅ Found', products.length, 'products');
+    // Validate input
+    const validatedLimit = limitSchema.parse(limit);
+    
+    const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: validatedLimit });
+    const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
+    const products = responseData?.data?.products?.edges || [];
     return products;
-  } catch (error) {
-    console.error('❌ Error fetching products:', error);
+  } catch {
     return [];
   }
 }
 
-export async function createStorefrontCheckout(items: any[]): Promise<string> {
-  try {
-    const lines = items.map(item => ({
-      quantity: item.quantity,
-      merchandiseId: item.variantId,
-    }));
+interface CheckoutItem {
+  variantId: string;
+  quantity: number;
+}
 
-    const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
-      input: {
-        lines,
-      },
-    });
+interface CartCreateResponse {
+  data?: {
+    cartCreate?: {
+      cart?: {
+        checkoutUrl?: string;
+      };
+      userErrors?: Array<{ message?: string }>;
+    };
+  };
+}
 
-    if (cartData.data.cartCreate.userErrors.length > 0) {
-      throw new Error(`Cart creation failed: ${cartData.data.cartCreate.userErrors.map((e: any) => e.message).join(', ')}`);
-    }
+export async function createStorefrontCheckout(items: CheckoutItem[]): Promise<string> {
+  // Validate input
+  const validatedItems = checkoutItemsSchema.parse(items);
+  
+  const lines = validatedItems.map(item => ({
+    quantity: item.quantity,
+    merchandiseId: item.variantId,
+  }));
 
-    const cart = cartData.data.cartCreate.cart;
-    
-    if (!cart.checkoutUrl) {
-      throw new Error('No checkout URL returned from Shopify');
-    }
+  const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
+    input: {
+      lines,
+    },
+  }) as CartCreateResponse | undefined;
 
-    const url = new URL(cart.checkoutUrl);
-    url.searchParams.set('channel', 'online_store');
-    const checkoutUrl = url.toString();
-    return checkoutUrl;
-  } catch (error) {
-    console.error('Error creating storefront checkout:', error);
-    throw error;
+  const userErrors = cartData?.data?.cartCreate?.userErrors;
+  if (userErrors && userErrors.length > 0) {
+    const errorMessages = userErrors.map(e => e.message || 'Unknown error').join(', ');
+    throw new Error(`Cart creation failed: ${errorMessages}`);
   }
+
+  const checkoutUrl = cartData?.data?.cartCreate?.cart?.checkoutUrl;
+  
+  if (!checkoutUrl) {
+    throw new Error('No checkout URL returned from Shopify');
+  }
+
+  const url = new URL(checkoutUrl);
+  url.searchParams.set('channel', 'online_store');
+  return url.toString();
 }
