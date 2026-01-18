@@ -33,8 +33,8 @@ export function CartDrawer() {
         window.open(checkoutUrl, '_blank');
         setIsOpen(false);
       }
-    } catch (error) {
-      console.error('Checkout failed:', error);
+    } catch {
+      // Error already handled by cart store with toast notification
     }
   };
 
