@@ -211,9 +211,12 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
 
       {/* Fullscreen Lightbox */}
       <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-        <DialogContent className="max-w-none w-screen h-screen p-0 bg-background border-none [&>button]:hidden">
+        <DialogContent 
+          className="fixed inset-0 max-w-none w-screen h-screen p-0 bg-background border-none rounded-none [&>button]:hidden"
+          style={{ maxWidth: '100vw', maxHeight: '100vh' }}
+        >
           <div 
-            className="relative w-full h-full flex flex-col"
+            className="absolute inset-0 flex flex-col overflow-hidden"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={() => {
@@ -225,72 +228,78 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
               touchEndX.current = null;
             }}
           >
-            {/* Close button */}
-            <button
-              onClick={() => setIsLightboxOpen(false)}
-              className="absolute top-4 right-4 z-50 p-2 text-foreground/50 hover:text-foreground transition-colors"
-              aria-label="Sluiten"
-            >
-              <X className="h-6 w-6" strokeWidth={1.5} />
-            </button>
-
-            {/* Image counter */}
-            <div className="absolute top-4 left-4 z-50 text-xs text-foreground/40 font-medium tracking-wide">
-              {lightboxIndex + 1} / {images.length}
+            {/* Top bar with counter and close */}
+            <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 z-50">
+              <span className="text-xs text-foreground/40 font-medium tracking-wide">
+                {lightboxIndex + 1} / {images.length}
+              </span>
+              <button
+                onClick={() => setIsLightboxOpen(false)}
+                className="p-2 text-foreground/50 hover:text-foreground transition-colors"
+                aria-label="Sluiten"
+              >
+                <X className="h-5 w-5" strokeWidth={1.5} />
+              </button>
             </div>
 
-            {/* Main lightbox image - proper sizing */}
-            <div className="flex-1 flex items-center justify-center px-12 md:px-20 py-16 md:py-20 min-h-0">
-              <img
-                src={images[lightboxIndex].url}
-                alt={images[lightboxIndex].altText || productTitle}
-                className="max-w-full max-h-full w-auto h-auto object-contain"
-                draggable={false}
-              />
-            </div>
-
-            {/* Lightbox navigation arrows - visible on all devices */}
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={lightboxPrevious}
-                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 z-50
-                    text-foreground/30 hover:text-primary transition-colors duration-300"
-                  aria-label="Vorige afbeelding"
-                >
-                  <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
-                </button>
-                <button
-                  onClick={lightboxNext}
-                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 z-50
-                    text-foreground/30 hover:text-primary transition-colors duration-300"
-                  aria-label="Volgende afbeelding"
-                >
-                  <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
-                </button>
-              </>
-            )}
-
-            {/* Thumbnail strip at bottom of lightbox */}
-            {images.length > 1 && (
-              <div className="flex-shrink-0 flex items-center justify-center gap-2 py-3 md:py-4 px-4 overflow-x-auto">
-                {images.map((image, index) => (
+            {/* Main image area - takes remaining space */}
+            <div className="flex-1 relative flex items-center justify-center min-h-0 px-4 md:px-16">
+              {/* Navigation arrows */}
+              {images.length > 1 && (
+                <>
                   <button
-                    key={index}
-                    onClick={() => setLightboxIndex(index)}
-                    className={`flex-shrink-0 w-12 h-12 md:w-14 md:h-14 overflow-hidden transition-all duration-300 ${
-                      lightboxIndex === index 
-                        ? 'ring-1 ring-primary' 
-                        : 'opacity-50 hover:opacity-100'
-                    }`}
+                    onClick={lightboxPrevious}
+                    className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 p-2 z-10
+                      text-foreground/30 hover:text-primary transition-colors duration-300"
+                    aria-label="Vorige afbeelding"
                   >
-                    <img
-                      src={image.url}
-                      alt={image.altText || `${productTitle} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                    <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
                   </button>
-                ))}
+                  <button
+                    onClick={lightboxNext}
+                    className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 p-2 z-10
+                      text-foreground/30 hover:text-primary transition-colors duration-300"
+                    aria-label="Volgende afbeelding"
+                  >
+                    <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
+                  </button>
+                </>
+              )}
+
+              {/* Image container with proper constraints */}
+              <div className="w-full h-full flex items-center justify-center p-4">
+                <img
+                  src={images[lightboxIndex].url}
+                  alt={images[lightboxIndex].altText || productTitle}
+                  className="max-w-full max-h-full object-contain"
+                  style={{ maxHeight: 'calc(100vh - 180px)' }}
+                  draggable={false}
+                />
+              </div>
+            </div>
+
+            {/* Thumbnail strip at bottom */}
+            {images.length > 1 && (
+              <div className="flex-shrink-0 py-3 px-4 border-t border-foreground/5">
+                <div className="flex items-center justify-center gap-2 overflow-x-auto">
+                  {images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setLightboxIndex(index)}
+                      className={`flex-shrink-0 w-12 h-12 md:w-14 md:h-14 overflow-hidden transition-all duration-300 ${
+                        lightboxIndex === index 
+                          ? 'ring-1 ring-primary opacity-100' 
+                          : 'opacity-40 hover:opacity-80'
+                      }`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.altText || `${productTitle} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
