@@ -15,6 +15,23 @@ const checkoutItemSchema = z.object({
 });
 const checkoutItemsSchema = z.array(checkoutItemSchema).min(1).max(100);
 
+// Request configuration
+const REQUEST_TIMEOUT_MS = 30000; // 30 second timeout
+const MAX_RETRY_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 1000; // 1 second between retries
+
+// Helper function to create timeout signal
+function createTimeoutController(timeoutMs: number): AbortController {
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), timeoutMs);
+  return controller;
+}
+
+// Helper function for delay
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export interface ShopifyProduct {
   node: {
     id: string;
@@ -153,40 +170,67 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
-export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}): Promise<Record<string, unknown> | undefined> {
-  const response = await fetch(SHOPIFY_STOREFRONT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
-
-  if (response.status === 402) {
-    toast.error("Shopify: Payment required", {
-      description: "Shopify API access requires an active Shopify billing plan. Visit https://admin.shopify.com to upgrade your store.",
-    });
-    return;
-  }
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
+export async function storefrontApiRequest(
+  query: string, 
+  variables: Record<string, unknown> = {},
+  attempt: number = 1
+): Promise<Record<string, unknown> | undefined> {
+  const controller = createTimeoutController(REQUEST_TIMEOUT_MS);
   
-  if (data.errors) {
-    const errorMessages = Array.isArray(data.errors) 
-      ? data.errors.map((e: { message?: string }) => e.message || 'Unknown error').join(', ')
-      : 'Unknown API error';
-    throw new Error(`Error calling Shopify: ${errorMessages}`);
-  }
+  try {
+    const response = await fetch(SHOPIFY_STOREFRONT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+      signal: controller.signal,
+    });
 
-  return data;
+    if (response.status === 402) {
+      toast.error("Shopify: Payment required", {
+        description: "Shopify API access requires an active Shopify billing plan. Visit https://admin.shopify.com to upgrade your store.",
+      });
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.errors) {
+      const errorMessages = Array.isArray(data.errors) 
+        ? data.errors.map((e: { message?: string }) => e.message || 'Unknown error').join(', ')
+        : 'Unknown API error';
+      throw new Error(`Error calling Shopify: ${errorMessages}`);
+    }
+
+    return data;
+  } catch (error) {
+    // Handle timeout
+    if (error instanceof Error && error.name === 'AbortError') {
+      if (attempt < MAX_RETRY_ATTEMPTS) {
+        await delay(RETRY_DELAY_MS);
+        return storefrontApiRequest(query, variables, attempt + 1);
+      }
+      throw new Error('Request timed out after multiple attempts');
+    }
+    
+    // Retry on network errors
+    if (attempt < MAX_RETRY_ATTEMPTS && error instanceof Error && 
+        (error.message.includes('network') || error.message.includes('HTTP error'))) {
+      await delay(RETRY_DELAY_MS);
+      return storefrontApiRequest(query, variables, attempt + 1);
+    }
+    
+    throw error;
+  }
 }
 
 export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[]> {
