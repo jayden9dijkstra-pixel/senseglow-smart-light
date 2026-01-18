@@ -211,7 +211,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
 
       {/* Fullscreen Lightbox */}
       <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-        <DialogContent className="max-w-none w-screen h-screen p-0 bg-background border-none">
+        <DialogContent className="max-w-none w-screen h-screen p-0 bg-background border-none [&>button]:hidden">
           <div 
             className="relative w-full h-full flex flex-col"
             onTouchStart={onTouchStart}
@@ -234,46 +234,51 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
               <X className="h-6 w-6" strokeWidth={1.5} />
             </button>
 
-            {/* Main lightbox image */}
-            <div className="flex-1 flex items-center justify-center p-4 md:p-12">
+            {/* Image counter */}
+            <div className="absolute top-4 left-4 z-50 text-xs text-foreground/40 font-medium tracking-wide">
+              {lightboxIndex + 1} / {images.length}
+            </div>
+
+            {/* Main lightbox image - proper sizing */}
+            <div className="flex-1 flex items-center justify-center px-12 md:px-20 py-16 md:py-20 min-h-0">
               <img
                 src={images[lightboxIndex].url}
                 alt={images[lightboxIndex].altText || productTitle}
-                className="max-w-full max-h-full object-contain"
+                className="max-w-full max-h-full w-auto h-auto object-contain"
                 draggable={false}
               />
             </div>
 
-            {/* Lightbox navigation arrows */}
+            {/* Lightbox navigation arrows - visible on all devices */}
             {images.length > 1 && (
               <>
                 <button
                   onClick={lightboxPrevious}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 
+                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 z-50
                     text-foreground/30 hover:text-primary transition-colors duration-300"
                   aria-label="Vorige afbeelding"
                 >
-                  <ChevronLeft className="h-8 w-8" strokeWidth={1.5} />
+                  <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={lightboxNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 
+                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 z-50
                     text-foreground/30 hover:text-primary transition-colors duration-300"
                   aria-label="Volgende afbeelding"
                 >
-                  <ChevronRight className="h-8 w-8" strokeWidth={1.5} />
+                  <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
                 </button>
               </>
             )}
 
             {/* Thumbnail strip at bottom of lightbox */}
             {images.length > 1 && (
-              <div className="flex items-center justify-center gap-2 py-4 px-4 overflow-x-auto">
+              <div className="flex-shrink-0 flex items-center justify-center gap-2 py-3 md:py-4 px-4 overflow-x-auto">
                 {images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setLightboxIndex(index)}
-                    className={`flex-shrink-0 w-14 h-14 md:w-16 md:h-16 overflow-hidden transition-all duration-300 ${
+                    className={`flex-shrink-0 w-12 h-12 md:w-14 md:h-14 overflow-hidden transition-all duration-300 ${
                       lightboxIndex === index 
                         ? 'ring-1 ring-primary' 
                         : 'opacity-50 hover:opacity-100'
@@ -288,11 +293,6 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 ))}
               </div>
             )}
-
-            {/* Image counter */}
-            <div className="absolute top-4 left-4 text-xs text-foreground/40 font-medium tracking-wide">
-              {lightboxIndex + 1} / {images.length}
-            </div>
           </div>
         </DialogContent>
       </Dialog>
