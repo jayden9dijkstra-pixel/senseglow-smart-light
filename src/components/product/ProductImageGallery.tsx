@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useRef, useCallback } from "react";
+import { ChevronLeft, ChevronRight, X, Grid2X2 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface ProductImage {
@@ -15,9 +14,14 @@ interface ProductImageGalleryProps {
 
 export const ProductImageGallery = ({ images, productTitle }: ProductImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isZoomed, setIsZoomed] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  
+  // Touch/swipe handling
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const isDragging = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const minSwipeDistance = 50;
 
   if (!images || images.length === 0) {
@@ -33,21 +37,26 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
 
   const currentImage = images[selectedIndex];
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+  }, [images.length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+  }, [images.length]);
 
+  // Touch events for main gallery
   const onTouchStart = (e: React.TouchEvent) => {
     touchEndX.current = null;
     touchStartX.current = e.targetTouches[0].clientX;
+    isDragging.current = false;
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
     touchEndX.current = e.targetTouches[0].clientX;
+    if (touchStartX.current && Math.abs(touchStartX.current - e.targetTouches[0].clientX) > 10) {
+      isDragging.current = true;
+    }
   };
 
   const onTouchEnd = () => {
@@ -58,115 +67,232 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
     
     if (isLeftSwipe && images.length > 1) handleNext();
     if (isRightSwipe && images.length > 1) handlePrevious();
+    
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  // Mouse drag for desktop (trackpad support)
+  const onMouseDown = (e: React.MouseEvent) => {
+    touchStartX.current = e.clientX;
+    isDragging.current = false;
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (touchStartX.current === null) return;
+    touchEndX.current = e.clientX;
+    if (Math.abs(touchStartX.current - e.clientX) > 10) {
+      isDragging.current = true;
+    }
+  };
+
+  const onMouseUp = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const distance = touchStartX.current - touchEndX.current;
+      const isLeftSwipe = distance > minSwipeDistance;
+      const isRightSwipe = distance < -minSwipeDistance;
+      
+      if (isLeftSwipe && images.length > 1) handleNext();
+      if (isRightSwipe && images.length > 1) handlePrevious();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  const onMouseLeave = () => {
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  // Lightbox navigation
+  const lightboxPrevious = () => {
+    setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const lightboxNext = () => {
+    setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const openLightbox = (index: number = selectedIndex) => {
+    setLightboxIndex(index);
+    setIsLightboxOpen(true);
   };
 
   return (
     <>
-      <div className="flex gap-4">
-        {/* Main Image */}
-        <div className="relative group flex-1">
-          <div 
-            className="relative aspect-square"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            <img
-              src={currentImage.url}
-              alt={currentImage.altText || productTitle}
-              className="absolute inset-0 w-full h-full object-contain cursor-pointer"
-              onClick={() => setIsZoomed(true)}
-            />
-
-            {/* Zoom hint */}
-            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <ZoomIn className="h-4 w-4 text-foreground/40" />
+      {/* Main Gallery Container */}
+      <div className="space-y-4">
+        {/* Main Image with swipe */}
+        <div 
+          ref={containerRef}
+          className="relative group cursor-grab active:cursor-grabbing select-none"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
+        >
+          <div className="relative aspect-square overflow-hidden">
+            {/* Image with smooth transition */}
+            <div 
+              className="absolute inset-0 transition-opacity duration-500 ease-out"
+              onClick={() => !isDragging.current && openLightbox()}
+            >
+              <img
+                src={currentImage.url}
+                alt={currentImage.altText || productTitle}
+                className="w-full h-full object-contain"
+                draggable={false}
+              />
             </div>
 
-            {/* Navigation arrows */}
+            {/* Desktop navigation arrows - subtle, minimal */}
             {images.length > 1 && (
               <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
-                  onClick={handlePrevious}
+                <button
+                  onClick={(e) => { e.stopPropagation(); handlePrevious(); }}
+                  className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 
+                    items-center justify-center w-10 h-10 
+                    opacity-0 group-hover:opacity-100 transition-all duration-300
+                    hover:text-primary"
+                  aria-label="Vorige afbeelding"
                 >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
-                  onClick={handleNext}
+                  <ChevronLeft className="h-6 w-6 text-foreground/30 hover:text-primary transition-colors" strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                  className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 
+                    items-center justify-center w-10 h-10 
+                    opacity-0 group-hover:opacity-100 transition-all duration-300
+                    hover:text-primary"
+                  aria-label="Volgende afbeelding"
                 >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+                  <ChevronRight className="h-6 w-6 text-foreground/30 hover:text-primary transition-colors" strokeWidth={1.5} />
+                </button>
               </>
-            )}
-
-            {/* Image counter */}
-            {images.length > 1 && (
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-xs text-foreground/50">
-                {selectedIndex + 1} / {images.length}
-              </div>
             )}
           </div>
         </div>
 
-        {/* Thumbnails - right side, vertical */}
+        {/* Dot indicators - minimal, always visible on mobile */}
         {images.length > 1 && (
-          <div className="flex flex-col gap-2 w-16">
-            {images.map((image, index) => (
+          <div className="flex items-center justify-center gap-1.5">
+            {images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedIndex(index)}
-                className={`relative w-16 h-16 transition-all duration-300 ${
-                  selectedIndex === index
-                    ? "ring-1 ring-glow"
-                    : "opacity-50 hover:opacity-100"
+                className={`transition-all duration-300 rounded-full ${
+                  selectedIndex === index 
+                    ? 'w-6 h-1.5 bg-primary' 
+                    : 'w-1.5 h-1.5 bg-foreground/20 hover:bg-foreground/40'
                 }`}
-              >
-                <img
-                  src={image.url}
-                  alt={`${productTitle} ${index + 1}`}
-                  className="w-full h-full object-contain"
-                />
-              </button>
+                aria-label={`Ga naar afbeelding ${index + 1}`}
+              />
             ))}
           </div>
         )}
+
+        {/* "View all images" button - clean, architectural */}
+        {images.length > 1 && (
+          <button
+            onClick={() => openLightbox(0)}
+            className="flex items-center justify-center gap-2 w-full py-3 
+              text-xs font-medium text-foreground/50 
+              hover:text-primary transition-colors duration-300
+              tracking-wide uppercase"
+          >
+            <Grid2X2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+            <span>Bekijk alle beelden</span>
+          </button>
+        )}
       </div>
 
-      {/* Zoomed Modal */}
-      <Dialog open={isZoomed} onOpenChange={setIsZoomed}>
-        <DialogContent className="max-w-[95vw] w-full max-h-[95vh] p-0 bg-neutral-950/98 border-none">
-          <div className="relative w-full h-[90vh] flex items-center justify-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 z-50 h-10 w-10 text-white"
-              onClick={() => setIsZoomed(false)}
+      {/* Fullscreen Lightbox */}
+      <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+        <DialogContent className="max-w-none w-screen h-screen p-0 bg-background border-none">
+          <div 
+            className="relative w-full h-full flex flex-col"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={() => {
+              if (!touchStartX.current || !touchEndX.current) return;
+              const distance = touchStartX.current - touchEndX.current;
+              if (distance > minSwipeDistance) lightboxNext();
+              if (distance < -minSwipeDistance) lightboxPrevious();
+              touchStartX.current = null;
+              touchEndX.current = null;
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setIsLightboxOpen(false)}
+              className="absolute top-4 right-4 z-50 p-2 text-foreground/50 hover:text-foreground transition-colors"
+              aria-label="Sluiten"
             >
-              <X className="h-5 w-5" />
-            </Button>
+              <X className="h-6 w-6" strokeWidth={1.5} />
+            </button>
 
+            {/* Main lightbox image */}
+            <div className="flex-1 flex items-center justify-center p-4 md:p-12">
+              <img
+                src={images[lightboxIndex].url}
+                alt={images[lightboxIndex].altText || productTitle}
+                className="max-w-full max-h-full object-contain"
+                draggable={false}
+              />
+            </div>
+
+            {/* Lightbox navigation arrows */}
             {images.length > 1 && (
               <>
-                <Button variant="ghost" size="icon" className="absolute left-4 top-1/2 -translate-y-1/2 z-50 h-10 w-10 text-white" onClick={handlePrevious}>
-                  <ChevronLeft className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" size="icon" className="absolute right-4 top-1/2 -translate-y-1/2 z-50 h-10 w-10 text-white" onClick={handleNext}>
-                  <ChevronRight className="h-5 w-5" />
-                </Button>
+                <button
+                  onClick={lightboxPrevious}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 
+                    text-foreground/30 hover:text-primary transition-colors duration-300"
+                  aria-label="Vorige afbeelding"
+                >
+                  <ChevronLeft className="h-8 w-8" strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={lightboxNext}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 
+                    text-foreground/30 hover:text-primary transition-colors duration-300"
+                  aria-label="Volgende afbeelding"
+                >
+                  <ChevronRight className="h-8 w-8" strokeWidth={1.5} />
+                </button>
               </>
             )}
 
-            <img
-              src={currentImage.url}
-              alt={currentImage.altText || productTitle}
-              className="max-w-[90vw] max-h-[85vh] object-contain"
-            />
+            {/* Thumbnail strip at bottom of lightbox */}
+            {images.length > 1 && (
+              <div className="flex items-center justify-center gap-2 py-4 px-4 overflow-x-auto">
+                {images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setLightboxIndex(index)}
+                    className={`flex-shrink-0 w-14 h-14 md:w-16 md:h-16 overflow-hidden transition-all duration-300 ${
+                      lightboxIndex === index 
+                        ? 'ring-1 ring-primary' 
+                        : 'opacity-50 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={image.url}
+                      alt={image.altText || `${productTitle} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Image counter */}
+            <div className="absolute top-4 left-4 text-xs text-foreground/40 font-medium tracking-wide">
+              {lightboxIndex + 1} / {images.length}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
