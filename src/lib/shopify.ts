@@ -242,24 +242,20 @@ export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
     const products = responseData?.data?.products?.edges || [];
     
-    // Filter to only return the active SenseGlow Ambient Motion Bar product
+    // Filter to only return the active product by handle
     // This ensures the site functions as a single-product store
-    const filteredProducts = products.filter(p => {
-      const title = p.node.title.toLowerCase();
-      return title.includes("senseglow") && title.includes("ambient") && title.includes("motion");
-    });
+    const ACTIVE_PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
     
-    // If we found filtered products, return only the most recent one (last in list)
-    // Otherwise fall back to all products
-    if (filteredProducts.length > 0) {
-      // Return only the most recent SenseGlow product (prefer the one with most variants)
-      const sortedProducts = filteredProducts.sort((a, b) => 
-        b.node.variants.edges.length - a.node.variants.edges.length
-      );
-      return [sortedProducts[0]];
+    const activeProduct = products.find(p => p.node.handle === ACTIVE_PRODUCT_HANDLE);
+    
+    if (activeProduct) {
+      return [activeProduct];
     }
     
-    return products;
+    // Fallback: return products with most variants
+    return products.sort((a, b) => 
+      b.node.variants.edges.length - a.node.variants.edges.length
+    ).slice(0, 1);
   } catch {
     return [];
   }
