@@ -1,0 +1,15 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+/**
+ * Hook that scrolls to top on route change
+ * This ensures all pages load from the top, including product pages
+ */
+export const useScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Scroll to top immediately on route change
+    window.scrollTo(0, 0);
+  }, [pathname]);
+};

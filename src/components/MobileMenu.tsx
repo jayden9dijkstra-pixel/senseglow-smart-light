@@ -12,10 +12,13 @@ import {
 export const MobileMenu = () => {
   const [open, setOpen] = useState(false);
 
+  // Single product handle - the only active SenseGlow product
+  const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
+  
   const menuItems = [
     { label: "HOME", href: "/" },
-    { label: "PRODUCTEN", href: "/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58" },
-    { label: "CONTACT", href: "#contact" },
+    { label: "PRODUCTEN", href: `/product/${PRODUCT_HANDLE}` },
+    { label: "CONTACT", href: "/contact" },
   ];
 
   const handleLinkClick = () => {

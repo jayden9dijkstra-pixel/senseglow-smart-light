@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
+import { SizeVariant, bundlePricing } from "@/lib/productConfig";
 import {
   Select,
   SelectContent,
@@ -14,23 +15,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const bundleData = {
-  "20cm": [
+const createBundleData = (size: SizeVariant) => {
+  const pricing = bundlePricing[size];
+  const sizeDescriptions: Record<SizeVariant, string> = {
+    "20cm": "Ideaal voor kleine ruimtes",
+    "30cm": "Perfect voor trappen & gangen",
+    "40cm": "Meer licht voor grotere ruimtes",
+  };
+  
+  return [
     {
       name: "Night Safety Pack",
       quantity: 2,
       quantityLabel: "2 stuks",
-      sizeLabel: "20cm modellen",
-      sizeDescription: "Ideaal voor trap & gang",
+      sizeLabel: `${size} modellen`,
+      sizeDescription: sizeDescriptions[size],
       label: "Ideaal voor trap & gang",
       subtekst: "Meest gekozen voor nachtveiligheid",
-      price: "66.95",
-      originalPrice: "69.90",
-      discount: "5%",
+      price: pricing.two.price,
+      originalPrice: pricing.two.originalPrice,
+      discount: pricing.two.discount,
       badge: "Meest gekozen",
       popular: true,
       features: [
-        "2x SenseGlow™ 20cm LED strip",
+        `2x SenseGlow™ ${size} LED strip`,
         "Gratis verzending",
         "30 dagen retourrecht"
       ]
@@ -39,16 +47,16 @@ const bundleData = {
       name: "Home Glow Pack",
       quantity: 3,
       quantityLabel: "3 stuks",
-      sizeLabel: "20cm modellen",
-      sizeDescription: "Ideaal voor trap & gang",
+      sizeLabel: `${size} modellen`,
+      sizeDescription: sizeDescriptions[size],
       label: "Beste balans",
       subtekst: "Veiligheid én comfort voor dagelijks gebruik",
-      price: "94.95",
-      originalPrice: "104.85",
-      discount: "10%",
+      price: pricing.three.price,
+      originalPrice: pricing.three.originalPrice,
+      discount: pricing.three.discount,
       badge: "Beste waarde",
       features: [
-        "3x SenseGlow™ 20cm LED strip",
+        `3x SenseGlow™ ${size} LED strip`,
         "Gratis verzending",
         "Extra voordeel",
         "30 dagen retourrecht"
@@ -58,83 +66,23 @@ const bundleData = {
       name: "Whole Home Security Pack",
       quantity: 5,
       quantityLabel: "5 stuks",
-      sizeLabel: "20cm modellen",
-      sizeDescription: "Ideaal voor trap & gang",
+      sizeLabel: `${size} modellen`,
+      sizeDescription: sizeDescriptions[size],
       label: "Volledige gemoedsrust",
       subtekst: "Voor wie alles in één keer goed wil doen",
-      price: "149.95",
-      originalPrice: "174.75",
-      discount: "15%",
+      price: pricing.five.price,
+      originalPrice: pricing.five.originalPrice,
+      discount: pricing.five.discount,
       badge: "Maximaal voordeel",
       features: [
-        "5x SenseGlow™ 20cm LED strip",
+        `5x SenseGlow™ ${size} LED strip`,
         "Gratis verzending",
         "Maximaal voordeel",
         "Premium support",
         "30 dagen retourrecht"
       ]
     }
-  ],
-  "40cm": [
-    {
-      name: "Night Safety Pack",
-      quantity: 2,
-      quantityLabel: "2 stuks",
-      sizeLabel: "40cm modellen",
-      sizeDescription: "Meer licht voor grotere ruimtes",
-      label: "Ideaal voor trap & gang",
-      subtekst: "Meest gekozen voor nachtveiligheid",
-      price: "99.95",
-      originalPrice: "109.90",
-      discount: "10%",
-      badge: "Meest gekozen",
-      popular: true,
-      features: [
-        "2x SenseGlow™ 40cm LED strip",
-        "Gratis verzending",
-        "30 dagen retourrecht"
-      ]
-    },
-    {
-      name: "Home Glow Pack",
-      quantity: 3,
-      quantityLabel: "3 stuks",
-      sizeLabel: "40cm modellen",
-      sizeDescription: "Meer licht voor grotere ruimtes",
-      label: "Beste balans",
-      subtekst: "Veiligheid én comfort voor dagelijks gebruik",
-      price: "139.95",
-      originalPrice: "164.85",
-      discount: "15%",
-      badge: "Beste waarde",
-      features: [
-        "3x SenseGlow™ 40cm LED strip",
-        "Gratis verzending",
-        "Extra voordeel",
-        "30 dagen retourrecht"
-      ]
-    },
-    {
-      name: "Whole Home Security Pack",
-      quantity: 5,
-      quantityLabel: "5 stuks",
-      sizeLabel: "40cm modellen",
-      sizeDescription: "Meer licht voor grotere ruimtes",
-      label: "Volledige gemoedsrust",
-      subtekst: "Voor wie alles in één keer goed wil doen",
-      price: "219.95",
-      originalPrice: "274.75",
-      discount: "20%",
-      badge: "Maximaal voordeel",
-      features: [
-        "5x SenseGlow™ 40cm LED strip",
-        "Gratis verzending",
-        "Maximaal voordeel",
-        "Premium support",
-        "30 dagen retourrecht"
-      ]
-    }
-  ]
+  ];
 };
 
 interface BundlesSectionProps {
@@ -155,29 +103,64 @@ interface BundlesSectionProps {
 
 export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
-  const [selectedSize, setSelectedSize] = useState<"20cm" | "40cm">("20cm");
+  const [selectedSize, setSelectedSize] = useState<SizeVariant>("20cm");
   const addItem = useCartStore((state) => state.addItem);
 
-  const bundles = bundleData[selectedSize];
+  // Sync bundle size with selected variant
+  useEffect(() => {
+    if (selectedVariant) {
+      const sizeOption = selectedVariant.selectedOptions.find(
+        opt => opt.name.toLowerCase() === "maat" || opt.name.toLowerCase() === "size"
+      );
+      if (sizeOption) {
+        const sizeValue = sizeOption.value.toLowerCase();
+        if (sizeValue.includes("20")) setSelectedSize("20cm");
+        else if (sizeValue.includes("30")) setSelectedSize("30cm");
+        else if (sizeValue.includes("40")) setSelectedSize("40cm");
+      }
+    }
+  }, [selectedVariant]);
+
+  const bundles = createBundleData(selectedSize);
+
+  // Find the correct variant for the selected size
+  const findVariantForSize = (size: SizeVariant) => {
+    if (!product) return selectedVariant;
+    
+    const variant = product.node.variants.edges.find(v => {
+      const sizeOption = v.node.selectedOptions.find(
+        opt => opt.name.toLowerCase() === "maat" || opt.name.toLowerCase() === "size"
+      );
+      return sizeOption?.value.toLowerCase().includes(size.replace("cm", ""));
+    });
+    
+    return variant?.node || selectedVariant;
+  };
 
   const handleAddBundleToCart = (bundleIndex: number) => {
-    if (!product || !selectedVariant) {
-      toast.error("Selecteer eerst een productvariant");
+    if (!product) {
+      toast.error("Product niet gevonden");
       return;
     }
 
     const bundle = bundles[bundleIndex];
+    const variantForSize = findVariantForSize(selectedSize);
+    
+    if (!variantForSize) {
+      toast.error("Selecteer eerst een productvariant");
+      return;
+    }
     
     addItem({
       product,
-      variantId: selectedVariant.id,
-      variantTitle: selectedVariant.title,
+      variantId: variantForSize.id,
+      variantTitle: variantForSize.title,
       price: {
         amount: (parseFloat(bundle.price) / bundle.quantity).toFixed(2),
-        currencyCode: selectedVariant.price.currencyCode,
+        currencyCode: variantForSize.price.currencyCode,
       },
       quantity: bundle.quantity,
-      selectedOptions: selectedVariant.selectedOptions,
+      selectedOptions: variantForSize.selectedOptions,
     });
 
     toast.success(`${bundle.name} toegevoegd!`, {
@@ -208,13 +191,14 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
             <div className="bg-background border border-border rounded-xl p-4">
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium text-foreground">Kies je maat:</span>
-                <Select value={selectedSize} onValueChange={(value: "20cm" | "40cm") => setSelectedSize(value)}>
+                <Select value={selectedSize} onValueChange={(value: SizeVariant) => setSelectedSize(value)}>
                   <SelectTrigger className="w-[200px] bg-background">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-background border border-border">
-                    <SelectItem value="20cm">20cm</SelectItem>
-                    <SelectItem value="40cm">40cm</SelectItem>
+                    <SelectItem value="20cm">20cm - Compact</SelectItem>
+                    <SelectItem value="30cm">30cm - Standaard</SelectItem>
+                    <SelectItem value="40cm">40cm - Groot</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { fetchProducts } from "@/lib/shopify";
 import { PageTransition } from "@/components/PageTransition";
+import { SizeVariant, bundlePricing, PRODUCT_HANDLE, getProductUrl } from "@/lib/productConfig";
 
 const questions = [
   {
@@ -20,9 +21,9 @@ const questions = [
   {
     question: "Hoe groot is de ruimte?",
     options: [
-      { text: "Klein (< 5m²)", value: "small" },
+      { text: "Klein of smal (< 5m²)", value: "small" },
       { text: "Gemiddeld (5-15m²)", value: "medium" },
-      { text: "Groot (> 15m²)", value: "large" },
+      { text: "Groot of breed (> 15m²)", value: "large" },
     ],
   },
   {
@@ -41,13 +42,18 @@ const Quiz = () => {
   const [answers, setAnswers] = useState<string[]>([]);
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
-  const [productHandle, setProductHandle] = useState<string>("");
+  const [productHandle, setProductHandle] = useState<string>(PRODUCT_HANDLE);
 
   useEffect(() => {
     const loadProduct = async () => {
-      const products = await fetchProducts(1);
-      if (products.length > 0) {
-        setProductHandle(products[0].node.handle);
+      const products = await fetchProducts(10);
+      // Find the SenseGlow Ambient Motion Bar product
+      const senseglowProduct = products.find(p => 
+        p.node.title.toLowerCase().includes("senseglow") && 
+        p.node.title.toLowerCase().includes("ambient")
+      );
+      if (senseglowProduct) {
+        setProductHandle(senseglowProduct.node.handle);
       }
     };
     loadProduct();
@@ -85,31 +91,30 @@ const Quiz = () => {
   const getRecommendation = () => {
     const locationCount = selectedLocations.length;
     
-    // Determine size based on room size
-    let size = "20cm";
-    if (answers.includes("large")) size = "40cm";
-    else if (answers.includes("small")) size = "20cm";
-    else if (answers.includes("medium")) size = "40cm";
+    // Determine size based on room size - NOW WITH 3 OPTIONS
+    // Small/narrow → 20cm, Medium → 30cm, Large → 40cm
+    let size: SizeVariant = "30cm"; // Default to medium
+    if (answers.includes("large")) {
+      size = "40cm";
+    } else if (answers.includes("small")) {
+      size = "20cm";
+    } else if (answers.includes("medium")) {
+      size = "30cm";
+    }
     
     // Determine color based on preferences
     let color = "Zwart";
     if (answers.includes("design")) color = "Zilver";
     
     // Bundle pricing based on size
-    const bundlePricing = {
-      "20cm": {
-        two: { price: "66.95", originalPrice: "69.90", discount: "5%" },
-        three: { price: "94.95", originalPrice: "104.85", discount: "10%" },
-        five: { price: "149.95", originalPrice: "174.75", discount: "15%" }
-      },
-      "40cm": {
-        two: { price: "99.95", originalPrice: "109.90", discount: "10%" },
-        three: { price: "139.95", originalPrice: "164.85", discount: "15%" },
-        five: { price: "219.95", originalPrice: "274.75", discount: "20%" }
-      }
-    };
+    const pricing = bundlePricing[size];
     
-    const pricing = bundlePricing[size as "20cm" | "40cm"];
+    // Size advice text
+    const sizeAdvice = {
+      "20cm": "Ideaal voor smalle ruimtes zoals nachtkastjes en kleine kasten",
+      "30cm": "Perfect voor gangen, keukens, trappenhuizen en nachtkastjes",
+      "40cm": "Optimaal voor brede of lange ruimtes"
+    };
     
     // Determine bundle based on number of locations
     let bundle = null;
@@ -150,7 +155,7 @@ const Quiz = () => {
       };
     }
     
-    return { size, color, bundle, locationCount };
+    return { size, color, bundle, locationCount, sizeAdvice: sizeAdvice[size] };
   };
 
   const resetQuiz = () => {
@@ -186,6 +191,17 @@ const Quiz = () => {
             </p>
           </div>
 
+          {/* Size Recommendation Card */}
+          <Card className="p-6 mb-6 bg-background border border-glow/20">
+            <div className="text-center space-y-3">
+              <p className="text-sm uppercase tracking-wider text-glow font-medium">
+                Aanbevolen maat
+              </p>
+              <p className="text-3xl font-bold text-foreground">{recommendation.size}</p>
+              <p className="text-muted-foreground">{recommendation.sizeAdvice}</p>
+            </div>
+          </Card>
+
           {recommendation.bundle ? (
             <Card className="p-8 bg-gradient-to-br from-background to-brand-orange/10 border-2 border-brand-orange/30 mb-6">
               <div className="text-center space-y-6">
@@ -211,13 +227,13 @@ const Quiz = () => {
                 </div>
 
                 <div className="text-left space-y-3 bg-background/50 rounded-lg p-6">
-                  <p className="font-semibold text-foreground">✓ {recommendation.bundle.quantity}x SenseGlow™ LED strip</p>
+                  <p className="font-semibold text-foreground">✓ {recommendation.bundle.quantity}x SenseGlow™ {recommendation.size} LED strip</p>
                   <p className="text-sm text-muted-foreground">
                     Perfect voor de {recommendation.locationCount} ruimtes die je hebt geselecteerd
                   </p>
                   <p className="text-sm text-muted-foreground">• Gratis verzending</p>
                   <p className="text-sm text-muted-foreground">• 30 dagen retourrecht</p>
-                  <p className="text-sm text-muted-foreground">• Aanbevolen: {recommendation.size} - {recommendation.color}</p>
+                  <p className="text-sm text-muted-foreground">• Kleur: {recommendation.color}</p>
                 </div>
 
                 <div className="flex flex-col gap-3 pt-4">
@@ -249,8 +265,11 @@ const Quiz = () => {
                   </p>
                 </div>
                 
-                <p className="text-muted-foreground mb-8">
+                <p className="text-muted-foreground mb-2">
                   Deze configuratie past perfect bij jouw wensen.
+                </p>
+                <p className="text-sm text-muted-foreground mb-8">
+                  {recommendation.sizeAdvice}
                 </p>
 
                 <div className="flex flex-col gap-4">
