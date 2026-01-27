@@ -242,17 +242,20 @@ export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
     const products = responseData?.data?.products?.edges || [];
     
-    // Filter to only return the active product by handle
+    // Filter to only return SenseGlow products (the active product line)
     // This ensures the site functions as a single-product store
-    const ACTIVE_PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
+    const senseGlowProducts = products.filter(p => 
+      p.node.title.toLowerCase().includes("senseglow")
+    );
     
-    const activeProduct = products.find(p => p.node.handle === ACTIVE_PRODUCT_HANDLE);
-    
-    if (activeProduct) {
-      return [activeProduct];
+    if (senseGlowProducts.length > 0) {
+      // Return the SenseGlow product with most variants
+      return senseGlowProducts.sort((a, b) => 
+        b.node.variants.edges.length - a.node.variants.edges.length
+      ).slice(0, 1);
     }
     
-    // Fallback: return products with most variants
+    // Fallback: return product with most variants
     return products.sort((a, b) => 
       b.node.variants.edges.length - a.node.variants.edges.length
     ).slice(0, 1);

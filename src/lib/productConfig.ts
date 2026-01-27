@@ -3,8 +3,8 @@
  * This app is a single-product store with 3 size variants
  */
 
-// The only active product handle
-export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
+// The only active product handle (SenseGlow™ Ambient Motion Bar)
+export const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
 
 // Available sizes
 export type SizeVariant = "20cm" | "30cm" | "40cm";
