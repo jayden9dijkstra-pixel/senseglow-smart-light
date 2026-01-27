@@ -4,7 +4,7 @@
  */
 
 // The only active product handle
-export const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
+export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
 
 // Available sizes
 export type SizeVariant = "20cm" | "30cm" | "40cm";

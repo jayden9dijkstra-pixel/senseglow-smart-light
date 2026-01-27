@@ -9,7 +9,7 @@ import {
 
 export const DesktopMenu = () => {
   // Single product handle - the only active SenseGlow product
-  const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
+  const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
   
   const menuItems = [
     { label: "HOME", href: "/" },
