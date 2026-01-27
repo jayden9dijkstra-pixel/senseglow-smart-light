@@ -170,7 +170,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
   };
 
   return (
-    <section className="py-20 md:py-32 bg-background-secondary animate-fade-in">
+    <section id="bundels" className="py-20 md:py-32 bg-background-secondary animate-fade-in transition-all duration-500">
       <div className="container">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 space-y-4">

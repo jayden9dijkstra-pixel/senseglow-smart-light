@@ -138,6 +138,27 @@ export const ProductHeroSection = ({
                 </span>
               </div>
 
+              {/* Bundle CTA Link */}
+              <button
+                onClick={() => {
+                  const bundlesSection = document.getElementById("bundels");
+                  if (bundlesSection) {
+                    bundlesSection.scrollIntoView({ behavior: "smooth", block: "start" });
+                    // Add highlight class after scroll completes
+                    setTimeout(() => {
+                      bundlesSection.classList.add("bundle-highlight");
+                      setTimeout(() => {
+                        bundlesSection.classList.remove("bundle-highlight");
+                      }, 1000);
+                    }, 600);
+                  }
+                }}
+                className="group flex items-center gap-1.5 text-sm text-muted-foreground hover:text-glow transition-colors duration-300"
+              >
+                <span>Voordeliger met bundels</span>
+                <span className="text-glow group-hover:translate-y-0.5 transition-transform duration-300">↓</span>
+              </button>
+
               {/* Premium Variant Picker */}
               {product.node.variants.edges.length > 1 && (
                 <VariantPicker

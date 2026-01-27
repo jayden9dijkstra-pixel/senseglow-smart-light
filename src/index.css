@@ -224,4 +224,21 @@ html {
   .dark .animate-fade-in-slow {
     animation-duration: 1400ms;
   }
+
+  /* Bundle highlight animation */
+  @keyframes bundle-glow {
+    0% {
+      box-shadow: inset 0 0 0 0 hsl(var(--glow) / 0);
+    }
+    30% {
+      box-shadow: inset 0 0 0 2px hsl(var(--glow) / 0.4);
+    }
+    100% {
+      box-shadow: inset 0 0 0 0 hsl(var(--glow) / 0);
+    }
+  }
+
+  .bundle-highlight {
+    animation: bundle-glow 1s ease-out forwards;
+  }
 }
