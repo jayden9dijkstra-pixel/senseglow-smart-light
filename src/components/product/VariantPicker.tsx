@@ -14,10 +14,34 @@ export const VariantPicker = ({
   onVariantChange,
 }: VariantPickerProps) => {
   // Extract unique sizes and colors from variants
+  // Handle both standard options (maat/size, kleur/color) and combined option values like "Silver-20cm TYPE-C"
   const { sizes, colors, variantMap } = useMemo(() => {
     const sizesSet = new Set<string>();
     const colorsSet = new Set<string>();
     const map = new Map<string, ShopifyProduct["node"]["variants"]["edges"][0]["node"]>();
+
+    // Helper to parse combined option value like "Silver-20cm TYPE-C"
+    const parseOptionValue = (value: string): { color: string; size: string } => {
+      // Pattern: "Color-SizeCm TYPE-C" (e.g., "Silver-20cm TYPE-C", "Black-40cm TYPE-C")
+      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)-(\d+)cm/i);
+      if (colorSizeMatch) {
+        const colorRaw = colorSizeMatch[1].toLowerCase();
+        // Normalize color names to Dutch
+        const colorMap: Record<string, string> = {
+          'silver': 'Zilver',
+          'black': 'Zwart',
+          'zilver': 'Zilver',
+          'zwart': 'Zwart',
+          'wit': 'Wit',
+          'goud': 'Goud',
+        };
+        return {
+          color: colorMap[colorRaw] || colorSizeMatch[1],
+          size: `${colorSizeMatch[2]}cm`,
+        };
+      }
+      return { color: '', size: '' };
+    };
 
     product.node.variants.edges.forEach((variant) => {
       let size = "";
@@ -25,13 +49,29 @@ export const VariantPicker = ({
 
       variant.node.selectedOptions.forEach((option) => {
         const name = option.name.toLowerCase();
+        const value = option.value;
+        
+        // Check for standard option names
         if (name === "maat" || name === "size" || name === "lengte") {
-          size = option.value;
-          sizesSet.add(option.value);
-        }
-        if (name === "kleur" || name === "color" || name === "colour") {
-          color = option.value;
-          colorsSet.add(option.value);
+          size = value;
+          sizesSet.add(value);
+        } else if (name === "kleur" || name === "color" || name === "colour") {
+          // Only add if it's a valid color (not a lamp type like "3 colors in one")
+          if (!value.toLowerCase().includes("colors in one") && !value.toLowerCase().includes("lamp")) {
+            color = value;
+            colorsSet.add(value);
+          }
+        } else {
+          // Try to parse combined option values like "Silver-20cm TYPE-C"
+          const parsed = parseOptionValue(value);
+          if (parsed.size && !size) {
+            size = parsed.size;
+            sizesSet.add(parsed.size);
+          }
+          if (parsed.color && !color) {
+            color = parsed.color;
+            colorsSet.add(parsed.color);
+          }
         }
       });
 
@@ -54,6 +94,27 @@ export const VariantPicker = ({
     };
   }, [product]);
 
+  // Helper to parse combined option value (same as in useMemo)
+  const parseOptionValue = (value: string): { color: string; size: string } => {
+    const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)-(\d+)cm/i);
+    if (colorSizeMatch) {
+      const colorRaw = colorSizeMatch[1].toLowerCase();
+      const colorMap: Record<string, string> = {
+        'silver': 'Zilver',
+        'black': 'Zwart',
+        'zilver': 'Zilver',
+        'zwart': 'Zwart',
+        'wit': 'Wit',
+        'goud': 'Goud',
+      };
+      return {
+        color: colorMap[colorRaw] || colorSizeMatch[1],
+        size: `${colorSizeMatch[2]}cm`,
+      };
+    }
+    return { color: '', size: '' };
+  };
+
   // Get current selected size and color
   const getCurrentSelection = () => {
     let currentSize = sizes[1] || sizes[0] || ""; // Default to 30cm (middle) if available
@@ -62,11 +123,17 @@ export const VariantPicker = ({
     if (selectedVariant) {
       selectedVariant.selectedOptions.forEach((option) => {
         const name = option.name.toLowerCase();
+        const value = option.value;
+        
         if (name === "maat" || name === "size" || name === "lengte") {
-          currentSize = option.value;
-        }
-        if (name === "kleur" || name === "color" || name === "colour") {
-          currentColor = option.value;
+          currentSize = value;
+        } else if (name === "kleur" || name === "color" || name === "colour") {
+          currentColor = value;
+        } else {
+          // Try to parse combined option values
+          const parsed = parseOptionValue(value);
+          if (parsed.size) currentSize = parsed.size;
+          if (parsed.color) currentColor = parsed.color;
         }
       });
     }

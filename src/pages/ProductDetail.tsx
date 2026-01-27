@@ -27,11 +27,15 @@ const ProductDetail = () => {
     const loadProduct = async () => {
       try {
         const products = await fetchProducts(50);
-        const found = products.find((p) => p.node.handle === handle);
-        setProduct(found || null);
+        // Single-product store: use the first product returned
+        // fetchProducts already filters to return only the active SenseGlow product
+        const found = products[0] || null;
+        setProduct(found);
 
         if (found) {
-          setSelectedVariant(found.node.variants.edges[0]?.node || null);
+          // Default to middle variant (30cm) if available
+          const middleIndex = Math.floor(found.node.variants.edges.length / 2);
+          setSelectedVariant(found.node.variants.edges[middleIndex]?.node || found.node.variants.edges[0]?.node || null);
         }
 
         setLoading(false);
