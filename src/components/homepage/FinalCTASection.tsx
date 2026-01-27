@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { PRODUCT_HANDLE } from "@/lib/productConfig";
 
 export const FinalCTASection = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="py-24 md:py-32 bg-background-secondary">
       <div className="container">
@@ -18,12 +22,7 @@ export const FinalCTASection = () => {
           </p>
           
           <Button
-            onClick={() => {
-              const productsSection = document.getElementById('products');
-              if (productsSection) {
-                productsSection.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            onClick={() => navigate(`/product/${PRODUCT_HANDLE}`)}
             size="lg"
             className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
           >

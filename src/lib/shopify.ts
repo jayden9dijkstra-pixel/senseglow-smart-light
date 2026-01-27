@@ -241,6 +241,24 @@ export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[
     const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: validatedLimit });
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
     const products = responseData?.data?.products?.edges || [];
+    
+    // Filter to only return the active SenseGlow Ambient Motion Bar product
+    // This ensures the site functions as a single-product store
+    const filteredProducts = products.filter(p => {
+      const title = p.node.title.toLowerCase();
+      return title.includes("senseglow") && title.includes("ambient") && title.includes("motion");
+    });
+    
+    // If we found filtered products, return only the most recent one (last in list)
+    // Otherwise fall back to all products
+    if (filteredProducts.length > 0) {
+      // Return only the most recent SenseGlow product (prefer the one with most variants)
+      const sortedProducts = filteredProducts.sort((a, b) => 
+        b.node.variants.edges.length - a.node.variants.edges.length
+      );
+      return [sortedProducts[0]];
+    }
+    
     return products;
   } catch {
     return [];

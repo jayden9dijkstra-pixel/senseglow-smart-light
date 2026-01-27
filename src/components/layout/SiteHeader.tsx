@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoNew from "@/assets/logo-new.png";
+// Single product handle - the only active SenseGlow product
+const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
+
 const menuItems = [{
   label: "Home",
   href: "/"
 }, {
   label: "Producten",
-  href: "/product/motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2025-11-07-06-57-58"
+  href: `/product/${PRODUCT_HANDLE}`
 }, {
   label: "Duurzaamheid",
   href: "/duurzaamheid"
