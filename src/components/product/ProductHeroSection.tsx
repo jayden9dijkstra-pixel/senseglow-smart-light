@@ -144,7 +144,6 @@ export const ProductHeroSection = ({
                   const bundlesSection = document.getElementById("bundels");
                   if (bundlesSection) {
                     bundlesSection.scrollIntoView({ behavior: "smooth", block: "start" });
-                    // Add highlight class after scroll completes
                     setTimeout(() => {
                       bundlesSection.classList.add("bundle-highlight");
                       setTimeout(() => {
@@ -153,10 +152,10 @@ export const ProductHeroSection = ({
                     }, 600);
                   }
                 }}
-                className="group flex items-center gap-1.5 text-sm text-muted-foreground hover:text-glow transition-colors duration-300"
+                className="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-glow border border-glow/40 rounded-full bg-glow/5 hover:bg-glow/10 hover:border-glow/60 hover:shadow-[0_0_20px_-5px_hsl(var(--glow)/0.4)] transition-all duration-300"
               >
                 <span>Voordeliger met bundels</span>
-                <span className="text-glow group-hover:translate-y-0.5 transition-transform duration-300">↓</span>
+                <span className="group-hover:translate-y-0.5 transition-transform duration-300">↓</span>
               </button>
 
               {/* Premium Variant Picker */}
