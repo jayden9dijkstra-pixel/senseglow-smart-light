@@ -142,41 +142,58 @@ export const VariantPicker = ({
   };
 
   const { currentSize, currentColor } = getCurrentSelection();
+  
+  // Use controlled state - only update from props on initial mount or when variant changes externally
   const [selectedSize, setSelectedSize] = useState(currentSize);
   const [selectedColor, setSelectedColor] = useState(currentColor);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Update local state when prop changes
+  // Only sync from prop on first render or when variant is changed externally (e.g., URL params)
   useEffect(() => {
-    const { currentSize, currentColor } = getCurrentSelection();
-    setSelectedSize(currentSize);
-    setSelectedColor(currentColor);
-  }, [selectedVariant]);
+    if (!isInitialized) {
+      setSelectedSize(currentSize);
+      setSelectedColor(currentColor);
+      setIsInitialized(true);
+    }
+  }, [currentSize, currentColor, isInitialized]);
 
   // Find and select the variant based on size and color
   const selectVariant = (size: string, color: string) => {
-    const key = `${size}|${color}`;
-    const variant = variantMap.get(key);
+    // Try exact match first
+    let key = `${size}|${color}`;
+    let variant = variantMap.get(key);
     
     if (variant) {
       onVariantChange(variant);
-    } else {
-      // Fallback: find any variant with the matching size
-      const fallbackKey = Array.from(variantMap.keys()).find((k) => k.startsWith(`${size}|`));
-      if (fallbackKey) {
-        const fallbackVariant = variantMap.get(fallbackKey);
-        if (fallbackVariant) {
-          onVariantChange(fallbackVariant);
-          // Update color to match fallback
-          const newColor = fallbackKey.split("|")[1];
-          setSelectedColor(newColor);
-        }
+      return true;
+    }
+    
+    // Try alternative color names
+    const colorAlt: Record<string, string> = { 'Zilver': 'Silver', 'Zwart': 'Black', 'Silver': 'Zilver', 'Black': 'Zwart' };
+    if (colorAlt[color]) {
+      key = `${size}|${colorAlt[color]}`;
+      variant = variantMap.get(key);
+      if (variant) {
+        onVariantChange(variant);
+        return true;
       }
     }
+    
+    return false;
   };
 
   const handleSizeChange = (size: string) => {
     setSelectedSize(size);
-    selectVariant(size, selectedColor);
+    if (!selectVariant(size, selectedColor)) {
+      // If no match, find first variant with this size
+      const fallbackKey = Array.from(variantMap.keys()).find(k => k.startsWith(`${size}|`));
+      if (fallbackKey) {
+        const newColor = fallbackKey.split("|")[1];
+        setSelectedColor(newColor);
+        const variant = variantMap.get(fallbackKey);
+        if (variant) onVariantChange(variant);
+      }
+    }
   };
 
   const handleColorChange = (color: string) => {
@@ -184,13 +201,15 @@ export const VariantPicker = ({
     selectVariant(selectedSize, color);
   };
 
-  // Get color value for swatch
+  // Get color value for swatch - fixed mapping
   const getColorValue = (colorName: string): string => {
     const name = colorName.toLowerCase();
-    if (name.includes("zwart") || name.includes("black")) return "#1a1a1a";
-    if (name.includes("zilver") || name.includes("silver")) return "#c0c0c0";
-    if (name.includes("wit") || name.includes("white")) return "#f5f5f5";
-    if (name.includes("goud") || name.includes("gold")) return "#d4af37";
+    // Zwart/Black = dark color
+    if (name === "zwart" || name === "black") return "#1a1a1a";
+    // Zilver/Silver = light silver color
+    if (name === "zilver" || name === "silver") return "#c0c0c0";
+    if (name === "wit" || name === "white") return "#f5f5f5";
+    if (name === "goud" || name === "gold") return "#d4af37";
     return "#666666";
   };
 
@@ -286,20 +305,12 @@ export const VariantPicker = ({
                         ? "ring-2 ring-glow shadow-[0_0_15px_-3px_hsl(var(--glow)/0.5)]"
                         : "ring-1 ring-foreground/20 group-hover:ring-foreground/40"
                     )}
+                    style={{ backgroundColor: colorValue }}
                   >
-                    <div
-                      className="absolute inset-0 rounded-full"
-                      style={{ backgroundColor: colorValue }}
-                    />
-                    {/* Inner highlight for depth */}
-                    <div
-                      className={cn(
-                        "absolute inset-0 rounded-full",
-                        isLight
-                          ? "bg-gradient-to-br from-white/40 via-transparent to-black/10"
-                          : "bg-gradient-to-br from-white/20 via-transparent to-black/20"
-                      )}
-                    />
+                    {/* Inner highlight for depth - only for light colors */}
+                    {isLight && (
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 via-transparent to-black/10" />
+                    )}
                   </div>
 
                   {/* Label */}
