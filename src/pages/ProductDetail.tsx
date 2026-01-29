@@ -33,9 +33,13 @@ const ProductDetail = () => {
         setProduct(found);
 
         if (found) {
-          // Default to middle variant (30cm) if available
-          const middleIndex = Math.floor(found.node.variants.edges.length / 2);
-          setSelectedVariant(found.node.variants.edges[middleIndex]?.node || found.node.variants.edges[0]?.node || null);
+          // Default to 30cm variant explicitly
+          const variant30cm = found.node.variants.edges.find((v) =>
+            v.node.selectedOptions.some((opt) => 
+              opt.value.includes("30") || opt.value.toLowerCase().includes("30cm")
+            )
+          );
+          setSelectedVariant(variant30cm?.node || found.node.variants.edges[0]?.node || null);
         }
 
         setLoading(false);
