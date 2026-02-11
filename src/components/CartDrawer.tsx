@@ -89,7 +89,7 @@ export function CartDrawer() {
                           {item.selectedOptions.map(option => option.value).join(' • ')}
                         </p>
                         <p className="font-semibold">
-                          {item.price.currencyCode} {parseFloat(item.price.amount).toFixed(2)}
+                          €{(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
                         </p>
                       </div>
                       
