@@ -6,7 +6,7 @@ import { Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
-import { SizeVariant, bundlePricing } from "@/lib/productConfig";
+import { SizeVariant, bundlePricing, bundleNames, incVatPrices } from "@/lib/productConfig";
 import {
   Select,
   SelectContent,
@@ -25,8 +25,8 @@ const createBundleData = (size: SizeVariant) => {
   
   return [
     {
-      name: "Night Safety Pack",
-      quantity: 2,
+      name: bundleNames[2],
+      quantity: 2 as const,
       quantityLabel: "2 stuks",
       sizeLabel: `${size} modellen`,
       sizeDescription: sizeDescriptions[size],
@@ -44,8 +44,8 @@ const createBundleData = (size: SizeVariant) => {
       ]
     },
     {
-      name: "Home Glow Pack",
-      quantity: 3,
+      name: bundleNames[3],
+      quantity: 3 as const,
       quantityLabel: "3 stuks",
       sizeLabel: `${size} modellen`,
       sizeDescription: sizeDescriptions[size],
@@ -63,8 +63,8 @@ const createBundleData = (size: SizeVariant) => {
       ]
     },
     {
-      name: "Whole Home Security Pack",
-      quantity: 5,
+      name: bundleNames[5],
+      quantity: 5 as const,
       quantityLabel: "5 stuks",
       sizeLabel: `${size} modellen`,
       sizeDescription: sizeDescriptions[size],
@@ -131,7 +131,13 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
       const sizeOption = v.node.selectedOptions.find(
         opt => opt.name.toLowerCase() === "maat" || opt.name.toLowerCase() === "size"
       );
-      return sizeOption?.value.toLowerCase().includes(size.replace("cm", ""));
+      if (sizeOption) {
+        return sizeOption.value.toLowerCase().includes(size.replace("cm", ""));
+      }
+      // Handle combined values like "Silver-20cm TYPE-C"
+      return v.node.selectedOptions.some(opt => 
+        opt.value.toLowerCase().includes(`${size.replace("cm", "")}cm`)
+      );
     });
     
     return variant?.node || selectedVariant;
@@ -150,22 +156,26 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
       toast.error("Selecteer eerst een productvariant");
       return;
     }
+
+    // Per-unit inc VAT price for the bundle
+    const perUnitIncVat = (parseFloat(bundle.price) / bundle.quantity).toFixed(2);
     
     addItem({
       product,
       variantId: variantForSize.id,
       variantTitle: variantForSize.title,
       price: {
-        amount: (parseFloat(bundle.price) / bundle.quantity).toFixed(2),
+        amount: perUnitIncVat,
         currencyCode: variantForSize.price.currencyCode,
       },
       quantity: bundle.quantity,
       selectedOptions: variantForSize.selectedOptions,
+      // Bundle metadata
+      isBundle: true,
+      bundleName: bundle.name,
+      bundleSize: selectedSize,
+      bundleIncVatTotal: bundle.price,
     });
-
-
-    // Toast handled centrally in cartStore
-
   };
 
   return (
@@ -173,7 +183,6 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
       <div className="container">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 space-y-4">
-            {/* Social Proof Header */}
             <p className="text-sm uppercase tracking-wider text-glow font-medium">
               90% van onze klanten kiest meer dan 1 SenseGlow™
             </p>
@@ -195,9 +204,9 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-background border border-border">
-                    <SelectItem value="20cm">20cm - Compact</SelectItem>
-                    <SelectItem value="30cm">30cm - Standaard</SelectItem>
-                    <SelectItem value="40cm">40cm - Groot</SelectItem>
+                    <SelectItem value="20cm">20cm — €{incVatPrices["20cm"]}/stuk</SelectItem>
+                    <SelectItem value="30cm">30cm — €{incVatPrices["30cm"]}/stuk</SelectItem>
+                    <SelectItem value="40cm">40cm — €{incVatPrices["40cm"]}/stuk</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -222,7 +231,6 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                 )}
 
                 <div className="flex flex-col flex-grow">
-                  {/* Header */}
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold text-foreground">{bundle.name}</h3>
                     <div className="flex items-center gap-2">
@@ -234,7 +242,6 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <p className="text-sm text-muted-foreground">{bundle.subtekst}</p>
                   </div>
 
-                  {/* Pricing */}
                   <div className="space-y-2 mt-6">
                     <div className="flex items-baseline gap-2">
                       <span 
@@ -254,9 +261,11 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <p className="text-sm text-muted-foreground line-through animate-fade-in">
                       Was €{bundle.originalPrice}
                     </p>
+                    <p className="text-xs text-muted-foreground">
+                      Inclusief 21% BTW
+                    </p>
                   </div>
 
-                  {/* Features - grows to push button down */}
                   <div className="space-y-3 py-4 border-y border-border mt-6 flex-grow">
                     {bundle.features.map((feature, i) => (
                       <div key={i} className="flex items-start gap-3">
@@ -266,7 +275,6 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     ))}
                   </div>
 
-                  {/* CTA - always at bottom */}
                   <Button 
                     onClick={(e) => {
                       e.stopPropagation();

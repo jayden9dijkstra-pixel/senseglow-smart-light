@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 
 export function CartDrawer() {
@@ -23,7 +23,14 @@ export function CartDrawer() {
   } = useCartStore();
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
+  
+  // Calculate total: for bundles use bundleIncVatTotal, for singles use price × quantity
+  const totalPrice = items.reduce((sum, item) => {
+    if (item.isBundle && item.bundleIncVatTotal) {
+      return sum + parseFloat(item.bundleIncVatTotal);
+    }
+    return sum + (parseFloat(item.price.amount) * item.quantity);
+  }, 0);
 
   const handleCheckout = async () => {
     try {
@@ -53,9 +60,9 @@ export function CartDrawer() {
       
       <SheetContent className="w-full sm:max-w-lg flex flex-col h-full">
         <SheetHeader className="flex-shrink-0">
-          <SheetTitle>Shopping Cart</SheetTitle>
+          <SheetTitle>Winkelwagen</SheetTitle>
           <SheetDescription>
-            {totalItems === 0 ? "Your cart is empty" : `${totalItems} item${totalItems !== 1 ? 's' : ''} in your cart`}
+            {totalItems === 0 ? "Je winkelwagen is leeg" : `${totalItems} artikel${totalItems !== 1 ? 'en' : ''} in je winkelwagen`}
           </SheetDescription>
         </SheetHeader>
         
@@ -64,7 +71,7 @@ export function CartDrawer() {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">Your cart is empty</p>
+                <p className="text-muted-foreground">Je winkelwagen is leeg</p>
               </div>
             </div>
           ) : (
@@ -72,7 +79,8 @@ export function CartDrawer() {
               <div className="flex-1 overflow-y-auto pr-2 min-h-0">
                 <div className="space-y-4">
                   {items.map((item) => (
-                    <div key={item.variantId} className="flex gap-4 p-2">
+                    <div key={item.variantId} className="flex gap-4 p-3 rounded-lg border border-border/50">
+                      {/* Product image */}
                       <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
                         {item.product.node.images?.edges?.[0]?.node && (
                           <img
@@ -84,13 +92,35 @@ export function CartDrawer() {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium truncate">{item.product.node.title}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {item.selectedOptions.map(option => option.value).join(' • ')}
-                        </p>
-                        <p className="font-semibold">
-                          €{(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
-                        </p>
+                        {/* Bundle header */}
+                        {item.isBundle ? (
+                          <>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Package className="w-3.5 h-3.5 text-glow" />
+                              <Badge variant="outline" className="text-[10px] border-glow/30 text-glow px-1.5 py-0">
+                                Bundel
+                              </Badge>
+                            </div>
+                            <h4 className="font-medium text-sm">
+                              {item.bundleName} — {item.quantity}x {item.bundleSize}
+                            </h4>
+                            <p className="font-semibold text-foreground">
+                              €{parseFloat(item.bundleIncVatTotal || "0").toFixed(2)}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground">Incl. 21% BTW</p>
+                          </>
+                        ) : (
+                          <>
+                            <h4 className="font-medium truncate">{item.product.node.title}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {item.selectedOptions.map(option => option.value).join(' • ')}
+                            </p>
+                            <p className="font-semibold">
+                              €{(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground">Incl. 21% BTW</p>
+                          </>
+                        )}
                       </div>
                       
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -103,25 +133,28 @@ export function CartDrawer() {
                           <Trash2 className="h-3 w-3" />
                         </Button>
                         
-                        <div className="flex items-center gap-1">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-6 w-6"
-                            onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          >
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <span className="w-8 text-center text-sm">{item.quantity}</span>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-6 w-6"
-                            onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                        </div>
+                        {/* Only show +/- for non-bundle items */}
+                        {!item.isBundle && (
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-6 w-6"
+                              onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-8 text-center text-sm">{item.quantity}</span>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-6 w-6"
+                              onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -130,9 +163,12 @@ export function CartDrawer() {
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total</span>
+                  <div>
+                    <span className="text-lg font-semibold">Totaal</span>
+                    <p className="text-xs text-muted-foreground">Inclusief 21% BTW</p>
+                  </div>
                   <span className="text-xl font-bold">
-                    {items[0]?.price.currencyCode || 'EUR'} {totalPrice.toFixed(2)}
+                    €{totalPrice.toFixed(2)}
                   </span>
                 </div>
                 

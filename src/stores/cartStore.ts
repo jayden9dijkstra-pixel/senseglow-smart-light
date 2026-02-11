@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
+import { bundleNames } from '@/lib/productConfig';
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -16,6 +17,11 @@ export interface CartItem {
     name: string;
     value: string;
   }>;
+  // Bundle info
+  isBundle?: boolean;
+  bundleName?: string;
+  bundleSize?: string;
+  bundleIncVatTotal?: string; // The customer-facing inc VAT total for this bundle
 }
 
 interface CartStore {
@@ -44,12 +50,25 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         const { items } = get();
-        const existingItem = items.find(i => i.variantId === item.variantId);
+        
+        // For bundle items, always add as a new line (don't merge with existing)
+        if (item.isBundle) {
+          // Generate a unique key for this bundle entry
+          const bundleKey = `${item.variantId}-bundle-${item.quantity}-${Date.now()}`;
+          set({ items: [...items, { ...item, variantId: bundleKey, _originalVariantId: item.variantId } as CartItem & { _originalVariantId: string }] });
+          toast.success('Bundel toegevoegd aan winkelwagen', {
+            description: `${item.bundleName} — ${item.quantity}x ${item.bundleSize}`,
+          });
+          return;
+        }
+        
+        // For single items, check if already in cart (non-bundle)
+        const existingItem = items.find(i => i.variantId === item.variantId && !i.isBundle);
         
         if (existingItem) {
           set({
             items: items.map(i =>
-              i.variantId === item.variantId
+              i.variantId === item.variantId && !i.isBundle
                 ? { ...i, quantity: i.quantity + item.quantity }
                 : i
             )
@@ -66,6 +85,10 @@ export const useCartStore = create<CartStore>()(
       },
 
       updateQuantity: (variantId, quantity) => {
+        const item = get().items.find(i => i.variantId === variantId);
+        // Prevent quantity changes on bundle items
+        if (item?.isBundle) return;
+        
         if (quantity <= 0) {
           get().removeItem(variantId);
           return;
@@ -99,7 +122,16 @@ export const useCartStore = create<CartStore>()(
 
         setLoading(true);
         try {
-          const checkoutUrl = await createStorefrontCheckout(items);
+          // Convert cart items to checkout items, using original variant IDs for bundles
+          const checkoutItems = items.map(item => {
+            const originalVariantId = (item as CartItem & { _originalVariantId?: string })._originalVariantId || item.variantId;
+            return {
+              variantId: originalVariantId,
+              quantity: item.quantity,
+            };
+          });
+          
+          const checkoutUrl = await createStorefrontCheckout(checkoutItems);
           setCheckoutUrl(checkoutUrl);
         } catch {
           toast.error('Checkout mislukt', {
