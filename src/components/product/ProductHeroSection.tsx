@@ -137,9 +137,7 @@ export const ProductHeroSection = ({
                     €{displayPrice}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Inclusief 21% BTW
-                </p>
+                
               </div>
 
               {/* Bundle CTA Link */}

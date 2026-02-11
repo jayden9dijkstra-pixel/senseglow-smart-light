@@ -83,7 +83,7 @@ export const sizeRecommendations = {
 // Bundle pricing configuration (all prices INC VAT, customer-facing)
 export const bundlePricing = {
   "20cm": {
-    basePrice: "39.95",
+    basePrice: "44.95",
     two: { price: "74.95", originalPrice: "79.90", discount: "6%" },
     three: { price: "109.95", originalPrice: "119.85", discount: "8%" },
     five: { price: "169.95", originalPrice: "199.75", discount: "15%" },
