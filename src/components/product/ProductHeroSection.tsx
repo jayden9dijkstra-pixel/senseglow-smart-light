@@ -3,7 +3,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
-import { getIncVatPrice } from "@/lib/productConfig";
+
 
 import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
@@ -82,7 +82,7 @@ export const ProductHeroSection = ({
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: {
-        amount: getIncVatPrice(selectedVariant.price.amount),
+        amount: selectedVariant.price.amount,
         currencyCode: selectedVariant.price.currencyCode,
       },
       quantity: 1,
@@ -96,9 +96,8 @@ export const ProductHeroSection = ({
       altText: edge.node.altText,
     })) || [];
 
-  // Get inc VAT price for display
   const displayPrice = selectedVariant
-    ? getIncVatPrice(selectedVariant.price.amount)
+    ? parseFloat(selectedVariant.price.amount).toFixed(2)
     : "0.00";
 
   return (
