@@ -28,9 +28,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     };
     
     addItem(cartItem);
-    toast.success('Toegevoegd aan winkelmandje', {
-      description: `${product.node.title} is toegevoegd.`,
-    });
   };
 
   const imageUrl = product.node.images?.edges?.[0]?.node?.url;
