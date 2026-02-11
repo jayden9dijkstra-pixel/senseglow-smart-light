@@ -19,14 +19,14 @@ export type SizeVariant = "20cm" | "30cm" | "40cm";
 
 // Shopify ex-VAT prices per size (as stored in Shopify)
 export const shopifyExVatPrices: Record<SizeVariant, number> = {
-  "20cm": 33.02,
+  "20cm": 37.15,
   "30cm": 41.28,
   "40cm": 49.55,
 };
 
 // Customer-facing inc-VAT prices per size
 export const incVatPrices: Record<SizeVariant, string> = {
-  "20cm": "39.95",
+  "20cm": "44.95",
   "30cm": "49.95",
   "40cm": "59.95",
 };
