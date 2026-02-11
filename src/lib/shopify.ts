@@ -280,7 +280,15 @@ interface CartCreateResponse {
   };
 }
 
-export async function createStorefrontCheckout(items: CheckoutItem[]): Promise<string> {
+export interface CheckoutBundleInfo {
+  bundleSize: string; // e.g. "20cm", "30cm", "40cm"
+  quantity: number;   // e.g. 2, 3, 5
+}
+
+export async function createStorefrontCheckout(
+  items: CheckoutItem[],
+  bundleInfos: CheckoutBundleInfo[] = []
+): Promise<string> {
   // Validate input
   const validatedItems = checkoutItemsSchema.parse(items);
   
@@ -289,9 +297,16 @@ export async function createStorefrontCheckout(items: CheckoutItem[]): Promise<s
     merchandiseId: item.variantId,
   }));
 
+  // Build discount codes from bundle info
+  const discountCodes = bundleInfos.map(b => {
+    const size = b.bundleSize.replace('cm', '').trim();
+    return `SG-${size}CM-${b.quantity}PACK`;
+  });
+
   const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
     input: {
       lines,
+      ...(discountCodes.length > 0 ? { discountCodes } : {}),
     },
   }) as CartCreateResponse | undefined;
 

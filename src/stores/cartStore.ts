@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
+import { createStorefrontCheckout, ShopifyProduct, CheckoutBundleInfo } from '@/lib/shopify';
 import { toast } from 'sonner';
 import { bundleNames } from '@/lib/productConfig';
 
@@ -130,8 +130,16 @@ export const useCartStore = create<CartStore>()(
               quantity: item.quantity,
             };
           });
+
+          // Collect bundle info for discount codes
+          const bundleInfos: CheckoutBundleInfo[] = items
+            .filter(item => item.isBundle && item.bundleSize)
+            .map(item => ({
+              bundleSize: item.bundleSize!,
+              quantity: item.quantity,
+            }));
           
-          const checkoutUrl = await createStorefrontCheckout(checkoutItems);
+          const checkoutUrl = await createStorefrontCheckout(checkoutItems, bundleInfos);
           setCheckoutUrl(checkoutUrl);
         } catch {
           toast.error('Checkout mislukt', {
