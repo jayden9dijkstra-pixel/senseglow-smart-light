@@ -7,21 +7,11 @@ import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
 import { SizeVariant, bundlePricing, bundleNames, incVatPrices } from "@/lib/productConfig";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+type ColorVariant = "zilver" | "zwart";
 
 const createBundleData = (size: SizeVariant) => {
   const pricing = bundlePricing[size];
-  const sizeDescriptions: Record<SizeVariant, string> = {
-    "20cm": "Ideaal voor kleine ruimtes",
-    "30cm": "Perfect voor trappen & gangen",
-    "40cm": "Meer licht voor grotere ruimtes",
-  };
   
   return [
     {
@@ -29,7 +19,6 @@ const createBundleData = (size: SizeVariant) => {
       quantity: 2 as const,
       quantityLabel: "2 stuks",
       sizeLabel: `${size} modellen`,
-      sizeDescription: sizeDescriptions[size],
       label: "Ideaal voor trap & gang",
       subtekst: "Meest gekozen voor nachtveiligheid",
       price: pricing.two.price,
@@ -48,7 +37,6 @@ const createBundleData = (size: SizeVariant) => {
       quantity: 3 as const,
       quantityLabel: "3 stuks",
       sizeLabel: `${size} modellen`,
-      sizeDescription: sizeDescriptions[size],
       label: "Beste balans",
       subtekst: "Veiligheid én comfort voor dagelijks gebruik",
       price: pricing.three.price,
@@ -67,7 +55,6 @@ const createBundleData = (size: SizeVariant) => {
       quantity: 5 as const,
       quantityLabel: "5 stuks",
       sizeLabel: `${size} modellen`,
-      sizeDescription: sizeDescriptions[size],
       label: "Volledige gemoedsrust",
       subtekst: "Voor wie alles in één keer goed wil doen",
       price: pricing.five.price,
@@ -104,40 +91,41 @@ interface BundlesSectionProps {
 export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
   const [selectedSize, setSelectedSize] = useState<SizeVariant>("20cm");
+  const [selectedColor, setSelectedColor] = useState<ColorVariant>("zilver");
   const addItem = useCartStore((state) => state.addItem);
 
-  // Sync bundle size with selected variant
+  // Sync bundle size & color with selected variant
   useEffect(() => {
     if (selectedVariant) {
-      const sizeOption = selectedVariant.selectedOptions.find(
-        opt => opt.name.toLowerCase() === "maat" || opt.name.toLowerCase() === "size"
-      );
-      if (sizeOption) {
-        const sizeValue = sizeOption.value.toLowerCase();
-        if (sizeValue.includes("20")) setSelectedSize("20cm");
-        else if (sizeValue.includes("30")) setSelectedSize("30cm");
-        else if (sizeValue.includes("40")) setSelectedSize("40cm");
+      for (const opt of selectedVariant.selectedOptions) {
+        const val = opt.value.toLowerCase();
+        if (val.includes("20")) setSelectedSize("20cm");
+        else if (val.includes("30")) setSelectedSize("30cm");
+        else if (val.includes("40")) setSelectedSize("40cm");
+        
+        if (val.includes("silver")) setSelectedColor("zilver");
+        else if (val.includes("black")) setSelectedColor("zwart");
       }
     }
   }, [selectedVariant]);
 
   const bundles = createBundleData(selectedSize);
 
-  // Find the correct variant for the selected size
-  const findVariantForSize = (size: SizeVariant) => {
+  // Find the correct variant for size + color combo
+  const findVariantForSizeAndColor = (size: SizeVariant, color: ColorVariant) => {
     if (!product) return selectedVariant;
     
+    const colorKey = color === "zilver" ? "silver" : "black";
+    const sizeKey = size.replace("cm", "");
+    
     const variant = product.node.variants.edges.find(v => {
-      const sizeOption = v.node.selectedOptions.find(
-        opt => opt.name.toLowerCase() === "maat" || opt.name.toLowerCase() === "size"
+      const matchesSize = v.node.selectedOptions.some(opt => 
+        opt.value.toLowerCase().includes(`${sizeKey}cm`)
       );
-      if (sizeOption) {
-        return sizeOption.value.toLowerCase().includes(size.replace("cm", ""));
-      }
-      // Handle combined values like "Silver-20cm TYPE-C"
-      return v.node.selectedOptions.some(opt => 
-        opt.value.toLowerCase().includes(`${size.replace("cm", "")}cm`)
+      const matchesColor = v.node.selectedOptions.some(opt => 
+        opt.value.toLowerCase().includes(colorKey)
       );
+      return matchesSize && matchesColor;
     });
     
     return variant?.node || selectedVariant;
@@ -150,33 +138,42 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
     }
 
     const bundle = bundles[bundleIndex];
-    const variantForSize = findVariantForSize(selectedSize);
+    const variantForSelection = findVariantForSizeAndColor(selectedSize, selectedColor);
     
-    if (!variantForSize) {
+    if (!variantForSelection) {
       toast.error("Selecteer eerst een productvariant");
       return;
     }
 
-    // Per-unit inc VAT price for the bundle
     const perUnitIncVat = (parseFloat(bundle.price) / bundle.quantity).toFixed(2);
     
     addItem({
       product,
-      variantId: variantForSize.id,
-      variantTitle: variantForSize.title,
+      variantId: variantForSelection.id,
+      variantTitle: variantForSelection.title,
       price: {
         amount: perUnitIncVat,
-        currencyCode: variantForSize.price.currencyCode,
+        currencyCode: variantForSelection.price.currencyCode,
       },
       quantity: bundle.quantity,
-      selectedOptions: variantForSize.selectedOptions,
-      // Bundle metadata
+      selectedOptions: variantForSelection.selectedOptions,
       isBundle: true,
       bundleName: bundle.name,
       bundleSize: selectedSize,
       bundleIncVatTotal: bundle.price,
     });
   };
+
+  const sizes: { value: SizeVariant; label: string; price: string }[] = [
+    { value: "20cm", label: "20cm", price: incVatPrices["20cm"] },
+    { value: "30cm", label: "30cm", price: incVatPrices["30cm"] },
+    { value: "40cm", label: "40cm", price: incVatPrices["40cm"] },
+  ];
+
+  const colors: { value: ColorVariant; label: string; gradient: string }[] = [
+    { value: "zilver", label: "Zilver", gradient: "bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400" },
+    { value: "zwart", label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" },
+  ];
 
   return (
     <section id="bundels" className="py-20 md:py-32 bg-background-secondary animate-fade-in transition-all duration-500">
@@ -194,29 +191,66 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
             </p>
           </div>
 
-          {/* Size Selector */}
+          {/* Size + Color Selector */}
           <div className="flex justify-center mb-10">
-            <div className="bg-background border border-border rounded-xl p-4">
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-foreground">Kies je maat:</span>
-                <Select value={selectedSize} onValueChange={(value: SizeVariant) => setSelectedSize(value)}>
-                  <SelectTrigger className="w-[200px] bg-background">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border border-border">
-                    <SelectItem value="20cm">20cm — €{incVatPrices["20cm"]}/stuk</SelectItem>
-                    <SelectItem value="30cm">30cm — €{incVatPrices["30cm"]}/stuk</SelectItem>
-                    <SelectItem value="40cm">40cm — €{incVatPrices["40cm"]}/stuk</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="bg-background border border-border rounded-xl p-5 inline-flex flex-col sm:flex-row items-center gap-6">
+              {/* Size pills */}
+              <div className="flex items-center gap-3">
+                <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Maat</span>
+                <div className="flex gap-2">
+                  {sizes.map((s) => (
+                    <button
+                      key={s.value}
+                      onClick={() => setSelectedSize(s.value)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        selectedSize === s.value
+                          ? "bg-glow/15 text-glow border border-glow/50 shadow-[0_0_12px_hsl(var(--glow)/0.15)]"
+                          : "bg-background-secondary text-muted-foreground border border-border hover:border-glow/30 hover:text-foreground"
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden sm:block w-px h-8 bg-border" />
+              <div className="block sm:hidden h-px w-full bg-border" />
+
+              {/* Color swatches */}
+              <div className="flex items-center gap-3">
+                <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Kleur</span>
+                <div className="flex gap-3">
+                  {colors.map((c) => (
+                    <button
+                      key={c.value}
+                      onClick={() => setSelectedColor(c.value)}
+                      className="flex flex-col items-center gap-1.5 group"
+                    >
+                      <div
+                        className={`w-9 h-9 rounded-full ${c.gradient} transition-all duration-200 ${
+                          selectedColor === c.value
+                            ? "ring-2 ring-glow ring-offset-2 ring-offset-background scale-110"
+                            : "ring-1 ring-border group-hover:ring-glow/40"
+                        }`}
+                      />
+                      <span className={`text-[11px] font-medium transition-colors ${
+                        selectedColor === c.value ? "text-glow" : "text-muted-foreground"
+                      }`}>
+                        {c.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          <div key={selectedSize} className="grid md:grid-cols-3 gap-8 animate-fade-in">
+          <div key={`${selectedSize}-${selectedColor}`} className="grid md:grid-cols-3 gap-8 animate-fade-in">
             {bundles.map((bundle, index) => (
               <Card 
-                key={`${selectedSize}-${index}`}
+                key={`${selectedSize}-${selectedColor}-${index}`}
                 onClick={() => setSelectedBundle(index)}
                 className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full ${
                   selectedBundle === index
@@ -236,6 +270,9 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-xs border-glow/30 text-glow">
                         {bundle.sizeLabel}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs border-border text-muted-foreground">
+                        {selectedColor === "zilver" ? "Zilver" : "Zwart"}
                       </Badge>
                     </div>
                     <p className="text-sm font-medium text-glow">{bundle.label}</p>
@@ -261,7 +298,6 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <p className="text-sm text-muted-foreground line-through animate-fade-in">
                       Was €{bundle.originalPrice}
                     </p>
-                    
                   </div>
 
                   <div className="space-y-3 py-4 border-y border-border mt-6 flex-grow">
