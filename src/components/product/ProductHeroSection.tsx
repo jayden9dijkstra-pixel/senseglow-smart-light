@@ -3,6 +3,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
+import { getIncVatPrice } from "@/lib/productConfig";
 
 import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
@@ -71,7 +72,6 @@ export const ProductHeroSection = ({
   ) => {
     setLocalVariant(variant);
     onVariantChange?.(variant);
-    // Trigger price animation
     setPriceKey((prev) => prev + 1);
   };
 
@@ -81,13 +81,13 @@ export const ProductHeroSection = ({
       product,
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
-      price: selectedVariant.price,
+      price: {
+        amount: getIncVatPrice(selectedVariant.price.amount),
+        currencyCode: selectedVariant.price.currencyCode,
+      },
       quantity: 1,
       selectedOptions: selectedVariant.selectedOptions,
     });
-
-    // Toast handled centrally in cartStore
-
   };
 
   const productImages =
@@ -96,11 +96,15 @@ export const ProductHeroSection = ({
       altText: edge.node.altText,
     })) || [];
 
+  // Get inc VAT price for display
+  const displayPrice = selectedVariant
+    ? getIncVatPrice(selectedVariant.price.amount)
+    : "0.00";
+
   return (
     <section className="py-10 md:py-16 bg-background animate-fade-in-slow">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          {/* Editorial grid with line separator */}
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Left - Product Image Gallery */}
             <div className="relative lg:border-r border-foreground/10 lg:pr-10 pb-8 lg:pb-0">
@@ -112,12 +116,10 @@ export const ProductHeroSection = ({
 
             {/* Right - Product Info */}
             <div className="space-y-6 lg:pl-10 pt-8 lg:pt-0 border-t lg:border-t-0 border-foreground/10 text-left">
-              {/* Headline */}
               <div className="space-y-2">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                   Veilig licht. Precies wanneer jij beweegt.
                 </h1>
-
                 <p className="text-base text-muted-foreground leading-relaxed">
                   Zachte nachtverlichting die je begeleidt zonder iemand wakker
                   te maken.
@@ -125,16 +127,19 @@ export const ProductHeroSection = ({
               </div>
 
               {/* Price with animation */}
-              <div className="flex items-baseline gap-4">
-                <span
-                  key={priceKey}
-                  className="text-2xl font-bold text-foreground animate-fade-in"
-                  style={{
-                    animation: "fade-in 0.4s ease-out",
-                  }}
-                >
-                  €{parseFloat(selectedVariant?.price.amount || "0").toFixed(2)}
-                </span>
+              <div className="space-y-1">
+                <div className="flex items-baseline gap-4">
+                  <span
+                    key={priceKey}
+                    className="text-2xl font-bold text-foreground animate-fade-in"
+                    style={{ animation: "fade-in 0.4s ease-out" }}
+                  >
+                    €{displayPrice}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Inclusief 21% BTW
+                </p>
               </div>
 
               {/* Bundle CTA Link */}
