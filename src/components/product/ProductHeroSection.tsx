@@ -3,7 +3,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
-import { toast } from "sonner";
+
 import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
 import { Check, Truck, RotateCcw, Shield } from "lucide-react";
@@ -85,10 +85,9 @@ export const ProductHeroSection = ({
       quantity: 1,
       selectedOptions: selectedVariant.selectedOptions,
     });
-    toast.success("Toegevoegd aan winkelwagen!", {
-      description: `${product.node.title} - ${selectedVariant.title}`,
-      position: "top-center",
-    });
+
+    // Toast handled centrally in cartStore
+
   };
 
   const productImages =
