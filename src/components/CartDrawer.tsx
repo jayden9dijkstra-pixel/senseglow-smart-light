@@ -107,7 +107,7 @@ export function CartDrawer() {
                             <p className="font-semibold text-foreground">
                               €{parseFloat(item.bundleIncVatTotal || "0").toFixed(2)}
                             </p>
-                            <p className="text-[10px] text-muted-foreground">Incl. 21% BTW</p>
+                            
                           </>
                         ) : (
                           <>
@@ -118,7 +118,7 @@ export function CartDrawer() {
                             <p className="font-semibold">
                               €{(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
                             </p>
-                            <p className="text-[10px] text-muted-foreground">Incl. 21% BTW</p>
+                            
                           </>
                         )}
                       </div>
@@ -165,7 +165,7 @@ export function CartDrawer() {
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-lg font-semibold">Totaal</span>
-                    <p className="text-xs text-muted-foreground">Inclusief 21% BTW</p>
+                    
                   </div>
                   <span className="text-xl font-bold">
                     €{totalPrice.toFixed(2)}

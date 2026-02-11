@@ -261,9 +261,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <p className="text-sm text-muted-foreground line-through animate-fade-in">
                       Was €{bundle.originalPrice}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      Inclusief 21% BTW
-                    </p>
+                    
                   </div>
 
                   <div className="space-y-3 py-4 border-y border-border mt-6 flex-grow">
