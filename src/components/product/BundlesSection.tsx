@@ -163,10 +163,9 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
       selectedOptions: variantForSize.selectedOptions,
     });
 
-    toast.success(`${bundle.name} toegevoegd!`, {
-      description: `${bundle.quantity}x ${product.node.title} (${selectedSize}) - €${bundle.price}`,
-      position: "top-center",
-    });
+
+    // Toast handled centrally in cartStore
+
   };
 
   return (
