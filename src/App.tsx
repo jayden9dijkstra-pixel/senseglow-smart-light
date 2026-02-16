@@ -10,6 +10,7 @@ import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
 import Shipping from "./pages/Shipping";
+import Tracking from "./pages/Tracking";
 import Returns from "./pages/Returns";
 import About from "./pages/About";
 import Sustainability from "./pages/Sustainability";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/verzending" element={<Shipping />} />
+            <Route path="/bestelling-volgen" element={<Tracking />} />
             <Route path="/retourneren" element={<Returns />} />
             <Route path="/over" element={<About />} />
             <Route path="/duurzaamheid" element={<Sustainability />} />

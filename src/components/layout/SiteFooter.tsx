@@ -10,6 +10,7 @@ export const SiteFooter = () => {
                 <li><a href="/contact" className="text-foreground/50 hover:text-glow transition-colors duration-500">Contact</a></li>
                 <li><a href="/verzending" className="text-foreground/50 hover:text-glow transition-colors duration-500">Verzending</a></li>
                 <li><a href="/retourneren" className="text-foreground/50 hover:text-glow transition-colors duration-500">Retourneren</a></li>
+                <li><a href="/bestelling-volgen" className="text-foreground/50 hover:text-glow transition-colors duration-500">Bestelling volgen</a></li>
               </ul>
             </div>
             <div>
