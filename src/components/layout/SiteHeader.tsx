@@ -14,6 +14,9 @@ const menuItems = [{
   label: "Producten",
   href: `/product/${PRODUCT_HANDLE}`
 }, {
+  label: "Bestelling Volgen",
+  href: "/bestelling-volgen"
+}, {
   label: "Duurzaamheid",
   href: "/duurzaamheid"
 }, {
