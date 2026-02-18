@@ -13,8 +13,8 @@ const Tracking = () => {
         <Button
           variant="ghost"
           onClick={() => navigate("/")}
-          className="mb-8"
-        >
+          className="mb-8">
+
           <ArrowLeft className="h-4 w-4 mr-2" />
           Terug naar home
         </Button>
@@ -38,15 +38,15 @@ const Tracking = () => {
               </div>
               <div className="space-y-3">
                 <h2 className="text-2xl font-bold">Track & Trace</h2>
-                <p className="text-foreground/60 max-w-md mx-auto">
-                  Klik op de knop hieronder om je bestelling te volgen. Je hebt je trackingnummer nodig — deze ontvang je per e-mail na verzending.
+                <p className="text-foreground/60 max-w-md mx-auto">Klik op de knop hieronder om je bestelling te volgen. Je hebt je trackingnummer nodig, deze ontvang je per e-mail na verzending.
+
                 </p>
               </div>
               <Button
                 size="lg"
                 className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
-                onClick={() => window.open("https://senseglow-smart-light-5jjoq.myshopify.com/apps/17TRACK", "_blank")}
-              >
+                onClick={() => window.open("https://senseglow-smart-light-5jjoq.myshopify.com/apps/17TRACK", "_blank")}>
+
                 Bestelling volgen
                 <ExternalLink className="h-4 w-4 ml-2" />
               </Button>
@@ -66,8 +66,8 @@ const Tracking = () => {
           </Card>
         </div>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>);
+
 };
 
 export default Tracking;
