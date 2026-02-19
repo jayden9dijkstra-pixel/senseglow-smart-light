@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import { z } from "zod";
+import { bundlePricing, incVatPrices, SizeVariant } from "@/lib/productConfig";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
@@ -285,6 +286,43 @@ export interface CheckoutBundleInfo {
   quantity: number;   // e.g. 2, 3, 5
 }
 
+/**
+ * Calculate the optimal bundle discount for a given quantity of one size,
+ * using a greedy algorithm: 5-packs first, then 3-packs, then 2-packs.
+ */
+function calcSizeDiscount(sizeCm: string, qty: number): number {
+  const sizeKey = `${sizeCm}cm` as SizeVariant;
+  const unitPrice = parseFloat(incVatPrices[sizeKey] || "0");
+  const pricing = bundlePricing[sizeKey];
+  if (!pricing || qty < 2 || unitPrice === 0) return 0;
+
+  const tiers = [
+    { n: 5, save: 5 * unitPrice - parseFloat(pricing.five.price) },
+    { n: 3, save: 3 * unitPrice - parseFloat(pricing.three.price) },
+    { n: 2, save: 2 * unitPrice - parseFloat(pricing.two.price) },
+  ];
+
+  let remaining = qty;
+  let discount = 0;
+  for (const t of tiers) {
+    while (remaining >= t.n) {
+      discount += t.save;
+      remaining -= t.n;
+    }
+  }
+  return Math.round(discount * 100) / 100;
+}
+
+/** Existing per-size code amounts (cents) mapped to a usable code name */
+const PER_SIZE_CODE_AMOUNTS: Record<number, (size: string) => string> = {
+  495:  (s) => `SG-${s}CM-2PACK`,   // 30/40cm 2-pack
+  990:  (s) => `SG-${s}CM-3PACK`,   // 30/40cm 3-pack
+  1495: () => 'SG-20CM-2PACK',
+  2490: () => 'SG-20CM-3PACK',
+  2980: (s) => `SG-${s}CM-5PACK`,   // 30/40cm 5-pack
+  5480: () => 'SG-20CM-5PACK',
+};
+
 export async function createStorefrontCheckout(
   items: CheckoutItem[],
   bundleInfos: CheckoutBundleInfo[] = []
@@ -297,23 +335,53 @@ export async function createStorefrontCheckout(
     merchandiseId: item.variantId,
   }));
 
-  // Consolidate bundles by size to avoid duplicate discount codes
-  // (Shopify only applies each unique code once, so we pick the best tier per size)
+  // Consolidate bundles by size — sum total quantities per size
   const sizeQuantities: Record<string, number> = {};
   for (const b of bundleInfos) {
     const size = b.bundleSize.replace('cm', '').trim();
     sizeQuantities[size] = (sizeQuantities[size] || 0) + b.quantity;
   }
 
-  // For each size, pick the single best discount code based on total quantity
+  // Calculate per-size discounts and total
+  const sizeDiscounts: Record<string, number> = {};
+  let totalDiscount = 0;
+  let discountSizeCount = 0;
+
+  for (const [size, qty] of Object.entries(sizeQuantities)) {
+    const d = calcSizeDiscount(size, qty);
+    if (d > 0) {
+      sizeDiscounts[size] = d;
+      totalDiscount += d;
+      discountSizeCount++;
+    }
+  }
+
+  // Determine the right discount code(s)
   const discountCodes: string[] = [];
-  for (const [size, totalQty] of Object.entries(sizeQuantities)) {
-    if (totalQty >= 5) {
-      discountCodes.push(`SG-${size}CM-5PACK`);
-    } else if (totalQty >= 3) {
-      discountCodes.push(`SG-${size}CM-3PACK`);
-    } else if (totalQty >= 2) {
-      discountCodes.push(`SG-${size}CM-2PACK`);
+
+  if (discountSizeCount === 1) {
+    // Single size — try to use existing per-size code
+    const [size, qty] = Object.entries(sizeQuantities).find(([s]) => sizeDiscounts[s])!;
+    // Standard tiers where one per-size code covers everything
+    if (qty >= 2 && qty <= 6) {
+      if (qty >= 5) discountCodes.push(`SG-${size}CM-5PACK`);
+      else if (qty >= 3) discountCodes.push(`SG-${size}CM-3PACK`);
+      else discountCodes.push(`SG-${size}CM-2PACK`);
+    } else {
+      // qty >= 7: needs combo code
+      const cents = Math.round(totalDiscount * 100);
+      discountCodes.push(`SG-COMBO-${cents}`);
+    }
+  } else if (discountSizeCount > 1) {
+    // Multiple sizes — always use combo code
+    const cents = Math.round(totalDiscount * 100);
+    // Check if amount matches an existing per-size code (rare but possible)
+    const firstSize = Object.keys(sizeDiscounts)[0];
+    const maker = PER_SIZE_CODE_AMOUNTS[cents];
+    if (maker) {
+      discountCodes.push(maker(firstSize));
+    } else {
+      discountCodes.push(`SG-COMBO-${cents}`);
     }
   }
 
