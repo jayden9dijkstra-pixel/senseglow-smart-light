@@ -297,11 +297,25 @@ export async function createStorefrontCheckout(
     merchandiseId: item.variantId,
   }));
 
-  // Build discount codes from bundle info
-  const discountCodes = bundleInfos.map(b => {
+  // Consolidate bundles by size to avoid duplicate discount codes
+  // (Shopify only applies each unique code once, so we pick the best tier per size)
+  const sizeQuantities: Record<string, number> = {};
+  for (const b of bundleInfos) {
     const size = b.bundleSize.replace('cm', '').trim();
-    return `SG-${size}CM-${b.quantity}PACK`;
-  });
+    sizeQuantities[size] = (sizeQuantities[size] || 0) + b.quantity;
+  }
+
+  // For each size, pick the single best discount code based on total quantity
+  const discountCodes: string[] = [];
+  for (const [size, totalQty] of Object.entries(sizeQuantities)) {
+    if (totalQty >= 5) {
+      discountCodes.push(`SG-${size}CM-5PACK`);
+    } else if (totalQty >= 3) {
+      discountCodes.push(`SG-${size}CM-3PACK`);
+    } else if (totalQty >= 2) {
+      discountCodes.push(`SG-${size}CM-2PACK`);
+    }
+  }
 
   const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
     input: {
