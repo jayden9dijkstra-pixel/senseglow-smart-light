@@ -290,7 +290,7 @@ export interface CheckoutBundleInfo {
  * Calculate the optimal bundle discount for a given quantity of one size,
  * using a greedy algorithm: 5-packs first, then 3-packs, then 2-packs.
  */
-function calcSizeDiscount(sizeCm: string, qty: number): number {
+export function calcSizeDiscount(sizeCm: string, qty: number): number {
   const sizeKey = `${sizeCm}cm` as SizeVariant;
   const unitPrice = parseFloat(incVatPrices[sizeKey] || "0");
   const pricing = bundlePricing[sizeKey];

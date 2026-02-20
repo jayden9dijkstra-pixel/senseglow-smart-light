@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
+import { getSizeFromVariant, incVatPrices, SizeVariant } from "@/lib/productConfig";
+import { calcSizeDiscount } from "@/lib/shopify";
 
 export function CartDrawer() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -24,13 +26,33 @@ export function CartDrawer() {
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   
-  // Calculate total: for bundles use bundleIncVatTotal, for singles use price × quantity
-  const totalPrice = items.reduce((sum, item) => {
-    if (item.isBundle && item.bundleIncVatTotal) {
-      return sum + parseFloat(item.bundleIncVatTotal);
+  // Calculate total using greedy discount algorithm (matches checkout)
+  const totalPrice = React.useMemo(() => {
+    // Sum quantities per size across ALL items (bundles + singles)
+    const sizeQuantities: Record<string, number> = {};
+    let baseTotal = 0;
+
+    for (const item of items) {
+      const size = getSizeFromVariant(item.selectedOptions);
+      if (size) {
+        const sizeCm = size.replace("cm", "");
+        sizeQuantities[sizeCm] = (sizeQuantities[sizeCm] || 0) + item.quantity;
+        // Use inc-VAT price for base total
+        baseTotal += parseFloat(incVatPrices[size]) * item.quantity;
+      } else {
+        // Fallback for items without recognizable size
+        baseTotal += parseFloat(item.price.amount) * item.quantity;
+      }
     }
-    return sum + (parseFloat(item.price.amount) * item.quantity);
-  }, 0);
+
+    // Apply greedy discount per size
+    let totalDiscount = 0;
+    for (const [sizeCm, qty] of Object.entries(sizeQuantities)) {
+      totalDiscount += calcSizeDiscount(sizeCm, qty);
+    }
+
+    return Math.round((baseTotal - totalDiscount) * 100) / 100;
+  }, [items]);
 
   const handleCheckout = async () => {
     try {
