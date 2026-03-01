@@ -297,7 +297,7 @@ export function calcSizeDiscount(sizeCm: string, qty: number): number {
   if (!pricing || qty < 2 || unitPrice === 0) return 0;
 
   const tiers = [
-    { n: 5, save: 5 * unitPrice - parseFloat(pricing.five.price) },
+    { n: 4, save: 4 * unitPrice - parseFloat(pricing.four.price) },
     { n: 3, save: 3 * unitPrice - parseFloat(pricing.three.price) },
     { n: 2, save: 2 * unitPrice - parseFloat(pricing.two.price) },
   ];
@@ -315,12 +315,15 @@ export function calcSizeDiscount(sizeCm: string, qty: number): number {
 
 /** Existing per-size code amounts (cents) mapped to a usable code name */
 const PER_SIZE_CODE_AMOUNTS: Record<number, (size: string) => string> = {
-  495:  (s) => `SG-${s}CM-2PACK`,   // 30/40cm 2-pack
-  990:  (s) => `SG-${s}CM-3PACK`,   // 30/40cm 3-pack
-  1495: () => 'SG-20CM-2PACK',
-  2490: () => 'SG-20CM-3PACK',
-  2980: (s) => `SG-${s}CM-5PACK`,   // 30/40cm 5-pack
-  5480: () => 'SG-20CM-5PACK',
+  550:  () => 'SG-20CM-2PACK',
+  700:  () => 'SG-30CM-2PACK',
+  800:  () => 'SG-40CM-2PACK',
+  1650: () => 'SG-20CM-3PACK',
+  2100: () => 'SG-30CM-3PACK',
+  2400: () => 'SG-40CM-3PACK',
+  2750: () => 'SG-20CM-4PACK',
+  3500: () => 'SG-30CM-4PACK',
+  4000: () => 'SG-40CM-4PACK',
 };
 
 export async function createStorefrontCheckout(
@@ -364,7 +367,7 @@ export async function createStorefrontCheckout(
     const [size, qty] = Object.entries(sizeQuantities).find(([s]) => sizeDiscounts[s])!;
     // Standard tiers where one per-size code covers everything
     if (qty >= 2 && qty <= 6) {
-      if (qty >= 5) discountCodes.push(`SG-${size}CM-5PACK`);
+      if (qty >= 4) discountCodes.push(`SG-${size}CM-4PACK`);
       else if (qty >= 3) discountCodes.push(`SG-${size}CM-3PACK`);
       else discountCodes.push(`SG-${size}CM-2PACK`);
     } else {
