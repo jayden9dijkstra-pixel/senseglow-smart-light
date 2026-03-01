@@ -19,16 +19,16 @@ export type SizeVariant = "20cm" | "30cm" | "40cm";
 
 // Shopify ex-VAT prices per size (as stored in Shopify)
 export const shopifyExVatPrices: Record<SizeVariant, number> = {
-  "20cm": 37.15,
-  "30cm": 41.28,
-  "40cm": 49.55,
+  "20cm": 22.73,
+  "30cm": 28.93,
+  "40cm": 33.06,
 };
 
 // Customer-facing inc-VAT prices per size
 export const incVatPrices: Record<SizeVariant, string> = {
-  "20cm": "44.95",
-  "30cm": "49.95",
-  "40cm": "59.95",
+  "20cm": "27.50",
+  "30cm": "35.00",
+  "40cm": "40.00",
 };
 
 /**
@@ -83,30 +83,30 @@ export const sizeRecommendations = {
 // Bundle pricing configuration (all prices INC VAT, customer-facing)
 export const bundlePricing = {
   "20cm": {
-    basePrice: "44.95",
-    two: { price: "74.95", originalPrice: "79.90", discount: "6%" },
-    three: { price: "109.95", originalPrice: "119.85", discount: "8%" },
-    five: { price: "169.95", originalPrice: "199.75", discount: "15%" },
+    basePrice: "27.50",
+    two: { price: "49.50", originalPrice: "55.00", discount: "10%", save: "5.50" },
+    three: { price: "66.00", originalPrice: "82.50", discount: "20%", save: "16.50" },
+    four: { price: "82.50", originalPrice: "110.00", discount: "25%", save: "27.50" },
   },
   "30cm": {
-    basePrice: "49.95",
-    two: { price: "94.95", originalPrice: "99.90", discount: "5%" },
-    three: { price: "139.95", originalPrice: "149.85", discount: "7%" },
-    five: { price: "219.95", originalPrice: "249.75", discount: "12%" },
+    basePrice: "35.00",
+    two: { price: "63.00", originalPrice: "70.00", discount: "10%", save: "7.00" },
+    three: { price: "84.00", originalPrice: "105.00", discount: "20%", save: "21.00" },
+    four: { price: "105.00", originalPrice: "140.00", discount: "25%", save: "35.00" },
   },
   "40cm": {
-    basePrice: "59.95",
-    two: { price: "114.95", originalPrice: "119.90", discount: "4%" },
-    three: { price: "169.95", originalPrice: "179.85", discount: "6%" },
-    five: { price: "269.95", originalPrice: "299.75", discount: "10%" },
+    basePrice: "40.00",
+    two: { price: "72.00", originalPrice: "80.00", discount: "10%", save: "8.00" },
+    three: { price: "96.00", originalPrice: "120.00", discount: "20%", save: "24.00" },
+    four: { price: "120.00", originalPrice: "160.00", discount: "25%", save: "40.00" },
   },
 } as const;
 
 // Bundle names for cart display
 export const bundleNames: Record<number, string> = {
-  2: "Night Safety Pack",
-  3: "Home Glow Pack",
-  5: "Whole Home Security Pack",
+  2: "Duo Set",
+  3: "Meest gekozen",
+  4: "Complete Set",
 };
 
 /**
@@ -116,8 +116,8 @@ export const bundleNames: Record<number, string> = {
  * targetExVatTotal = bundleIncVatPrice / 1.21
  * perUnitExVat = targetExVatTotal / quantity
  */
-export function getBundleExVatUnitPrice(size: SizeVariant, quantity: 2 | 3 | 5): number {
-  const tier = quantity === 2 ? "two" : quantity === 3 ? "three" : "five";
+export function getBundleExVatUnitPrice(size: SizeVariant, quantity: 2 | 3 | 4): number {
+  const tier = quantity === 2 ? "two" : quantity === 3 ? "three" : "four";
   const bundleIncVat = parseFloat(bundlePricing[size][tier].price);
   const targetExVatTotal = bundleIncVat / (1 + VAT_RATE);
   return targetExVatTotal / quantity;

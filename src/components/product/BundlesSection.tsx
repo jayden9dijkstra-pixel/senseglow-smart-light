@@ -19,13 +19,14 @@ const createBundleData = (size: SizeVariant) => {
       quantity: 2 as const,
       quantityLabel: "2 stuks",
       sizeLabel: `${size} modellen`,
-      label: "Ideaal voor trap & gang",
-      subtekst: "Meest gekozen voor nachtveiligheid",
+      label: "Duo Set",
+      subtekst: "Ideaal om te starten met nachtverlichting",
       price: pricing.two.price,
       originalPrice: pricing.two.originalPrice,
       discount: pricing.two.discount,
-      badge: "Meest gekozen",
-      popular: true,
+      save: pricing.two.save,
+      badge: null,
+      popular: false,
       features: [
         `2x SenseGlow™ ${size} LED strip`,
         "Gratis verzending",
@@ -37,34 +38,37 @@ const createBundleData = (size: SizeVariant) => {
       quantity: 3 as const,
       quantityLabel: "3 stuks",
       sizeLabel: `${size} modellen`,
-      label: "Beste balans",
+      label: size === "30cm" ? "Perfect voor trap of gang" : "Meest gekozen",
       subtekst: "Veiligheid én comfort voor dagelijks gebruik",
       price: pricing.three.price,
       originalPrice: pricing.three.originalPrice,
       discount: pricing.three.discount,
-      badge: "Beste waarde",
+      save: pricing.three.save,
+      badge: "⭐ Meest gekozen",
+      popular: true,
       features: [
         `3x SenseGlow™ ${size} LED strip`,
         "Gratis verzending",
-        "Extra voordeel",
+        "20% korting",
         "30 dagen retourrecht"
       ]
     },
     {
-      name: bundleNames[5],
-      quantity: 5 as const,
-      quantityLabel: "5 stuks",
+      name: bundleNames[4],
+      quantity: 4 as const,
+      quantityLabel: "4 stuks",
       sizeLabel: `${size} modellen`,
       label: "Volledige gemoedsrust",
       subtekst: "Voor wie alles in één keer goed wil doen",
-      price: pricing.five.price,
-      originalPrice: pricing.five.originalPrice,
-      discount: pricing.five.discount,
+      price: pricing.four.price,
+      originalPrice: pricing.four.originalPrice,
+      discount: pricing.four.discount,
+      save: pricing.four.save,
       badge: "Maximaal voordeel",
       features: [
-        `5x SenseGlow™ ${size} LED strip`,
+        `4x SenseGlow™ ${size} LED strip`,
         "Gratis verzending",
-        "Maximaal voordeel",
+        "25% korting",
         "Premium support",
         "30 dagen retourrecht"
       ]
@@ -248,18 +252,26 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
           </div>
 
           <div key={`${selectedSize}-${selectedColor}`} className="grid md:grid-cols-3 gap-8 animate-fade-in">
-            {bundles.map((bundle, index) => (
+            {bundles.map((bundle, index) => {
+              const isHighlighted = bundle.popular;
+              return (
               <Card 
                 key={`${selectedSize}-${selectedColor}-${index}`}
                 onClick={() => setSelectedBundle(index)}
                 className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full ${
-                  selectedBundle === index
-                    ? 'border-glow border-2 bg-background' 
-                    : 'bg-background border-border hover:border-glow/50'
+                  isHighlighted
+                    ? 'border-primary border-2 bg-primary/5 ring-1 ring-primary/20 shadow-lg shadow-primary/10'
+                    : selectedBundle === index
+                      ? 'border-glow border-2 bg-background' 
+                      : 'bg-background border-border hover:border-glow/50'
                 }`}
               >
                 {bundle.badge && (
-                  <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground">
+                  <Badge className={`absolute top-4 right-4 ${
+                    isHighlighted 
+                      ? 'bg-primary text-primary-foreground text-sm px-3 py-1' 
+                      : 'bg-primary text-primary-foreground'
+                  }`}>
                     {bundle.badge}
                   </Badge>
                 )}
@@ -275,7 +287,7 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                         {selectedColor === "zilver" ? "Zilver" : "Zwart"}
                       </Badge>
                     </div>
-                    <p className="text-sm font-medium text-glow">{bundle.label}</p>
+                    <p className={`text-sm font-medium ${isHighlighted ? 'text-primary' : 'text-glow'}`}>{bundle.label}</p>
                     <p className="text-sm text-muted-foreground">{bundle.subtekst}</p>
                   </div>
 
@@ -298,12 +310,15 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                     <p className="text-sm text-muted-foreground line-through animate-fade-in">
                       Was €{bundle.originalPrice}
                     </p>
+                    <p className={`text-sm font-semibold ${isHighlighted ? 'text-primary' : 'text-glow'} animate-fade-in`}>
+                      Je bespaart €{bundle.save}
+                    </p>
                   </div>
 
                   <div className="space-y-3 py-4 border-y border-border mt-6 flex-grow">
                     {bundle.features.map((feature, i) => (
                       <div key={i} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 text-glow flex-shrink-0 mt-0.5" />
+                        <Check className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isHighlighted ? 'text-primary' : 'text-glow'}`} />
                         <span className="text-sm text-foreground">{feature}</span>
                       </div>
                     ))}
@@ -315,14 +330,19 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
                       setSelectedBundle(index);
                       handleAddBundleToCart(index);
                     }}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mt-6"
+                    className={`w-full mt-6 ${
+                      isHighlighted 
+                        ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20' 
+                        : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                    }`}
                     size="lg"
                   >
                     Kies {bundle.quantityLabel}
                   </Button>
                 </div>
               </Card>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

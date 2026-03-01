@@ -145,11 +145,11 @@ const Quiz = () => {
       };
     } else if (locationCount >= 4) {
       bundle = {
-        name: "Whole Home Security Pack",
-        quantity: 5,
-        price: pricing.five.price,
-        originalPrice: pricing.five.originalPrice,
-        discount: pricing.five.discount,
+        name: "Complete Set",
+        quantity: 4,
+        price: pricing.four.price,
+        originalPrice: pricing.four.originalPrice,
+        discount: pricing.four.discount,
         badge: "Meest voordelig",
         ideal: "Complete woning bescherming"
       };
