@@ -17,11 +17,11 @@ export const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
 // Available sizes
 export type SizeVariant = "20cm" | "30cm" | "40cm";
 
-// Shopify ex-VAT prices per size (as stored in Shopify)
+// Shopify prices per size (as stored in Shopify — these ARE the customer-facing prices)
 export const shopifyExVatPrices: Record<SizeVariant, number> = {
-  "20cm": 22.73,
-  "30cm": 28.93,
-  "40cm": 33.06,
+  "20cm": 27.50,
+  "30cm": 35.00,
+  "40cm": 40.00,
 };
 
 // Customer-facing inc-VAT prices per size
@@ -32,19 +32,20 @@ export const incVatPrices: Record<SizeVariant, string> = {
 };
 
 /**
- * Convert a Shopify ex-VAT price to inc-VAT display price.
- * Uses the known inc-VAT prices for accuracy (avoids rounding drift).
+ * Convert a Shopify price to display price.
+ * Shopify prices now match customer-facing prices directly.
+ * Uses the known prices for accuracy (avoids rounding drift).
  */
 export function getIncVatPrice(shopifyAmount: string): string {
-  const exVat = parseFloat(shopifyAmount);
-  // Match to known size by checking proximity to known ex-VAT prices
-  for (const [size, exVatPrice] of Object.entries(shopifyExVatPrices)) {
-    if (Math.abs(exVat - exVatPrice) < 0.50) {
+  const price = parseFloat(shopifyAmount);
+  // Match to known size by checking proximity to known prices
+  for (const [size, knownPrice] of Object.entries(shopifyExVatPrices)) {
+    if (Math.abs(price - knownPrice) < 0.50) {
       return incVatPrices[size as SizeVariant];
     }
   }
-  // Fallback: calculate manually
-  return (exVat * (1 + VAT_RATE)).toFixed(2);
+  // Fallback: return as-is (prices are already customer-facing)
+  return price.toFixed(2);
 }
 
 /**
