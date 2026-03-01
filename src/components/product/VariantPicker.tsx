@@ -23,7 +23,7 @@ export const VariantPicker = ({
     // Helper to parse combined option value like "Silver-20cm TYPE-C"
     const parseOptionValue = (value: string): { color: string; size: string } => {
       // Pattern: "Color-SizeCm TYPE-C" (e.g., "Silver-20cm TYPE-C", "Black-40cm TYPE-C")
-      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)-(\d+)cm/i);
+      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)[\s\-]+(\d+)cm/i);
       if (colorSizeMatch) {
         const colorRaw = colorSizeMatch[1].toLowerCase();
         // Normalize color names to Dutch
@@ -96,7 +96,7 @@ export const VariantPicker = ({
 
   // Helper to parse combined option value (same as in useMemo)
   const parseOptionValue = (value: string): { color: string; size: string } => {
-    const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)-(\d+)cm/i);
+    const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)[\s\-]+(\d+)cm/i);
     if (colorSizeMatch) {
       const colorRaw = colorSizeMatch[1].toLowerCase();
       const colorMap: Record<string, string> = {
@@ -128,7 +128,10 @@ export const VariantPicker = ({
         if (name === "maat" || name === "size" || name === "lengte") {
           currentSize = value;
         } else if (name === "kleur" || name === "color" || name === "colour") {
-          currentColor = value;
+          // Filter out non-color values like "3 colors in one Lamp"
+          if (!value.toLowerCase().includes("colors in one") && !value.toLowerCase().includes("lamp")) {
+            currentColor = value;
+          }
         } else {
           // Try to parse combined option values
           const parsed = parseOptionValue(value);
