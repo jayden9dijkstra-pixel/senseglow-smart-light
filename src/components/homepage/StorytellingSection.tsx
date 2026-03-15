@@ -1,3 +1,4 @@
+import { DualImage } from "@/components/ui/DualImage";
 import storytellingImage from "@/assets/storytelling-glow.png";
 
 export const StorytellingSection = () => {
@@ -9,10 +10,10 @@ export const StorytellingSection = () => {
             {/* Image - Left side */}
             <div className="relative animate-fade-in-slow">
               <div className="aspect-square overflow-hidden rounded-3xl">
-                <img 
-                  src={storytellingImage} 
-                  alt="SenseGlow LED strip die warm oplicht in het donker" 
-                  className="w-full h-full object-cover" 
+                <DualImage
+                  srcLight={storytellingImage}
+                  alt="SenseGlow LED strip die warm oplicht in het donker"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>

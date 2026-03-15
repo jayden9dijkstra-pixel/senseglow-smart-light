@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoNew from "@/assets/logo-new.png";
 // Single product handle - the only active SenseGlow product
@@ -57,10 +58,13 @@ export const SiteHeader = () => {
               </DropdownMenu>
             </div>
             
-            {/* Center - Logo */}
-            <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
-              <img src={logoNew} alt="SenseGlow Logo" className="h-[76px] w-auto object-contain" />
-            </button>
+            {/* Center - Logo + Lamp toggle */}
+            <div className="flex items-center gap-2">
+              <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
+                <img src={logoNew} alt="SenseGlow Logo" className="h-[76px] w-auto object-contain" />
+              </button>
+              <ThemeToggle />
+            </div>
             
             {/* Right - Cart with fixed width for symmetry */}
             <div className="w-20 flex justify-end">
@@ -87,10 +91,13 @@ export const SiteHeader = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            {/* Center - Logo */}
-            <button onClick={() => navigate("/")} className="absolute left-1/2 -translate-x-1/2 translate-x-2 cursor-pointer" aria-label="Ga naar homepage">
-              <img src={logoNew} alt="SenseGlow Logo" className="h-20 w-auto object-contain" />
-            </button>
+            {/* Center - Logo + Lamp toggle */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
+              <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
+                <img src={logoNew} alt="SenseGlow Logo" className="h-20 w-auto object-contain" />
+              </button>
+              <ThemeToggle />
+            </div>
             
             {/* Right - Cart */}
             <CartDrawer />

@@ -34,14 +34,15 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const price = selectedVariant?.price || product.node.priceRange.minVariantPrice;
 
   return (
-    <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-300 hover:-translate-y-1">
+    <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-500 hover:-translate-y-1 group">
       <Link to={`/product/${product.node.handle}`}>
         <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={product.node.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            loading="lazy"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground">
@@ -52,13 +53,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </Link>
       <CardContent className="p-5">
         <Link to={`/product/${product.node.handle}`}>
-          <h3 className="font-bold text-base mb-2 hover:text-brand-orange transition-colors uppercase tracking-wide">
+          <h3 className="font-bold text-base mb-2 hover:text-glow transition-colors duration-300 uppercase tracking-[0.15em]">
             {product.node.title}
           </h3>
         </Link>
         <div className="flex items-center gap-1 mb-3">
           {[...Array(5)].map((_, i) => (
-            <span key={i} className="text-brand-orange text-sm">★</span>
+            <span key={i} className="text-glow text-sm">★</span>
           ))}
           <span className="text-xs text-muted-foreground ml-1">4.7/5</span>
         </div>
@@ -69,7 +70,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         {product.node.variants.edges.length > 1 && (
           <div className="mb-3">
             <select
-              className="w-full p-2 border border-muted rounded text-sm"
+              className="w-full p-2 border border-border rounded-lg text-sm bg-background/50"
               value={selectedVariant?.id}
               onChange={(e) => {
                 const variant = product.node.variants.edges.find(v => v.node.id === e.target.value)?.node;
@@ -88,7 +89,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <CardFooter className="p-5 pt-0">
         <Button 
           onClick={handleAddToCart}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase text-sm tracking-wide"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium uppercase text-sm tracking-[0.15em] rounded-full hover:shadow-[0_0_20px_-5px_hsl(var(--glow)/0.3)] transition-all duration-500"
           disabled={!selectedVariant?.availableForSale}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
