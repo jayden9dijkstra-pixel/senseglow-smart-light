@@ -34,7 +34,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const price = selectedVariant?.price || product.node.priceRange.minVariantPrice;
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-all border-border bg-card">
+    <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-300 hover:-translate-y-1">
       <Link to={`/product/${product.node.handle}`}>
         <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
         {imageUrl ? (

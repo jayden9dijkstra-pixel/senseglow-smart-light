@@ -34,7 +34,7 @@ const menuItems = [{
 }];
 export const SiteHeader = () => {
   const navigate = useNavigate();
-  return <header className="w-full bg-background">
+  return <header className="w-full glass sticky top-0 z-50">
       <div className="container">
         <div className="flex h-24 md:h-28 items-center relative">
           {/* Mobile Layout */}
