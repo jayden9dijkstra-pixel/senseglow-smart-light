@@ -49,7 +49,11 @@ export const HeroSection = () => {
             {/* Hero Image - Right side */}
             <div className="relative order-1 md:order-2 animate-fade-in-slow">
               <div className="aspect-[4/5] overflow-hidden rounded-3xl">
-                <img src={heroImage} alt="SenseGlow LED lamp met warme glow in donkere ruimte" className="w-full h-full object-cover" />
+                <DualImage
+                  srcLight={heroImage}
+                  alt="SenseGlow LED lamp met warme glow in donkere ruimte"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
