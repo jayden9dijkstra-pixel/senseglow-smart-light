@@ -71,26 +71,26 @@ html {
   }
 
   .dark {
-    /* NACHT MODUS - Deep Charcoal #161616 */
-    --background: 0 0% 9%; /* #161616 Deep Charcoal */
-    --background-secondary: 0 0% 11%; /* Slightly lighter */
+    /* NACHT MODUS - Lichter grijs zodat amber gloed opvalt */
+    --background: 0 0% 14%; /* #242424 */
+    --background-secondary: 0 0% 17%; /* #2C2C2C */
     --foreground: 40 5% 95%; /* #F2F1ED Warm Off-White */
     --foreground-muted: 40 3% 81%; /* #CFCFC9 Muted Off-White */
 
-    --card: 0 0% 9%;
+    --card: 0 0% 16%;
     --card-foreground: 40 5% 95%;
 
-    --popover: 0 0% 11%;
+    --popover: 0 0% 17%;
     --popover-foreground: 40 5% 95%;
 
     /* Soft Amber blijft hetzelfde */
     --primary: 33 52% 50%;
     --primary-foreground: 0 0% 9%;
 
-    --secondary: 0 0% 13%;
+    --secondary: 0 0% 19%;
     --secondary-foreground: 40 5% 95%;
 
-    --muted: 0 0% 15%;
+    --muted: 0 0% 21%;
     --muted-foreground: 40 3% 81%;
 
     --accent: 33 52% 50%;
@@ -99,25 +99,25 @@ html {
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Editorial borders - low opacity off-white */
-    --border: 40 5% 95% / 0.12;
-    --border-strong: 40 5% 95% / 0.20;
-    --input: 0 0% 20%;
+    /* Editorial borders */
+    --border: 40 5% 95% / 0.08;
+    --border-strong: 40 5% 95% / 0.15;
+    --input: 0 0% 24%;
     --ring: 33 52% 50%;
     
     --glow: 33 52% 50%;
-    --glow-light: 33 52% 70%;
+    --glow-light: 33 60% 75%;
     
     --brand-amber: 33 52% 50%;
     --brand-amber-light: 33 52% 30%;
     
-    --sidebar-background: 0 0% 11%;
+    --sidebar-background: 0 0% 17%;
     --sidebar-foreground: 40 5% 95%;
     --sidebar-primary: 33 52% 50%;
     --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent: 0 0% 22%;
     --sidebar-accent-foreground: 40 5% 95%;
-    --sidebar-border: 40 5% 95% / 0.12;
+    --sidebar-border: 40 5% 95% / 0.08;
     --sidebar-ring: 33 52% 50%;
   }
 }
