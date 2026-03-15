@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Truck, RotateCcw, Shield } from "lucide-react";
+import { DualImage } from "@/components/ui/DualImage";
 import heroImage from "@/assets/hero-lifestyle.png";
 export const HeroSection = () => {
   const navigate = useNavigate();
