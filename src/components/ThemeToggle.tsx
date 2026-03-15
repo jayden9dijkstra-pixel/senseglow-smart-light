@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState, useCallback } from "react";
-import { Sun, Moon } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 
 export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -14,16 +14,13 @@ export const ThemeToggle = () => {
   const handleThemeChange = useCallback(() => {
     const newTheme = theme === "dark" ? "light" : "dark";
     
-    // Add transitioning class for smooth animation
     document.documentElement.classList.add("transitioning");
     setIsTransitioning(true);
     
-    // Use requestAnimationFrame for smoother transition start
     requestAnimationFrame(() => {
       setTheme(newTheme);
     });
     
-    // Remove transitioning class after animation completes
     setTimeout(() => {
       document.documentElement.classList.remove("transitioning");
       setIsTransitioning(false);
@@ -31,9 +28,7 @@ export const ThemeToggle = () => {
   }, [theme, setTheme]);
 
   if (!mounted) {
-    return (
-      <div className="w-16 h-8 bg-muted rounded-full opacity-0" />
-    );
+    return <div className="w-10 h-10 opacity-0" />;
   }
 
   const isDark = theme === "dark";
@@ -42,38 +37,31 @@ export const ThemeToggle = () => {
     <button
       onClick={handleThemeChange}
       disabled={isTransitioning}
-      className="relative w-16 h-8 bg-muted rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait"
-      aria-label={isDark ? "Schakel naar dagmodus" : "Schakel naar nachtmodus"}
-      style={{ willChange: "auto" }}
+      className="relative flex items-center justify-center w-10 h-10 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait group"
+      aria-label={isDark ? "Schakel lamp uit" : "Schakel lamp aan"}
     >
-      {/* Track icons */}
-      <div className="absolute inset-0 flex items-center justify-between px-2 pointer-events-none">
-        <Sun 
-          className={`w-4 h-4 ${
-            isDark ? "text-muted-foreground opacity-50" : "text-primary opacity-100"
-          }`}
-          style={{ 
-            transition: "opacity 600ms cubic-bezier(0.4, 0, 0.2, 1), color 600ms cubic-bezier(0.4, 0, 0.2, 1)" 
-          }}
-        />
-        <Moon 
-          className={`w-4 h-4 ${
-            isDark ? "text-primary opacity-100" : "text-muted-foreground opacity-50"
-          }`}
-          style={{ 
-            transition: "opacity 600ms cubic-bezier(0.4, 0, 0.2, 1), color 600ms cubic-bezier(0.4, 0, 0.2, 1)" 
-          }}
-        />
-      </div>
-      
-      {/* Slider thumb with GPU-accelerated animation */}
+      {/* Ambient glow behind icon when "on" */}
       <div
-        className="absolute top-1 w-6 h-6 rounded-full bg-background border border-border pointer-events-none"
+        className="absolute inset-0 rounded-full"
         style={{
-          transform: `translateX(${isDark ? "32px" : "4px"})`,
-          transition: "transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-          willChange: "transform"
+          background: isDark
+            ? "radial-gradient(circle, hsl(33 52% 50% / 0.25) 0%, transparent 70%)"
+            : "transparent",
+          transition: "background 1200ms cubic-bezier(0.4, 0, 0.2, 1)",
         }}
+      />
+      
+      <Lightbulb
+        className={`w-5 h-5 relative z-10 transition-all duration-500 ${
+          isDark
+            ? "text-glow drop-shadow-[0_0_8px_hsl(33_52%_50%/0.6)]"
+            : "text-foreground/40 group-hover:text-foreground/60"
+        }`}
+        style={{
+          filter: isDark ? "drop-shadow(0 0 12px hsl(33 52% 50% / 0.5))" : "none",
+          transition: "filter 1200ms cubic-bezier(0.4, 0, 0.2, 1), color 600ms ease",
+        }}
+        fill={isDark ? "hsl(33 52% 50% / 0.15)" : "none"}
       />
     </button>
   );
