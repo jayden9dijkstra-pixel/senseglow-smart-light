@@ -58,10 +58,13 @@ export const SiteHeader = () => {
               </DropdownMenu>
             </div>
             
-            {/* Center - Logo */}
-            <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
-              <img src={logoNew} alt="SenseGlow Logo" className="h-[76px] w-auto object-contain" />
-            </button>
+            {/* Center - Logo + Lamp toggle */}
+            <div className="flex items-center gap-2">
+              <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
+                <img src={logoNew} alt="SenseGlow Logo" className="h-[76px] w-auto object-contain" />
+              </button>
+              <ThemeToggle />
+            </div>
             
             {/* Right - Cart with fixed width for symmetry */}
             <div className="w-20 flex justify-end">
