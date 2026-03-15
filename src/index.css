@@ -13,38 +13,38 @@ html {
 
 @layer base {
   :root {
-    /* DAG MODUS - Cool Soft Grey #E2E4E1 */
-    --background: 100 5% 89%; /* #E2E4E1 Cool Soft Grey */
-    --background-secondary: 100 5% 87%;
+    /* DAG MODUS - Apple-inspired glasachtig wit */
+    --background: 0 0% 99%; /* #FCFCFC puur wit */
+    --background-secondary: 0 0% 96%; /* #F5F5F7 Apple grijs */
     --foreground: 0 0% 17%; /* #2B2B2B Charcoal */
     --foreground-muted: 0 0% 29%; /* #4A4A4A Dark Grey */
 
-    --card: 100 5% 89%;
+    --card: 0 0% 100%;
     --card-foreground: 0 0% 17%;
 
-    --popover: 100 5% 89%;
+    --popover: 0 0% 99%;
     --popover-foreground: 0 0% 17%;
 
     /* Soft Amber - enige accentkleur #C58A3D */
     --primary: 33 52% 50%;
-    --primary-foreground: 0 0% 17%; /* Charcoal text op amber */
+    --primary-foreground: 0 0% 100%; /* Wit text op amber */
 
-    --secondary: 100 5% 85%;
+    --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 17%;
 
-    --muted: 100 5% 82%;
+    --muted: 0 0% 94%;
     --muted-foreground: 0 0% 29%;
 
     --accent: 33 52% 50%; /* Amber */
-    --accent-foreground: 0 0% 17%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Editorial borders - low opacity charcoal */
-    --border: 0 0% 17% / 0.15;
-    --border-strong: 0 0% 17% / 0.25;
-    --input: 100 5% 80%;
+    /* Apple-stijl subtiele borders */
+    --border: 0 0% 0% / 0.06;
+    --border-strong: 0 0% 0% / 0.12;
+    --input: 0 0% 92%;
     --ring: 33 52% 50%;
     
     /* Amber glow voor subtiele effecten */
@@ -60,37 +60,37 @@ html {
     /* Section transition curves */
     --section-curve: 40px;
 
-    --sidebar-background: 100 5% 87%;
+    --sidebar-background: 0 0% 96%;
     --sidebar-foreground: 0 0% 17%;
     --sidebar-primary: 33 52% 50%;
-    --sidebar-primary-foreground: 0 0% 17%;
-    --sidebar-accent: 100 5% 80%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 92%;
     --sidebar-accent-foreground: 0 0% 17%;
-    --sidebar-border: 0 0% 17% / 0.15;
+    --sidebar-border: 0 0% 0% / 0.06;
     --sidebar-ring: 33 52% 50%;
   }
 
   .dark {
-    /* NACHT MODUS - Deep Charcoal #161616 */
-    --background: 0 0% 9%; /* #161616 Deep Charcoal */
-    --background-secondary: 0 0% 11%; /* Slightly lighter */
+    /* NACHT MODUS - Lichter grijs zodat amber gloed opvalt */
+    --background: 0 0% 14%; /* #242424 */
+    --background-secondary: 0 0% 17%; /* #2C2C2C */
     --foreground: 40 5% 95%; /* #F2F1ED Warm Off-White */
     --foreground-muted: 40 3% 81%; /* #CFCFC9 Muted Off-White */
 
-    --card: 0 0% 9%;
+    --card: 0 0% 16%;
     --card-foreground: 40 5% 95%;
 
-    --popover: 0 0% 11%;
+    --popover: 0 0% 17%;
     --popover-foreground: 40 5% 95%;
 
     /* Soft Amber blijft hetzelfde */
     --primary: 33 52% 50%;
     --primary-foreground: 0 0% 9%;
 
-    --secondary: 0 0% 13%;
+    --secondary: 0 0% 19%;
     --secondary-foreground: 40 5% 95%;
 
-    --muted: 0 0% 15%;
+    --muted: 0 0% 21%;
     --muted-foreground: 40 3% 81%;
 
     --accent: 33 52% 50%;
@@ -99,25 +99,25 @@ html {
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Editorial borders - low opacity off-white */
-    --border: 40 5% 95% / 0.12;
-    --border-strong: 40 5% 95% / 0.20;
-    --input: 0 0% 20%;
+    /* Editorial borders */
+    --border: 40 5% 95% / 0.08;
+    --border-strong: 40 5% 95% / 0.15;
+    --input: 0 0% 24%;
     --ring: 33 52% 50%;
     
     --glow: 33 52% 50%;
-    --glow-light: 33 52% 70%;
+    --glow-light: 33 60% 75%;
     
     --brand-amber: 33 52% 50%;
     --brand-amber-light: 33 52% 30%;
     
-    --sidebar-background: 0 0% 11%;
+    --sidebar-background: 0 0% 17%;
     --sidebar-foreground: 40 5% 95%;
     --sidebar-primary: 33 52% 50%;
     --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent: 0 0% 22%;
     --sidebar-accent-foreground: 40 5% 95%;
-    --sidebar-border: 40 5% 95% / 0.12;
+    --sidebar-border: 40 5% 95% / 0.08;
     --sidebar-ring: 33 52% 50%;
   }
 }
@@ -240,5 +240,34 @@ html {
 
   .bundle-highlight {
     animation: bundle-glow 1s ease-out forwards;
+  }
+
+  /* Apple-inspired glassmorphism */
+  .glass {
+    background: hsl(0 0% 100% / 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(0 0% 0% / 0.04);
+  }
+
+  .dark .glass {
+    background: hsl(0 0% 100% / 0.04);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.06);
+  }
+
+  .glass-strong {
+    background: hsl(0 0% 100% / 0.85);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid hsl(0 0% 100% / 0.3);
+  }
+
+  .dark .glass-strong {
+    background: hsl(0 0% 100% / 0.06);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid hsl(0 0% 100% / 0.08);
   }
 }

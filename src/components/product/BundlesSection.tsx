@@ -258,12 +258,12 @@ export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps
               <Card 
                 key={`${selectedSize}-${selectedColor}-${index}`}
                 onClick={() => setSelectedBundle(index)}
-                className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full ${
+                className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full glass ${
                   isHighlighted
                     ? 'border-primary border-2 bg-primary/5 ring-1 ring-primary/20 shadow-lg shadow-primary/10'
                     : selectedBundle === index
-                      ? 'border-glow border-2 bg-background' 
-                      : 'bg-background border-border hover:border-glow/50'
+                      ? 'border-glow border-2' 
+                      : 'hover:border-glow/50 hover:shadow-lg hover:shadow-glow/5'
                 }`}
               >
                 {bundle.badge && (
