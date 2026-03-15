@@ -1,3 +1,4 @@
+import { DualImage } from "@/components/ui/DualImage";
 import storytellingImage from "@/assets/storytelling-glow.png";
 
 export const StorytellingSection = () => {
