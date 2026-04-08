@@ -12,6 +12,18 @@ import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
+import { WAVE_PRODUCT_HANDLE } from "@/lib/productConfig";
+import {
+  WAVE_HERO_CONTENT,
+  WAVE_OUTCOMES,
+  WAVE_OUTCOME_HEADLINE,
+  WAVE_PROBLEM_SOLUTION,
+  WAVE_USE_CASES,
+  WAVE_TECH_BENEFITS,
+  WAVE_FAQS,
+  WAVE_BUNDLE_HEADLINE,
+  WAVE_FINAL_CTA,
+} from "@/lib/waveProductConfig";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -22,6 +34,9 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState<
     ShopifyProduct["node"]["variants"]["edges"][0]["node"] | null
   >(null);
+
+  // Detect if this is the Wave product
+  const isWave = handle === WAVE_PRODUCT_HANDLE;
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -79,11 +94,12 @@ const ProductDetail = () => {
 
   return (
     <PageLayout>
-      {/* Product Sections with curved transitions */}
+      {/* Product Hero */}
       <ProductHeroSection
         product={product}
         selectedVariant={selectedVariant}
         onVariantChange={setSelectedVariant}
+        heroContent={isWave ? WAVE_HERO_CONTENT : undefined}
       />
 
       {/* Curved transition */}
@@ -93,7 +109,11 @@ const ProductDetail = () => {
       </div>
 
       <div className="bg-background-secondary">
-        <BundlesSection product={product} selectedVariant={selectedVariant || undefined} />
+        <BundlesSection
+          product={product}
+          selectedVariant={selectedVariant || undefined}
+          headlineOverride={isWave ? WAVE_BUNDLE_HEADLINE : undefined}
+        />
       </div>
 
       {/* Curved transition back */}
@@ -106,7 +126,10 @@ const ProductDetail = () => {
 
       <div className="border-t border-foreground/8" />
 
-      <OutcomeSection />
+      <OutcomeSection
+        headline={isWave ? WAVE_OUTCOME_HEADLINE : undefined}
+        outcomes={isWave ? WAVE_OUTCOMES : undefined}
+      />
 
       {/* Curved transition */}
       <div className="relative h-12 md:h-20">
@@ -115,7 +138,12 @@ const ProductDetail = () => {
       </div>
 
       <div className="bg-background-secondary">
-        <ProblemSolutionProductSection />
+        <ProblemSolutionProductSection
+          headline={isWave ? WAVE_PROBLEM_SOLUTION.headline : undefined}
+          problems={isWave ? WAVE_PROBLEM_SOLUTION.problems : undefined}
+          solutionTitle={isWave ? WAVE_PROBLEM_SOLUTION.solutionTitle : undefined}
+          solutionText={isWave ? WAVE_PROBLEM_SOLUTION.solutionText : undefined}
+        />
       </div>
 
       {/* Curved transition back */}
@@ -124,11 +152,18 @@ const ProductDetail = () => {
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
       </div>
 
-      <UseCaseSection />
+      <UseCaseSection
+        headline={isWave ? "Perfect voor elke ruimte" : undefined}
+        subtitle={isWave ? "Ontdek waar SenseGlow Wave™ het verschil maakt" : undefined}
+        useCases={isWave ? WAVE_USE_CASES : undefined}
+      />
 
       <div className="border-t border-foreground/8" />
 
-      <TechBenefitsSection />
+      <TechBenefitsSection
+        headline={isWave ? "Technologie die indruk maakt" : undefined}
+        benefits={isWave ? WAVE_TECH_BENEFITS : undefined}
+      />
 
       {/* Curved transition */}
       <div className="relative h-12 md:h-20">
@@ -137,7 +172,10 @@ const ProductDetail = () => {
       </div>
 
       <div className="bg-background-secondary">
-        <ProductFAQSection />
+        <ProductFAQSection
+          subtitle={isWave ? "Alles wat je moet weten over SenseGlow Wave™" : undefined}
+          faqs={isWave ? WAVE_FAQS : undefined}
+        />
       </div>
 
       {/* Curved transition back */}
@@ -146,7 +184,11 @@ const ProductDetail = () => {
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
       </div>
 
-      <FinalProductCTA />
+      <FinalProductCTA
+        headline={isWave ? WAVE_FINAL_CTA.headline : undefined}
+        subtext={isWave ? WAVE_FINAL_CTA.subtext : undefined}
+        ctaLabel={isWave ? WAVE_FINAL_CTA.cta : undefined}
+      />
     </PageLayout>
   );
 };
