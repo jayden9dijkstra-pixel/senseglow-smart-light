@@ -16,13 +16,14 @@ export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-co
 export const WAVE_PRODUCT_HANDLE = "motion-sensor-light-led-lamp-wireless-ultra-thin-usb-led-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting-night-light2026-03-08-17-30-58";
 
 // Available sizes
-export type SizeVariant = "20cm" | "30cm" | "40cm";
+export type SizeVariant = "20cm" | "30cm" | "40cm" | "50cm";
 
 // Shopify prices per size (as stored in Shopify — these ARE the customer-facing prices)
 export const shopifyExVatPrices: Record<SizeVariant, number> = {
   "20cm": 27.50,
   "30cm": 35.00,
   "40cm": 40.00,
+  "50cm": 45.00,
 };
 
 // Customer-facing inc-VAT prices per size
@@ -30,6 +31,7 @@ export const incVatPrices: Record<SizeVariant, string> = {
   "20cm": "27.50",
   "30cm": "35.00",
   "40cm": "40.00",
+  "50cm": "45.00",
 };
 
 /**
@@ -62,14 +64,15 @@ export function getSizeFromVariant(
       if (value.includes("20")) return "20cm";
       if (value.includes("30")) return "30cm";
       if (value.includes("40")) return "40cm";
+      if (value.includes("50")) return "50cm";
     }
-    // Handle combined values like "Silver-20cm TYPE-C"
     const match = value.match(/(\d+)cm/);
     if (match) {
       const num = match[1];
       if (num === "20") return "20cm";
       if (num === "30") return "30cm";
       if (num === "40") return "40cm";
+      if (num === "50") return "50cm";
     }
   }
   return null;
@@ -83,7 +86,12 @@ export const sizeRecommendations = {
 } as const;
 
 // Bundle pricing configuration (all prices INC VAT, customer-facing)
-export const bundlePricing = {
+export const bundlePricing: Record<SizeVariant, {
+  basePrice: string;
+  two: { price: string; originalPrice: string; discount: string; save: string };
+  three: { price: string; originalPrice: string; discount: string; save: string };
+  four: { price: string; originalPrice: string; discount: string; save: string };
+}> = {
   "20cm": {
     basePrice: "27.50",
     two: { price: "49.50", originalPrice: "55.00", discount: "10%", save: "5.50" },
@@ -101,6 +109,12 @@ export const bundlePricing = {
     two: { price: "72.00", originalPrice: "80.00", discount: "10%", save: "8.00" },
     three: { price: "96.00", originalPrice: "120.00", discount: "20%", save: "24.00" },
     four: { price: "120.00", originalPrice: "160.00", discount: "25%", save: "40.00" },
+  },
+  "50cm": {
+    basePrice: "45.00",
+    two: { price: "81.00", originalPrice: "90.00", discount: "10%", save: "9.00" },
+    three: { price: "108.00", originalPrice: "135.00", discount: "20%", save: "27.00" },
+    four: { price: "135.00", originalPrice: "180.00", discount: "25%", save: "45.00" },
   },
 } as const;
 

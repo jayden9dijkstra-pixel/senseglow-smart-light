@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
 import { SizeVariant, bundlePricing, bundleNames, incVatPrices } from "@/lib/productConfig";
 
-type ColorVariant = "zilver" | "zwart";
+type ColorVariant = string;
 
 const createBundleData = (size: SizeVariant) => {
   const pricing = bundlePricing[size];
@@ -96,20 +96,49 @@ interface BundlesSectionProps {
 export const BundlesSection = ({ product, selectedVariant, headlineOverride }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
   const [selectedSize, setSelectedSize] = useState<SizeVariant>("20cm");
-  const [selectedColor, setSelectedColor] = useState<ColorVariant>("zilver");
+  const [selectedColor, setSelectedColor] = useState<ColorVariant>("");
   const addItem = useCartStore((state) => state.addItem);
+
+  // Detect available colors from product variants
+  const availableColors = useMemo(() => {
+    if (!product) return [{ value: "zwart", label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" }];
+    
+    const colorMap: Record<string, { label: string; gradient: string }> = {
+      silver: { label: "Zilver", gradient: "bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400" },
+      black: { label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" },
+      white: { label: "Wit", gradient: "bg-gradient-to-br from-gray-100 via-white to-gray-200" },
+    };
+
+    const found = new Set<string>();
+    product.node.variants.edges.forEach(v => {
+      v.node.selectedOptions.forEach(opt => {
+        const val = opt.value.toLowerCase();
+        if (val.includes("silver")) found.add("silver");
+        if (val.includes("black")) found.add("black");
+        if (val.includes("white")) found.add("white");
+      });
+    });
+
+    return Array.from(found).map(key => ({
+      value: key,
+      label: colorMap[key]?.label || key,
+      gradient: colorMap[key]?.gradient || "",
+    }));
+  }, [product]);
 
   // Sync bundle size & color with selected variant
   useEffect(() => {
     if (selectedVariant) {
       for (const opt of selectedVariant.selectedOptions) {
         const val = opt.value.toLowerCase();
-        if (val.includes("20")) setSelectedSize("20cm");
+        if (val.includes("20cm") || (val.includes("20") && !val.includes("50"))) setSelectedSize("20cm");
         else if (val.includes("30")) setSelectedSize("30cm");
         else if (val.includes("40")) setSelectedSize("40cm");
+        else if (val.includes("50")) setSelectedSize("50cm");
         
-        if (val.includes("silver")) setSelectedColor("zilver");
-        else if (val.includes("black")) setSelectedColor("zwart");
+        if (val.includes("silver")) setSelectedColor("silver");
+        else if (val.includes("black")) setSelectedColor("black");
+        else if (val.includes("white")) setSelectedColor("white");
       }
     }
   }, [selectedVariant]);
@@ -120,7 +149,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const findVariantForSizeAndColor = (size: SizeVariant, color: ColorVariant) => {
     if (!product) return selectedVariant;
     
-    const colorKey = color === "zilver" ? "silver" : "black";
+    const colorKey = color; // already in english (silver/black/white)
     const sizeKey = size.replace("cm", "");
     
     const variant = product.node.variants.edges.find(v => {
@@ -169,16 +198,28 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     });
   };
 
-  const sizes: { value: SizeVariant; label: string; price: string }[] = [
-    { value: "20cm", label: "20cm", price: incVatPrices["20cm"] },
-    { value: "30cm", label: "30cm", price: incVatPrices["30cm"] },
-    { value: "40cm", label: "40cm", price: incVatPrices["40cm"] },
-  ];
+  // Dynamically detect available sizes from product variants
+  const sizes = useMemo(() => {
+    const allSizes: SizeVariant[] = ["20cm", "30cm", "40cm", "50cm"];
+    if (!product) return allSizes.filter(s => s !== "50cm").map(s => ({ value: s, label: s, price: incVatPrices[s] }));
+    
+    const available = new Set<string>();
+    product.node.variants.edges.forEach(v => {
+      v.node.selectedOptions.forEach(opt => {
+        const val = opt.value.toLowerCase();
+        if (val.includes("20cm") || val.includes("20 ")) available.add("20cm");
+        if (val.includes("30cm") || val.includes("30 ")) available.add("30cm");
+        if (val.includes("40cm") || val.includes("40 ")) available.add("40cm");
+        if (val.includes("50cm") || val.includes("50 ")) available.add("50cm");
+      });
+    });
 
-  const colors: { value: ColorVariant; label: string; gradient: string }[] = [
-    { value: "zilver", label: "Zilver", gradient: "bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400" },
-    { value: "zwart", label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" },
-  ];
+    return allSizes
+      .filter(s => available.has(s))
+      .map(s => ({ value: s, label: s, price: incVatPrices[s] }));
+  }, [product]);
+
+  const colors = availableColors;
 
   return (
     <section id="bundels" className="py-20 md:py-32 bg-background-secondary animate-fade-in transition-all duration-500">
@@ -285,7 +326,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         {bundle.sizeLabel}
                       </Badge>
                       <Badge variant="outline" className="text-xs border-border text-muted-foreground">
-                        {selectedColor === "zilver" ? "Zilver" : "Zwart"}
+                        {availableColors.find(c => c.value === selectedColor)?.label || selectedColor}
                       </Badge>
                     </div>
                     <p className={`text-sm font-medium ${isHighlighted ? 'text-primary' : 'text-glow'}`}>{bundle.label}</p>

@@ -23,7 +23,7 @@ export const VariantPicker = ({
     // Helper to parse combined option value like "Silver-20cm TYPE-C"
     const parseOptionValue = (value: string): { color: string; size: string } => {
       // Pattern: "Color-SizeCm TYPE-C" (e.g., "Silver-20cm TYPE-C", "Black-40cm TYPE-C")
-      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)[\s\-]+(\d+)cm/i);
+      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)[\s\-]+(\d+)cm/i);
       if (colorSizeMatch) {
         const colorRaw = colorSizeMatch[1].toLowerCase();
         // Normalize color names to Dutch
@@ -33,7 +33,9 @@ export const VariantPicker = ({
           'zilver': 'Zilver',
           'zwart': 'Zwart',
           'wit': 'Wit',
+          'white': 'Wit',
           'goud': 'Goud',
+          'gold': 'Goud',
         };
         return {
           color: colorMap[colorRaw] || colorSizeMatch[1],
@@ -96,7 +98,7 @@ export const VariantPicker = ({
 
   // Helper to parse combined option value (same as in useMemo)
   const parseOptionValue = (value: string): { color: string; size: string } => {
-    const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|Goud)[\s\-]+(\d+)cm/i);
+    const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)[\s\-]+(\d+)cm/i);
     if (colorSizeMatch) {
       const colorRaw = colorSizeMatch[1].toLowerCase();
       const colorMap: Record<string, string> = {
@@ -105,7 +107,9 @@ export const VariantPicker = ({
         'zilver': 'Zilver',
         'zwart': 'Zwart',
         'wit': 'Wit',
+        'white': 'Wit',
         'goud': 'Goud',
+        'gold': 'Goud',
       };
       return {
         color: colorMap[colorRaw] || colorSizeMatch[1],
@@ -172,7 +176,7 @@ export const VariantPicker = ({
     }
     
     // Try alternative color names
-    const colorAlt: Record<string, string> = { 'Zilver': 'Silver', 'Zwart': 'Black', 'Silver': 'Zilver', 'Black': 'Zwart' };
+    const colorAlt: Record<string, string> = { 'Zilver': 'Silver', 'Zwart': 'Black', 'Silver': 'Zilver', 'Black': 'Zwart', 'Wit': 'White', 'White': 'Wit' };
     if (colorAlt[color]) {
       key = `${size}|${colorAlt[color]}`;
       variant = variantMap.get(key);
