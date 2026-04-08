@@ -310,7 +310,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         {bundle.sizeLabel}
                       </Badge>
                       <Badge variant="outline" className="text-xs border-border text-muted-foreground">
-                        {selectedColor === "zilver" ? "Zilver" : "Zwart"}
+                        {availableColors.find(c => c.value === selectedColor)?.label || selectedColor}
                       </Badge>
                     </div>
                     <p className={`text-sm font-medium ${isHighlighted ? 'text-primary' : 'text-glow'}`}>{bundle.label}</p>
