@@ -338,7 +338,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const bundles = productType === "arc"
     ? createArcBundleData(selectedWattage, unitPrice)
     : productType === "flex"
-      ? createFlexBundleData(currentColorLabel, unitPrice)
+      ? createFlexBundleData(currentColorLabel, unitPrice, product?.node.title || "SenseGlow Flex™")
       : createBundleData(selectedSize);
 
   // ─── Add to cart ─────────────────────────────────────
