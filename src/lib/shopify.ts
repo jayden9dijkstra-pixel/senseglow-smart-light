@@ -78,8 +78,8 @@ export interface ShopifyProduct {
 }
 
 const STOREFRONT_QUERY = `
-  query GetProducts($first: Int!) {
-    products(first: $first) {
+  query GetProducts($first: Int!, $query: String) {
+    products(first: $first, query: $query) {
       edges {
         node {
           id
@@ -236,32 +236,77 @@ export async function storefrontApiRequest(
 
 export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[]> {
   try {
-    // Validate input
     const validatedLimit = limitSchema.parse(limit);
     
-    const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: validatedLimit });
+    // Only fetch SenseGlow products
+    const data = await storefrontApiRequest(STOREFRONT_QUERY, { 
+      first: validatedLimit,
+      query: "title:SenseGlow*"
+    });
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
-    const products = responseData?.data?.products?.edges || [];
-    
-    // Filter to only return SenseGlow products (the active product line)
-    // This ensures the site functions as a single-product store
-    const senseGlowProducts = products.filter(p => 
-      p.node.title.toLowerCase().includes("senseglow")
-    );
-    
-    if (senseGlowProducts.length > 0) {
-      // Return the SenseGlow product with most variants
-      return senseGlowProducts.sort((a, b) => 
-        b.node.variants.edges.length - a.node.variants.edges.length
-      ).slice(0, 1);
-    }
-    
-    // Fallback: return product with most variants
-    return products.sort((a, b) => 
-      b.node.variants.edges.length - a.node.variants.edges.length
-    ).slice(0, 1);
+    return responseData?.data?.products?.edges || [];
   } catch {
     return [];
+  }
+}
+
+/**
+ * Fetch a single product by its Shopify handle.
+ */
+export async function fetchProductByHandle(handle: string): Promise<ShopifyProduct | null> {
+  try {
+    const query = `
+      query GetProductByHandle($handle: String!) {
+        productByHandle(handle: $handle) {
+          id
+          title
+          description
+          handle
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          images(first: 20) {
+            edges {
+              node {
+                url
+                altText
+              }
+            }
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+          options {
+            name
+            values
+          }
+        }
+      }
+    `;
+    const data = await storefrontApiRequest(query, { handle });
+    const responseData = data as { data?: { productByHandle?: ShopifyProduct["node"] } } | undefined;
+    const productNode = responseData?.data?.productByHandle;
+    if (!productNode) return null;
+    return { node: productNode };
+  } catch {
+    return null;
   }
 }
 

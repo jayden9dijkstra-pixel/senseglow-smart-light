@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,8 +13,6 @@ import {
 export const MobileMenu = () => {
   const [open, setOpen] = useState(false);
 
-  // Single product handle - the only active SenseGlow product
-  const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
   
   const menuItems = [
     { label: "HOME", href: "/" },
