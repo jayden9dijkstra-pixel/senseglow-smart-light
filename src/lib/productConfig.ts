@@ -11,8 +11,9 @@
 
 export const VAT_RATE = 0.21;
 
-// The only active product handle (SenseGlow™ Ambient Motion Bar)
-export const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
+// Active product handles
+export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
+export const WAVE_PRODUCT_HANDLE = "motion-sensor-light-led-lamp-wireless-ultra-thin-usb-led-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting-night-light2026-03-08-17-30-58";
 
 // Available sizes
 export type SizeVariant = "20cm" | "30cm" | "40cm";
