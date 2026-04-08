@@ -176,7 +176,7 @@ export const VariantPicker = ({
     }
     
     // Try alternative color names
-    const colorAlt: Record<string, string> = { 'Zilver': 'Silver', 'Zwart': 'Black', 'Silver': 'Zilver', 'Black': 'Zwart' };
+    const colorAlt: Record<string, string> = { 'Zilver': 'Silver', 'Zwart': 'Black', 'Silver': 'Zilver', 'Black': 'Zwart', 'Wit': 'White', 'White': 'Wit' };
     if (colorAlt[color]) {
       key = `${size}|${colorAlt[color]}`;
       variant = variantMap.get(key);
