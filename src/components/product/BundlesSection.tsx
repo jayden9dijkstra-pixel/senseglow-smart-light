@@ -197,11 +197,26 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     });
   };
 
-  const sizes: { value: SizeVariant; label: string; price: string }[] = [
-    { value: "20cm", label: "20cm", price: incVatPrices["20cm"] },
-    { value: "30cm", label: "30cm", price: incVatPrices["30cm"] },
-    { value: "40cm", label: "40cm", price: incVatPrices["40cm"] },
-  ];
+  // Dynamically detect available sizes from product variants
+  const sizes = useMemo(() => {
+    const allSizes: SizeVariant[] = ["20cm", "30cm", "40cm", "50cm"];
+    if (!product) return allSizes.filter(s => s !== "50cm").map(s => ({ value: s, label: s, price: incVatPrices[s] }));
+    
+    const available = new Set<string>();
+    product.node.variants.edges.forEach(v => {
+      v.node.selectedOptions.forEach(opt => {
+        const val = opt.value.toLowerCase();
+        if (val.includes("20cm") || val.includes("20 ")) available.add("20cm");
+        if (val.includes("30cm") || val.includes("30 ")) available.add("30cm");
+        if (val.includes("40cm") || val.includes("40 ")) available.add("40cm");
+        if (val.includes("50cm") || val.includes("50 ")) available.add("50cm");
+      });
+    });
+
+    return allSizes
+      .filter(s => available.has(s))
+      .map(s => ({ value: s, label: s, price: incVatPrices[s] }));
+  }, [product]);
 
   const colors = availableColors;
 
