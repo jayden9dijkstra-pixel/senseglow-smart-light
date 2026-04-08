@@ -64,14 +64,15 @@ export function getSizeFromVariant(
       if (value.includes("20")) return "20cm";
       if (value.includes("30")) return "30cm";
       if (value.includes("40")) return "40cm";
+      if (value.includes("50")) return "50cm";
     }
-    // Handle combined values like "Silver-20cm TYPE-C"
     const match = value.match(/(\d+)cm/);
     if (match) {
       const num = match[1];
       if (num === "20") return "20cm";
       if (num === "30") return "30cm";
       if (num === "40") return "40cm";
+      if (num === "50") return "50cm";
     }
   }
   return null;
