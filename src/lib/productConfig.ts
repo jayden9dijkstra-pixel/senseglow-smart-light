@@ -17,6 +17,7 @@ export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-co
 export const WAVE_PRODUCT_HANDLE = "motion-sensor-light-led-lamp-wireless-ultra-thin-usb-led-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting-night-light2026-03-08-17-30-58";
 export const ARC_PRODUCT_HANDLE = "aluminium-led-wall-lamp-ip65-waterproof-8w-12w-outdoor-garden-lighting2026-02-20-02-48-52";
 export const FLEX_PRODUCT_HANDLE = "night-light-led-usb-rechargeable-lamp-hanging-magnetic-desk-lamp-stepless-dimming-cabinet-closet-wardrobe-table-lamp2026-03-08-17-16-36";
+export const LANTERN_PRODUCT_HANDLE = "solar-led-wall-lamp-with-motion-sensor-waterproof-tungsten-wire-bulb-for-outdoor-garden-decoration2026-03-08-17-16-37";
 
 /** Whitelist of product handles that are enabled on the website. */
 export const ENABLED_PRODUCT_HANDLES: string[] = [
@@ -24,6 +25,7 @@ export const ENABLED_PRODUCT_HANDLES: string[] = [
   WAVE_PRODUCT_HANDLE,
   ARC_PRODUCT_HANDLE,
   FLEX_PRODUCT_HANDLE,
+  LANTERN_PRODUCT_HANDLE,
 ];
 
 // Available sizes

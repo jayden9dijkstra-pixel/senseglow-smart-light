@@ -12,7 +12,7 @@ import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
-import { WAVE_PRODUCT_HANDLE, ARC_PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { WAVE_PRODUCT_HANDLE, ARC_PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE } from "@/lib/productConfig";
 import {
   WAVE_HERO_CONTENT, WAVE_OUTCOMES, WAVE_OUTCOME_HEADLINE,
   WAVE_PROBLEM_SOLUTION, WAVE_USE_CASES, WAVE_TECH_BENEFITS,
@@ -28,6 +28,11 @@ import {
   FLEX_PROBLEM_SOLUTION, FLEX_USE_CASES, FLEX_TECH_BENEFITS,
   FLEX_FAQS, FLEX_BUNDLE_HEADLINE, FLEX_FINAL_CTA,
 } from "@/lib/flexProductConfig";
+import {
+  LANTERN_HERO_CONTENT, LANTERN_OUTCOMES, LANTERN_OUTCOME_HEADLINE,
+  LANTERN_PROBLEM_SOLUTION, LANTERN_USE_CASES, LANTERN_TECH_BENEFITS,
+  LANTERN_FAQS, LANTERN_BUNDLE_HEADLINE, LANTERN_FINAL_CTA,
+} from "@/lib/lanternProductConfig";
 
 // Content lookup per handle
 const CONTENT_MAP: Record<string, {
@@ -89,6 +94,21 @@ const CONTENT_MAP: Record<string, {
     faqs: FLEX_FAQS,
     bundleHeadline: FLEX_BUNDLE_HEADLINE,
     finalCta: FLEX_FINAL_CTA,
+  },
+  [LANTERN_PRODUCT_HANDLE]: {
+    hero: LANTERN_HERO_CONTENT,
+    outcomeHeadline: LANTERN_OUTCOME_HEADLINE,
+    outcomes: LANTERN_OUTCOMES,
+    problemSolution: LANTERN_PROBLEM_SOLUTION,
+    useCaseHeadline: "Overal buiten inzetbaar",
+    useCaseSubtitle: "Ontdek waar SenseGlow Lantern™ het verschil maakt",
+    useCases: LANTERN_USE_CASES,
+    techHeadline: "Slim & duurzaam ontworpen",
+    techBenefits: LANTERN_TECH_BENEFITS,
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Lantern™",
+    faqs: LANTERN_FAQS,
+    bundleHeadline: LANTERN_BUNDLE_HEADLINE,
+    finalCta: LANTERN_FINAL_CTA,
   },
 };
 

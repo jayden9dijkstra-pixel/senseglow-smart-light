@@ -179,13 +179,12 @@ export const FLEX_FINAL_CTA = {
 
 // ─── Variant parsing helpers ───────────────────────────
 
-export type FlexColor = "white" | "pink" | "green";
+export type FlexColor = "white" | "pink" | "green" | "black";
 export type FlexType = "standard" | "remote";
 
 /**
- * Parse a Flex variant's selectedOptions.
- * "White Remote Control" → { bodyColor: "white", type: "remote" }
- * "Pink" → { bodyColor: "pink", type: "standard" }
+ * Parse an "Emitting Color" variant's selectedOptions.
+ * Works for Flex ("White Remote Control", "Pink") and Lantern ("1PCS-White Wall Ligh", "1PCS-Black Wall Ligh")
  */
 export function parseFlexVariant(
   selectedOptions: Array<{ name: string; value: string }>
@@ -200,7 +199,8 @@ export function parseFlexVariant(
       type = "remote";
     }
 
-    if (val.includes("white")) bodyColor = "white";
+    if (val.includes("black")) bodyColor = "black";
+    else if (val.includes("white")) bodyColor = "white";
     else if (val.includes("pink")) bodyColor = "pink";
     else if (val.includes("green")) bodyColor = "green";
   }
