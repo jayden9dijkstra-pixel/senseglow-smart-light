@@ -94,37 +94,37 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
   ];
 };
 
-// ─── Flex bundle data (color-based, dynamic pricing) ───
+// ─── Flex/Lantern bundle data (color-based, dynamic pricing) ───
 
-const createFlexBundleData = (colorLabel: string, unitPrice: number) => {
+const createFlexBundleData = (colorLabel: string, unitPrice: number, productName: string = "SenseGlow Flex™") => {
   const p = computeFlexBundlePricing(unitPrice);
   return [
     {
       name: "Duo Set", quantity: 2 as const, quantityLabel: "2 stuks",
-      sizeLabel: colorLabel, label: "Bureau + bedside",
-      subtekst: "Twee plekken, één stijl",
+      sizeLabel: colorLabel, label: productName.includes("Lantern") ? "Twee kanten van je tuin" : "Bureau + bedside",
+      subtekst: productName.includes("Lantern") ? "Sfeer aan beide zijden" : "Twee plekken, één stijl",
       price: p.two.price, originalPrice: p.two.originalPrice,
       discount: p.two.discount, save: p.two.save,
       badge: null as string | null, popular: false,
-      features: [`2x SenseGlow Flex™`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
+      features: [`2x ${productName}`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
     },
     {
       name: "Meest gekozen", quantity: 3 as const, quantityLabel: "3 stuks",
-      sizeLabel: colorLabel, label: "Bureau + kast + bed",
-      subtekst: "Licht precies waar je het nodig hebt",
+      sizeLabel: colorLabel, label: productName.includes("Lantern") ? "Langs het tuinpad" : "Bureau + kast + bed",
+      subtekst: productName.includes("Lantern") ? "Warm licht langs het hele pad" : "Licht precies waar je het nodig hebt",
       price: p.three.price, originalPrice: p.three.originalPrice,
       discount: p.three.discount, save: p.three.save,
       badge: "⭐ Meest gekozen" as string | null, popular: true,
-      features: [`3x SenseGlow Flex™`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x ${productName}`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
     },
     {
       name: "Complete Set", quantity: 4 as const, quantityLabel: "4 stuks",
-      sizeLabel: colorLabel, label: "Heel je huis verlicht",
-      subtekst: "Maximale flexibiliteit, maximale besparing",
+      sizeLabel: colorLabel, label: productName.includes("Lantern") ? "Rondom je woning" : "Heel je huis verlicht",
+      subtekst: productName.includes("Lantern") ? "Volledig verlichte buitenruimte" : "Maximale flexibiliteit, maximale besparing",
       price: p.four.price, originalPrice: p.four.originalPrice,
       discount: p.four.discount, save: p.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x SenseGlow Flex™`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x ${productName}`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
