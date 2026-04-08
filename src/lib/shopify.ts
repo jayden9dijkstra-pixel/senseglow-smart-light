@@ -238,13 +238,16 @@ export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[
   try {
     const validatedLimit = limitSchema.parse(limit);
     
-    // Only fetch SenseGlow products
+    // Fetch all SenseGlow products from Shopify
     const data = await storefrontApiRequest(STOREFRONT_QUERY, { 
       first: validatedLimit,
       query: "title:SenseGlow*"
     });
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
-    return responseData?.data?.products?.edges || [];
+    const allProducts = responseData?.data?.products?.edges || [];
+    
+    // Only return products whose handle is explicitly whitelisted
+    return allProducts.filter(p => ENABLED_PRODUCT_HANDLES.includes(p.node.handle));
   } catch {
     return [];
   }
