@@ -1,4 +1,5 @@
 import { Menu } from "lucide-react";
+import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,8 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const DesktopMenu = () => {
-  // Single product handle - the only active SenseGlow product
-  const PRODUCT_HANDLE = "senseglow-ambient-motion-bar-1";
   
   const menuItems = [
     { label: "HOME", href: "/" },
