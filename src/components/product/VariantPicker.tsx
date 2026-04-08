@@ -61,7 +61,8 @@ function parseDimensions(
         d.variantType = "Standaard";
       }
       // Detect color
-      if (val.includes("white")) d.color = "Wit";
+      if (val.includes("black")) d.color = "Zwart";
+      else if (val.includes("white")) d.color = "Wit";
       else if (val.includes("pink")) d.color = "Roze";
       else if (val.includes("green")) d.color = "Groen";
     }
