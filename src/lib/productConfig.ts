@@ -11,9 +11,16 @@
 
 export const VAT_RATE = 0.21;
 
-// Active product handles
+// Active product handles — only products listed here will appear on the site.
+// To add a new product: add its Shopify handle to this array AND create its config/page.
 export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
 export const WAVE_PRODUCT_HANDLE = "motion-sensor-light-led-lamp-wireless-ultra-thin-usb-led-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting-night-light2026-03-08-17-30-58";
+
+/** Whitelist of product handles that are enabled on the website. */
+export const ENABLED_PRODUCT_HANDLES: string[] = [
+  PRODUCT_HANDLE,
+  WAVE_PRODUCT_HANDLE,
+];
 
 // Available sizes
 export type SizeVariant = "20cm" | "30cm" | "40cm" | "50cm";

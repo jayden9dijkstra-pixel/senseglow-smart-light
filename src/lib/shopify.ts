@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { z } from "zod";
-import { bundlePricing, incVatPrices, SizeVariant } from "@/lib/productConfig";
+import { bundlePricing, incVatPrices, SizeVariant, ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
