@@ -15,11 +15,13 @@ export const VAT_RATE = 0.21;
 // To add a new product: add its Shopify handle to this array AND create its config/page.
 export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
 export const WAVE_PRODUCT_HANDLE = "motion-sensor-light-led-lamp-wireless-ultra-thin-usb-led-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting-night-light2026-03-08-17-30-58";
+export const ARC_PRODUCT_HANDLE = "aluminium-led-wall-lamp-ip65-waterproof-8w-12w-outdoor-garden-lighting2026-02-20-02-48-52";
 
 /** Whitelist of product handles that are enabled on the website. */
 export const ENABLED_PRODUCT_HANDLES: string[] = [
   PRODUCT_HANDLE,
   WAVE_PRODUCT_HANDLE,
+  ARC_PRODUCT_HANDLE,
 ];
 
 // Available sizes
