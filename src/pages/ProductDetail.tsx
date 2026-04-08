@@ -12,7 +12,7 @@ import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
-import { WAVE_PRODUCT_HANDLE, ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { WAVE_PRODUCT_HANDLE, ARC_PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE } from "@/lib/productConfig";
 import {
   WAVE_HERO_CONTENT, WAVE_OUTCOMES, WAVE_OUTCOME_HEADLINE,
   WAVE_PROBLEM_SOLUTION, WAVE_USE_CASES, WAVE_TECH_BENEFITS,
@@ -23,6 +23,74 @@ import {
   ARC_PROBLEM_SOLUTION, ARC_USE_CASES, ARC_TECH_BENEFITS,
   ARC_FAQS, ARC_BUNDLE_HEADLINE, ARC_FINAL_CTA,
 } from "@/lib/arcProductConfig";
+import {
+  FLEX_HERO_CONTENT, FLEX_OUTCOMES, FLEX_OUTCOME_HEADLINE,
+  FLEX_PROBLEM_SOLUTION, FLEX_USE_CASES, FLEX_TECH_BENEFITS,
+  FLEX_FAQS, FLEX_BUNDLE_HEADLINE, FLEX_FINAL_CTA,
+} from "@/lib/flexProductConfig";
+
+// Content lookup per handle
+const CONTENT_MAP: Record<string, {
+  hero: typeof WAVE_HERO_CONTENT;
+  outcomeHeadline: string;
+  outcomes: typeof WAVE_OUTCOMES;
+  problemSolution: typeof WAVE_PROBLEM_SOLUTION;
+  useCaseHeadline: string;
+  useCaseSubtitle: string;
+  useCases: typeof WAVE_USE_CASES;
+  techHeadline: string;
+  techBenefits: typeof WAVE_TECH_BENEFITS;
+  faqSubtitle: string;
+  faqs: typeof WAVE_FAQS;
+  bundleHeadline: string;
+  finalCta: typeof WAVE_FINAL_CTA;
+}> = {
+  [WAVE_PRODUCT_HANDLE]: {
+    hero: WAVE_HERO_CONTENT,
+    outcomeHeadline: WAVE_OUTCOME_HEADLINE,
+    outcomes: WAVE_OUTCOMES,
+    problemSolution: WAVE_PROBLEM_SOLUTION,
+    useCaseHeadline: "Perfect voor elke ruimte",
+    useCaseSubtitle: "Ontdek waar SenseGlow Wave™ het verschil maakt",
+    useCases: WAVE_USE_CASES,
+    techHeadline: "Technologie die indruk maakt",
+    techBenefits: WAVE_TECH_BENEFITS,
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Wave™",
+    faqs: WAVE_FAQS,
+    bundleHeadline: WAVE_BUNDLE_HEADLINE,
+    finalCta: WAVE_FINAL_CTA,
+  },
+  [ARC_PRODUCT_HANDLE]: {
+    hero: ARC_HERO_CONTENT,
+    outcomeHeadline: ARC_OUTCOME_HEADLINE,
+    outcomes: ARC_OUTCOMES,
+    problemSolution: ARC_PROBLEM_SOLUTION,
+    useCaseHeadline: "Perfect voor binnen & buiten",
+    useCaseSubtitle: "Ontdek waar SenseGlow Arc™ het verschil maakt",
+    useCases: ARC_USE_CASES,
+    techHeadline: "Gebouwd voor binnen & buiten",
+    techBenefits: ARC_TECH_BENEFITS,
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Arc™",
+    faqs: ARC_FAQS,
+    bundleHeadline: ARC_BUNDLE_HEADLINE,
+    finalCta: ARC_FINAL_CTA,
+  },
+  [FLEX_PRODUCT_HANDLE]: {
+    hero: FLEX_HERO_CONTENT,
+    outcomeHeadline: FLEX_OUTCOME_HEADLINE,
+    outcomes: FLEX_OUTCOMES,
+    problemSolution: FLEX_PROBLEM_SOLUTION,
+    useCaseHeadline: "Overal inzetbaar",
+    useCaseSubtitle: "Ontdek waar SenseGlow Flex™ het verschil maakt",
+    useCases: FLEX_USE_CASES,
+    techHeadline: "Slim ontworpen, tot in detail",
+    techBenefits: FLEX_TECH_BENEFITS,
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Flex™",
+    faqs: FLEX_FAQS,
+    bundleHeadline: FLEX_BUNDLE_HEADLINE,
+    finalCta: FLEX_FINAL_CTA,
+  },
+};
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -34,8 +102,7 @@ const ProductDetail = () => {
     ShopifyProduct["node"]["variants"]["edges"][0]["node"] | null
   >(null);
 
-  const isWave = handle === WAVE_PRODUCT_HANDLE;
-  const isArc = handle === ARC_PRODUCT_HANDLE;
+  const content = handle ? CONTENT_MAP[handle] : undefined;
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -44,31 +111,23 @@ const ProductDetail = () => {
         const found = await fetchProductByHandle(handle);
         setProduct(found);
         if (found) {
-          if (isArc) {
-            // Default to 6W Black Warm for Arc
-            const defaultVariant = found.node.variants.edges.find((v) =>
-              v.node.selectedOptions.some((opt) =>
-                opt.value.includes("6W") && opt.value.includes("Black")
-              ) &&
-              v.node.selectedOptions.some((opt) =>
-                opt.value.toLowerCase().includes("warm")
-              )
+          // Default variant selection logic per product type
+          if (handle === ARC_PRODUCT_HANDLE) {
+            const def = found.node.variants.edges.find((v) =>
+              v.node.selectedOptions.some((o) => o.value.includes("6W") && o.value.includes("Black")) &&
+              v.node.selectedOptions.some((o) => o.value.toLowerCase().includes("warm"))
             );
-            setSelectedVariant(defaultVariant?.node || found.node.variants.edges[0]?.node || null);
+            setSelectedVariant(def?.node || found.node.variants.edges[0]?.node || null);
           } else {
-            // Default to 30cm variant
-            const variant30cm = found.node.variants.edges.find((v) =>
-              v.node.selectedOptions.some((opt) =>
-                opt.value.includes("30") || opt.value.toLowerCase().includes("30cm")
-              )
+            // Default to 30cm or first variant
+            const v30 = found.node.variants.edges.find((v) =>
+              v.node.selectedOptions.some((o) => o.value.includes("30"))
             );
-            setSelectedVariant(variant30cm?.node || found.node.variants.edges[0]?.node || null);
+            setSelectedVariant(v30?.node || found.node.variants.edges[0]?.node || null);
           }
         }
         setLoading(false);
-      } catch {
-        setLoading(false);
-      }
+      } catch { setLoading(false); }
     };
     loadProduct();
   }, [handle]);
@@ -96,28 +155,13 @@ const ProductDetail = () => {
     );
   }
 
-  // Resolve content per product
-  const heroContent = isWave ? WAVE_HERO_CONTENT : isArc ? ARC_HERO_CONTENT : undefined;
-  const outcomeHeadline = isWave ? WAVE_OUTCOME_HEADLINE : isArc ? ARC_OUTCOME_HEADLINE : undefined;
-  const outcomes = isWave ? WAVE_OUTCOMES : isArc ? ARC_OUTCOMES : undefined;
-  const problemSolution = isWave ? WAVE_PROBLEM_SOLUTION : isArc ? ARC_PROBLEM_SOLUTION : undefined;
-  const useCaseHeadline = isWave ? "Perfect voor elke ruimte" : isArc ? "Perfect voor binnen & buiten" : undefined;
-  const useCaseSubtitle = isWave ? "Ontdek waar SenseGlow Wave™ het verschil maakt" : isArc ? "Ontdek waar SenseGlow Arc™ het verschil maakt" : undefined;
-  const useCases = isWave ? WAVE_USE_CASES : isArc ? ARC_USE_CASES : undefined;
-  const techHeadline = isWave ? "Technologie die indruk maakt" : isArc ? "Gebouwd voor binnen & buiten" : undefined;
-  const techBenefits = isWave ? WAVE_TECH_BENEFITS : isArc ? ARC_TECH_BENEFITS : undefined;
-  const faqSubtitle = isWave ? "Alles wat je moet weten over SenseGlow Wave™" : isArc ? "Alles wat je moet weten over SenseGlow Arc™" : undefined;
-  const faqs = isWave ? WAVE_FAQS : isArc ? ARC_FAQS : undefined;
-  const bundleHeadline = isWave ? WAVE_BUNDLE_HEADLINE : isArc ? ARC_BUNDLE_HEADLINE : undefined;
-  const finalCta = isWave ? WAVE_FINAL_CTA : isArc ? ARC_FINAL_CTA : undefined;
-
   return (
     <PageLayout>
       <ProductHeroSection
         product={product}
         selectedVariant={selectedVariant}
         onVariantChange={setSelectedVariant}
-        heroContent={heroContent}
+        heroContent={content?.hero}
       />
 
       <div className="relative h-12 md:h-20">
@@ -129,7 +173,7 @@ const ProductDetail = () => {
         <BundlesSection
           product={product}
           selectedVariant={selectedVariant || undefined}
-          headlineOverride={bundleHeadline}
+          headlineOverride={content?.bundleHeadline}
         />
       </div>
 
@@ -141,7 +185,7 @@ const ProductDetail = () => {
       <ProductReviewsSection />
       <div className="border-t border-foreground/8" />
 
-      <OutcomeSection headline={outcomeHeadline} outcomes={outcomes} />
+      <OutcomeSection headline={content?.outcomeHeadline} outcomes={content?.outcomes} />
 
       <div className="relative h-12 md:h-20">
         <div className="absolute inset-x-0 top-0 h-full bg-background" />
@@ -150,10 +194,10 @@ const ProductDetail = () => {
 
       <div className="bg-background-secondary">
         <ProblemSolutionProductSection
-          headline={problemSolution?.headline}
-          problems={problemSolution?.problems}
-          solutionTitle={problemSolution?.solutionTitle}
-          solutionText={problemSolution?.solutionText}
+          headline={content?.problemSolution?.headline}
+          problems={content?.problemSolution?.problems}
+          solutionTitle={content?.problemSolution?.solutionTitle}
+          solutionText={content?.problemSolution?.solutionText}
         />
       </div>
 
@@ -162,10 +206,10 @@ const ProductDetail = () => {
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
       </div>
 
-      <UseCaseSection headline={useCaseHeadline} subtitle={useCaseSubtitle} useCases={useCases} />
+      <UseCaseSection headline={content?.useCaseHeadline} subtitle={content?.useCaseSubtitle} useCases={content?.useCases} />
       <div className="border-t border-foreground/8" />
 
-      <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
+      <TechBenefitsSection headline={content?.techHeadline} benefits={content?.techBenefits} />
 
       <div className="relative h-12 md:h-20">
         <div className="absolute inset-x-0 top-0 h-full bg-background" />
@@ -173,7 +217,7 @@ const ProductDetail = () => {
       </div>
 
       <div className="bg-background-secondary">
-        <ProductFAQSection subtitle={faqSubtitle} faqs={faqs} />
+        <ProductFAQSection subtitle={content?.faqSubtitle} faqs={content?.faqs} />
       </div>
 
       <div className="relative h-12 md:h-20">
@@ -182,9 +226,9 @@ const ProductDetail = () => {
       </div>
 
       <FinalProductCTA
-        headline={finalCta?.headline}
-        subtext={finalCta?.subtext}
-        ctaLabel={finalCta?.cta}
+        headline={content?.finalCta?.headline}
+        subtext={content?.finalCta?.subtext}
+        ctaLabel={content?.finalCta?.cta}
       />
     </PageLayout>
   );

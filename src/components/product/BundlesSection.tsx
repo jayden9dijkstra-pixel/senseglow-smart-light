@@ -8,16 +8,18 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
 import { SizeVariant, bundlePricing, bundleNames, incVatPrices } from "@/lib/productConfig";
 import { computeArcBundlePricing, parseArcVariant } from "@/lib/arcProductConfig";
+import { parseFlexVariant, computeFlexBundlePricing } from "@/lib/flexProductConfig";
 
 type ColorVariant = string;
 
 // ─── Helpers ───────────────────────────────────────────
 
-type ProductType = "standard" | "arc";
+type ProductType = "standard" | "arc" | "flex";
 
 function detectProductType(product: ShopifyProduct): ProductType {
   const opts = product.node.variants.edges[0]?.node.selectedOptions || [];
   if (opts.some((o) => o.name.toLowerCase() === "uitstraalkleur")) return "arc";
+  if (opts.some((o) => o.name.toLowerCase().includes("emitting"))) return "flex";
   return "standard";
 }
 
@@ -92,6 +94,41 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
   ];
 };
 
+// ─── Flex bundle data (color-based, dynamic pricing) ───
+
+const createFlexBundleData = (colorLabel: string, unitPrice: number) => {
+  const p = computeFlexBundlePricing(unitPrice);
+  return [
+    {
+      name: "Duo Set", quantity: 2 as const, quantityLabel: "2 stuks",
+      sizeLabel: colorLabel, label: "Bureau + bedside",
+      subtekst: "Twee plekken, één stijl",
+      price: p.two.price, originalPrice: p.two.originalPrice,
+      discount: p.two.discount, save: p.two.save,
+      badge: null as string | null, popular: false,
+      features: [`2x SenseGlow Flex™`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
+    },
+    {
+      name: "Meest gekozen", quantity: 3 as const, quantityLabel: "3 stuks",
+      sizeLabel: colorLabel, label: "Bureau + kast + bed",
+      subtekst: "Licht precies waar je het nodig hebt",
+      price: p.three.price, originalPrice: p.three.originalPrice,
+      discount: p.three.discount, save: p.three.save,
+      badge: "⭐ Meest gekozen" as string | null, popular: true,
+      features: [`3x SenseGlow Flex™`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+    },
+    {
+      name: "Complete Set", quantity: 4 as const, quantityLabel: "4 stuks",
+      sizeLabel: colorLabel, label: "Heel je huis verlicht",
+      subtekst: "Maximale flexibiliteit, maximale besparing",
+      price: p.four.price, originalPrice: p.four.originalPrice,
+      discount: p.four.discount, save: p.four.save,
+      badge: "Maximaal voordeel" as string | null,
+      features: [`4x SenseGlow Flex™`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+    },
+  ];
+};
+
 // ─── Component ─────────────────────────────────────────
 
 interface BundlesSectionProps {
@@ -111,24 +148,32 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
 
   const productType = useMemo(() => product ? detectProductType(product) : "standard", [product]);
 
-  // ─── Standard state ──────────────────────────────────
+  // ─── Standard state
   const [selectedSize, setSelectedSize] = useState<SizeVariant>("20cm");
   const [selectedColor, setSelectedColor] = useState<ColorVariant>("");
 
-  // ─── Arc state ───────────────────────────────────────
+  // ─── Arc state
   const [selectedWattage, setSelectedWattage] = useState("6W");
   const [selectedBodyColor, setSelectedBodyColor] = useState("");
   const [selectedLightColor, setSelectedLightColor] = useState("");
 
-  // ─── Detect available options from product ───────────
+  // ─── Flex state
+  const [selectedFlexColor, setSelectedFlexColor] = useState("");
+  const [selectedFlexType, setSelectedFlexType] = useState("");
+
+  // ─── Detect available options ────────────────────────
 
   const availableColors = useMemo(() => {
     if (!product) return [{ value: "zwart", label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" }];
+
     const colorMap: Record<string, { label: string; gradient: string }> = {
       silver: { label: "Zilver", gradient: "bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400" },
       black: { label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" },
       white: { label: "Wit", gradient: "bg-gradient-to-br from-gray-100 via-white to-gray-200" },
+      pink: { label: "Roze", gradient: "bg-gradient-to-br from-pink-300 via-pink-200 to-pink-400" },
+      green: { label: "Groen", gradient: "bg-gradient-to-br from-green-300 via-green-200 to-green-400" },
     };
+
     const found = new Set<string>();
 
     if (productType === "arc") {
@@ -140,6 +185,11 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
             if (val.startsWith("white")) found.add("white");
           }
         });
+      });
+    } else if (productType === "flex") {
+      product.node.variants.edges.forEach((v) => {
+        const parsed = parseFlexVariant(v.node.selectedOptions);
+        found.add(parsed.bodyColor);
       });
     } else {
       product.node.variants.edges.forEach((v) => {
@@ -159,26 +209,34 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     }));
   }, [product, productType]);
 
-  // Arc-specific: available wattages and light colors
+  // Arc options
   const arcOptions = useMemo(() => {
     if (productType !== "arc" || !product) return { wattages: [] as string[], lightColors: [] as string[] };
     const wSet = new Set<string>();
     const lcSet = new Set<string>();
-
     product.node.variants.edges.forEach((v) => {
       const parsed = parseArcVariant(v.node.selectedOptions);
       if (parsed.wattage) wSet.add(parsed.wattage);
       if (parsed.lightColor) lcSet.add(parsed.lightColor === "warm" ? "Warm licht" : "Koud licht");
     });
-
-    const sorted = Array.from(wSet).sort((a, b) => parseInt(a) - parseInt(b));
-    return { wattages: sorted, lightColors: Array.from(lcSet) };
+    return { wattages: Array.from(wSet).sort((a, b) => parseInt(a) - parseInt(b)), lightColors: Array.from(lcSet) };
   }, [product, productType]);
 
-  // Standard: available sizes
+  // Flex options
+  const flexTypes = useMemo(() => {
+    if (productType !== "flex" || !product) return [] as string[];
+    const types = new Set<string>();
+    product.node.variants.edges.forEach((v) => {
+      const parsed = parseFlexVariant(v.node.selectedOptions);
+      types.add(parsed.type === "remote" ? "Met afstandsbediening" : "Standaard");
+    });
+    return Array.from(types);
+  }, [product, productType]);
+
+  // Standard sizes
   const sizes = useMemo(() => {
     const allSizes: SizeVariant[] = ["20cm", "30cm", "40cm", "50cm"];
-    if (!product || productType === "arc") return allSizes.filter((s) => s !== "50cm").map((s) => ({ value: s, label: s, price: incVatPrices[s] }));
+    if (!product || productType !== "standard") return allSizes.filter((s) => s !== "50cm").map((s) => ({ value: s, label: s, price: incVatPrices[s] }));
     const available = new Set<string>();
     product.node.variants.edges.forEach((v) => {
       v.node.selectedOptions.forEach((opt) => {
@@ -202,6 +260,10 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
       if (parsed.wattage) setSelectedWattage(parsed.wattage);
       if (parsed.bodyColor) setSelectedBodyColor(parsed.bodyColor.toLowerCase());
       setSelectedLightColor(parsed.lightColor === "warm" ? "Warm licht" : "Koud licht");
+    } else if (productType === "flex") {
+      const parsed = parseFlexVariant(selectedVariant.selectedOptions);
+      setSelectedFlexColor(parsed.bodyColor);
+      setSelectedFlexType(parsed.type === "remote" ? "Met afstandsbediening" : "Standaard");
     } else {
       for (const opt of selectedVariant.selectedOptions) {
         const val = opt.value.toLowerCase();
@@ -216,7 +278,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     }
   }, [selectedVariant, productType]);
 
-  // ─── Find variant for selection ──────────────────────
+  // ─── Find variant ────────────────────────────────────
 
   const findVariant = () => {
     if (!product) return selectedVariant;
@@ -224,12 +286,20 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     if (productType === "arc") {
       return product.node.variants.edges.find((v) => {
         const parsed = parseArcVariant(v.node.selectedOptions);
-        const matchW = parsed.wattage === selectedWattage;
-        const matchC = parsed.bodyColor.toLowerCase() === selectedBodyColor;
-        const matchL =
-          (selectedLightColor === "Warm licht" && parsed.lightColor === "warm") ||
-          (selectedLightColor === "Koud licht" && parsed.lightColor === "cold");
-        return matchW && matchC && matchL;
+        return parsed.wattage === selectedWattage &&
+          parsed.bodyColor.toLowerCase() === selectedBodyColor &&
+          ((selectedLightColor === "Warm licht" && parsed.lightColor === "warm") ||
+           (selectedLightColor === "Koud licht" && parsed.lightColor === "cold"));
+      })?.node || selectedVariant;
+    }
+
+    if (productType === "flex") {
+      return product.node.variants.edges.find((v) => {
+        const parsed = parseFlexVariant(v.node.selectedOptions);
+        const colorMatch = parsed.bodyColor === selectedFlexColor;
+        const typeMatch = (selectedFlexType === "Met afstandsbediening" && parsed.type === "remote") ||
+                          (selectedFlexType === "Standaard" && parsed.type === "standard");
+        return colorMatch && typeMatch;
       })?.node || selectedVariant;
     }
 
@@ -245,19 +315,31 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   // ─── Bundle data ─────────────────────────────────────
 
   const unitPrice = useMemo(() => {
-    if (productType === "arc" && product) {
+    if (!product) return 100;
+    if (productType === "arc") {
       const v = product.node.variants.edges.find((v) => {
         const parsed = parseArcVariant(v.node.selectedOptions);
         return parsed.wattage === selectedWattage;
       });
       return v ? parseFloat(v.node.price.amount) : 100;
     }
-    return 0; // not used for standard
+    if (productType === "flex") {
+      return parseFloat(product.node.variants.edges[0]?.node.price.amount || "100");
+    }
+    return 0;
   }, [product, productType, selectedWattage]);
+
+  const currentColorLabel = productType === "flex"
+    ? availableColors.find((c) => c.value === selectedFlexColor)?.label || selectedFlexColor
+    : productType === "arc"
+      ? availableColors.find((c) => c.value === selectedBodyColor)?.label || selectedBodyColor
+      : availableColors.find((c) => c.value === selectedColor)?.label || selectedColor;
 
   const bundles = productType === "arc"
     ? createArcBundleData(selectedWattage, unitPrice)
-    : createBundleData(selectedSize);
+    : productType === "flex"
+      ? createFlexBundleData(currentColorLabel, unitPrice)
+      : createBundleData(selectedSize);
 
   // ─── Add to cart ─────────────────────────────────────
 
@@ -277,14 +359,20 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
       selectedOptions: variantForSelection.selectedOptions,
       isBundle: true,
       bundleName: bundle.name,
-      bundleSize: productType === "arc" ? selectedWattage : selectedSize,
+      bundleSize: productType === "arc" ? selectedWattage : productType === "flex" ? currentColorLabel : selectedSize,
       bundleIncVatTotal: bundle.price,
     });
   };
 
-  // ─── Render ──────────────────────────────────────────
+  // ─── Selector key for animation ──────────────────────
 
-  const colors = availableColors;
+  const selectorKey = productType === "arc"
+    ? `${selectedWattage}-${selectedBodyColor}-${selectedLightColor}`
+    : productType === "flex"
+      ? `${selectedFlexColor}-${selectedFlexType}`
+      : `${selectedSize}-${selectedColor}`;
+
+  // ─── Render ──────────────────────────────────────────
 
   return (
     <section id="bundels" className="py-20 md:py-32 bg-background-secondary animate-fade-in transition-all duration-500">
@@ -305,40 +393,36 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
           {/* Selector bar */}
           <div className="flex justify-center mb-10">
             <div className="bg-background border border-border rounded-xl p-5 inline-flex flex-col sm:flex-row items-center gap-6 flex-wrap">
-              {/* Wattage / Size pills */}
-              {productType === "arc" ? (
+              {/* Primary dimension: Wattage / Size / nothing for Flex */}
+              {productType === "arc" && (
                 <div className="flex items-center gap-3">
                   <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Vermogen</span>
                   <div className="flex gap-2 flex-wrap">
                     {arcOptions.wattages.map((w) => (
-                      <button
-                        key={w}
-                        onClick={() => setSelectedWattage(w)}
+                      <button key={w} onClick={() => setSelectedWattage(w)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedWattage === w
                             ? "bg-glow/15 text-glow border border-glow/50 shadow-[0_0_12px_hsl(var(--glow)/0.15)]"
                             : "bg-background-secondary text-muted-foreground border border-border hover:border-glow/30 hover:text-foreground"
-                        }`}
-                      >
+                        }`}>
                         {w}
                       </button>
                     ))}
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {productType === "standard" && (
                 <div className="flex items-center gap-3">
                   <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Maat</span>
                   <div className="flex gap-2">
                     {sizes.map((s) => (
-                      <button
-                        key={s.value}
-                        onClick={() => setSelectedSize(s.value)}
+                      <button key={s.value} onClick={() => setSelectedSize(s.value)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedSize === s.value
                             ? "bg-glow/15 text-glow border border-glow/50 shadow-[0_0_12px_hsl(var(--glow)/0.15)]"
                             : "bg-background-secondary text-muted-foreground border border-border hover:border-glow/30 hover:text-foreground"
-                        }`}
-                      >
+                        }`}>
                         {s.label}
                       </button>
                     ))}
@@ -346,33 +430,38 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                 </div>
               )}
 
-              <div className="hidden sm:block w-px h-8 bg-border" />
-              <div className="block sm:hidden h-px w-full bg-border" />
+              {(productType === "arc" || productType === "standard") && (
+                <>
+                  <div className="hidden sm:block w-px h-8 bg-border" />
+                  <div className="block sm:hidden h-px w-full bg-border" />
+                </>
+              )}
 
               {/* Color swatches */}
               <div className="flex items-center gap-3">
                 <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Kleur</span>
                 <div className="flex gap-3">
-                  {colors.map((c) => (
-                    <button
-                      key={c.value}
-                      onClick={() => productType === "arc" ? setSelectedBodyColor(c.value) : setSelectedColor(c.value)}
-                      className="flex flex-col items-center gap-1.5 group"
-                    >
-                      <div
-                        className={`w-9 h-9 rounded-full ${c.gradient} transition-all duration-200 ${
-                          (productType === "arc" ? selectedBodyColor : selectedColor) === c.value
-                            ? "ring-2 ring-glow ring-offset-2 ring-offset-background scale-110"
-                            : "ring-1 ring-border group-hover:ring-glow/40"
-                        }`}
-                      />
-                      <span className={`text-[11px] font-medium transition-colors ${
-                        (productType === "arc" ? selectedBodyColor : selectedColor) === c.value ? "text-glow" : "text-muted-foreground"
-                      }`}>
-                        {c.label}
-                      </span>
-                    </button>
-                  ))}
+                  {availableColors.map((c) => {
+                    const isActive = productType === "arc" ? selectedBodyColor === c.value
+                      : productType === "flex" ? selectedFlexColor === c.value
+                      : selectedColor === c.value;
+                    return (
+                      <button key={c.value}
+                        onClick={() => {
+                          if (productType === "arc") setSelectedBodyColor(c.value);
+                          else if (productType === "flex") setSelectedFlexColor(c.value);
+                          else setSelectedColor(c.value);
+                        }}
+                        className="flex flex-col items-center gap-1.5 group">
+                        <div className={`w-9 h-9 rounded-full ${c.gradient} transition-all duration-200 ${
+                          isActive ? "ring-2 ring-glow ring-offset-2 ring-offset-background scale-110" : "ring-1 ring-border group-hover:ring-glow/40"
+                        }`} />
+                        <span className={`text-[11px] font-medium transition-colors ${isActive ? "text-glow" : "text-muted-foreground"}`}>
+                          {c.label}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -385,16 +474,36 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                     <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Licht</span>
                     <div className="flex gap-2">
                       {arcOptions.lightColors.map((lc) => (
-                        <button
-                          key={lc}
-                          onClick={() => setSelectedLightColor(lc)}
+                        <button key={lc} onClick={() => setSelectedLightColor(lc)}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                             selectedLightColor === lc
                               ? "bg-glow/15 text-glow border border-glow/50 shadow-[0_0_12px_hsl(var(--glow)/0.15)]"
                               : "bg-background-secondary text-muted-foreground border border-border hover:border-glow/30 hover:text-foreground"
-                          }`}
-                        >
+                          }`}>
                           {lc}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Type (Flex only) */}
+              {productType === "flex" && flexTypes.length > 1 && (
+                <>
+                  <div className="hidden sm:block w-px h-8 bg-border" />
+                  <div className="block sm:hidden h-px w-full bg-border" />
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Uitvoering</span>
+                    <div className="flex gap-2">
+                      {flexTypes.map((t) => (
+                        <button key={t} onClick={() => setSelectedFlexType(t)}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            selectedFlexType === t
+                              ? "bg-glow/15 text-glow border border-glow/50 shadow-[0_0_12px_hsl(var(--glow)/0.15)]"
+                              : "bg-background-secondary text-muted-foreground border border-border hover:border-glow/30 hover:text-foreground"
+                          }`}>
+                          {t}
                         </button>
                       ))}
                     </div>
@@ -405,26 +514,21 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
           </div>
 
           {/* Bundle cards */}
-          <div key={productType === "arc" ? `${selectedWattage}-${selectedBodyColor}-${selectedLightColor}` : `${selectedSize}-${selectedColor}`} className="grid md:grid-cols-3 gap-8 animate-fade-in">
+          <div key={selectorKey} className="grid md:grid-cols-3 gap-8 animate-fade-in">
             {bundles.map((bundle, index) => {
               const isHighlighted = bundle.popular;
               return (
-                <Card
-                  key={index}
-                  onClick={() => setSelectedBundle(index)}
+                <Card key={index} onClick={() => setSelectedBundle(index)}
                   className={`p-8 relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full glass ${
                     isHighlighted
                       ? "border-primary border-2 bg-primary/5 ring-1 ring-primary/20 shadow-lg shadow-primary/10"
                       : selectedBundle === index
                         ? "border-glow border-2"
                         : "hover:border-glow/50 hover:shadow-lg hover:shadow-glow/5"
-                  }`}
-                >
+                  }`}>
                   {bundle.badge && (
                     <Badge className={`absolute top-4 right-4 ${
-                      isHighlighted
-                        ? "bg-primary text-primary-foreground text-sm px-3 py-1"
-                        : "bg-primary text-primary-foreground"
+                      isHighlighted ? "bg-primary text-primary-foreground text-sm px-3 py-1" : "bg-primary text-primary-foreground"
                     }`}>
                       {bundle.badge}
                     </Badge>
@@ -437,11 +541,6 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         <Badge variant="outline" className="text-xs border-glow/30 text-glow">
                           {bundle.sizeLabel}
                         </Badge>
-                        <Badge variant="outline" className="text-xs border-border text-muted-foreground">
-                          {productType === "arc"
-                            ? availableColors.find((c) => c.value === selectedBodyColor)?.label || selectedBodyColor
-                            : availableColors.find((c) => c.value === selectedColor)?.label || selectedColor}
-                        </Badge>
                       </div>
                       <p className={`text-sm font-medium ${isHighlighted ? "text-primary" : "text-glow"}`}>{bundle.label}</p>
                       <p className="text-sm text-muted-foreground">{bundle.subtekst}</p>
@@ -449,22 +548,15 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
 
                     <div className="space-y-2 mt-6">
                       <div className="flex items-baseline gap-2">
-                        <span
-                          className="text-4xl font-bold text-foreground animate-[scale-in_0.4s_ease-out] origin-left"
-                          style={{
-                            textShadow: "0 0 20px hsl(var(--glow) / 0.3)",
-                            animation: "scale-in 0.4s ease-out, glow-pulse 0.6s ease-out",
-                          }}
-                        >
+                        <span className="text-4xl font-bold text-foreground animate-[scale-in_0.4s_ease-out] origin-left"
+                          style={{ textShadow: "0 0 20px hsl(var(--glow) / 0.3)", animation: "scale-in 0.4s ease-out, glow-pulse 0.6s ease-out" }}>
                           €{bundle.price}
                         </span>
                         <Badge variant="secondary" className="bg-glow/10 text-glow animate-fade-in">
                           -{bundle.discount}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground line-through animate-fade-in">
-                        Was €{bundle.originalPrice}
-                      </p>
+                      <p className="text-sm text-muted-foreground line-through animate-fade-in">Was €{bundle.originalPrice}</p>
                       <p className={`text-sm font-semibold ${isHighlighted ? "text-primary" : "text-glow"} animate-fade-in`}>
                         Je bespaart €{bundle.save}
                       </p>
@@ -479,19 +571,11 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                       ))}
                     </div>
 
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedBundle(index);
-                        handleAddBundleToCart(index);
-                      }}
+                    <Button onClick={(e) => { e.stopPropagation(); setSelectedBundle(index); handleAddBundleToCart(index); }}
                       className={`w-full mt-6 ${
-                        isHighlighted
-                          ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
-                          : "bg-primary hover:bg-primary/90 text-primary-foreground"
+                        isHighlighted ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20" : "bg-primary hover:bg-primary/90 text-primary-foreground"
                       }`}
-                      size="lg"
-                    >
+                      size="lg">
                       Kies {bundle.quantityLabel}
                     </Button>
                   </div>
