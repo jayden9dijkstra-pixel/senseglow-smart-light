@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { ShopifyProduct, fetchProducts } from "@/lib/shopify";
+import { ShopifyProduct, fetchProductByHandle } from "@/lib/shopify";
 import { ProductHeroSection } from "@/components/product/ProductHeroSection";
 import { OutcomeSection } from "@/components/product/OutcomeSection";
 import { ProblemSolutionProductSection } from "@/components/product/ProblemSolutionProductSection";
@@ -25,11 +25,12 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const loadProduct = async () => {
+      if (!handle) {
+        setLoading(false);
+        return;
+      }
       try {
-        const products = await fetchProducts(50);
-        // Single-product store: use the first product returned
-        // fetchProducts already filters to return only the active SenseGlow product
-        const found = products[0] || null;
+        const found = await fetchProductByHandle(handle);
         setProduct(found);
 
         if (found) {
