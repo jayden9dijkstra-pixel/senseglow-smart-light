@@ -186,7 +186,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 space-y-4">
             <p className="text-sm uppercase tracking-wider text-glow font-medium">
-              90% van onze klanten kiest meer dan 1 SenseGlow™
+              {headlineOverride || "90% van onze klanten kiest meer dan 1 SenseGlow™"}
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
               Bespaar met bundels
