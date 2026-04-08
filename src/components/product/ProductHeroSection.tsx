@@ -9,19 +9,39 @@ import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
 import { Check, Truck, RotateCcw, Shield } from "lucide-react";
 
+interface HeroContent {
+  h1: string;
+  subtitle: string;
+  bundleCta: string;
+  bullets: string[];
+}
+
 interface ProductHeroSectionProps {
   product: ShopifyProduct;
   selectedVariant?: ShopifyProduct["node"]["variants"]["edges"][0]["node"] | null;
   onVariantChange?: (
     variant: ShopifyProduct["node"]["variants"]["edges"][0]["node"]
   ) => void;
+  heroContent?: HeroContent;
 }
 
 export const ProductHeroSection = ({
   product,
   selectedVariant: propVariant,
   onVariantChange,
+  heroContent,
 }: ProductHeroSectionProps) => {
+  const defaultContent: HeroContent = {
+    h1: "Veilig licht. Precies wanneer jij beweegt.",
+    subtitle: "Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken.",
+    bundleCta: "Voordeliger met bundels",
+    bullets: [
+      "Automatische bewegingssensor",
+      "Warm licht (2700K) - slaapvriendelijk",
+      "Installatie zonder gereedschap",
+    ],
+  };
+  const content = heroContent || defaultContent;
   const [searchParams] = useSearchParams();
   const [localVariant, setLocalVariant] = useState(
     product.node.variants.edges[0]?.node
