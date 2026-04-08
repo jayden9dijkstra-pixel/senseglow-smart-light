@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { z } from "zod";
-import { bundlePricing, incVatPrices, SizeVariant } from "@/lib/productConfig";
+import { bundlePricing, incVatPrices, SizeVariant, ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
@@ -238,13 +238,16 @@ export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[
   try {
     const validatedLimit = limitSchema.parse(limit);
     
-    // Only fetch SenseGlow products
+    // Fetch all SenseGlow products from Shopify
     const data = await storefrontApiRequest(STOREFRONT_QUERY, { 
       first: validatedLimit,
       query: "title:SenseGlow*"
     });
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
-    return responseData?.data?.products?.edges || [];
+    const allProducts = responseData?.data?.products?.edges || [];
+    
+    // Only return products whose handle is explicitly whitelisted
+    return allProducts.filter(p => ENABLED_PRODUCT_HANDLES.includes(p.node.handle));
   } catch {
     return [];
   }
