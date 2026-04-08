@@ -137,11 +137,10 @@ export const ProductHeroSection = ({
             <div className="space-y-6 lg:pl-10 pt-8 lg:pt-0 border-t lg:border-t-0 border-foreground/10 text-left">
               <div className="space-y-2">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
-                  Veilig licht. Precies wanneer jij beweegt.
+                  {content.h1}
                 </h1>
                 <p className="text-base text-muted-foreground leading-relaxed">
-                  Zachte nachtverlichting die je begeleidt zonder iemand wakker
-                  te maken.
+                  {content.subtitle}
                 </p>
               </div>
 
@@ -175,7 +174,7 @@ export const ProductHeroSection = ({
                 }}
                 className="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-glow border border-glow/40 rounded-full bg-glow/5 hover:bg-glow/10 hover:border-glow/60 hover:shadow-[0_0_20px_-5px_hsl(var(--glow)/0.4)] transition-all duration-300"
               >
-                <span>Voordeliger met bundels</span>
+                <span>{content.bundleCta}</span>
                 <span className="group-hover:translate-y-0.5 transition-transform duration-300">↓</span>
               </button>
 
@@ -190,11 +189,7 @@ export const ProductHeroSection = ({
 
               {/* 3 Bullets */}
               <div className="space-y-2 py-4 border-y border-foreground/10">
-                {[
-                  "Automatische bewegingssensor",
-                  "Warm licht (2700K) - slaapvriendelijk",
-                  "Installatie zonder gereedschap",
-                ].map((bullet, i) => (
+                {content.bullets.map((bullet, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-glow flex-shrink-0" />
                     <span className="text-sm text-foreground/80">{bullet}</span>

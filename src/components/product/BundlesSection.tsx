@@ -90,9 +90,10 @@ interface BundlesSectionProps {
       value: string;
     }>;
   };
+  headlineOverride?: string;
 }
 
-export const BundlesSection = ({ product, selectedVariant }: BundlesSectionProps) => {
+export const BundlesSection = ({ product, selectedVariant, headlineOverride }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
   const [selectedSize, setSelectedSize] = useState<SizeVariant>("20cm");
   const [selectedColor, setSelectedColor] = useState<ColorVariant>("zilver");
