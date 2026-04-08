@@ -8,7 +8,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
 import { SizeVariant, bundlePricing, bundleNames, incVatPrices } from "@/lib/productConfig";
 
-type ColorVariant = "zilver" | "zwart";
+type ColorVariant = string;
 
 const createBundleData = (size: SizeVariant) => {
   const pricing = bundlePricing[size];
@@ -96,8 +96,35 @@ interface BundlesSectionProps {
 export const BundlesSection = ({ product, selectedVariant, headlineOverride }: BundlesSectionProps) => {
   const [selectedBundle, setSelectedBundle] = useState<number | null>(0);
   const [selectedSize, setSelectedSize] = useState<SizeVariant>("20cm");
-  const [selectedColor, setSelectedColor] = useState<ColorVariant>("zilver");
+  const [selectedColor, setSelectedColor] = useState<ColorVariant>("");
   const addItem = useCartStore((state) => state.addItem);
+
+  // Detect available colors from product variants
+  const availableColors = useMemo(() => {
+    if (!product) return [{ value: "zwart", label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" }];
+    
+    const colorMap: Record<string, { label: string; gradient: string }> = {
+      silver: { label: "Zilver", gradient: "bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400" },
+      black: { label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" },
+      white: { label: "Wit", gradient: "bg-gradient-to-br from-gray-100 via-white to-gray-200" },
+    };
+
+    const found = new Set<string>();
+    product.node.variants.edges.forEach(v => {
+      v.node.selectedOptions.forEach(opt => {
+        const val = opt.value.toLowerCase();
+        if (val.includes("silver")) found.add("silver");
+        if (val.includes("black")) found.add("black");
+        if (val.includes("white")) found.add("white");
+      });
+    });
+
+    return Array.from(found).map(key => ({
+      value: key,
+      label: colorMap[key]?.label || key,
+      gradient: colorMap[key]?.gradient || "",
+    }));
+  }, [product]);
 
   // Sync bundle size & color with selected variant
   useEffect(() => {
@@ -108,8 +135,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
         else if (val.includes("30")) setSelectedSize("30cm");
         else if (val.includes("40")) setSelectedSize("40cm");
         
-        if (val.includes("silver")) setSelectedColor("zilver");
-        else if (val.includes("black")) setSelectedColor("zwart");
+        if (val.includes("silver")) setSelectedColor("silver");
+        else if (val.includes("black")) setSelectedColor("black");
+        else if (val.includes("white")) setSelectedColor("white");
       }
     }
   }, [selectedVariant]);
@@ -120,7 +148,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const findVariantForSizeAndColor = (size: SizeVariant, color: ColorVariant) => {
     if (!product) return selectedVariant;
     
-    const colorKey = color === "zilver" ? "silver" : "black";
+    const colorKey = color; // already in english (silver/black/white)
     const sizeKey = size.replace("cm", "");
     
     const variant = product.node.variants.edges.find(v => {
@@ -175,10 +203,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     { value: "40cm", label: "40cm", price: incVatPrices["40cm"] },
   ];
 
-  const colors: { value: ColorVariant; label: string; gradient: string }[] = [
-    { value: "zilver", label: "Zilver", gradient: "bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400" },
-    { value: "zwart", label: "Zwart", gradient: "bg-gradient-to-br from-gray-700 via-gray-900 to-black" },
-  ];
+  const colors = availableColors;
 
   return (
     <section id="bundels" className="py-20 md:py-32 bg-background-secondary animate-fade-in transition-all duration-500">
