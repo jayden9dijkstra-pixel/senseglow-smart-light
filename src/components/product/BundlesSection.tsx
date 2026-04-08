@@ -131,9 +131,10 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     if (selectedVariant) {
       for (const opt of selectedVariant.selectedOptions) {
         const val = opt.value.toLowerCase();
-        if (val.includes("20")) setSelectedSize("20cm");
+        if (val.includes("20cm") || (val.includes("20") && !val.includes("50"))) setSelectedSize("20cm");
         else if (val.includes("30")) setSelectedSize("30cm");
         else if (val.includes("40")) setSelectedSize("40cm");
+        else if (val.includes("50")) setSelectedSize("50cm");
         
         if (val.includes("silver")) setSelectedColor("silver");
         else if (val.includes("black")) setSelectedColor("black");
