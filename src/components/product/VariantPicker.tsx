@@ -387,10 +387,13 @@ export const VariantPicker = ({
   }
 
   // Standard (size + color)
+  const isCmSize = sizes.some((s) => /\d+\s?cm/i.test(s));
+  const sizeLabel = isCmSize ? "Lengte" : "Maat";
+  const sizeHint = isCmSize ? "Kies de lengte die past bij jouw ruimte" : "Kies de set die past bij jouw ruimte";
   return (
     <div className="space-y-6">
-      {sizes.length > 0 && (
-        <PillPicker label="Lengte" hint="Kies de lengte die past bij jouw ruimte" values={sizes} selected={selectedSize} onChange={handleSizeChange} highlightValue={sizes.find((s) => s.includes("30"))} />
+      {sizes.length > 1 && (
+        <PillPicker label={sizeLabel} hint={sizeHint} values={sizes} selected={selectedSize} onChange={handleSizeChange} highlightValue={sizes.find((s) => s.includes("30")) || sizes.find((s) => s.includes("8"))} />
       )}
       {colors.length > 1 && (
         <SwatchPicker label="Kleur" values={colors} selected={selectedColor} onChange={handleColorChange} />
