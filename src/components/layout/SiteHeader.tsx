@@ -5,33 +5,19 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoNew from "@/assets/logo-new.png";
-import { PRODUCT_HANDLE } from "@/lib/productConfig";
 
-const menuItems = [{
-  label: "Home",
-  href: "/"
-}, {
-  label: "Producten",
-  href: `/product/${PRODUCT_HANDLE}`
-}, {
-  label: "Bestelling Volgen",
-  href: "/bestelling-volgen"
-}, {
-  label: "Duurzaamheid",
-  href: "/duurzaamheid"
-}, {
-  label: "Contact",
-  href: "/contact"
-}, {
-  label: "Verzending",
-  href: "/verzending"
-}, {
-  label: "Retourneren",
-  href: "/retourneren"
-}, {
-  label: "Over Ons",
-  href: "/over"
-}];
+type MenuItem = { label: string; href: string; newTab?: boolean };
+
+const menuItems: MenuItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Producten", href: "/producten", newTab: true },
+  { label: "Bestelling Volgen", href: "/bestelling-volgen" },
+  { label: "Duurzaamheid", href: "/duurzaamheid" },
+  { label: "Contact", href: "/contact" },
+  { label: "Verzending", href: "/verzending" },
+  { label: "Retourneren", href: "/retourneren" },
+  { label: "Over Ons", href: "/over" },
+];
 export const SiteHeader = () => {
   const navigate = useNavigate();
   return <header className="w-full glass sticky top-0 z-50">
