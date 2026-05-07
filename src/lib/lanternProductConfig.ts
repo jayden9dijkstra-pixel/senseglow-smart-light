@@ -170,29 +170,7 @@ export const LANTERN_FINAL_CTA = {
   cta: "Bekijk SenseGlow Lantern™",
 };
 
-/**
- * Compute bundle pricing dynamically from the unit price.
- */
-export function computeLanternBundlePricing(unitPrice: number) {
-  return {
-    basePrice: unitPrice.toFixed(2),
-    two: {
-      price: (unitPrice * 2 * 0.9).toFixed(2),
-      originalPrice: (unitPrice * 2).toFixed(2),
-      discount: "10%",
-      save: (unitPrice * 2 * 0.1).toFixed(2),
-    },
-    three: {
-      price: (unitPrice * 3 * 0.8).toFixed(2),
-      originalPrice: (unitPrice * 3).toFixed(2),
-      discount: "20%",
-      save: (unitPrice * 3 * 0.2).toFixed(2),
-    },
-    four: {
-      price: (unitPrice * 4 * 0.75).toFixed(2),
-      originalPrice: (unitPrice * 4).toFixed(2),
-      discount: "25%",
-      save: (unitPrice * 4 * 0.25).toFixed(2),
-    },
-  };
-}
+import { computeBundlePricing } from "./productConfig";
+
+/** Bundle pricing — uses centralized 11/13/20% tiers. */
+export const computeLanternBundlePricing = computeBundlePricing;

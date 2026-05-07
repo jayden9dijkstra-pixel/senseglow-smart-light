@@ -103,14 +103,24 @@ const Index = () => {
       <section id="products" className="py-24 md:py-32 bg-background">
         <div className="container">
           <div className="max-w-6xl mx-auto">
-            <div className="mb-16">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-4">
-                Collectie
-              </p>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Onze Producten</h2>
-              <p className="text-base text-foreground/60 max-w-md">
-                Kies de juiste maat voor jouw ruimte
-              </p>
+            <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-4">
+                  Collectie
+                </p>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">Onze collectie</h2>
+                <p className="text-base text-foreground/60 max-w-md">
+                  Verlichting die denkt. Jij hoeft alleen maar te bewegen.
+                </p>
+              </div>
+              <a
+                href="/producten"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] uppercase tracking-[0.25em] text-glow hover:text-glow/80 transition-colors duration-500"
+              >
+                Bekijk alle producten →
+              </a>
             </div>
 
             {loading ? (

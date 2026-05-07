@@ -1,5 +1,4 @@
 import { Menu } from "lucide-react";
-import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,12 +8,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const DesktopMenu = () => {
-  
   const menuItems = [
-    { label: "HOME", href: "/" },
-    { label: "PRODUCTEN", href: `/product/${PRODUCT_HANDLE}` },
-    { label: "BESTELLING VOLGEN", href: "/bestelling-volgen" },
-    { label: "CONTACT", href: "/contact" },
+    { label: "HOME", href: "/", newTab: false },
+    { label: "PRODUCTEN", href: "/producten", newTab: true },
+    { label: "BESTELLING VOLGEN", href: "/bestelling-volgen", newTab: false },
+    { label: "CONTACT", href: "/contact", newTab: false },
   ];
 
   return (
@@ -30,6 +28,7 @@ export const DesktopMenu = () => {
           <DropdownMenuItem key={item.href} asChild>
             <a
               href={item.href}
+              {...(item.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               className="cursor-pointer text-foreground hover:text-brand-orange transition-colors"
             >
               {item.label}

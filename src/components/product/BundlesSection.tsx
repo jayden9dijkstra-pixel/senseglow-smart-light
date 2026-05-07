@@ -6,7 +6,7 @@ import { Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { toast } from "sonner";
-import { SizeVariant, bundlePricing, bundleNames, incVatPrices } from "@/lib/productConfig";
+import { SizeVariant, bundlePricing, bundleNames, incVatPrices, computeBundlePricing } from "@/lib/productConfig";
 import { computeArcBundlePricing, parseArcVariant } from "@/lib/arcProductConfig";
 import { parseFlexVariant, computeFlexBundlePricing } from "@/lib/flexProductConfig";
 
@@ -25,36 +25,37 @@ function detectProductType(product: ShopifyProduct): ProductType {
 
 // ─── Standard bundle data (size-based) ─────────────────
 
-const createBundleData = (size: SizeVariant) => {
-  const pricing = bundlePricing[size];
+const createBundleData = (size: SizeVariant | string, fallbackUnitPrice?: number, productLabel = "SenseGlow™") => {
+  const known = (bundlePricing as Record<string, ReturnType<typeof computeBundlePricing>>)[size];
+  const pricing = known || computeBundlePricing(fallbackUnitPrice ?? 0);
   return [
     {
       name: bundleNames[2], quantity: 2 as const, quantityLabel: "2 stuks",
-      sizeLabel: `${size} modellen`, label: "Duo Set",
-      subtekst: "Ideaal om te starten met nachtverlichting",
+      sizeLabel: size, label: "Duopak",
+      subtekst: "Ideaal om te starten",
       price: pricing.two.price, originalPrice: pricing.two.originalPrice,
       discount: pricing.two.discount, save: pricing.two.save,
       badge: null as string | null, popular: false,
-      features: [`2x SenseGlow™ ${size} LED strip`, "Gratis verzending", "30 dagen retourrecht"],
+      features: [`2x ${productLabel} ${size}`, "Gratis verzending", "30 dagen retourrecht"],
     },
     {
       name: bundleNames[3], quantity: 3 as const, quantityLabel: "3 stuks",
-      sizeLabel: `${size} modellen`,
-      label: size === "30cm" ? "Perfect voor trap of gang" : "Meest gekozen",
-      subtekst: "Veiligheid én comfort voor dagelijks gebruik",
+      sizeLabel: size,
+      label: "Familiepak",
+      subtekst: "Voor het hele huis",
       price: pricing.three.price, originalPrice: pricing.three.originalPrice,
       discount: pricing.three.discount, save: pricing.three.save,
       badge: "⭐ Meest gekozen", popular: true,
-      features: [`3x SenseGlow™ ${size} LED strip`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x ${productLabel} ${size}`, "Gratis verzending", "13% korting", "30 dagen retourrecht"],
     },
     {
       name: bundleNames[4], quantity: 4 as const, quantityLabel: "4 stuks",
-      sizeLabel: `${size} modellen`, label: "Volledige gemoedsrust",
-      subtekst: "Voor wie alles in één keer goed wil doen",
+      sizeLabel: size, label: "Voordeelpak",
+      subtekst: "Maximale besparing",
       price: pricing.four.price, originalPrice: pricing.four.originalPrice,
       discount: pricing.four.discount, save: pricing.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x SenseGlow™ ${size} LED strip`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x ${productLabel} ${size}`, "Gratis verzending", "20% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
@@ -71,7 +72,7 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
       price: p.two.price, originalPrice: p.two.originalPrice,
       discount: p.two.discount, save: p.two.save,
       badge: "⭐ Meest gekozen" as string | null, popular: true,
-      features: [`2x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
+      features: [`2x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "11% korting", "30 dagen retourrecht"],
     },
     {
       name: "Trio Set", quantity: 3 as const, quantityLabel: "3 stuks",
@@ -80,7 +81,7 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
       price: p.three.price, originalPrice: p.three.originalPrice,
       discount: p.three.discount, save: p.three.save,
       badge: null as string | null, popular: false,
-      features: [`3x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "13% korting", "30 dagen retourrecht"],
     },
     {
       name: "Complete Set", quantity: 4 as const, quantityLabel: "4 stuks",
@@ -89,7 +90,7 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
       price: p.four.price, originalPrice: p.four.originalPrice,
       discount: p.four.discount, save: p.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "20% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
@@ -106,7 +107,7 @@ const createFlexBundleData = (colorLabel: string, unitPrice: number, productName
       price: p.two.price, originalPrice: p.two.originalPrice,
       discount: p.two.discount, save: p.two.save,
       badge: null as string | null, popular: false,
-      features: [`2x ${productName}`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
+      features: [`2x ${productName}`, "Gratis verzending", "11% korting", "30 dagen retourrecht"],
     },
     {
       name: "Meest gekozen", quantity: 3 as const, quantityLabel: "3 stuks",
@@ -115,7 +116,7 @@ const createFlexBundleData = (colorLabel: string, unitPrice: number, productName
       price: p.three.price, originalPrice: p.three.originalPrice,
       discount: p.three.discount, save: p.three.save,
       badge: "⭐ Meest gekozen" as string | null, popular: true,
-      features: [`3x ${productName}`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x ${productName}`, "Gratis verzending", "13% korting", "30 dagen retourrecht"],
     },
     {
       name: "Complete Set", quantity: 4 as const, quantityLabel: "4 stuks",
@@ -124,7 +125,7 @@ const createFlexBundleData = (colorLabel: string, unitPrice: number, productName
       price: p.four.price, originalPrice: p.four.originalPrice,
       discount: p.four.discount, save: p.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x ${productName}`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x ${productName}`, "Gratis verzending", "20% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
@@ -326,8 +327,11 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     if (productType === "flex") {
       return parseFloat(product.node.variants.edges[0]?.node.price.amount || "100");
     }
-    return 0;
-  }, [product, productType, selectedWattage]);
+    const matched = product.node.variants.edges.find((v) =>
+      v.node.selectedOptions.some((o) => o.value.toLowerCase().includes(selectedSize.toLowerCase().replace(/\s/g, "")))
+    );
+    return parseFloat((matched?.node.price.amount) || product.node.variants.edges[0]?.node.price.amount || "0");
+  }, [product, productType, selectedWattage, selectedSize]);
 
   const currentColorLabel = productType === "flex"
     ? availableColors.find((c) => c.value === selectedFlexColor)?.label || selectedFlexColor
@@ -339,7 +343,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     ? createArcBundleData(selectedWattage, unitPrice)
     : productType === "flex"
       ? createFlexBundleData(currentColorLabel, unitPrice, product?.node.title || "SenseGlow Flex™")
-      : createBundleData(selectedSize);
+      : createBundleData(selectedSize, unitPrice, product?.node.title || "SenseGlow™");
 
   // ─── Add to cart ─────────────────────────────────────
 
