@@ -8,6 +8,7 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
+import Catalog from "./pages/Catalog";
 import Contact from "./pages/Contact";
 import Shipping from "./pages/Shipping";
 import Tracking from "./pages/Tracking";
@@ -38,6 +39,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/product/:handle" element={<ProductDetail />} />
+            <Route path="/producten" element={<Catalog />} />
+            <Route path="/catalogus" element={<Catalog />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/verzending" element={<Shipping />} />
             <Route path="/bestelling-volgen" element={<Tracking />} />
