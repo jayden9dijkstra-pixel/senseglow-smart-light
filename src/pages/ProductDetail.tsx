@@ -12,7 +12,7 @@ import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
-import { WAVE_PRODUCT_HANDLE, ARC_PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { WAVE_PRODUCT_HANDLE, ARC_PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE, STEP_PRODUCT_HANDLE, SCONCE_PRODUCT_HANDLE } from "@/lib/productConfig";
 import {
   WAVE_HERO_CONTENT, WAVE_OUTCOMES, WAVE_OUTCOME_HEADLINE,
   WAVE_PROBLEM_SOLUTION, WAVE_USE_CASES, WAVE_TECH_BENEFITS,
@@ -33,6 +33,16 @@ import {
   LANTERN_PROBLEM_SOLUTION, LANTERN_USE_CASES, LANTERN_TECH_BENEFITS,
   LANTERN_FAQS, LANTERN_BUNDLE_HEADLINE, LANTERN_FINAL_CTA,
 } from "@/lib/lanternProductConfig";
+import {
+  STEP_HERO_CONTENT, STEP_OUTCOMES, STEP_OUTCOME_HEADLINE,
+  STEP_PROBLEM_SOLUTION, STEP_USE_CASES, STEP_TECH_BENEFITS,
+  STEP_FAQS, STEP_BUNDLE_HEADLINE, STEP_FINAL_CTA,
+} from "@/lib/stepProductConfig";
+import {
+  SCONCE_HERO_CONTENT, SCONCE_OUTCOMES, SCONCE_OUTCOME_HEADLINE,
+  SCONCE_PROBLEM_SOLUTION, SCONCE_USE_CASES, SCONCE_TECH_BENEFITS,
+  SCONCE_FAQS, SCONCE_BUNDLE_HEADLINE, SCONCE_FINAL_CTA,
+} from "@/lib/sconceProductConfig";
 
 // Content lookup per handle
 const CONTENT_MAP: Record<string, {
@@ -101,14 +111,44 @@ const CONTENT_MAP: Record<string, {
     outcomes: LANTERN_OUTCOMES,
     problemSolution: LANTERN_PROBLEM_SOLUTION,
     useCaseHeadline: "Overal buiten inzetbaar",
-    useCaseSubtitle: "Ontdek waar SenseGlow Lantern™ het verschil maakt",
+    useCaseSubtitle: "Ontdek waar SenseGlow Solar™ het verschil maakt",
     useCases: LANTERN_USE_CASES,
     techHeadline: "Slim & duurzaam ontworpen",
     techBenefits: LANTERN_TECH_BENEFITS,
-    faqSubtitle: "Alles wat je moet weten over SenseGlow Lantern™",
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Solar™",
     faqs: LANTERN_FAQS,
     bundleHeadline: LANTERN_BUNDLE_HEADLINE,
     finalCta: LANTERN_FINAL_CTA,
+  },
+  [STEP_PRODUCT_HANDLE]: {
+    hero: STEP_HERO_CONTENT,
+    outcomeHeadline: STEP_OUTCOME_HEADLINE,
+    outcomes: STEP_OUTCOMES,
+    problemSolution: STEP_PROBLEM_SOLUTION,
+    useCaseHeadline: "Voor trap, gang & meer",
+    useCaseSubtitle: "Ontdek waar SenseGlow Step™ het verschil maakt",
+    useCases: STEP_USE_CASES,
+    techHeadline: "Slim ontworpen voor veiligheid",
+    techBenefits: STEP_TECH_BENEFITS,
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Step™",
+    faqs: STEP_FAQS,
+    bundleHeadline: STEP_BUNDLE_HEADLINE,
+    finalCta: STEP_FINAL_CTA,
+  },
+  [SCONCE_PRODUCT_HANDLE]: {
+    hero: SCONCE_HERO_CONTENT,
+    outcomeHeadline: SCONCE_OUTCOME_HEADLINE,
+    outcomes: SCONCE_OUTCOMES,
+    problemSolution: SCONCE_PROBLEM_SOLUTION,
+    useCaseHeadline: "Sfeer in elke kamer",
+    useCaseSubtitle: "Ontdek waar SenseGlow Sconce™ het verschil maakt",
+    useCases: SCONCE_USE_CASES,
+    techHeadline: "Premium afwerking, zonder bedrading",
+    techBenefits: SCONCE_TECH_BENEFITS,
+    faqSubtitle: "Alles wat je moet weten over SenseGlow Sconce™",
+    faqs: SCONCE_FAQS,
+    bundleHeadline: SCONCE_BUNDLE_HEADLINE,
+    finalCta: SCONCE_FINAL_CTA,
   },
 };
 
