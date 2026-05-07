@@ -184,33 +184,10 @@ export const ARC_FINAL_CTA = {
 export type ArcWattage = "2W" | "4W" | "6W" | "8W" | "10W" | "12W";
 export type ArcLightColor = "warm" | "cold";
 
-/**
- * Compute bundle pricing dynamically from the Shopify unit price.
- * Returns bundle tiers with 10% / 20% / 25% discounts.
- */
-export function computeArcBundlePricing(unitPrice: number) {
-  return {
-    basePrice: unitPrice.toFixed(2),
-    two: {
-      price: (unitPrice * 2 * 0.9).toFixed(2),
-      originalPrice: (unitPrice * 2).toFixed(2),
-      discount: "10%",
-      save: (unitPrice * 2 * 0.1).toFixed(2),
-    },
-    three: {
-      price: (unitPrice * 3 * 0.8).toFixed(2),
-      originalPrice: (unitPrice * 3).toFixed(2),
-      discount: "20%",
-      save: (unitPrice * 3 * 0.2).toFixed(2),
-    },
-    four: {
-      price: (unitPrice * 4 * 0.75).toFixed(2),
-      originalPrice: (unitPrice * 4).toFixed(2),
-      discount: "25%",
-      save: (unitPrice * 4 * 0.25).toFixed(2),
-    },
-  };
-}
+import { computeBundlePricing } from "./productConfig";
+
+/** Bundle pricing — uses centralized 11/13/20% tiers. */
+export const computeArcBundlePricing = computeBundlePricing;
 
 /**
  * Parse an Arc variant's selectedOptions to extract wattage, body color and light color.
