@@ -327,8 +327,11 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     if (productType === "flex") {
       return parseFloat(product.node.variants.edges[0]?.node.price.amount || "100");
     }
-    return 0;
-  }, [product, productType, selectedWattage]);
+    const matched = product.node.variants.edges.find((v) =>
+      v.node.selectedOptions.some((o) => o.value.toLowerCase().includes(selectedSize.toLowerCase().replace(/\s/g, "")))
+    );
+    return parseFloat((matched?.node.price.amount) || product.node.variants.edges[0]?.node.price.amount || "0");
+  }, [product, productType, selectedWattage, selectedSize]);
 
   const currentColorLabel = productType === "flex"
     ? availableColors.find((c) => c.value === selectedFlexColor)?.label || selectedFlexColor
@@ -340,7 +343,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     ? createArcBundleData(selectedWattage, unitPrice)
     : productType === "flex"
       ? createFlexBundleData(currentColorLabel, unitPrice, product?.node.title || "SenseGlow Flex™")
-      : createBundleData(selectedSize);
+      : createBundleData(selectedSize, unitPrice, product?.node.title || "SenseGlow™");
 
   // ─── Add to cart ─────────────────────────────────────
 
