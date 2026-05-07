@@ -13,19 +13,19 @@ export const HeroSection = () => {
             <div className="space-y-10 order-2 md:order-1 animate-fade-in-slow">
               <div className="space-y-6">
                 <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
-                  Nachtverlichting met bewegingssensor
+                  Verlichting met bewegingssensor
                 </p>
                 
                 <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-[1.15] text-foreground">
-                  Veilig licht. Precies wanneer jij beweegt.
+                  Licht dat weet wanneer jij er bent.
                 </h1>
                 
-                <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-lg">Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken. De bewegingssensor activeert alleen wanneer nodig stil, veilig en intelligent.</p>
+                <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-lg">Zachte verlichting die automatisch reageert op beweging. Voor binnen, buiten, op de trap of in de kast — wij hebben een lamp die past.</p>
               </div>
 
               <div className="space-y-8">
-                <Button onClick={() => navigate("/quiz")} size="lg" className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500">
-                  Ontdek SenseGlow
+                <Button onClick={() => window.open("/producten", "_blank", "noopener,noreferrer")} size="lg" className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500">
+                  Bekijk alle producten
                 </Button>
 
                 {/* Trust indicators with amber icons */}

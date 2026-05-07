@@ -35,7 +35,7 @@ export const SiteFooter = () => {
             </div>
           </div>
           <div className="text-[11px] text-foreground/30 pt-12 border-t border-foreground/6">
-            <p>© 2025 SenseGlow™. Alle rechten voorbehouden.</p>
+            <p>© 2026 SenseGlow™. Alle rechten voorbehouden.</p>
           </div>
         </div>
       </div>
