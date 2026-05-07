@@ -45,7 +45,7 @@ const createBundleData = (size: SizeVariant) => {
       price: pricing.three.price, originalPrice: pricing.three.originalPrice,
       discount: pricing.three.discount, save: pricing.three.save,
       badge: "⭐ Meest gekozen", popular: true,
-      features: [`3x SenseGlow™ ${size} LED strip`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x SenseGlow™ ${size} LED strip`, "Gratis verzending", "13% korting", "30 dagen retourrecht"],
     },
     {
       name: bundleNames[4], quantity: 4 as const, quantityLabel: "4 stuks",
@@ -54,7 +54,7 @@ const createBundleData = (size: SizeVariant) => {
       price: pricing.four.price, originalPrice: pricing.four.originalPrice,
       discount: pricing.four.discount, save: pricing.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x SenseGlow™ ${size} LED strip`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x SenseGlow™ ${size} LED strip`, "Gratis verzending", "20% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
@@ -71,7 +71,7 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
       price: p.two.price, originalPrice: p.two.originalPrice,
       discount: p.two.discount, save: p.two.save,
       badge: "⭐ Meest gekozen" as string | null, popular: true,
-      features: [`2x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
+      features: [`2x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "11% korting", "30 dagen retourrecht"],
     },
     {
       name: "Trio Set", quantity: 3 as const, quantityLabel: "3 stuks",
@@ -80,7 +80,7 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
       price: p.three.price, originalPrice: p.three.originalPrice,
       discount: p.three.discount, save: p.three.save,
       badge: null as string | null, popular: false,
-      features: [`3x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "13% korting", "30 dagen retourrecht"],
     },
     {
       name: "Complete Set", quantity: 4 as const, quantityLabel: "4 stuks",
@@ -89,7 +89,7 @@ const createArcBundleData = (wattage: string, unitPrice: number) => {
       price: p.four.price, originalPrice: p.four.originalPrice,
       discount: p.four.discount, save: p.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x SenseGlow Arc™ ${wattage}`, "Gratis verzending", "20% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
@@ -106,7 +106,7 @@ const createFlexBundleData = (colorLabel: string, unitPrice: number, productName
       price: p.two.price, originalPrice: p.two.originalPrice,
       discount: p.two.discount, save: p.two.save,
       badge: null as string | null, popular: false,
-      features: [`2x ${productName}`, "Gratis verzending", "10% korting", "30 dagen retourrecht"],
+      features: [`2x ${productName}`, "Gratis verzending", "11% korting", "30 dagen retourrecht"],
     },
     {
       name: "Meest gekozen", quantity: 3 as const, quantityLabel: "3 stuks",
@@ -115,7 +115,7 @@ const createFlexBundleData = (colorLabel: string, unitPrice: number, productName
       price: p.three.price, originalPrice: p.three.originalPrice,
       discount: p.three.discount, save: p.three.save,
       badge: "⭐ Meest gekozen" as string | null, popular: true,
-      features: [`3x ${productName}`, "Gratis verzending", "20% korting", "30 dagen retourrecht"],
+      features: [`3x ${productName}`, "Gratis verzending", "13% korting", "30 dagen retourrecht"],
     },
     {
       name: "Complete Set", quantity: 4 as const, quantityLabel: "4 stuks",
@@ -124,7 +124,7 @@ const createFlexBundleData = (colorLabel: string, unitPrice: number, productName
       price: p.four.price, originalPrice: p.four.originalPrice,
       discount: p.four.discount, save: p.four.save,
       badge: "Maximaal voordeel" as string | null,
-      features: [`4x ${productName}`, "Gratis verzending", "25% korting", "Premium support", "30 dagen retourrecht"],
+      features: [`4x ${productName}`, "Gratis verzending", "20% korting", "Premium support", "30 dagen retourrecht"],
     },
   ];
 };
