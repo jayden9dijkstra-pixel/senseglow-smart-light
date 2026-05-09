@@ -25,7 +25,7 @@ const ProductDetail = () => {
     ShopifyProduct["node"]["variants"]["edges"][0]["node"] | null
   >(null);
 
-  const content = handle ? CONTENT_MAP[handle] : undefined;
+  const content = product ? buildPlaceholderContent(product.node.title) : undefined;
 
   useEffect(() => {
     const loadProduct = async () => {
