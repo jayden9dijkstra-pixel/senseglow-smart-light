@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, ShopifyProduct, CheckoutBundleInfo } from '@/lib/shopify';
 import { toast } from 'sonner';
-import { bundleNames } from '@/lib/productConfig';
+import { bundleNames, ProductKey, BundleTierKey } from '@/lib/productConfig';
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -21,7 +21,10 @@ export interface CartItem {
   isBundle?: boolean;
   bundleName?: string;
   bundleSize?: string;
-  bundleIncVatTotal?: string; // The customer-facing inc VAT total for this bundle
+  bundleIncVatTotal?: string;
+  productKey?: ProductKey;
+  variantKey?: string;
+  tierKey?: BundleTierKey;
 }
 
 interface CartStore {
