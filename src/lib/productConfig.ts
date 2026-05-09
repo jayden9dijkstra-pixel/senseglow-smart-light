@@ -88,6 +88,7 @@ export interface BundleQuote {
   price: string;          // discounted total inc-VAT
   originalPrice: string;  // qty * unit
   save: string;           // money saved
+  discount: string;       // alias of label, kept for backwards compat
 }
 
 export function quoteBundle(
@@ -107,6 +108,7 @@ export function quoteBundle(
     price: price.toFixed(2),
     originalPrice: original.toFixed(2),
     save: (original - price).toFixed(2),
+    discount: tier.label,
   };
 }
 
