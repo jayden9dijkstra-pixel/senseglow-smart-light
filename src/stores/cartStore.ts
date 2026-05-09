@@ -136,10 +136,13 @@ export const useCartStore = create<CartStore>()(
 
           // Collect bundle info for discount codes
           const bundleInfos: CheckoutBundleInfo[] = items
-            .filter(item => item.isBundle && item.bundleSize)
+            .filter(item => item.isBundle && item.productKey && item.variantKey && item.tierKey)
             .map(item => ({
-              bundleSize: item.bundleSize!,
+              productKey: item.productKey!,
+              variantKey: item.variantKey!,
+              tierKey: item.tierKey!,
               quantity: item.quantity,
+              unitPrice: parseFloat(item.price.amount),
             }));
           
           const checkoutUrl = await createStorefrontCheckout(checkoutItems, bundleInfos);
