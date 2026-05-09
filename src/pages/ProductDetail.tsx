@@ -135,21 +135,7 @@ const CONTENT_MAP: Record<string, {
     bundleHeadline: STEP_BUNDLE_HEADLINE,
     finalCta: STEP_FINAL_CTA,
   },
-  [SCONCE_PRODUCT_HANDLE]: {
-    hero: SCONCE_HERO_CONTENT,
-    outcomeHeadline: SCONCE_OUTCOME_HEADLINE,
-    outcomes: SCONCE_OUTCOMES,
-    problemSolution: SCONCE_PROBLEM_SOLUTION,
-    useCaseHeadline: "Sfeer in elke kamer",
-    useCaseSubtitle: "Ontdek waar SenseGlow Sconce™ het verschil maakt",
-    useCases: SCONCE_USE_CASES,
-    techHeadline: "Premium afwerking, zonder bedrading",
-    techBenefits: SCONCE_TECH_BENEFITS,
-    faqSubtitle: "Alles wat je moet weten over SenseGlow Sconce™",
-    faqs: SCONCE_FAQS,
-    bundleHeadline: SCONCE_BUNDLE_HEADLINE,
-    finalCta: SCONCE_FINAL_CTA,
-  },
+  // SCONCE_PRODUCT_HANDLE === STEP_PRODUCT_HANDLE — same Shopify product
 };
 
 const ProductDetail = () => {

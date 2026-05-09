@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, ShopifyProduct, CheckoutBundleInfo } from '@/lib/shopify';
 import { toast } from 'sonner';
-import { bundleNames } from '@/lib/productConfig';
+import { bundleNames, ProductKey, BundleTierKey } from '@/lib/productConfig';
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -21,7 +21,10 @@ export interface CartItem {
   isBundle?: boolean;
   bundleName?: string;
   bundleSize?: string;
-  bundleIncVatTotal?: string; // The customer-facing inc VAT total for this bundle
+  bundleIncVatTotal?: string;
+  productKey?: ProductKey;
+  variantKey?: string;
+  tierKey?: BundleTierKey;
 }
 
 interface CartStore {
@@ -133,10 +136,13 @@ export const useCartStore = create<CartStore>()(
 
           // Collect bundle info for discount codes
           const bundleInfos: CheckoutBundleInfo[] = items
-            .filter(item => item.isBundle && item.bundleSize)
+            .filter(item => item.isBundle && item.productKey && item.variantKey && item.tierKey)
             .map(item => ({
-              bundleSize: item.bundleSize!,
+              productKey: item.productKey!,
+              variantKey: item.variantKey!,
+              tierKey: item.tierKey!,
               quantity: item.quantity,
+              unitPrice: parseFloat(item.price.amount),
             }));
           
           const checkoutUrl = await createStorefrontCheckout(checkoutItems, bundleInfos);
