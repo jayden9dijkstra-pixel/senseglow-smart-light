@@ -53,7 +53,12 @@ export function buildPlaceholderContent(productTitle: string): PlaceholderConten
     useCaseSubtitle: PH,
     useCases: [placeholderItem, placeholderItem, placeholderItem, placeholderItem],
     techHeadline: PH,
-    techBenefits: [placeholderItem, placeholderItem, placeholderItem, placeholderItem],
+    techBenefits: [
+      { icon: "▢", tech: PH, benefit: PH },
+      { icon: "▢", tech: PH, benefit: PH },
+      { icon: "▢", tech: PH, benefit: PH },
+      { icon: "▢", tech: PH, benefit: PH },
+    ],
     faqSubtitle: PH,
     faqs: [
       { question: PH, answer: PH },
