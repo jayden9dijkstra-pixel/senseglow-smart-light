@@ -25,7 +25,7 @@ export interface PlaceholderContent {
   useCaseSubtitle: string;
   useCases: Array<{ icon: string; title: string; description: string }>;
   techHeadline: string;
-  techBenefits: Array<{ icon: string; title: string; description: string }>;
+  techBenefits: Array<{ icon: string; tech: string; benefit: string }>;
   faqSubtitle: string;
   faqs: Array<{ question: string; answer: string }>;
   bundleHeadline: string;
