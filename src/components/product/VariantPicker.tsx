@@ -134,7 +134,7 @@ export const VariantPicker = ({
 }: VariantPickerProps) => {
   const productType = useMemo(() => {
     const firstOpts = product.node.variants.edges[0]?.node.selectedOptions || [];
-    return detectProductType(firstOpts);
+    return detectProductType(product, firstOpts);
   }, [product]);
 
   const { sizes, colors, wattages, lightColors, variantTypes, variantMap } = useMemo(() => {
