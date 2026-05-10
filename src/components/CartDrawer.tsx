@@ -13,6 +13,26 @@ import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package } fro
 import { useCartStore } from "@/stores/cartStore";
 import { getSizeFromVariant, incVatPrices, SizeVariant } from "@/lib/productConfig";
 import { calcSizeDiscount } from "@/lib/shopify";
+import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
+
+function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
+  const key = getProductKeyFromHandle(item.product.node.handle);
+  if (key) {
+    const parsed = parseVariantLabel(key, item.selectedOptions);
+    if (parsed.label) return parsed.label;
+  }
+  // Fallback: filter out junk option values
+  return item.selectedOptions
+    .map(o => o.value)
+    .filter(v => {
+      const lv = v.toLowerCase();
+      return !lv.includes("colors in one") && !lv.includes("lamp") &&
+             !lv.includes("type-c") && !lv.includes("waterproof");
+    })
+    .map(v => v.replace(/\s*type-c\s*/i, "").trim())
+    .filter(Boolean)
+    .join(" • ");
+}
 
 export function CartDrawer() {
   const [isOpen, setIsOpen] = React.useState(false);
