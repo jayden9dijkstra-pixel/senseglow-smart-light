@@ -155,7 +155,7 @@ export function CartDrawer() {
                           <>
                             <h4 className="font-medium truncate">{item.product.node.title}</h4>
                             <p className="text-sm text-muted-foreground">
-                              {item.selectedOptions.map(option => option.value).join(' • ')}
+                              {formatVariantLabel(item)}
                             </p>
                             <p className="font-semibold">
                               €{(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
