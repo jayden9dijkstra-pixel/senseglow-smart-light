@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { cn } from "@/lib/utils";
+import { getProductKeyFromHandle } from "@/lib/productRegistry";
+import type { ProductKey } from "@/lib/productConfig";
 
 interface VariantPickerProps {
   product: ShopifyProduct;
