@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { cn } from "@/lib/utils";
+import { getProductKeyFromHandle } from "@/lib/productRegistry";
+import type { ProductKey } from "@/lib/productConfig";
 
 interface VariantPickerProps {
   product: ShopifyProduct;
@@ -21,8 +23,15 @@ interface ParsedDimensions {
 }
 
 function detectProductType(
+  product: ShopifyProduct,
   options: Array<{ name: string; value: string }>
 ): ProductType {
+  // Prefer handle-based detection (most reliable)
+  const key = getProductKeyFromHandle(product.node.handle);
+  if (key === "arc") return "arc";
+  if (key === "flex") return "flex";
+  if (key === "ambient" || key === "wave" || key === "lantern" || key === "sconce") return "standard";
+  // Fallback to heuristic
   if (options.some((o) => o.name.toLowerCase() === "uitstraalkleur")) return "arc";
   if (options.some((o) => o.name.toLowerCase().includes("emitting"))) return "flex";
   return "standard";
@@ -125,7 +134,7 @@ export const VariantPicker = ({
 }: VariantPickerProps) => {
   const productType = useMemo(() => {
     const firstOpts = product.node.variants.edges[0]?.node.selectedOptions || [];
-    return detectProductType(firstOpts);
+    return detectProductType(product, firstOpts);
   }, [product]);
 
   const { sizes, colors, wattages, lightColors, variantTypes, variantMap } = useMemo(() => {
