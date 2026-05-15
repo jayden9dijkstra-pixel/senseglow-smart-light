@@ -90,10 +90,17 @@ function parseDimensions(
   for (const opt of selectedOptions) {
     const name = opt.name.toLowerCase();
     const value = opt.value;
+    const lower = value.toLowerCase();
     if (name === "maat" || name === "size" || name === "lengte") {
       d.size = value;
-    } else if (name === "kleur" || name === "color" || name === "colour") {
-      if (!value.toLowerCase().includes("colors in one") && !value.toLowerCase().includes("lamp")) {
+    } else if (
+      name === "kleur" || name === "color" || name === "colour" ||
+      name.includes("emitting")
+    ) {
+      if (lower.includes("white") || lower.includes("wit")) d.color = "Wit";
+      else if (lower.includes("black") || lower.includes("zwart")) d.color = "Zwart";
+      else if (lower.includes("silver") || lower.includes("zilver")) d.color = "Zilver";
+      else if (!lower.includes("colors in one") && !lower.includes("lamp")) {
         d.color = normalizeColor(value);
       }
     } else {
