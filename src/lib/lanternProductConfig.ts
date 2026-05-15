@@ -5,8 +5,7 @@
  * Variant structure: "Emitting Color" → "1PCS-White Wall Ligh" / "1PCS-Black Wall Ligh"
  */
 
-export const LANTERN_PRODUCT_HANDLE =
-  "solar-led-wall-lamp-with-motion-sensor-waterproof-tungsten-wire-bulb-for-outdoor-garden-decoration2026-03-08-17-16-37";
+export const LANTERN_PRODUCT_HANDLE = "senseglow_solar_lantern";
 
 // ─── Hero ──────────────────────────────────────────────
 

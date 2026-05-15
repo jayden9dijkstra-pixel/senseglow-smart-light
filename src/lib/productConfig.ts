@@ -8,14 +8,14 @@
 export const VAT_RATE = 0.21;
 
 // ─── Product handles ───────────────────────────────────
-export const PRODUCT_HANDLE = "motion-sensor-led-night-light-type-c-usb-three-color-lamp-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting2026-01-27-10-33-46";
-export const WAVE_PRODUCT_HANDLE = "motion-sensor-light-led-lamp-wireless-ultra-thin-usb-led-for-kitchen-cabinet-bedroom-wardrobe-indoor-lighting-night-light2026-03-08-17-30-58";
+export const PRODUCT_HANDLE = "senseglow_ambient_motion_bar";
+export const WAVE_PRODUCT_HANDLE = "senseglow_wave";
 export const ARC_PRODUCT_HANDLE = "aluminium-led-wall-lamp-ip65-waterproof-8w-12w-outdoor-garden-lighting2026-02-20-02-48-52";
-export const FLEX_PRODUCT_HANDLE = "night-light-led-usb-rechargeable-lamp-hanging-magnetic-desk-lamp-stepless-dimming-cabinet-closet-wardrobe-table-lamp2026-03-08-17-16-36";
-export const LANTERN_PRODUCT_HANDLE = "solar-led-wall-lamp-with-motion-sensor-waterproof-tungsten-wire-bulb-for-outdoor-garden-decoration2026-03-08-17-16-37";
+export const FLEX_PRODUCT_HANDLE = "senseglow_flex";
+export const LANTERN_PRODUCT_HANDLE = "senseglow_solar_lantern";
 export const SOLAR_PRODUCT_HANDLE = LANTERN_PRODUCT_HANDLE;
-// "Step" product is now sold as the SenseGlow Solar Wall Lamp™ (4-set / 8-set)
-export const STEP_PRODUCT_HANDLE = "willed-bewegingssensor-trapverlichting-oplaadbare-nachtlampje-draadloze-led-licht-auto-on-off-magnetische-stick-on-lampen-voor-trap-gang-kinderkamer-slaapkamer-badkamer-4-stuks2026-03-08-17-16-41";
+// "Step" product is now sold as the SenseGlow Wall Lamp™ (4-set / 8-set)
+export const STEP_PRODUCT_HANDLE = "senseglow_wall_lamp";
 export const SCONCE_PRODUCT_HANDLE = STEP_PRODUCT_HANDLE;
 
 export const ENABLED_PRODUCT_HANDLES: string[] = [
