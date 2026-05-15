@@ -181,7 +181,7 @@ export const ARC_FINAL_CTA = {
 // ─── Helpers ───────────────────────────────────────────
 
 /** Available wattages for the Arc product */
-export type ArcWattage = "2W" | "4W" | "6W" | "8W" | "10W" | "12W";
+export type ArcWattage = "12W";
 export type ArcLightColor = "warm" | "cold";
 
 import { computeBundlePricing } from "./productConfig";
