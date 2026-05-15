@@ -378,7 +378,7 @@ export const VariantPicker = ({
     return (
       <div className="space-y-6">
         {wattages.length > 1 && (
-          <PillPicker label="Vermogen" hint="Kies het vermogen dat past bij je ruimte" values={wattages} selected={selectedWattage} onChange={handleWattageChange} highlightValue="6W" />
+          <PillPicker label="Vermogen" hint="Kies het vermogen dat past bij je ruimte" values={wattages} selected={selectedWattage} onChange={handleWattageChange} highlightValue="12W" />
         )}
         {colors.length > 1 && (
           <SwatchPicker label="Kleur" values={colors} selected={selectedColor} onChange={handleColorChange} />
