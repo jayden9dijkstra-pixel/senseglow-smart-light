@@ -180,32 +180,25 @@ export const FLEX_FINAL_CTA = {
 // ─── Variant parsing helpers ───────────────────────────
 
 export type FlexColor = "white" | "pink" | "green" | "black";
-export type FlexType = "standard" | "remote";
 
 /**
- * Parse an "Emitting Color" variant's selectedOptions.
- * Works for Flex ("White Remote Control", "Pink") and Lantern ("1PCS-White Wall Ligh", "1PCS-Black Wall Ligh")
+ * Parse a Flex/Lantern variant's selectedOptions to extract body color.
+ * Works for Flex ("White", "Black") and Lantern ("1PCS-White Wall Ligh", "1PCS-Black Wall Ligh").
  */
 export function parseFlexVariant(
   selectedOptions: Array<{ name: string; value: string }>
-): { bodyColor: FlexColor; type: FlexType } {
+): { bodyColor: FlexColor } {
   let bodyColor: FlexColor = "white";
-  let type: FlexType = "standard";
 
   for (const opt of selectedOptions) {
     const val = opt.value.toLowerCase();
-
-    if (val.includes("remote")) {
-      type = "remote";
-    }
-
     if (val.includes("black")) bodyColor = "black";
     else if (val.includes("white")) bodyColor = "white";
     else if (val.includes("pink")) bodyColor = "pink";
     else if (val.includes("green")) bodyColor = "green";
   }
 
-  return { bodyColor, type };
+  return { bodyColor };
 }
 
 import { computeBundlePricing } from "./productConfig";
