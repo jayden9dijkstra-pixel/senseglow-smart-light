@@ -202,20 +202,20 @@ export function parseArcVariant(
   for (const opt of selectedOptions) {
     const name = opt.name.toLowerCase();
     const value = opt.value;
+    const lower = value.toLowerCase();
 
-    if (name === "uitstraalkleur") {
-      // "Black 2W", "White 6W", etc.
-      const match = value.match(/^(Black|White)\s+(\d+W)/i);
-      if (match) {
-        bodyColor = match[1];
-        wattage = match[2];
-      }
+    if (name === "colour of lamp" || name === "color of lamp" || name === "kleur lamp") {
+      if (lower.includes("white")) bodyColor = "White";
+      else if (lower.includes("black")) bodyColor = "Black";
+    } else if (name === "wattage" || name === "vermogen") {
+      const m = value.match(/(\d+W)/i);
+      if (m) wattage = m[1];
     } else if (name === "kleur" || name === "color") {
-      if (value.toLowerCase().includes("warm")) {
-        lightColor = "warm";
-      } else {
-        lightColor = "cold";
-      }
+      lightColor = lower.includes("warm") ? "warm" : "cold";
+    } else if (name === "uitstraalkleur") {
+      // Legacy combined option support
+      const match = value.match(/^(Black|White)\s+(\d+W)/i);
+      if (match) { bodyColor = match[1]; wattage = match[2]; }
     }
   }
 
