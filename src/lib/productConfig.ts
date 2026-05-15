@@ -71,9 +71,7 @@ export const BUNDLE_TIERS: Record<ProductKey, BundleTiers> = {
     four:  { qty: 4, rate: 0.15, label: "15%" },
   },
   sconce: {
-    // Sconce uses a single 8-set discount, applied on the 8-set variant itself.
-    // Treated as quantity-1 of the 8-set variant + a flat 10% code.
-    eight: { qty: 1, rate: 0.10, label: "10%" },
+    // No bundles for Solar Wall Lamp — section hidden on product page.
   },
   flex: {
     // No bundles for Flex — section hidden on product page.
