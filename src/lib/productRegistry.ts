@@ -99,8 +99,10 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
       return { label: [setSize, color].filter(Boolean).join(" • "), setSize, color };
     }
     case "flex": {
-      const type = lower.includes("remote") ? "Met afstandsbediening" : "Standaard";
-      return { label: type, type };
+      let color = "";
+      if (lower.includes("white")) color = "Wit";
+      else if (lower.includes("black")) color = "Zwart";
+      return { label: color, color };
     }
     default:
       return { label: "" };
