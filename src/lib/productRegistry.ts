@@ -81,10 +81,8 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
     case "arc": {
       const isWhite = lower.includes("white");
       const isBlack = lower.includes("black");
-      const w12 = lower.includes("12w");
-      const w6 = lower.includes("6w");
       const color = isWhite ? "Wit" : isBlack ? "Zwart" : "";
-      const wattage = w12 ? "12W" : w6 ? "6W" : "";
+      const wattage = lower.includes("6w") ? "6W" : "12W";
       return { label: [wattage, color].filter(Boolean).join(" • "), color, wattage };
     }
     case "lantern": {
