@@ -29,11 +29,10 @@ export function buildVariantKey(productKey: ProductKey, opts: SelectedOption[]):
     case "arc": {
       const isWhite = join.includes("white");
       const isBlack = join.includes("black");
-      const w12 = join.includes("12w");
-      const w6 = join.includes("6w");
       const c = isWhite ? "W" : isBlack ? "B" : "";
-      const w = w12 ? "12W" : w6 ? "6W" : "";
-      return c && w ? `${c}${w}` : "";
+      // Wattage is fixed at 12W now; legacy 6W still recognized.
+      const w = join.includes("6w") ? "6W" : "12W";
+      return c ? `${c}${w}` : "";
     }
     case "lantern": {
       // No size — single tier on color-agnostic discount.
@@ -45,7 +44,9 @@ export function buildVariantKey(productKey: ProductKey, opts: SelectedOption[]):
       return "";
     }
     case "flex": {
-      return join.includes("remote") ? "REMOTE" : "STD";
+      if (join.includes("remote")) return "REMOTE";
+      if (join.includes("black")) return "B";
+      return "W";
     }
     default:
       return "";
@@ -80,10 +81,8 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
     case "arc": {
       const isWhite = lower.includes("white");
       const isBlack = lower.includes("black");
-      const w12 = lower.includes("12w");
-      const w6 = lower.includes("6w");
       const color = isWhite ? "Wit" : isBlack ? "Zwart" : "";
-      const wattage = w12 ? "12W" : w6 ? "6W" : "";
+      const wattage = lower.includes("6w") ? "6W" : "12W";
       return { label: [wattage, color].filter(Boolean).join(" • "), color, wattage };
     }
     case "lantern": {
@@ -100,8 +99,10 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
       return { label: [setSize, color].filter(Boolean).join(" • "), setSize, color };
     }
     case "flex": {
-      const type = lower.includes("remote") ? "Met afstandsbediening" : "Standaard";
-      return { label: type, type };
+      let color = "";
+      if (lower.includes("white")) color = "Wit";
+      else if (lower.includes("black")) color = "Zwart";
+      return { label: color, color };
     }
     default:
       return { label: "" };
