@@ -62,8 +62,7 @@ export const BUNDLE_TIERS: Record<ProductKey, BundleTiers> = {
     three: { qty: 3, rate: 0.15, label: "15%" },
   },
   lantern: {
-    two:   { qty: 2, rate: 0.08, label: "8%" },
-    four:  { qty: 4, rate: 0.15, label: "15%" },
+    // No bundles for Lantern — section hidden on product page.
   },
   wave: {
     two:   { qty: 2, rate: 0.08, label: "8%" },
