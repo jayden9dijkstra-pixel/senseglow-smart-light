@@ -29,11 +29,10 @@ export function buildVariantKey(productKey: ProductKey, opts: SelectedOption[]):
     case "arc": {
       const isWhite = join.includes("white");
       const isBlack = join.includes("black");
-      const w12 = join.includes("12w");
-      const w6 = join.includes("6w");
       const c = isWhite ? "W" : isBlack ? "B" : "";
-      const w = w12 ? "12W" : w6 ? "6W" : "";
-      return c && w ? `${c}${w}` : "";
+      // Wattage is fixed at 12W now; legacy 6W still recognized.
+      const w = join.includes("6w") ? "6W" : "12W";
+      return c ? `${c}${w}` : "";
     }
     case "lantern": {
       // No size — single tier on color-agnostic discount.
