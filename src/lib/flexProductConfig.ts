@@ -7,8 +7,7 @@
  *   → parsed into: bodyColor (Pink/White/Green) + type (Standard/Remote Control)
  */
 
-export const FLEX_PRODUCT_HANDLE =
-  "night-light-led-usb-rechargeable-lamp-hanging-magnetic-desk-lamp-stepless-dimming-cabinet-closet-wardrobe-table-lamp2026-03-08-17-16-36";
+export const FLEX_PRODUCT_HANDLE = "senseglow_flex";
 
 // ─── Hero ──────────────────────────────────────────────
 
