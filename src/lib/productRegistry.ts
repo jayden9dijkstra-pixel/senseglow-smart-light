@@ -44,7 +44,9 @@ export function buildVariantKey(productKey: ProductKey, opts: SelectedOption[]):
       return "";
     }
     case "flex": {
-      return join.includes("remote") ? "REMOTE" : "STD";
+      if (join.includes("remote")) return "REMOTE";
+      if (join.includes("black")) return "B";
+      return "W";
     }
     default:
       return "";
