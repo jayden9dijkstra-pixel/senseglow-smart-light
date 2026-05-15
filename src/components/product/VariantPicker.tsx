@@ -47,14 +47,22 @@ function parseDimensions(
     for (const opt of selectedOptions) {
       const name = opt.name.toLowerCase();
       const value = opt.value;
-      if (name === "uitstraalkleur") {
+      const lower = value.toLowerCase();
+      if (name === "colour of lamp" || name === "color of lamp" || name === "kleur lamp") {
+        if (lower.includes("white")) d.color = "Wit";
+        else if (lower.includes("black")) d.color = "Zwart";
+      } else if (name === "wattage" || name === "vermogen") {
+        const m = value.match(/(\d+W)/i);
+        if (m) d.wattage = m[1];
+      } else if (name === "kleur" || name === "color") {
+        d.lightColor = lower.includes("warm") ? "Warm licht" : "Koud licht";
+      } else if (name === "uitstraalkleur") {
+        // Legacy combined option
         const match = value.match(/^(Black|White)\s+(\d+W)/i);
         if (match) {
           d.color = normalizeColor(match[1]);
           d.wattage = match[2];
         }
-      } else if (name === "kleur" || name === "color") {
-        d.lightColor = value.toLowerCase().includes("warm") ? "Warm licht" : "Koud licht";
       }
     }
     return d;
