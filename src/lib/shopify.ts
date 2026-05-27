@@ -333,55 +333,6 @@ interface CartCreateResponse {
   };
 }
 
-export interface CheckoutBundleInfo {
-  productKey: ProductKey;
-  variantKey: string;
-  tierKey: BundleTierKey;
-  quantity: number;       // total units of this bundle line (e.g. 3 for trio)
-  unitPrice: number;      // inc-VAT unit price used for the calc
-}
-
-/**
- * Build the discount code string for a given (productKey, variantKey, tierKey).
- * Codes follow the SG-* convention from the plan.
- */
-function buildDiscountCode(p: ProductKey, variantKey: string, tier: BundleTierKey): string | null {
-  const t = BUNDLE_TIERS[p]?.[tier];
-  if (!t) return null;
-  const qtySuffix = tier === "eight" ? "8" : String(t.qty);
-  switch (p) {
-    case "ambient": return `SG-AB-${variantKey}-${qtySuffix}`;
-    case "wave":    return `SG-WAVE-${variantKey}-${qtySuffix}`;
-    case "arc":     return `SG-ARC-${variantKey}-${qtySuffix}`;
-    case "lantern": return `SG-SOL-${qtySuffix}`;
-    case "sconce":  return `SG-SCONCE-8`;
-    default: return null;
-  }
-}
-
-/**
- * Greedy: collapse multiple bundle lines per (productKey, variantKey)
- * into the optimal mix of tier codes for that group.
- */
-function pickCodesForGroup(p: ProductKey, variantKey: string, totalQty: number): string[] {
-  const tierMap = BUNDLE_TIERS[p];
-  if (!tierMap) return [];
-  const tiers = (Object.entries(tierMap) as Array<[BundleTierKey, typeof tierMap[BundleTierKey]]>)
-    .filter(([, v]) => !!v)
-    .sort((a, b) => (b![1]!.qty - a![1]!.qty)); // largest first
-
-  const codes: string[] = [];
-  let remaining = totalQty;
-  for (const [tk, t] of tiers) {
-    while (remaining >= t!.qty) {
-      const c = buildDiscountCode(p, variantKey, tk);
-      if (c) codes.push(c);
-      remaining -= t!.qty;
-    }
-  }
-  return codes;
-}
-
 /** Legacy helper still used by CartDrawer for size-only Ambient totals. */
 export function calcSizeDiscount(sizeCm: string, qty: number): number {
   const sizeKey = `${sizeCm}cm` as SizeVariant;
@@ -402,9 +353,15 @@ export function calcSizeDiscount(sizeCm: string, qty: number): number {
   return Math.round(saved * 100) / 100;
 }
 
+/**
+ * Create a Shopify cart via the Storefront API and return its checkoutUrl.
+ *
+ * Bundle pricing is now baked into BUNDLE-* variants (with compare_at_price)
+ * in Shopify, so no discount codes are needed at checkout — the lines speak
+ * for themselves.
+ */
 export async function createStorefrontCheckout(
-  items: CheckoutItem[],
-  bundleInfos: CheckoutBundleInfo[] = []
+  items: CheckoutItem[]
 ): Promise<string> {
   const validatedItems = checkoutItemsSchema.parse(items);
 
@@ -413,24 +370,8 @@ export async function createStorefrontCheckout(
     merchandiseId: item.variantId,
   }));
 
-  // Group bundle quantities per (productKey|variantKey)
-  const groups: Record<string, { p: ProductKey; vk: string; qty: number }> = {};
-  for (const b of bundleInfos) {
-    const key = `${b.productKey}|${b.variantKey}`;
-    if (!groups[key]) groups[key] = { p: b.productKey, vk: b.variantKey, qty: 0 };
-    groups[key].qty += b.quantity;
-  }
-
-  const discountCodes: string[] = [];
-  for (const g of Object.values(groups)) {
-    discountCodes.push(...pickCodesForGroup(g.p, g.vk, g.qty));
-  }
-
   const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
-    input: {
-      lines,
-      ...(discountCodes.length > 0 ? { discountCodes } : {}),
-    },
+    input: { lines },
   }) as CartCreateResponse | undefined;
 
   const userErrors = cartData?.data?.cartCreate?.userErrors;
@@ -446,4 +387,5 @@ export async function createStorefrontCheckout(
   url.searchParams.set('channel', 'online_store');
   return url.toString();
 }
+
 
