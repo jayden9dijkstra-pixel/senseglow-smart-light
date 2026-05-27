@@ -19,7 +19,6 @@ function formatVariantLabel(item: { product: { node: { handle: string } }; selec
     const parsed = parseVariantLabel(key, item.selectedOptions);
     if (parsed.label) return parsed.label;
   }
-  // Fallback: filter out junk option values
   return item.selectedOptions
     .map(o => o.value)
     .filter(v => {
@@ -42,23 +41,30 @@ export function CartDrawer() {
     createCheckout
   } = useCartStore();
 
-  const totalItems = items.reduce((sum, item) => {
-    // Bundles count as their bundleUnitCount for the badge (so a 3-pack = 3 lamps)
-    if (item.isBundle) return sum + (item.bundleUnitCount || item.quantity);
-    return sum + item.quantity;
-  }, 0);
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Total = sum of Shopify line prices (bundles already pre-discounted)
+  // Total inc-VAT, applying bundle discount per bundle line.
   const totalPrice = React.useMemo(() => {
     let total = 0;
     for (const item of items) {
-      if (item.isBundle) {
-        total += parseFloat(item.bundleIncVatTotal || item.price.amount) * item.quantity;
+      const lineGross = parseFloat(item.price.amount) * item.quantity;
+      if (item.isBundle && item.bundleRate) {
+        total += lineGross * (1 - item.bundleRate);
       } else {
-        total += parseFloat(item.price.amount) * item.quantity;
+        total += lineGross;
       }
     }
     return Math.round(total * 100) / 100;
+  }, [items]);
+
+  const totalSavings = React.useMemo(() => {
+    let s = 0;
+    for (const item of items) {
+      if (item.isBundle && item.bundleRate) {
+        s += parseFloat(item.price.amount) * item.quantity * item.bundleRate;
+      }
+    }
+    return Math.round(s * 100) / 100;
   }, [items]);
 
   const handleCheckout = async () => {
@@ -70,7 +76,7 @@ export function CartDrawer() {
         setIsOpen(false);
       }
     } catch {
-      // Error already handled by cart store with toast notification
+      // handled by store
     }
   };
 
@@ -86,7 +92,7 @@ export function CartDrawer() {
           )}
         </Button>
       </SheetTrigger>
-      
+
       <SheetContent className="w-full sm:max-w-lg flex flex-col h-full glass-strong">
         <SheetHeader className="flex-shrink-0">
           <SheetTitle>Winkelwagen</SheetTitle>
@@ -94,7 +100,7 @@ export function CartDrawer() {
             {totalItems === 0 ? "Je winkelwagen is leeg" : `${totalItems} artikel${totalItems !== 1 ? 'en' : ''} in je winkelwagen`}
           </SheetDescription>
         </SheetHeader>
-        
+
         <div className="flex flex-col flex-1 pt-6 min-h-0">
           {items.length === 0 ? (
             <div className="flex-1 flex items-center justify-center">
@@ -107,106 +113,111 @@ export function CartDrawer() {
             <>
               <div className="flex-1 overflow-y-auto pr-2 min-h-0">
                 <div className="space-y-4">
-                  {items.map((item) => (
-                    <div key={item.variantId} className="flex gap-4 p-3 rounded-lg border border-border/50">
-                      {/* Product image */}
-                      <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
-                        {item.product.node.images?.edges?.[0]?.node && (
-                          <img
-                            src={item.product.node.images.edges[0].node.url}
-                            alt={item.product.node.title}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        {/* Bundle header */}
-                        {item.isBundle ? (
-                          <>
-                            <div className="flex items-center gap-2 mb-1">
-                              <Package className="w-3.5 h-3.5 text-glow" />
-                              <Badge variant="outline" className="text-[10px] border-glow/30 text-glow px-1.5 py-0">
-                                Bundel
-                              </Badge>
+                  {items.map((item, idx) => {
+                    const lineGross = parseFloat(item.price.amount) * item.quantity;
+                    const lineNet = item.isBundle && item.bundleRate ? lineGross * (1 - item.bundleRate) : lineGross;
+                    const key = item.isBundle ? `${item.variantId}-bundle-${item.bundlePackSize}-${idx}` : item.variantId;
+                    return (
+                      <div key={key} className="flex gap-4 p-3 rounded-lg border border-border/50">
+                        <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
+                          {item.product.node.images?.edges?.[0]?.node && (
+                            <img
+                              src={item.product.node.images.edges[0].node.url}
+                              alt={item.product.node.title}
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          {item.isBundle ? (
+                            <>
+                              <div className="flex items-center gap-2 mb-1">
+                                <Package className="w-3.5 h-3.5 text-glow" />
+                                <Badge variant="outline" className="text-[10px] border-glow/30 text-glow px-1.5 py-0">
+                                  Bundel · {Math.round((item.bundleRate || 0) * 100)}%
+                                </Badge>
+                              </div>
+                              <h4 className="font-medium text-sm">
+                                {item.bundleName}
+                                {item.bundleVariantLabel ? ` — ${item.bundleVariantLabel}` : ""}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {item.product.node.title} · {item.quantity}×
+                              </p>
+                              <div className="flex items-baseline gap-2">
+                                <p className="font-semibold text-foreground">€{lineNet.toFixed(2)}</p>
+                                <p className="text-xs text-muted-foreground line-through">€{lineGross.toFixed(2)}</p>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <h4 className="font-medium truncate">{item.product.node.title}</h4>
+                              <p className="text-sm text-muted-foreground">
+                                {formatVariantLabel(item)}
+                              </p>
+                              <p className="font-semibold">
+                                €{lineGross.toFixed(2)}
+                              </p>
+                            </>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={() => removeItem(item.variantId, item.isBundle, item.bundlePackSize)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+
+                          {!item.isBundle && (
+                            <div className="flex items-center gap-1">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span className="w-8 text-center text-sm">{item.quantity}</span>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
                             </div>
-                            <h4 className="font-medium text-sm">
-                              {item.bundleName}
-                              {item.bundleSize ? ` — ${item.bundleSize}` : ""}
-                            </h4>
-                            <p className="text-xs text-muted-foreground">
-                              {item.product.node.title}
-                            </p>
-                            <p className="font-semibold text-foreground">
-                              €{(parseFloat(item.bundleIncVatTotal || item.price.amount) * item.quantity).toFixed(2)}
-                            </p>
-                          </>
-                        ) : (
-                          <>
-                            <h4 className="font-medium truncate">{item.product.node.title}</h4>
-                            <p className="text-sm text-muted-foreground">
-                              {formatVariantLabel(item)}
-                            </p>
-                            <p className="font-semibold">
-                              €{(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
-                            </p>
-                            
-                          </>
-                        )}
+                          )}
+                        </div>
                       </div>
-                      
-                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6"
-                          onClick={() => removeItem(item.variantId)}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                        
-                        {/* Only show +/- for non-bundle items */}
-                        {!item.isBundle && (
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-6 w-6"
-                              onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-8 text-center text-sm">{item.quantity}</span>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-6 w-6"
-                              onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
-              
-              <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-lg font-semibold">Totaal</span>
-                    
+
+              <div className="flex-shrink-0 space-y-2 pt-4 border-t bg-background">
+                {totalSavings > 0 && (
+                  <div className="flex justify-between items-center text-sm text-glow">
+                    <span>Bundelkorting</span>
+                    <span>−€{totalSavings.toFixed(2)}</span>
                   </div>
+                )}
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-semibold">Totaal</span>
                   <span className="text-xl font-bold">
                     €{totalPrice.toFixed(2)}
                   </span>
                 </div>
-                
-                <Button 
+
+                <Button
                   onClick={handleCheckout}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   size="lg"
                   disabled={items.length === 0 || isLoading}
                 >

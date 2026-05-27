@@ -5,7 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
-import { extractBundleVariants, BundleVariant } from "@/lib/bundleVariants";
+import { isBundleVariant } from "@/lib/bundleVariants";
+import {
+  buildBundleQuote,
+  getBundleConfig,
+  getBundleDiscountCode,
+  PackSize,
+} from "@/lib/productConfig";
+import { buildVariantKey, getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 
 interface BundlesSectionProps {
   product?: ShopifyProduct;
@@ -18,46 +25,111 @@ interface BundlesSectionProps {
   headlineOverride?: string;
 }
 
-export const BundlesSection = ({ product, headlineOverride }: BundlesSectionProps) => {
-  const addItem = useCartStore((s) => s.addItem);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(0);
+type SingleVariant = ShopifyProduct["node"]["variants"]["edges"][number]["node"];
 
-  const bundles: BundleVariant[] = useMemo(
-    () => (product ? extractBundleVariants(product) : []),
+export const BundlesSection = ({ product, selectedVariant, headlineOverride }: BundlesSectionProps) => {
+  const addItem = useCartStore((s) => s.addItem);
+
+  const productKey = product ? getProductKeyFromHandle(product.node.handle) : null;
+  const config = getBundleConfig(productKey);
+
+  // Single (non-bundle) variants available for picking inside a bundle
+  const singleVariants: SingleVariant[] = useMemo(
+    () => (product ? product.node.variants.edges.map((e) => e.node).filter((v) => !isBundleVariant(v)) : []),
     [product]
   );
 
-  // Auto-highlight the popular bundle
+  // Track which single variant is currently selected for the bundle picker
+  const [pickedVariantId, setPickedVariantId] = useState<string | null>(null);
+  const [highlightedPack, setHighlightedPack] = useState<PackSize | null>(null);
+
   useEffect(() => {
-    const popularIdx = bundles.findIndex((b) => b.popular);
-    setSelectedIdx(popularIdx >= 0 ? popularIdx : 0);
-  }, [bundles.length]);
+    if (selectedVariant && !isBundleVariant(selectedVariant)) {
+      setPickedVariantId(selectedVariant.id);
+    } else if (singleVariants.length > 0 && !pickedVariantId) {
+      setPickedVariantId(singleVariants[0].id);
+    }
+    // Auto-highlight 3-pack if offered, else the largest
+    if (config.packSizes.length > 0) {
+      const popular = config.packSizes.includes(3) ? 3 : config.packSizes[config.packSizes.length - 1];
+      setHighlightedPack(popular);
+    }
+  }, [selectedVariant?.id, singleVariants.length, config.packSizes.join(",")]);
 
-  if (!product || bundles.length === 0) return null;
+  if (!product || !productKey || config.packSizes.length === 0 || singleVariants.length === 0) {
+    return null;
+  }
 
-  const handleAdd = (b: BundleVariant) => {
+  const pickedVariant = singleVariants.find((v) => v.id === pickedVariantId) || singleVariants[0];
+  const unitPrice = parseFloat(pickedVariant.price.amount);
+  const variantKey = buildVariantKey(productKey, pickedVariant.selectedOptions);
+  const variantLabel = parseVariantLabel(productKey, pickedVariant.selectedOptions).label;
+
+  const handleAdd = (pack: PackSize) => {
+    const quote = buildBundleQuote(pack, unitPrice);
+    const code = getBundleDiscountCode(productKey, pack, variantKey);
     addItem({
       product,
-      variantId: b.variantId,
-      variantTitle: b.variantTitle,
-      price: { amount: b.price.toFixed(2), currencyCode: "EUR" },
-      quantity: 1,
-      selectedOptions: b.selectedOptions,
+      variantId: pickedVariant.id,
+      variantTitle: pickedVariant.title,
+      price: { amount: unitPrice.toFixed(2), currencyCode: "EUR" },
+      quantity: pack,
+      selectedOptions: pickedVariant.selectedOptions,
       isBundle: true,
-      bundleName: b.niceLabel,
-      bundleSize: b.contents,
-      bundleUnitCount: b.quantity,
-      bundleIncVatTotal: b.price.toFixed(2),
+      bundleName: quote.label,
+      bundleVariantLabel: variantLabel,
+      bundlePackSize: pack,
+      bundleRate: quote.rate,
+      bundleDiscountCode: code || undefined,
     });
   };
 
   const headline = headlineOverride || "Meer kiezen, meer besparen";
 
+  // Group variant options by name for cleaner pickers (e.g. Color, Size)
+  // Build pickers from product.options, skipping bundle-only values
+  const pickerOptions = product.node.options.map((opt) => {
+    const seen = new Set<string>();
+    const values: Array<{ value: string; variantId: string }> = [];
+    for (const v of singleVariants) {
+      const optVal = v.selectedOptions.find((o) => o.name === opt.name)?.value;
+      if (!optVal || seen.has(optVal)) continue;
+      // Skip placeholder option values
+      if (/3 colors in one lamp/i.test(optVal)) continue;
+      seen.add(optVal);
+      values.push({ value: optVal, variantId: v.id });
+    }
+    return { name: opt.name, values };
+  }).filter((o) => o.values.length > 1);
+
+  const updatePicked = (optionName: string, newValue: string) => {
+    const currentOpts = pickedVariant.selectedOptions.map((o) =>
+      o.name === optionName ? { ...o, value: newValue } : o
+    );
+    const match = singleVariants.find((v) =>
+      currentOpts.every((o) => v.selectedOptions.find((vo) => vo.name === o.name)?.value === o.value)
+    );
+    if (match) setPickedVariantId(match.id);
+  };
+
+  // Pretty option label maps
+  const prettifyValue = (raw: string): string => {
+    const v = raw.toLowerCase();
+    if (v.includes("silver")) return "Zilver";
+    if (v.includes("white") || v === "wit") return "Wit";
+    if (v.includes("black") || v === "zwart") return "Zwart";
+    const sz = v.match(/(\d{2,3})\s?cm/);
+    if (sz) return `${sz[1]}cm`;
+    if (v.includes("4-delige")) return "4-set";
+    if (v.includes("8-delige")) return "8-set";
+    return raw;
+  };
+
   return (
     <section className="py-20 md:py-32">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14 space-y-4">
+          <div className="text-center mb-10 space-y-4">
             <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
               Bundels
             </p>
@@ -69,27 +141,59 @@ export const BundlesSection = ({ product, headlineOverride }: BundlesSectionProp
             </p>
           </div>
 
+          {/* Variant pickers for the whole bundle group */}
+          {pickerOptions.length > 0 && (
+            <div className="max-w-2xl mx-auto mb-10 space-y-4">
+              {pickerOptions.map((opt) => {
+                const currentVal = pickedVariant.selectedOptions.find((o) => o.name === opt.name)?.value;
+                return (
+                  <div key={opt.name} className="space-y-2">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-foreground/50 font-medium">
+                      {/Emitting Color|Color|Kleur/i.test(opt.name) && opt.values.some(v => /cm/i.test(v.value)) ? "Maat & kleur" : opt.name}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {opt.values.map(({ value }) => {
+                        const active = value === currentVal;
+                        return (
+                          <button
+                            key={value}
+                            type="button"
+                            onClick={() => updatePicked(opt.name, value)}
+                            className={`px-4 py-2 rounded-full text-sm transition-all duration-300 border ${
+                              active
+                                ? "bg-glow text-background border-glow shadow-[0_0_20px_-8px_hsl(var(--glow)/0.6)]"
+                                : "bg-card border-foreground/10 hover:border-foreground/30 text-foreground/80"
+                            }`}
+                          >
+                            {prettifyValue(value)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           <div
             className={`grid gap-6 ${
-              bundles.length === 1
+              config.packSizes.length === 1
                 ? "max-w-md mx-auto"
-                : bundles.length === 2
+                : config.packSizes.length === 2
                 ? "md:grid-cols-2 max-w-3xl mx-auto"
                 : "md:grid-cols-3"
             }`}
           >
-            {bundles.map((b, idx) => {
-              const isHighlighted = selectedIdx === idx;
-              const badge = b.popular
-                ? "⭐ Meest gekozen"
-                : b.quantity >= 4
-                ? "Maximaal voordeel"
-                : null;
+            {config.packSizes.map((pack) => {
+              const quote = buildBundleQuote(pack, unitPrice);
+              const isHighlighted = highlightedPack === pack;
+              const badge = pack === 3 ? "⭐ Meest gekozen" : pack === 4 ? "Maximaal voordeel" : null;
 
               return (
                 <Card
-                  key={b.variantId}
-                  onClick={() => setSelectedIdx(idx)}
+                  key={pack}
+                  onClick={() => setHighlightedPack(pack)}
                   className={`
                     relative p-7 cursor-pointer transition-all duration-500 ease-out
                     ${
@@ -107,46 +211,36 @@ export const BundlesSection = ({ product, headlineOverride }: BundlesSectionProp
 
                   <div className="space-y-5">
                     <div className="space-y-1.5">
-                      <h3 className="text-2xl font-bold text-foreground">{b.niceLabel}</h3>
-                      {b.contents && (
-                        <p className="text-xs uppercase tracking-[0.2em] text-foreground/40">
-                          {b.contents}
-                        </p>
-                      )}
-                      {b.subtitle && (
-                        <p className="text-sm text-foreground/55">{b.subtitle}</p>
-                      )}
+                      <h3 className="text-2xl font-bold text-foreground">{quote.label}</h3>
+                      <p className="text-xs uppercase tracking-[0.2em] text-foreground/40">
+                        {pack}× {variantLabel || pickedVariant.title}
+                      </p>
+                      <p className="text-sm text-foreground/55">{quote.subtitle}</p>
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex items-baseline gap-3">
                         <span className="text-3xl font-bold text-foreground">
-                          €{b.price.toFixed(2)}
+                          €{quote.total.toFixed(2)}
                         </span>
-                        {b.discountLabel && (
-                          <span className="px-2 py-0.5 rounded-full bg-glow/10 text-glow text-xs font-semibold">
-                            {b.discountLabel}
-                          </span>
-                        )}
+                        <span className="px-2 py-0.5 rounded-full bg-glow/10 text-glow text-xs font-semibold">
+                          {quote.discountLabel}
+                        </span>
                       </div>
-                      {b.comparePrice && (
-                        <p className="text-sm text-foreground/40 line-through">
-                          Was €{b.comparePrice.toFixed(2)}
-                        </p>
-                      )}
-                      {b.savings > 0 && (
-                        <p className="text-sm text-glow font-medium">
-                          Je bespaart €{b.savings.toFixed(2)}
-                        </p>
-                      )}
+                      <p className="text-sm text-foreground/40 line-through">
+                        Was €{quote.originalTotal.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-glow font-medium">
+                        Je bespaart €{quote.save.toFixed(2)}
+                      </p>
                     </div>
 
                     <ul className="space-y-2.5">
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
                         <span>
-                          {b.quantity}× {product.node.title}
-                          {b.contents ? ` — ${b.contents}` : ""}
+                          {pack}× {product.node.title}
+                          {variantLabel ? ` — ${variantLabel}` : ""}
                         </span>
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
@@ -166,7 +260,7 @@ export const BundlesSection = ({ product, headlineOverride }: BundlesSectionProp
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleAdd(b);
+                        handleAdd(pack);
                       }}
                       className={`w-full rounded-full transition-all duration-500 ${
                         isHighlighted
