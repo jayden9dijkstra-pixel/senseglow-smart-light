@@ -88,45 +88,6 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
 
   const headline = headlineOverride || "Meer kiezen, meer besparen";
 
-  // Group variant options by name for cleaner pickers (e.g. Color, Size)
-  // Build pickers from product.options, skipping bundle-only values
-  const pickerOptions = product.node.options.map((opt) => {
-    const seen = new Set<string>();
-    const values: Array<{ value: string; variantId: string }> = [];
-    for (const v of singleVariants) {
-      const optVal = v.selectedOptions.find((o) => o.name === opt.name)?.value;
-      if (!optVal || seen.has(optVal)) continue;
-      // Skip placeholder option values
-      if (/3 colors in one lamp/i.test(optVal)) continue;
-      seen.add(optVal);
-      values.push({ value: optVal, variantId: v.id });
-    }
-    return { name: opt.name, values };
-  }).filter((o) => o.values.length > 1);
-
-  const updatePicked = (optionName: string, newValue: string) => {
-    const currentOpts = pickedVariant.selectedOptions.map((o) =>
-      o.name === optionName ? { ...o, value: newValue } : o
-    );
-    const match = singleVariants.find((v) =>
-      currentOpts.every((o) => v.selectedOptions.find((vo) => vo.name === o.name)?.value === o.value)
-    );
-    if (match) setPickedVariantId(match.id);
-  };
-
-  // Pretty option label maps
-  const prettifyValue = (raw: string): string => {
-    const v = raw.toLowerCase();
-    if (v.includes("silver")) return "Zilver";
-    if (v.includes("white") || v === "wit") return "Wit";
-    if (v.includes("black") || v === "zwart") return "Zwart";
-    const sz = v.match(/(\d{2,3})\s?cm/);
-    if (sz) return `${sz[1]}cm`;
-    if (v.includes("4-delige")) return "4-set";
-    if (v.includes("8-delige")) return "8-set";
-    return raw;
-  };
-
   return (
     <section className="py-20 md:py-32">
       <div className="container">
@@ -143,40 +104,16 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
             </p>
           </div>
 
-          {/* Variant pickers for the whole bundle group */}
-          {pickerOptions.length > 0 && (
-            <div className="max-w-2xl mx-auto mb-10 space-y-4">
-              {pickerOptions.map((opt) => {
-                const currentVal = pickedVariant.selectedOptions.find((o) => o.name === opt.name)?.value;
-                return (
-                  <div key={opt.name} className="space-y-2">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-foreground/50 font-medium">
-                      {/Emitting Color|Color|Kleur/i.test(opt.name) && opt.values.some(v => /cm/i.test(v.value)) ? "Maat & kleur" : opt.name}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {opt.values.map(({ value }) => {
-                        const active = value === currentVal;
-                        return (
-                          <button
-                            key={value}
-                            type="button"
-                            onClick={() => updatePicked(opt.name, value)}
-                            className={`px-4 py-2 rounded-full text-sm transition-all duration-300 border ${
-                              active
-                                ? "bg-glow text-background border-glow shadow-[0_0_20px_-8px_hsl(var(--glow)/0.6)]"
-                                : "bg-card border-foreground/10 hover:border-foreground/30 text-foreground/80"
-                            }`}
-                          >
-                            {prettifyValue(value)}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          {/* Same variant picker as the single product page */}
+          <div className="max-w-2xl mx-auto mb-12">
+            <VariantPicker
+              product={product}
+              selectedVariant={pickedVariant}
+              onVariantChange={(v) => setPickedVariantId(v.id)}
+            />
+          </div>
+
+
 
           <div
             className={`grid gap-6 ${
