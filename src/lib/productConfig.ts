@@ -115,16 +115,17 @@ export function getProductTierKeys(productKey: ProductKey): BundleTierKey[] {
 // ─── Legacy Ambient Bar size helpers (still used by quiz / cart drawer) ──
 export type SizeVariant = "20cm" | "30cm" | "40cm";
 
+// Inc-VAT prices match Shopify (updated 2026-05-25 — €3 drop across all sizes)
 export const incVatPrices: Record<SizeVariant, string> = {
-  "20cm": "27.95",
-  "30cm": "32.95",
-  "40cm": "37.95",
+  "20cm": "24.95",
+  "30cm": "29.95",
+  "40cm": "34.95",
 };
 
 export const shopifyExVatPrices: Record<SizeVariant, number> = {
-  "20cm": 27.95,
-  "30cm": 32.95,
-  "40cm": 37.95,
+  "20cm": 24.95,
+  "30cm": 29.95,
+  "40cm": 34.95,
 };
 
 export function getIncVatPrice(shopifyAmount: string): string {
