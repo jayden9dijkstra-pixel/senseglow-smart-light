@@ -1,10 +1,6 @@
 import { toast } from "sonner";
 import { z } from "zod";
-import {
-  bundlePricing, incVatPrices, SizeVariant, ENABLED_PRODUCT_HANDLES,
-  ProductKey, BundleTierKey, BUNDLE_TIERS, quoteBundle,
-} from "@/lib/productConfig";
-import { isBundleOptionValue } from "@/lib/bundleVariants";
+import { ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
@@ -20,19 +16,16 @@ const checkoutItemSchema = z.object({
 });
 const checkoutItemsSchema = z.array(checkoutItemSchema).min(1).max(100);
 
-// Request configuration
-const REQUEST_TIMEOUT_MS = 30000; // 30 second timeout
+const REQUEST_TIMEOUT_MS = 30000;
 const MAX_RETRY_ATTEMPTS = 3;
-const RETRY_DELAY_MS = 1000; // 1 second between retries
+const RETRY_DELAY_MS = 1000;
 
-// Helper function to create timeout signal
 function createTimeoutController(timeoutMs: number): AbortController {
   const controller = new AbortController();
   setTimeout(() => controller.abort(), timeoutMs);
   return controller;
 }
 
-// Helper function for delay
 function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -86,45 +79,18 @@ const STOREFRONT_QUERY = `
     products(first: $first, query: $query) {
       edges {
         node {
-          id
-          title
-          description
-          handle
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          images(first: 20) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
+          id title description handle
+          priceRange { minVariantPrice { amount currencyCode } }
+          images(first: 20) { edges { node { url altText } } }
           variants(first: 30) {
-            edges {
-              node {
-                id
-                title
-                price {
-                  amount
-                  currencyCode
-                }
-                availableForSale
-                selectedOptions {
-                  name
-                  value
-                }
-              }
-            }
+            edges { node {
+              id title
+              price { amount currencyCode }
+              availableForSale
+              selectedOptions { name value }
+            } }
           }
-          options {
-            name
-            values
-          }
+          options { name values }
         }
       }
     }
@@ -135,53 +101,21 @@ const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
       cart {
-        id
-        checkoutUrl
-        totalQuantity
-        cost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-        }
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  title
-                  price {
-                    amount
-                    currencyCode
-                  }
-                  product {
-                    title
-                    handle
-                  }
-                }
-              }
-            }
-          }
-        }
+        id checkoutUrl totalQuantity
+        cost { totalAmount { amount currencyCode } }
       }
-      userErrors {
-        field
-        message
-      }
+      userErrors { field message }
     }
   }
 `;
 
 export async function storefrontApiRequest(
-  query: string, 
+  query: string,
   variables: Record<string, unknown> = {},
   attempt: number = 1
 ): Promise<Record<string, unknown> | undefined> {
   const controller = createTimeoutController(REQUEST_TIMEOUT_MS);
-  
+
   try {
     const response = await fetch(SHOPIFY_STOREFRONT_URL, {
       method: 'POST',
@@ -189,28 +123,23 @@ export async function storefrontApiRequest(
         'Content-Type': 'application/json',
         'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
       },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
+      body: JSON.stringify({ query, variables }),
       signal: controller.signal,
     });
 
     if (response.status === 402) {
       toast.error("Shopify: Payment required", {
-        description: "Shopify API access requires an active Shopify billing plan. Visit https://admin.shopify.com to upgrade your store.",
+        description: "Shopify API access requires an active Shopify billing plan.",
       });
       return;
     }
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const data = await response.json();
-    
+
     if (data.errors) {
-      const errorMessages = Array.isArray(data.errors) 
+      const errorMessages = Array.isArray(data.errors)
         ? data.errors.map((e: { message?: string }) => e.message || 'Unknown error').join(', ')
         : 'Unknown API error';
       throw new Error(`Error calling Shopify: ${errorMessages}`);
@@ -218,7 +147,6 @@ export async function storefrontApiRequest(
 
     return data;
   } catch (error) {
-    // Handle timeout
     if (error instanceof Error && error.name === 'AbortError') {
       if (attempt < MAX_RETRY_ATTEMPTS) {
         await delay(RETRY_DELAY_MS);
@@ -226,14 +154,13 @@ export async function storefrontApiRequest(
       }
       throw new Error('Request timed out after multiple attempts');
     }
-    
-    // Retry on network errors
-    if (attempt < MAX_RETRY_ATTEMPTS && error instanceof Error && 
+
+    if (attempt < MAX_RETRY_ATTEMPTS && error instanceof Error &&
         (error.message.includes('network') || error.message.includes('HTTP error'))) {
       await delay(RETRY_DELAY_MS);
       return storefrontApiRequest(query, variables, attempt + 1);
     }
-    
+
     throw error;
   }
 }
@@ -241,69 +168,35 @@ export async function storefrontApiRequest(
 export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[]> {
   try {
     const validatedLimit = limitSchema.parse(limit);
-    
-    // Fetch all SenseGlow products from Shopify
-    const data = await storefrontApiRequest(STOREFRONT_QUERY, { 
+    const data = await storefrontApiRequest(STOREFRONT_QUERY, {
       first: validatedLimit,
       query: "title:SenseGlow*"
     });
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
     const allProducts = responseData?.data?.products?.edges || [];
-    
-    // Only return products whose handle is explicitly whitelisted
     return allProducts.filter(p => ENABLED_PRODUCT_HANDLES.includes(p.node.handle));
   } catch {
     return [];
   }
 }
 
-/**
- * Fetch a single product by its Shopify handle.
- */
 export async function fetchProductByHandle(handle: string): Promise<ShopifyProduct | null> {
   try {
     const query = `
       query GetProductByHandle($handle: String!) {
         productByHandle(handle: $handle) {
-          id
-          title
-          description
-          handle
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          images(first: 20) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
+          id title description handle
+          priceRange { minVariantPrice { amount currencyCode } }
+          images(first: 20) { edges { node { url altText } } }
           variants(first: 30) {
-            edges {
-              node {
-                id
-                title
-                price {
-                  amount
-                  currencyCode
-                }
-                availableForSale
-                selectedOptions {
-                  name
-                  value
-                }
-              }
-            }
+            edges { node {
+              id title
+              price { amount currencyCode }
+              availableForSale
+              selectedOptions { name value }
+            } }
           }
-          options {
-            name
-            values
-          }
+          options { name values }
         }
       }
     `;
@@ -325,43 +218,19 @@ interface CheckoutItem {
 interface CartCreateResponse {
   data?: {
     cartCreate?: {
-      cart?: {
-        checkoutUrl?: string;
-      };
+      cart?: { checkoutUrl?: string };
       userErrors?: Array<{ message?: string }>;
     };
   };
 }
 
-/** Legacy helper still used by CartDrawer for size-only Ambient totals. */
-export function calcSizeDiscount(sizeCm: string, qty: number): number {
-  const sizeKey = `${sizeCm}cm` as SizeVariant;
-  const unit = parseFloat(incVatPrices[sizeKey] || "0");
-  if (!unit || qty < 2) return 0;
-  const tiers: Array<{ key: BundleTierKey; qty: number }> = [
-    { key: "four", qty: 4 }, { key: "three", qty: 3 }, { key: "two", qty: 2 },
-  ];
-  let remaining = qty;
-  let saved = 0;
-  for (const t of tiers) {
-    while (remaining >= t.qty) {
-      const q = quoteBundle("ambient", t.key, unit);
-      if (q) saved += parseFloat(q.save);
-      remaining -= t.qty;
-    }
-  }
-  return Math.round(saved * 100) / 100;
-}
-
 /**
- * Create a Shopify cart via the Storefront API and return its checkoutUrl.
- *
- * Bundle pricing is now baked into BUNDLE-* variants (with compare_at_price)
- * in Shopify, so no discount codes are needed at checkout — the lines speak
- * for themselves.
+ * Create a Shopify cart via the Storefront API. Optionally applies one or
+ * more discount codes (Shopify combines them based on shop configuration).
  */
 export async function createStorefrontCheckout(
-  items: CheckoutItem[]
+  items: CheckoutItem[],
+  discountCodes: string[] = []
 ): Promise<string> {
   const validatedItems = checkoutItemsSchema.parse(items);
 
@@ -370,9 +239,10 @@ export async function createStorefrontCheckout(
     merchandiseId: item.variantId,
   }));
 
-  const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
-    input: { lines },
-  }) as CartCreateResponse | undefined;
+  const input: Record<string, unknown> = { lines };
+  if (discountCodes.length > 0) input.discountCodes = discountCodes;
+
+  const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, { input }) as CartCreateResponse | undefined;
 
   const userErrors = cartData?.data?.cartCreate?.userErrors;
   if (userErrors && userErrors.length > 0) {
@@ -387,5 +257,3 @@ export async function createStorefrontCheckout(
   url.searchParams.set('channel', 'online_store');
   return url.toString();
 }
-
-
