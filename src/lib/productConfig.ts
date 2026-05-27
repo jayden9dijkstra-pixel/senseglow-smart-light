@@ -1,8 +1,11 @@
 /**
  * Product configuration & per-product bundle tiers
  *
- * - Shopify is the source of truth for variant pricing.
- * - Bundle discount % per product (see BUNDLE_TIERS below).
+ * Bundle pricing model:
+ * - User picks a single variant (color + size) and a pack size (2, 3 or 4)
+ * - Cart line = N × variantId of that single variant
+ * - At checkout a Shopify discount code is applied that gives the
+ *   standardized % off (8 / 12 / 15 for 2 / 3 / 4 pack)
  */
 
 export const VAT_RATE = 0.21;
@@ -14,7 +17,6 @@ export const ARC_PRODUCT_HANDLE = "aluminium-led-wall-lamp-ip65-waterproof-8w-12
 export const FLEX_PRODUCT_HANDLE = "senseglow_flex";
 export const LANTERN_PRODUCT_HANDLE = "senseglow_solar_lantern";
 export const SOLAR_PRODUCT_HANDLE = LANTERN_PRODUCT_HANDLE;
-// "Step" product is now sold as the SenseGlow Wall Lamp™ (4-set / 8-set)
 export const STEP_PRODUCT_HANDLE = "senseglow_wall_lamp";
 export const SCONCE_PRODUCT_HANDLE = STEP_PRODUCT_HANDLE;
 
@@ -26,7 +28,7 @@ export const ENABLED_PRODUCT_HANDLES: string[] = [
   STEP_PRODUCT_HANDLE,
 ];
 
-// ─── Product key (used for tier lookups + discount codes) ──
+// ─── Product key ───────────────────────────────────────
 export type ProductKey = "ambient" | "arc" | "flex" | "lantern" | "wave" | "sconce";
 
 export const HANDLE_TO_KEY: Record<string, ProductKey> = {
@@ -38,84 +40,99 @@ export const HANDLE_TO_KEY: Record<string, ProductKey> = {
   [SCONCE_PRODUCT_HANDLE]: "sconce",
 };
 
-// ─── Per-product bundle tier configuration ─────────────
-// Tier value = decimal discount (0.07 = 7%). Missing tiers are not offered.
-export type BundleTierKey = "two" | "three" | "four" | "eight";
-
-export interface BundleTierConfig {
-  qty: number;
-  rate: number;
-  label: string; // % shown to user
-}
-
-export type BundleTiers = Partial<Record<BundleTierKey, BundleTierConfig>>;
-
-export const BUNDLE_TIERS: Record<ProductKey, BundleTiers> = {
-  ambient: {
-    two:   { qty: 2, rate: 0.07, label: "7%" },
-    three: { qty: 3, rate: 0.12, label: "12%" },
-    four:  { qty: 4, rate: 0.15, label: "15%" },
-  },
-  arc: {
-    two:   { qty: 2, rate: 0.10, label: "10%" },
-    three: { qty: 3, rate: 0.15, label: "15%" },
-  },
-  lantern: {
-    // No bundles for Lantern — section hidden on product page.
-  },
-  wave: {
-    two:   { qty: 2, rate: 0.08, label: "8%" },
-    three: { qty: 3, rate: 0.12, label: "12%" },
-    four:  { qty: 4, rate: 0.15, label: "15%" },
-  },
-  sconce: {
-    // No bundles for Solar Wall Lamp — section hidden on product page.
-  },
-  flex: {
-    // No bundles for Flex — section hidden on product page.
-  },
+// ─── Standardized bundle tiers (same for every product) ──
+export type PackSize = 2 | 3 | 4;
+export const PACK_RATE: Record<PackSize, number> = {
+  2: 0.08,
+  3: 0.12,
+  4: 0.15,
+};
+export const PACK_LABEL: Record<PackSize, string> = {
+  2: "Duopak",
+  3: "Familiepak",
+  4: "Voordeelpak",
+};
+export const PACK_SUBTITLE: Record<PackSize, string> = {
+  2: "Ideaal om te starten",
+  3: "Voor het hele huis",
+  4: "Maximale besparing",
 };
 
-export interface BundleQuote {
-  tierKey: BundleTierKey;
-  qty: number;
-  rate: number;
-  label: string;
-  price: string;          // discounted total inc-VAT
-  originalPrice: string;  // qty * unit
-  save: string;           // money saved
-  discount: string;       // alias of label, kept for backwards compat
+// ─── Per-product configuration ─────────────────────────
+export interface ProductBundleConfig {
+  packSizes: PackSize[];
 }
 
-export function quoteBundle(
+export const BUNDLE_CONFIG: Record<ProductKey, ProductBundleConfig> = {
+  ambient: { packSizes: [2, 3, 4] },
+  wave: { packSizes: [2, 3, 4] },
+  lantern: { packSizes: [2] },
+  sconce: { packSizes: [2] },
+  flex: { packSizes: [] },
+  arc: { packSizes: [] },
+};
+
+export function getBundleConfig(productKey: ProductKey | null): ProductBundleConfig {
+  return productKey ? BUNDLE_CONFIG[productKey] : { packSizes: [] };
+}
+
+// ─── Discount-code mapping ─────────────────────────────
+// Codes already exist in Shopify and are standardized at 8/12/15%.
+// variantKey comes from productRegistry.buildVariantKey(productKey, opts).
+export function getBundleDiscountCode(
   productKey: ProductKey,
-  tierKey: BundleTierKey,
-  unitIncVatPrice: number
-): BundleQuote | null {
-  const tier = BUNDLE_TIERS[productKey]?.[tierKey];
-  if (!tier) return null;
-  const original = unitIncVatPrice * tier.qty;
-  const price = original * (1 - tier.rate);
+  packSize: PackSize,
+  variantKey: string
+): string | null {
+  switch (productKey) {
+    case "ambient":
+      if (!["20", "30", "40"].includes(variantKey)) return null;
+      return `SG-AB-${variantKey}-${packSize}`;
+    case "wave":
+      if (!["30", "50"].includes(variantKey)) return null;
+      return `SG-WAVE-${variantKey}-${packSize}`;
+    case "lantern":
+      return packSize === 2 ? "SG-SOL-2" : null;
+    case "sconce":
+      return packSize === 2 ? "SG-WALLLAMP-2" : null;
+    default:
+      return null;
+  }
+}
+
+// ─── Bundle quote helper ───────────────────────────────
+export interface BundleQuote {
+  packSize: PackSize;
+  rate: number;
+  label: string;        // "Duopak"
+  subtitle: string;     // marketing subtitle
+  discountLabel: string; // "-8%"
+  unitPrice: number;
+  originalTotal: number;
+  total: number;        // discounted
+  save: number;
+}
+
+export function buildBundleQuote(packSize: PackSize, unitPrice: number): BundleQuote {
+  const rate = PACK_RATE[packSize];
+  const originalTotal = +(unitPrice * packSize).toFixed(2);
+  const total = +(originalTotal * (1 - rate)).toFixed(2);
   return {
-    tierKey,
-    qty: tier.qty,
-    rate: tier.rate,
-    label: tier.label,
-    price: price.toFixed(2),
-    originalPrice: original.toFixed(2),
-    save: (original - price).toFixed(2),
-    discount: tier.label,
+    packSize,
+    rate,
+    label: PACK_LABEL[packSize],
+    subtitle: PACK_SUBTITLE[packSize],
+    discountLabel: `-${Math.round(rate * 100)}%`,
+    unitPrice,
+    originalTotal,
+    total,
+    save: +(originalTotal - total).toFixed(2),
   };
 }
 
-export function getProductTierKeys(productKey: ProductKey): BundleTierKey[] {
-  return Object.keys(BUNDLE_TIERS[productKey] || {}) as BundleTierKey[];
-}
-
-// ─── Legacy Ambient Bar size helpers (still used by quiz / cart drawer) ──
+// ─── Legacy Ambient Bar size helpers (still used by quiz) ──
 export type SizeVariant = "20cm" | "30cm" | "40cm";
 
-// Inc-VAT prices match Shopify (updated 2026-05-25 — €3 drop across all sizes)
 export const incVatPrices: Record<SizeVariant, string> = {
   "20cm": "24.95",
   "30cm": "29.95",
@@ -154,47 +171,40 @@ export const sizeRecommendations = {
   large: "40cm" as SizeVariant,
 } as const;
 
-// Backwards-compat re-export — Ambient Bar bundle pricing (size based)
+// Backwards-compat re-export for Quiz.tsx (Ambient bundle preview)
 export const bundlePricing: Record<SizeVariant, {
   basePrice: string;
-  two: BundleQuote;
-  three: BundleQuote;
-  four: BundleQuote;
-}> = {
-  "20cm": {
-    basePrice: incVatPrices["20cm"],
-    two: quoteBundle("ambient", "two", parseFloat(incVatPrices["20cm"]))!,
-    three: quoteBundle("ambient", "three", parseFloat(incVatPrices["20cm"]))!,
-    four: quoteBundle("ambient", "four", parseFloat(incVatPrices["20cm"]))!,
-  },
-  "30cm": {
-    basePrice: incVatPrices["30cm"],
-    two: quoteBundle("ambient", "two", parseFloat(incVatPrices["30cm"]))!,
-    three: quoteBundle("ambient", "three", parseFloat(incVatPrices["30cm"]))!,
-    four: quoteBundle("ambient", "four", parseFloat(incVatPrices["30cm"]))!,
-  },
-  "40cm": {
-    basePrice: incVatPrices["40cm"],
-    two: quoteBundle("ambient", "two", parseFloat(incVatPrices["40cm"]))!,
-    three: quoteBundle("ambient", "three", parseFloat(incVatPrices["40cm"]))!,
-    four: quoteBundle("ambient", "four", parseFloat(incVatPrices["40cm"]))!,
-  },
-};
+  two: { price: string; originalPrice: string; save: string; discount: string };
+  three: { price: string; originalPrice: string; save: string; discount: string };
+  four: { price: string; originalPrice: string; save: string; discount: string };
+}> = (() => {
+  const build = (size: SizeVariant) => {
+    const unit = parseFloat(incVatPrices[size]);
+    const wrap = (q: BundleQuote) => ({
+      price: q.total.toFixed(2),
+      originalPrice: q.originalTotal.toFixed(2),
+      save: q.save.toFixed(2),
+      discount: q.discountLabel,
+    });
+    return {
+      basePrice: incVatPrices[size],
+      two: wrap(buildBundleQuote(2, unit)),
+      three: wrap(buildBundleQuote(3, unit)),
+      four: wrap(buildBundleQuote(4, unit)),
+    };
+  };
+  return {
+    "20cm": build("20cm"),
+    "30cm": build("30cm"),
+    "40cm": build("40cm"),
+  };
+})();
 
 export const bundleNames: Record<number, string> = {
   2: "Duopak",
   3: "Familiepak",
   4: "Voordeelpak",
-  8: "Voordeelset",
 };
-
-export function getBundleExVatUnitPrice(size: SizeVariant, quantity: 2 | 3 | 4): number {
-  const tierKey: BundleTierKey = quantity === 2 ? "two" : quantity === 3 ? "three" : "four";
-  const tier = BUNDLE_TIERS.ambient[tierKey]!;
-  const targetIncVat = parseFloat(incVatPrices[size]) * tier.qty * (1 - tier.rate);
-  const targetExVat = targetIncVat / (1 + VAT_RATE);
-  return targetExVat / quantity;
-}
 
 export function getProductUrl(size?: SizeVariant, color?: string): string {
   const params = new URLSearchParams();
@@ -204,12 +214,18 @@ export function getProductUrl(size?: SizeVariant, color?: string): string {
   return `/product/${PRODUCT_HANDLE}${qs ? `?${qs}` : ""}`;
 }
 
-// Legacy alias kept for older code paths
+// Legacy alias used by other product config files (kept harmless)
 export function computeBundlePricing(unitPrice: number) {
+  const wrap = (q: BundleQuote) => ({
+    price: q.total.toFixed(2),
+    originalPrice: q.originalTotal.toFixed(2),
+    save: q.save.toFixed(2),
+    discount: q.discountLabel,
+  });
   return {
     basePrice: unitPrice.toFixed(2),
-    two: quoteBundle("ambient", "two", unitPrice)!,
-    three: quoteBundle("ambient", "three", unitPrice)!,
-    four: quoteBundle("ambient", "four", unitPrice)!,
+    two: wrap(buildBundleQuote(2, unitPrice)),
+    three: wrap(buildBundleQuote(3, unitPrice)),
+    four: wrap(buildBundleQuote(4, unitPrice)),
   };
 }
