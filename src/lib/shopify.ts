@@ -4,6 +4,7 @@ import {
   bundlePricing, incVatPrices, SizeVariant, ENABLED_PRODUCT_HANDLES,
   ProductKey, BundleTierKey, BUNDLE_TIERS, quoteBundle,
 } from "@/lib/productConfig";
+import { isBundleOptionValue } from "@/lib/bundleVariants";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
@@ -103,7 +104,7 @@ const STOREFRONT_QUERY = `
               }
             }
           }
-          variants(first: 10) {
+          variants(first: 30) {
             edges {
               node {
                 id
@@ -282,7 +283,7 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
               }
             }
           }
-          variants(first: 10) {
+          variants(first: 30) {
             edges {
               node {
                 id
