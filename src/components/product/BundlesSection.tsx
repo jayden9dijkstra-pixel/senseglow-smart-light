@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { isBundleVariant } from "@/lib/bundleVariants";
+import { VariantPicker } from "@/components/product/VariantPicker";
 import {
   buildBundleQuote,
   getBundleConfig,
@@ -13,6 +14,7 @@ import {
   PackSize,
 } from "@/lib/productConfig";
 import { buildVariantKey, getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
+
 
 interface BundlesSectionProps {
   product?: ShopifyProduct;
