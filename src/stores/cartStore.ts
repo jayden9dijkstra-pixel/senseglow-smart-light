@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createStorefrontCheckout, ShopifyProduct, CheckoutBundleInfo } from '@/lib/shopify';
+import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
-import { bundleNames, ProductKey, BundleTierKey } from '@/lib/productConfig';
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -17,14 +16,12 @@ export interface CartItem {
     name: string;
     value: string;
   }>;
-  // Bundle info
+  // Bundle info (now: variantId IS the Shopify bundle variant, quantity is always 1)
   isBundle?: boolean;
   bundleName?: string;
-  bundleSize?: string;
-  bundleIncVatTotal?: string;
-  productKey?: ProductKey;
-  variantKey?: string;
-  tierKey?: BundleTierKey;
+  bundleSize?: string;          // e.g. "30cm + 50cm"
+  bundleUnitCount?: number;     // 2, 3, 12, 16 — display only
+  bundleIncVatTotal?: string;   // total price the user pays for the bundle
 }
 
 interface CartStore {
@@ -32,7 +29,7 @@ interface CartStore {
   cartId: string | null;
   checkoutUrl: string | null;
   isLoading: boolean;
-  
+
   addItem: (item: CartItem) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
   removeItem: (variantId: string) => void;
@@ -53,28 +50,37 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         const { items } = get();
-        
-        // For bundle items, always add as a new line (don't merge with existing)
+
+        // Bundle: variantId is the real Shopify bundle variant.
+        // Stack quantities on the same bundle line if the user adds it twice.
         if (item.isBundle) {
-          // Generate a unique key for this bundle entry
-          const bundleKey = `${item.variantId}-bundle-${item.quantity}-${Date.now()}`;
-          set({ items: [...items, { ...item, variantId: bundleKey, _originalVariantId: item.variantId } as CartItem & { _originalVariantId: string }] });
+          const existing = items.find((i) => i.isBundle && i.variantId === item.variantId);
+          if (existing) {
+            set({
+              items: items.map((i) =>
+                i.isBundle && i.variantId === item.variantId
+                  ? { ...i, quantity: i.quantity + 1 }
+                  : i
+              ),
+            });
+          } else {
+            set({ items: [...items, { ...item, quantity: 1 }] });
+          }
           toast.success('Bundel toegevoegd aan winkelwagen', {
-            description: `${item.bundleName} — ${item.quantity}x ${item.bundleSize}`,
+            description: `${item.bundleName}${item.bundleSize ? ` — ${item.bundleSize}` : ''}`,
           });
           return;
         }
-        
-        // For single items, check if already in cart (non-bundle)
-        const existingItem = items.find(i => i.variantId === item.variantId && !i.isBundle);
-        
+
+        // Singles: merge by variantId
+        const existingItem = items.find((i) => i.variantId === item.variantId && !i.isBundle);
         if (existingItem) {
           set({
-            items: items.map(i =>
+            items: items.map((i) =>
               i.variantId === item.variantId && !i.isBundle
                 ? { ...i, quantity: i.quantity + item.quantity }
                 : i
-            )
+            ),
           });
           toast.success('Toegevoegd aan winkelwagen', {
             description: `${item.product.node.title} (${existingItem.quantity + item.quantity}x)`,
@@ -88,25 +94,20 @@ export const useCartStore = create<CartStore>()(
       },
 
       updateQuantity: (variantId, quantity) => {
-        const item = get().items.find(i => i.variantId === variantId);
-        // Prevent quantity changes on bundle items
-        if (item?.isBundle) return;
-        
         if (quantity <= 0) {
           get().removeItem(variantId);
           return;
         }
-        
         set({
-          items: get().items.map(item =>
+          items: get().items.map((item) =>
             item.variantId === variantId ? { ...item, quantity } : item
-          )
+          ),
         });
       },
 
       removeItem: (variantId) => {
         set({
-          items: get().items.filter(item => item.variantId !== variantId)
+          items: get().items.filter((item) => item.variantId !== variantId),
         });
         toast.info('Verwijderd uit winkelwagen');
       },
@@ -125,27 +126,11 @@ export const useCartStore = create<CartStore>()(
 
         setLoading(true);
         try {
-          // Convert cart items to checkout items, using original variant IDs for bundles
-          const checkoutItems = items.map(item => {
-            const originalVariantId = (item as CartItem & { _originalVariantId?: string })._originalVariantId || item.variantId;
-            return {
-              variantId: originalVariantId,
-              quantity: item.quantity,
-            };
-          });
-
-          // Collect bundle info for discount codes
-          const bundleInfos: CheckoutBundleInfo[] = items
-            .filter(item => item.isBundle && item.productKey && item.variantKey && item.tierKey)
-            .map(item => ({
-              productKey: item.productKey!,
-              variantKey: item.variantKey!,
-              tierKey: item.tierKey!,
-              quantity: item.quantity,
-              unitPrice: parseFloat(item.price.amount),
-            }));
-          
-          const checkoutUrl = await createStorefrontCheckout(checkoutItems, bundleInfos);
+          const checkoutItems = items.map((item) => ({
+            variantId: item.variantId,
+            quantity: item.quantity,
+          }));
+          const checkoutUrl = await createStorefrontCheckout(checkoutItems);
           setCheckoutUrl(checkoutUrl);
         } catch {
           toast.error('Checkout mislukt', {
@@ -155,7 +140,7 @@ export const useCartStore = create<CartStore>()(
         } finally {
           setLoading(false);
         }
-      }
+      },
     }),
     {
       name: 'shopify-cart',

@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
-import { getSizeFromVariant, incVatPrices, SizeVariant } from "@/lib/productConfig";
-import { calcSizeDiscount } from "@/lib/shopify";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
@@ -36,42 +34,31 @@ function formatVariantLabel(item: { product: { node: { handle: string } }; selec
 
 export function CartDrawer() {
   const [isOpen, setIsOpen] = React.useState(false);
-  const { 
-    items, 
-    isLoading, 
-    updateQuantity, 
-    removeItem, 
-    createCheckout 
+  const {
+    items,
+    isLoading,
+    updateQuantity,
+    removeItem,
+    createCheckout
   } = useCartStore();
-  
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  
-  // Calculate total using greedy discount algorithm (matches checkout)
-  const totalPrice = React.useMemo(() => {
-    // Sum quantities per size across ALL items (bundles + singles)
-    const sizeQuantities: Record<string, number> = {};
-    let baseTotal = 0;
 
+  const totalItems = items.reduce((sum, item) => {
+    // Bundles count as their bundleUnitCount for the badge (so a 3-pack = 3 lamps)
+    if (item.isBundle) return sum + (item.bundleUnitCount || item.quantity);
+    return sum + item.quantity;
+  }, 0);
+
+  // Total = sum of Shopify line prices (bundles already pre-discounted)
+  const totalPrice = React.useMemo(() => {
+    let total = 0;
     for (const item of items) {
-      const size = getSizeFromVariant(item.selectedOptions);
-      if (size) {
-        const sizeCm = size.replace("cm", "");
-        sizeQuantities[sizeCm] = (sizeQuantities[sizeCm] || 0) + item.quantity;
-        // Use inc-VAT price for base total
-        baseTotal += parseFloat(incVatPrices[size]) * item.quantity;
+      if (item.isBundle) {
+        total += parseFloat(item.bundleIncVatTotal || item.price.amount) * item.quantity;
       } else {
-        // Fallback for items without recognizable size
-        baseTotal += parseFloat(item.price.amount) * item.quantity;
+        total += parseFloat(item.price.amount) * item.quantity;
       }
     }
-
-    // Apply greedy discount per size
-    let totalDiscount = 0;
-    for (const [sizeCm, qty] of Object.entries(sizeQuantities)) {
-      totalDiscount += calcSizeDiscount(sizeCm, qty);
-    }
-
-    return Math.round((baseTotal - totalDiscount) * 100) / 100;
+    return Math.round(total * 100) / 100;
   }, [items]);
 
   const handleCheckout = async () => {
@@ -144,12 +131,15 @@ export function CartDrawer() {
                               </Badge>
                             </div>
                             <h4 className="font-medium text-sm">
-                              {item.bundleName} — {item.quantity}x {item.bundleSize}
+                              {item.bundleName}
+                              {item.bundleSize ? ` — ${item.bundleSize}` : ""}
                             </h4>
-                            <p className="font-semibold text-foreground">
-                              €{parseFloat(item.bundleIncVatTotal || "0").toFixed(2)}
+                            <p className="text-xs text-muted-foreground">
+                              {item.product.node.title}
                             </p>
-                            
+                            <p className="font-semibold text-foreground">
+                              €{(parseFloat(item.bundleIncVatTotal || item.price.amount) * item.quantity).toFixed(2)}
+                            </p>
                           </>
                         ) : (
                           <>

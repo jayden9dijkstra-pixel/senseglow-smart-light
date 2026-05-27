@@ -43,6 +43,11 @@ function parseDimensions(
 ): ParsedDimensions {
   const d: ParsedDimensions = { size: "", color: "", wattage: "", lightColor: "", variantType: "" };
 
+  // Skip BUNDLE variants — they are handled by BundlesSection, not the picker
+  if (selectedOptions.some((o) => /^bundle\b/i.test(o.value))) {
+    return d;
+  }
+
   if (type === "arc") {
     for (const opt of selectedOptions) {
       const name = opt.name.toLowerCase();
