@@ -1,12 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Mail, Clock, Globe } from "lucide-react";
+import { ArrowLeft, Mail, Package, Clock, RotateCcw, Shield, FileText } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+
+const Placeholder = ({ children }: { children: string }) => (
+  <span className="px-2 py-0.5 bg-muted/40 border border-dashed border-foreground/20 rounded text-foreground/50 text-sm font-mono">
+    {children}
+  </span>
+);
 
 const Contact = () => {
   const navigate = useNavigate();
-  
+
   return (
     <PageLayout>
       <div className="container py-12 max-w-4xl">
@@ -15,96 +21,94 @@ const Contact = () => {
           Terug naar home
         </Button>
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              Contact & Support
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Contact</h1>
             <p className="text-lg text-foreground/60">
-              Bij SenseGlow staat klanttevredenheid centraal. Ons supportteam helpt je graag met al je vragen over bestellingen, garantie of technische ondersteuning.
+              Vraag over je bestelling, een product, of iets anders? We mailen binnen 24 uur op werkdagen terug.
             </p>
           </div>
 
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-8 space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-glow/10 rounded-lg">
+          {/* Two cards */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card className="border-foreground/10 bg-background">
+              <CardContent className="p-6 space-y-4">
+                <div className="p-3 bg-glow/10 rounded-lg w-fit">
                   <Mail className="h-6 w-6 text-glow" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">E-mail</h3>
-                  <a href="mailto:support@senseglow.nl" className="text-glow hover:underline">support@senseglow.shop</a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-glow/10 rounded-lg">
-                  <Clock className="h-6 w-6 text-glow" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Reactietijd</h3>
-                  <p className="text-foreground/60">Binnen 24 uur (ma–vr)</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-glow/10 rounded-lg">
-                  <Globe className="h-6 w-6 text-glow" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Taal</h3>
-                  <p className="text-foreground/60">Nederlands & Engels</p>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-foreground/10">
+                <h3 className="font-semibold text-xl">E-mail</h3>
+                <a href="mailto:support@senseglow.shop" className="text-glow hover:underline font-semibold block">
+                  support@senseglow.shop
+                </a>
                 <p className="text-sm text-foreground/60">
-                  <strong className="text-foreground">Tip:</strong> Vermeld je ordernummer voor een snelle afhandeling.
+                  Voor alle vragen — bestellingen, producten, retourzendingen, technische hulp. Reactietijd: binnen 24 uur op werkdagen (ma-vr, 09:00-17:00).
                 </p>
+                <Button
+                  onClick={() => (window.location.href = "mailto:support@senseglow.shop")}
+                  className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 mt-2"
+                >
+                  Stuur een mail
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-foreground/10 bg-background">
+              <CardContent className="p-6 space-y-4">
+                <div className="p-3 bg-glow/10 rounded-lg w-fit">
+                  <Package className="h-6 w-6 text-glow" />
+                </div>
+                <h3 className="font-semibold text-xl">Bestelling volgen</h3>
+                <p className="text-sm text-foreground/60">
+                  Bestelnummer of track-code bij de hand? Volg je pakket direct via DHL.
+                </p>
+                <Button
+                  onClick={() => navigate("/bestelling-volgen")}
+                  variant="outline"
+                  className="rounded-full mt-2"
+                >
+                  Volg mijn bestelling →
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* FAQ shortcuts */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Veelgestelde vragen</h2>
+            <div className="space-y-2">
+              {[
+                { icon: Clock, label: "Hoe snel wordt mijn bestelling geleverd?", to: "/verzending" },
+                { icon: RotateCcw, label: "Hoe retourneer ik een product?", to: "/retourneren" },
+                { icon: Shield, label: "Wat valt onder de garantie?", to: "/retourneren" },
+                { icon: FileText, label: "Modelformulier herroeping nodig?", to: "/retourneren" },
+              ].map(({ icon: Icon, label, to }) => (
+                <button
+                  key={label}
+                  onClick={() => navigate(to)}
+                  className="w-full flex items-center gap-3 p-4 rounded-lg border border-foreground/10 bg-background hover:border-glow/40 hover:bg-glow/5 transition-colors text-left"
+                >
+                  <Icon className="h-5 w-5 text-glow flex-shrink-0" />
+                  <span className="flex-1">{label}</span>
+                  <span className="text-glow">→</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Bedrijfsgegevens */}
+          <Card className="border-foreground/10 bg-background">
+            <CardContent className="p-6">
+              <h2 className="text-lg font-semibold mb-4">Bedrijfsgegevens</h2>
+              <div className="space-y-2 text-sm text-foreground/70">
+                <p><strong>SenseGlow</strong></p>
+                <p>KvK-nummer: <Placeholder>[KvK-nummer]</Placeholder></p>
+                <p>BTW-nummer: <Placeholder>[BTW-nummer]</Placeholder></p>
+                <p>Vestigingsadres: <Placeholder>[Vestigingsadres]</Placeholder></p>
+                <p>E-mail: <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a></p>
+                <p>Web: senseglow.shop / senseglow.nl</p>
               </div>
             </CardContent>
           </Card>
-
-          {/* FAQ Section */}
-          <div>
-            <h2 className="text-3xl font-bold mb-6">Veelgestelde vragen</h2>
-            <div className="space-y-4">
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Hoe snel wordt mijn bestelling verzonden?</h3>
-                  <p className="text-foreground/60">Binnen 24–48 uur verwerkt. Levertijd 5–10 werkdagen.</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Moet ik verzendkosten betalen?</h3>
-                  <p className="text-foreground/60">Nee. Bij SenseGlow is verzending altijd gratis.</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Krijg ik een Track & Trace?</h3>
-                  <p className="text-foreground/60">Ja, automatisch na verwerking van je bestelling.</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Mijn lamp werkt niet goed. Wat kan ik doen?</h3>
-                  <p className="text-foreground/60">Neem contact met ons op met een korte video. Je valt onder onze 1 jaar garantie.</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Kan ik retourneren?</h3>
-                  <p className="text-foreground/60">Ja, binnen 30 dagen, mits het product ongebruikt is.</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </div>
       </div>
     </PageLayout>

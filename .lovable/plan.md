@@ -1,36 +1,64 @@
-# Sync frontend met nieuwe Shopify-varianten
 
-De varianten in Shopify zijn al correct (Arc = Black/White 12W, Flex = White/Black, Ambient Bar = 6 varianten incl. Black 30cm). De frontend en wat copy in Shopify zelf lopen nog achter. Dit plan haalt alles in lijn.
+# Plan: Homepage + Utility Pages Overhaul
 
-## Wat nu mis gaat
+Scope strikt: **niet aanraken** = ProductDetail, alle `components/product/*`, productContent/Config/Registry, cart/checkout, shopify lib, design tokens. Routes blijven gelijk (huidige bestandsnamen: `Shipping.tsx`, `Returns.tsx`, `Tracking.tsx`, `Sustainability.tsx`, `Terms.tsx` — geen rename nodig, alleen inhoud).
 
-- **Arc**: Shopify gebruikt nu drie aparte opties (`Colour of Lamp`, `Wattage`, `Kleur`). De `VariantPicker` zoekt nog naar de oude gecombineerde optie `Uitstraalkleur` (bv. "Black 6W"). Resultaat: geen kleur/wattage zichtbaar in de picker.
-- **Flex**: beide varianten (White, Black) krijgen hetzelfde label "Standaard" omdat de parser nog naar `remote` zoekt i.p.v. naar de kleur. Picker toont geen kleurkeuze, bundels tonen identieke labels.
-- **Ambient Bar**: de nieuwe Black 30cm wordt al door Shopify geleverd, maar moet visueel verschijnen in de pickers en bundels (verifiëren).
-- **Productpagina-copy in Shopify** verwijst nog naar 4W/6W (Arc) en de afstandsbediening-versie (Flex).
+## Volgorde (één stap = één commit)
 
-## Wijzigingen frontend
+### Stap 1 — Utility-pagina's (klein)
+- `src/pages/Shipping.tsx` → herschrijven volgens Deel 4 (3 info-cards, 3 stappen, 4 toelichtingssecties)
+- `src/pages/Returns.tsx` → herschrijven volgens Deel 5 (3 info-cards, 4 stappen, garantie-sectie + uitklapbaar modelformulier voor herroeping via shadcn Accordion)
+- `src/pages/Tracking.tsx` → herschrijven volgens Deel 7 (sub-header + grote CTA naar 17TRACK in nieuw tabblad + 3 toelichtingsblokken)
 
-1. **`src/components/product/VariantPicker.tsx`** — Arc-parsing herschrijven naar de nieuwe optie-structuur (`Colour of Lamp` → kleur, `Wattage` → wattage, `Kleur` → lichtkleur). Highlight "6W" verwijderen. Picker verbergt automatisch wattage/lichtkleur als er maar 1 waarde is.
-2. **`src/lib/productRegistry.ts`**
-   - `parseVariantLabel('arc')`: lezen uit nieuwe option-namen, label wordt simpelweg "Wit" of "Zwart".
-   - `parseVariantLabel('flex')`: label op kleur baseren ("Wit"/"Zwart") i.p.v. "Standaard"/"Met afstandsbediening".
-   - `buildVariantKey('flex')`: per kleur unieke key ("W"/"B") zodat bundel-discountcodes per kleur kunnen verschillen indien nodig (anders blijft het "STD" voor beide).
-3. **`src/lib/arcProductConfig.ts`** — referenties naar 2W/4W/6W/8W/10W verwijderen; alleen 12W behouden in `ArcWattage` en specs/copy.
-4. **`src/lib/flexProductConfig.ts`** — kop "White Remote Control" en "remote" parsing uit comments/parser halen; `FlexType` weghalen, parser geeft alleen `bodyColor` terug.
+### Stap 2 — Contact
+- `src/pages/Contact.tsx` → Deel 6: 2 cards (mail + bestelling volgen) naast elkaar, FAQ-shortcuts, bedrijfsgegevens-block met `[KvK-nummer]`, `[BTW-nummer]`, `[Vestigingsadres]` placeholders in muted/dashed styling
 
-## Wijzigingen Shopify (via tools)
+### Stap 3 — Duurzaamheid
+- `src/pages/Sustainability.tsx` → Deel 3: H1 + intro, 4 punten in 2×2 grid, outro-paragraaf
 
-5. **Arc product** (`10045207281962`) — `body_html` updaten: "4W, 6W en 12W" → "12W"; spec-lijst "4W / 6W / 12W" → "12W". Andere copy ongemoeid.
-6. **Flex product** (`10057915138346`) — `body_html` updaten: zin over "versie met afstandsbediening beschikbaar" en "(standaard en met afstandsbediening)" weghalen; spec "Bediening" terugbrengen tot enkel touch.
+### Stap 4 — Privacy + Voorwaarden (templates met jurist-banner)
+- `src/pages/Privacy.tsx` → Deel 8 volledige AVG-template + top-banner ("template — laat nakijken door NL-jurist")
+- `src/pages/Terms.tsx` → Deel 9 volledige AV-template + zelfde top-banner
+- Beide met `[KvK]`, `[BTW]`, `[Vestigingsadres]`, `[datum]` placeholders zichtbaar gestyled
 
-## Verificatie na implementatie
+### Stap 5 — Quiz uitbreiden naar 5 producten
+- `src/pages/Quiz.tsx` → state machine herschrijven:
+  - Q1 (locatie): binnen / buiten → Solar Lantern / bureau → Flex
+  - Q2 (doel binnen): trap / sfeer / niet zoeken → vertakt naar Q3a/b/c
+  - Q3a Wall Lamp size (4-pack vs 8-pack)
+  - Q3b Wave size (30 vs 50)
+  - Q3c Ambient ruimtes (single / 3-pack / 4-pack)
+  - Progress-bar, fade-transitie, "Vorige"-knop vanaf Q2, tap-friendly cards
+  - Resultaat-pagina: product-foto, naam, copy uit Deel 2.3, prijs (uit Shopify call zoals nu), CTA met juiste URL-params (`?size=`, `?bundle=`, `?set=`) + fallback link "Niet de juiste match? Bekijk alle producten"
 
-- Op `/product/<arc-handle>`: kleurswatch toont Wit/Zwart, geen wattage-picker, prijs €54,95.
-- Op `/product/<flex-handle>`: kleurswatch toont Wit/Zwart, geen "Uitvoering" picker.
-- Op de Ambient Bar pagina: lengte-picker toont 20/30/40, beide kleuren werken op alle drie de lengtes.
-- Bundels op alle drie de pagina's tonen de juiste varianten en gebruiken de bestaande SG-... discountcodes ongewijzigd.
+### Stap 6 — Homepage overhaul
+**Verwijderen** uit `src/pages/Index.tsx` (en bestanden zelf):
+- `ProblemSolutionSection.tsx`
+- `WarmGlowSection.tsx`
+- `SafetySection.tsx`
+- `FinalCTASection.tsx`
 
-## Buiten scope
+**Updaten:**
+- `HeroSection.tsx`: H1 "Slimme verlichting. Geen gedoe.", nieuwe sub, primary CTA → `/producten`, secundair → `/quiz`, behoud trust-bullets
+- `StorytellingSection.tsx`: tekst breder maken (verwijder Ambient-specifieke verwijzingen, gebruik voorgestelde copy)
+- `QuizIntroSection.tsx`: nieuwe H2/sub/CTA-tekst
+- `ReviewsTeaserSection.tsx` → hernoemen/herwerken naar carousel met 5 reviews (één per product, shadcn Carousel — 3 zichtbaar desktop, swipe mobile), elk met "Lees meer reviews →" naar bijbehorende productpagina
 
-- Nieuwe foto's, NOVA-quotes, definitieve prijzen, bundle-strategie en hero/copy-herziening (deel 4 van het briefing — pas later).
+**Nieuw** in `src/components/homepage/`:
+- `UseCaseGrid.tsx`: H2 "Voor elke kamer een ander licht", 5 tegels (3+2 desktop, 1-col mobile), glassmorphism, hele tegel klikbaar naar juiste `/product/<handle>`
+- `WhatTheyShare.tsx`: H2 "Wat ze met elkaar gemeen hebben", 4 voordeel-blokken 2×2
+- `VoetCTA.tsx`: kleine uitleider, H2 "Klaar om te beginnen?", CTA → `/producten`
+
+**Nieuwe homepage-volgorde** in `Index.tsx`:
+1. Hero → 2. UseCaseGrid → 3. WhatTheyShare → 4. Storytelling → 5. QuizIntro → 6. ReviewsCarousel → 7. bestaande Catalog/collectie-sectie → 8. HomepageFAQ → 9. VoetCTA
+
+## Technische notes
+- Alle nieuwe componenten gebruiken bestaande design tokens (`bg-background`, `text-foreground`, `text-glow`, glassmorphism classes), geen nieuwe kleuren.
+- Voor de Homepage FAQ-update: gebruikt bestaande `FAQSection.tsx` of homepage-equivalent — vragen-array vervangen door 6 vragen uit Deel 1.9.
+- Productafbeeldingen voor UseCaseGrid + ReviewsCarousel + Quiz-resultaten: gebruik bestaande Shopify product images (eerste image van handle via Storefront fetch zoals al gedaan in Catalog) — geen nieuwe assets nodig.
+- Modelformulier herroeping: rendered binnen `<pre>` of stylized `<div>` in een shadcn `<Accordion>`.
+- Geen wijzigingen aan routes (`App.tsx`), header, footer, of Catalog.
+- KvK/BTW/adres-placeholders: rendered als `<span className="px-2 py-0.5 bg-muted/40 border border-dashed border-foreground/20 rounded text-foreground/50 text-sm">[KvK-nummer]</span>` zodat eigenaar ze visueel terugvindt.
+
+## Out of scope (bevestiging)
+ProductDetail, alle product-componenten, productContent/Config/Registry, cart, checkout, shopify.ts, header, footer, design tokens — allemaal **onaangeroerd**.
