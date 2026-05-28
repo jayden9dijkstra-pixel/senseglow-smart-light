@@ -4,16 +4,23 @@ import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ShopifyProduct, fetchProductByHandle } from "@/lib/shopify";
 import { ProductHeroSection } from "@/components/product/ProductHeroSection";
-import { OutcomeSection } from "@/components/product/OutcomeSection";
-import { ProblemSolutionProductSection } from "@/components/product/ProblemSolutionProductSection";
-import { UseCaseSection } from "@/components/product/UseCaseSection";
 import { BundlesSection } from "@/components/product/BundlesSection";
 import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
+import { HowItWorksSection } from "@/components/product/HowItWorksSection";
+import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { getProductContent } from "@/lib/productContent";
 import { buildPlaceholderContent } from "@/lib/placeholderContent";
+
+const Curve = ({ from, to }: { from: string; to: string }) => (
+  <div className="relative h-12 md:h-20">
+    <div className={`absolute inset-x-0 top-0 h-full ${from}`} />
+    <div className={`absolute inset-x-0 bottom-0 h-full ${to} rounded-t-[40px] md:rounded-t-[60px]`} />
+  </div>
+);
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -25,7 +32,23 @@ const ProductDetail = () => {
     ShopifyProduct["node"]["variants"]["edges"][0]["node"] | null
   >(null);
 
-  const content = product ? buildPlaceholderContent(product.node.title) : undefined;
+  const content = getProductContent(handle);
+  const fallback = product ? buildPlaceholderContent(product.node.title) : undefined;
+
+  const hero = content?.hero ?? fallback?.hero;
+  const reviews = content?.reviews;
+  const techHeadline = content?.techHeadline;
+  const techBenefits = content?.techBenefits;
+  const stepsHeadline = content?.stepsHeadline;
+  const steps = content?.steps;
+  const beforeAfterHeadline = content?.beforeAfterHeadline;
+  const beforeLabel = content?.beforeLabel;
+  const afterLabel = content?.afterLabel;
+  const beforeAfter = content?.beforeAfter;
+  const faqSubtitle = content?.faqSubtitle ?? fallback?.faqSubtitle;
+  const faqs = content?.faqs ?? fallback?.faqs;
+  const bundleHeadline = content?.bundleHeadline ?? fallback?.bundleHeadline;
+  const finalCta = content?.finalCta ?? fallback?.finalCta;
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -34,7 +57,6 @@ const ProductDetail = () => {
         const found = await fetchProductByHandle(handle);
         setProduct(found);
         if (found) {
-          // Default variant selection logic per product type
           if (handle === ARC_PRODUCT_HANDLE) {
             const def = found.node.variants.edges.find((v) =>
               v.node.selectedOptions.some((o) => o.value.includes("6W") && o.value.includes("Black")) &&
@@ -42,7 +64,6 @@ const ProductDetail = () => {
             );
             setSelectedVariant(def?.node || found.node.variants.edges[0]?.node || null);
           } else {
-            // Default to 30cm or first variant
             const v30 = found.node.variants.edges.find((v) =>
               v.node.selectedOptions.some((o) => o.value.includes("30"))
             );
@@ -84,74 +105,51 @@ const ProductDetail = () => {
         product={product}
         selectedVariant={selectedVariant}
         onVariantChange={setSelectedVariant}
-        heroContent={content?.hero}
+        heroContent={hero}
       />
 
-      <div className="relative h-12 md:h-20">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
-      </div>
+      <Curve from="bg-background" to="bg-background-secondary" />
 
       <div className="bg-background-secondary">
         <BundlesSection
           product={product}
           selectedVariant={selectedVariant || undefined}
-          headlineOverride={content?.bundleHeadline}
+          headlineOverride={bundleHeadline}
         />
       </div>
 
-      <div className="relative h-12 md:h-20">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
-      </div>
+      <Curve from="bg-background-secondary" to="bg-background" />
 
-      <ProductReviewsSection />
+      <ProductReviewsSection reviews={reviews} />
       <div className="border-t border-foreground/8" />
 
-      <OutcomeSection headline={content?.outcomeHeadline} outcomes={content?.outcomes} />
+      <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
 
-      <div className="relative h-12 md:h-20">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
-      </div>
+      <Curve from="bg-muted/20" to="bg-background" />
 
-      <div className="bg-background-secondary">
-        <ProblemSolutionProductSection
-          headline={content?.problemSolution?.headline}
-          problems={content?.problemSolution?.problems}
-          solutionTitle={content?.problemSolution?.solutionTitle}
-          solutionText={content?.problemSolution?.solutionText}
-        />
-      </div>
+      <HowItWorksSection headline={stepsHeadline} steps={steps} />
 
-      <div className="relative h-12 md:h-20">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
-      </div>
-
-      <UseCaseSection headline={content?.useCaseHeadline} subtitle={content?.useCaseSubtitle} useCases={content?.useCases} />
       <div className="border-t border-foreground/8" />
 
-      <TechBenefitsSection headline={content?.techHeadline} benefits={content?.techBenefits} />
+      <BeforeAfterSection
+        headline={beforeAfterHeadline}
+        beforeLabel={beforeLabel}
+        afterLabel={afterLabel}
+        rows={beforeAfter}
+      />
 
-      <div className="relative h-12 md:h-20">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[40px] md:rounded-t-[60px]" />
-      </div>
+      <Curve from="bg-background" to="bg-background-secondary" />
 
       <div className="bg-background-secondary">
-        <ProductFAQSection subtitle={content?.faqSubtitle} faqs={content?.faqs} />
+        <ProductFAQSection subtitle={faqSubtitle} faqs={faqs} />
       </div>
 
-      <div className="relative h-12 md:h-20">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[40px] md:rounded-t-[60px]" />
-      </div>
+      <Curve from="bg-background-secondary" to="bg-background" />
 
       <FinalProductCTA
-        headline={content?.finalCta?.headline}
-        subtext={content?.finalCta?.subtext}
-        ctaLabel={content?.finalCta?.cta}
+        headline={finalCta?.headline}
+        subtext={finalCta?.subtext}
+        ctaLabel={finalCta?.cta}
       />
     </PageLayout>
   );
