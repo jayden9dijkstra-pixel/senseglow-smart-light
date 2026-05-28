@@ -1,8 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Leaf, Package, Zap } from "lucide-react";
+import { ArrowLeft, BatteryCharging, Sun, Magnet, Wrench } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+
+const points = [
+  {
+    icon: BatteryCharging,
+    title: "USB-C, geen wegwerpbatterijen",
+    body: "Standaard sensor-lampen verbruiken 4-6 AA-batterijen per jaar. Onze Ambient-, Wave-, en Wall Lamp-producten zijn USB-C oplaadbaar — eens per 3-6 weken. Geen lege batterijen in de afvalbak, geen nieuwe aanschaffen, geen plastic verpakkingen.",
+  },
+  {
+    icon: Sun,
+    title: "De Solar Lantern verbruikt letterlijk geen stroom",
+    body: "Geen kabel naar het stopcontact. Geen extra euro op je energierekening. Een Nederlandse zomer levert genoeg op voor het hele jaar; in de winter helpt de reservecapaciteit van de accu door donkere weken heen.",
+  },
+  {
+    icon: Magnet,
+    title: "Ontworpen om mee te verhuizen",
+    body: "Magnetische bevestiging en plakstrips betekenen geen geboorde gaten in de muur. Je kunt onze producten meenemen naar je volgende huis, doorgeven aan een vriend, of tweedehands verkopen. Niets is permanent stuk te krijgen door verhuizen.",
+  },
+  {
+    icon: Wrench,
+    title: "Eén jaar garantie + replacement bij defect",
+    body: "Werkt iets niet zoals beloofd? Mail support@senseglow.shop en we sturen een vervanger. We gooien geen producten weg die nog te repareren of vervangen zijn. Bovenop je wettelijke conformiteitsrechten.",
+  },
+];
 
 const Sustainability = () => {
   const navigate = useNavigate();
@@ -10,82 +33,39 @@ const Sustainability = () => {
   return (
     <PageLayout>
       <div className="container py-12 max-w-4xl">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/")}
-          className="mb-8"
-        >
+        <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Terug naar home
         </Button>
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              Duurzaamheid
+              Duurzaamheid bij SenseGlow
             </h1>
             <p className="text-lg text-foreground/60 leading-relaxed">
-              SenseGlow kiest bewust voor een duurzame aanpak.
+              We maken geen klimaat-claims die we niet kunnen onderbouwen. Wel een paar concrete keuzes die het verschil maken — vooral op de lange termijn.
             </p>
           </div>
 
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-8">
-              <p className="text-lg text-foreground/60 leading-relaxed mb-6">
-                Onze LED-technologie is energiezuinig, onze productie gebeurt in kleine batches om overschotten te voorkomen, en onze verpakkingen zijn minimalistisch met zo min mogelijk afval.
-              </p>
-              <p className="text-lg font-semibold text-foreground">
-                Door te kiezen voor SenseGlow, kies je voor verlichting met een langere levensduur én een lagere impact op het milieu.
-              </p>
-            </CardContent>
-          </Card>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 mb-4 bg-glow/10 rounded-full flex items-center justify-center">
-                  <Zap className="h-8 w-8 text-glow" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Energiezuinige LED</h3>
-                <p className="text-sm text-foreground/60 leading-relaxed">
-                  Onze LED-technologie verbruikt tot 80% minder energie dan traditionele verlichting en gaat jaren mee.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 mb-4 bg-glow/10 rounded-full flex items-center justify-center">
-                  <Package className="h-8 w-8 text-glow" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Kleine Batches</h3>
-                <p className="text-sm text-foreground/60 leading-relaxed">
-                  We produceren bewust in kleinere aantallen om overproductie en verspilling te voorkomen.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 mb-4 bg-glow/10 rounded-full flex items-center justify-center">
-                  <Leaf className="h-8 w-8 text-glow" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Minimaal Afval</h3>
-                <p className="text-sm text-foreground/60 leading-relaxed">
-                  Onze verpakkingen zijn minimalistisch ontwerpen met zo min mogelijk materiaal en maximale bescherming.
-                </p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-2 gap-4">
+            {points.map(({ icon: Icon, title, body }) => (
+              <Card key={title} className="border-foreground/10 bg-background">
+                <CardContent className="p-6 space-y-4">
+                  <div className="p-3 bg-glow/10 rounded-lg w-fit">
+                    <Icon className="h-6 w-6 text-glow" />
+                  </div>
+                  <h3 className="font-semibold text-lg">{title}</h3>
+                  <p className="text-foreground/60 leading-relaxed text-sm">{body}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
-          <Card className="border-glow/20 bg-glow/5">
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-bold mb-4">Onze belofte</h2>
-              <p className="text-foreground/60 leading-relaxed mb-4">
-                We blijven zoeken naar manieren om onze impact op het milieu te verkleinen. Van slimme productie tot duurzame materialen — duurzaamheid is onderdeel van alles wat we doen.
-              </p>
-              <p className="text-foreground/60 leading-relaxed">
-                Met SenseGlow kies je niet alleen voor comfort en stijl, maar ook voor een verantwoorde keuze die bijdraagt aan een beter milieu.
+          <Card className="border-foreground/10 bg-background">
+            <CardContent className="p-6">
+              <p className="text-foreground/60 leading-relaxed text-sm">
+                We zijn niet perfect. Onze producten worden in Azië gemaakt en verscheept met DHL. Dat is een keuze tussen betaalbaarheid en lokale productie die we niet verbloemen. Wat we wel doen: producten ontwerpen die jaren meegaan in plaats van seizoenen.
               </p>
             </CardContent>
           </Card>

@@ -5,13 +5,12 @@ import { Loader2 } from "lucide-react";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { HeroSection } from "@/components/homepage/HeroSection";
+import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
+import { WhatTheyShare } from "@/components/homepage/WhatTheyShare";
 import { StorytellingSection } from "@/components/homepage/StorytellingSection";
-import { ProblemSolutionSection } from "@/components/homepage/ProblemSolutionSection";
-import { WarmGlowSection } from "@/components/homepage/WarmGlowSection";
 import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
-import { SafetySection } from "@/components/homepage/SafetySection";
 import { ReviewsTeaserSection } from "@/components/homepage/ReviewsTeaserSection";
-import { FinalCTASection } from "@/components/homepage/FinalCTASection";
+import { VoetCTA } from "@/components/homepage/VoetCTA";
 import { FAQSection } from "@/components/FAQSection";
 
 const Index = () => {
@@ -31,15 +30,28 @@ const Index = () => {
 
   return (
     <PageLayout>
-      {/* Hero Section with overlap into next */}
+      {/* 1. Hero */}
       <HeroSection />
 
-      {/* Soft curved transition into Storytelling */}
-      <div className="relative h-16 md:h-24 -mt-8 md:-mt-12">
+      {/* 2. UseCaseGrid — 5 products */}
+      <UseCaseGrid />
+
+      {/* Editorial separator */}
+      <div className="container">
+        <div className="max-w-6xl mx-auto border-t border-foreground/6" />
+      </div>
+
+      {/* 3. WhatTheyShare */}
+      <WhatTheyShare />
+
+      {/* Curved transition into Storytelling */}
+      <div className="relative h-16 md:h-24">
+        <div className="absolute inset-x-0 top-0 h-full bg-background" />
         <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[60px] md:rounded-t-[80px]" />
       </div>
 
       <div className="bg-background-secondary relative z-10">
+        {/* 4. Storytelling */}
         <StorytellingSection />
       </div>
 
@@ -49,21 +61,7 @@ const Index = () => {
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
       </div>
 
-      <ProblemSolutionSection />
-
-      {/* Editorial line separator */}
-      <div className="container">
-        <div className="max-w-6xl mx-auto border-t border-foreground/6" />
-      </div>
-
-      <WarmGlowSection />
-
-      {/* Curved transition to secondary */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
+      {/* 5. QuizIntro */}
       <div className="bg-background-secondary">
         <QuizIntroSection />
       </div>
@@ -74,32 +72,10 @@ const Index = () => {
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
       </div>
 
-      <SafetySection />
-
-      {/* Editorial line separator */}
-      <div className="container">
-        <div className="max-w-6xl mx-auto border-t border-foreground/6" />
-      </div>
-
+      {/* 6. ReviewsCarousel */}
       <ReviewsTeaserSection />
 
-      {/* Curved transition to final CTA */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
-      <div className="bg-background-secondary">
-        <FinalCTASection />
-      </div>
-
-      {/* Curved transition to products */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
-      {/* Products Section */}
+      {/* 7. Onze collectie */}
       <section id="products" className="py-24 md:py-32 bg-background">
         <div className="container">
           <div className="max-w-6xl mx-auto">
@@ -110,13 +86,11 @@ const Index = () => {
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">Onze collectie</h2>
                 <p className="text-base text-foreground/60 max-w-md">
-                  Verlichting die denkt. Jij hoeft alleen maar te bewegen.
+                  Vijf lampen die werken zoals jij leeft.
                 </p>
               </div>
               <a
                 href="/producten"
-                target="_blank"
-                rel="noopener noreferrer"
                 className="text-[11px] uppercase tracking-[0.25em] text-glow hover:text-glow/80 transition-colors duration-500"
               >
                 Bekijk alle producten →
@@ -147,7 +121,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FAQ Section with curved transition */}
+      {/* 8. FAQ */}
       <div className="relative h-16 md:h-24">
         <div className="absolute inset-x-0 top-0 h-full bg-background" />
         <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[60px] md:rounded-t-[80px]" />
@@ -157,10 +131,11 @@ const Index = () => {
         <FAQSection />
       </div>
 
-      {/* Scroll to Top */}
+      {/* 9. VoetCTA */}
+      <VoetCTA />
+
       <ScrollToTop />
 
-      {/* Curve into global footer */}
       <div className="relative h-16 md:h-24">
         <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />

@@ -10,22 +10,16 @@ const Tracking = () => {
   return (
     <PageLayout>
       <div className="container py-12 max-w-4xl">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/")}
-          className="mb-8">
-
+        <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Terug naar home
         </Button>
 
         <div className="space-y-8">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              Bestelling Volgen
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Volg je bestelling</h1>
             <p className="text-lg text-foreground/60">
-              Volg je SenseGlow bestelling in realtime via ons trackingsysteem.
+              Voer je track-code in om de status van je pakket live te zien.
             </p>
           </div>
 
@@ -37,37 +31,47 @@ const Tracking = () => {
                 </div>
               </div>
               <div className="space-y-3">
-                <h2 className="text-2xl font-bold">Track & Trace</h2>
-                <p className="text-foreground/60 max-w-md mx-auto">Klik op de knop hieronder om je bestelling te volgen. Je hebt je trackingnummer nodig, deze ontvang je per e-mail na verzending.
-
+                <h2 className="text-2xl font-bold">Volg via 17TRACK</h2>
+                <p className="text-foreground/60 max-w-md mx-auto">
+                  Klik op de knop hieronder om je pakket live te volgen in een nieuw tabblad.
                 </p>
               </div>
               <Button
                 size="lg"
                 className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
-                onClick={() => window.open("https://senseglow-smart-light-5jjoq.myshopify.com/apps/17TRACK", "_blank")}>
-
-                Bestelling volgen
+                onClick={() => window.open("https://t.17track.net", "_blank", "noopener,noreferrer")}
+              >
+                Volg via 17TRACK
                 <ExternalLink className="h-4 w-4 ml-2" />
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-8 space-y-4">
-              <h3 className="text-xl font-semibold">Hoe werkt het?</h3>
-              <ol className="space-y-3 text-foreground/60 list-decimal list-inside">
-                <li>Na verzending ontvang je een e-mail met je trackingnummer</li>
-                <li>Klik op "Bestelling volgen" hierboven</li>
-                <li>Voer je trackingnummer in op de trackingpagina</li>
-                <li>Bekijk de actuele status van je pakket</li>
-              </ol>
-            </CardContent>
-          </Card>
+          {[
+            {
+              title: "Wat is mijn track-code?",
+              body: "Je vindt 'm in de tweede mail die je van ons kreeg — die hebben we gestuurd zodra je pakket bij DHL lag. Onderwerp: 'Je SenseGlow bestelling is onderweg'. Kun je 'm niet vinden? Check ook je spam-folder.",
+            },
+            {
+              title: "Hoe lang nog?",
+              body: "Tussen 7 en 14 werkdagen vanaf het moment dat je de mail kreeg. De 17TRACK-status laat zien wáár het pakket nu is.",
+            },
+            {
+              title: "Mijn track-code werkt niet?",
+              body: "Track-codes worden soms pas na 24-48 uur actief in het DHL-systeem. Als je 'm na 3 dagen nog steeds niet kunt volgen, mail support@senseglow.shop met je bestelnummer — we lossen het op.",
+            },
+          ].map(({ title, body }) => (
+            <Card key={title} className="border-foreground/10 bg-background">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg mb-2">{title}</h3>
+                <p className="text-foreground/60 leading-relaxed">{body}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
-    </PageLayout>);
-
+    </PageLayout>
+  );
 };
 
 export default Tracking;

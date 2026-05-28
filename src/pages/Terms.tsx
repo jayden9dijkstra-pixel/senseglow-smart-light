@@ -1,8 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, FileText, CheckCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+
+const Placeholder = ({ children }: { children: string }) => (
+  <span className="px-2 py-0.5 bg-muted/40 border border-dashed border-foreground/20 rounded text-foreground/50 text-sm font-mono">
+    {children}
+  </span>
+);
+
+const Article = ({ n, title, children }: { n: number; title: string; children: React.ReactNode }) => (
+  <section className="space-y-3">
+    <h2 className="text-xl font-semibold">Artikel {n} — {title}</h2>
+    <div className="text-foreground/70 leading-relaxed space-y-3">{children}</div>
+  </section>
+);
 
 const Terms = () => {
   const navigate = useNavigate();
@@ -10,174 +23,90 @@ const Terms = () => {
   return (
     <PageLayout>
       <div className="container py-12 max-w-4xl">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/")}
-          className="mb-8"
-        >
+        <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Terug naar home
         </Button>
 
+        <Card className="border-glow/40 bg-glow/5 mb-8">
+          <CardContent className="p-5 flex gap-3">
+            <AlertCircle className="h-5 w-5 text-glow flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-foreground/70">
+              <strong>Template-versie.</strong> Vóór live gaan: laat deze tekst nakijken door een NL-jurist. Verplicht volgens de Wet Koop op Afstand en gerelateerde consumentenwetgeving.
+            </p>
+          </CardContent>
+        </Card>
+
         <div className="space-y-8">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              Algemene Voorwaarden
-            </h1>
-            <p className="text-lg text-foreground/60 leading-relaxed">
-              Onze algemene voorwaarden bieden heldere uitleg over bestellen, betalen, verzenden, retourneren en garantie.
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">Algemene Voorwaarden</h1>
+            <p className="text-sm text-foreground/50">
+              Laatst bijgewerkt: <Placeholder>[datum]</Placeholder>
             </p>
           </div>
 
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-8">
-              <p className="text-lg text-foreground/60 leading-relaxed mb-4">
-                Ze zijn opgesteld om transparantie te bieden en jouw rechten te beschermen bij elke aankoop.
-              </p>
-              <p className="text-lg font-semibold text-foreground">
-                Lees de volledige voorwaarden om precies te weten waar je aan toe bent bij het bestellen bij SenseGlow.
-              </p>
-            </CardContent>
-          </Card>
+          <Article n={1} title="Identiteit van de ondernemer">
+            <p>SenseGlow</p>
+            <p>Vestigingsadres: <Placeholder>[Vestigingsadres]</Placeholder></p>
+            <p>KvK-nummer: <Placeholder>[KvK-nummer]</Placeholder></p>
+            <p>BTW-nummer: <Placeholder>[BTW-nummer]</Placeholder></p>
+            <p>E-mail: support@senseglow.shop</p>
+            <p>Website: senseglow.shop / senseglow.nl</p>
+          </Article>
 
-          <div className="space-y-6">
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-glow/10 rounded-lg">
-                    <FileText className="h-6 w-6 text-glow" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold mb-2">1. Toepasselijkheid</h2>
-                    <p className="text-foreground/60 leading-relaxed">
-                      Deze algemene voorwaarden zijn van toepassing op alle aanbiedingen, bestellingen en overeenkomsten tussen SenseGlow en de klant. Door een bestelling te plaatsen, ga je akkoord met deze voorwaarden.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <Article n={2} title="Toepasselijkheid">
+            <p>Deze algemene voorwaarden zijn van toepassing op elk aanbod van SenseGlow en op elke tot stand gekomen overeenkomst tussen SenseGlow en de consument. De tekst van deze voorwaarden is vóór het sluiten van de overeenkomst voor de consument beschikbaar op senseglow.shop/voorwaarden.</p>
+          </Article>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-4">2. Bestellingen & Betaling</h2>
-                <ul className="space-y-3 text-foreground/60">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Alle prijzen zijn inclusief BTW en exclusief eventuele verzendkosten (bij SenseGlow is verzending gratis)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Een overeenkomst komt tot stand na ontvangst van de orderbevestiging per e-mail</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Betaling geschiedt via de beschikbare betaalmethoden op onze website</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>SenseGlow behoudt zich het recht voor om bestellingen te weigeren of te annuleren</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <Article n={3} title="Het aanbod">
+            <p>Alle producten op senseglow.shop zijn met zorg samengesteld. Aanbiedingen bevatten een omschrijving, productfoto's, en prijs (incl. BTW, in euro's). Kennelijke vergissingen of fouten binden SenseGlow niet.</p>
+          </Article>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-4">3. Levering</h2>
-                <ul className="space-y-3 text-foreground/60">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Bestellingen worden binnen 24-48 uur verwerkt</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Levertijd is 5-10 werkdagen binnen Nederland en België</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Verzending is altijd gratis binnen Nederland en België</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Het risico voor de producten gaat over op de klant bij fysieke ontvangst</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <Article n={4} title="De overeenkomst">
+            <p>De overeenkomst komt tot stand op het moment dat de consument een bestelling plaatst en SenseGlow deze elektronisch bevestigt per e-mail. Tot dat moment kan SenseGlow de bestelling weigeren of aanvullende voorwaarden stellen.</p>
+          </Article>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-4">4. Herroepingsrecht (30 dagen)</h2>
-                <p className="text-foreground/60 leading-relaxed mb-4">
-                  Je hebt het recht om binnen 30 dagen na ontvangst van het product de overeenkomst te ontbinden, zonder opgave van redenen.
-                </p>
-                <ul className="space-y-3 text-foreground/60">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Het product moet ongebruikt en in originele staat zijn</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Retourkosten zijn voor de klant</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Terugbetaling vindt plaats binnen 14 dagen na ontvangst van de retourzending</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <Article n={5} title="Prijzen en betaling">
+            <p>Alle prijzen zijn in euro's en inclusief 21% BTW, exclusief verzendkosten (verzending is gratis binnen Nederland). Betaling vindt plaats via de op de website aangeboden betaalmethoden. SenseGlow gebruikt erkende betaalproviders; betaalgegevens worden niet door SenseGlow zelf opgeslagen.</p>
+          </Article>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-4">5. Garantie</h2>
-                <p className="text-foreground/60 leading-relaxed mb-4">
-                  SenseGlow biedt 1 jaar garantie op fabricagefouten en defecten die niet het gevolg zijn van normaal gebruik.
-                </p>
-                <ul className="space-y-3 text-foreground/60">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Garantie dekt fabricagefouten en defecte onderdelen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Garantie dekt geen schade door val, stoot, water of onjuist gebruik</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-glow flex-shrink-0 mt-1" />
-                    <span>Voor garantieclaims neem je contact op via support@senseglow.nl</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <Article n={6} title="Levering">
+            <p>SenseGlow verzendt bestellingen binnen 1-3 werkdagen na ontvangst. De gemiddelde bezorgtijd is 7-14 werkdagen via DHL. SenseGlow levert binnen Nederland; verzending naar het buitenland is op dit moment niet beschikbaar.</p>
+            <p>Het risico van beschadiging of vermissing van producten berust bij SenseGlow tot het moment van bezorging aan de consument.</p>
+          </Article>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-4">6. Aansprakelijkheid</h2>
-                <p className="text-foreground/60 leading-relaxed">
-                  SenseGlow is niet aansprakelijk voor indirecte schade, gevolgschade of bedrijfsschade die voortvloeit uit het gebruik van onze producten, tenzij er sprake is van opzet of grove schuld.
-                </p>
-              </CardContent>
-            </Card>
+          <Article n={7} title="Herroepingsrecht">
+            <p>De consument heeft het recht om de overeenkomst binnen <strong>30 dagen</strong> zonder opgave van redenen te ontbinden — dit is langer dan de wettelijke 14 dagen termijn. Deze periode gaat in op de dag na ontvangst van het product.</p>
+            <p>Tijdens de bedenktijd zal de consument zorgvuldig omgaan met het product en de verpakking. Hij/zij mag het product slechts uitpakken en gebruiken voor zover dat nodig is om de aard en het functioneren ervan vast te stellen.</p>
+            <p>Om gebruik te maken van het herroepingsrecht, stuurt de consument een ondubbelzinnige verklaring per e-mail naar support@senseglow.shop, of gebruikt het modelformulier voor herroeping (beschikbaar op senseglow.shop/retourneren).</p>
+          </Article>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-4">7. Geschillen</h2>
-                <p className="text-foreground/60 leading-relaxed">
-                  Op alle overeenkomsten tussen SenseGlow en de klant is Nederlands recht van toepassing. Geschillen worden voorgelegd aan de bevoegde rechter in Nederland.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <Article n={8} title="Kosten van retournering">
+            <p>De directe kosten van het retourneren komen voor rekening van de consument, tenzij het product defect is of niet conform de overeenkomst is geleverd. In dat geval vergoedt SenseGlow ook de retourkosten.</p>
+          </Article>
 
-          <Card className="border-glow/20 bg-glow/5">
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-bold mb-4">Vragen over de voorwaarden?</h2>
-              <p className="text-foreground/60">
-                Neem gerust contact met ons op via <a href="mailto:support@senseglow.nl" className="text-glow hover:underline font-semibold">support@senseglow.nl</a> als je vragen hebt over onze algemene voorwaarden.
-              </p>
-            </CardContent>
-          </Card>
+          <Article n={9} title="Terugbetaling">
+            <p>SenseGlow vergoedt de van de consument ontvangen betalingen (inclusief eventuele leveringskosten) binnen 14 dagen na ontvangst van de retourzending, mits het product onbeschadigd retour is. Terugbetaling vindt plaats via dezelfde betaalmethode als waarmee de oorspronkelijke transactie is verricht.</p>
+          </Article>
+
+          <Article n={10} title="Garantie">
+            <p>SenseGlow biedt <strong>bovenop de wettelijke conformiteitsrechten</strong> een additionele functionele garantie van <strong>één jaar</strong> op alle producten. Deze garantie laat de wettelijke rechten van de consument uit hoofde van non-conformiteit onverlet — de consument behoudt te allen tijde zijn wettelijke rechten.</p>
+            <p>De garantie geldt voor defecten bij normaal gebruik. Schade door val, water (uitgezonderd IP65-gecertificeerde producten zoals de Solar Lantern), of opzettelijke beschadiging vallen niet onder de garantie.</p>
+          </Article>
+
+          <Article n={11} title="Klachtenregeling">
+            <p>Klachten over de uitvoering van de overeenkomst moeten binnen redelijke tijd nadat de consument de gebreken heeft geconstateerd, volledig en duidelijk omschreven worden ingediend bij SenseGlow via support@senseglow.shop.</p>
+            <p>Bij SenseGlow ingediende klachten worden binnen 14 dagen vanaf de datum van ontvangst beantwoord. Als een klacht een voorzienbaar langere verwerkingstijd vraagt, wordt door SenseGlow binnen 14 dagen geantwoord met een bericht van ontvangst en een indicatie wanneer de consument een meer uitvoerig antwoord kan verwachten.</p>
+          </Article>
+
+          <Article n={12} title="Geschillen">
+            <p>Op overeenkomsten tussen SenseGlow en de consument waarop deze algemene voorwaarden betrekking hebben, is uitsluitend Nederlands recht van toepassing.</p>
+            <p>Conform de Europese ODR-Verordening kunnen consumenten ook gebruikmaken van het Europees ODR-platform om geschillen online op te lossen: ec.europa.eu/consumers/odr.</p>
+          </Article>
+
+          <Article n={13} title="Wijzigingen">
+            <p>SenseGlow behoudt zich het recht voor deze algemene voorwaarden te wijzigen. De meest recente versie staat altijd op senseglow.shop/voorwaarden met de datum van laatste wijziging bovenaan.</p>
+          </Article>
         </div>
       </div>
     </PageLayout>

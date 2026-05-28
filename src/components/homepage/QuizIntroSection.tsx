@@ -2,13 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import quizSmartphone from "@/assets/quiz-smartphone.png";
 
-const locations = [
-  { icon: "🪜", label: "Trap" },
-  { icon: "🚪", label: "Gang" },
-  { icon: "🛏️", label: "Slaapkamer" },
-  { icon: "🚿", label: "Badkamer" }
-];
-
 export const QuizIntroSection = () => {
   const navigate = useNavigate();
 
@@ -20,7 +13,7 @@ export const QuizIntroSection = () => {
             {/* Smartphone Image - Left */}
             <div className="relative flex justify-center md:justify-start order-1 animate-fade-in-slow">
               <div className="max-w-xs overflow-hidden">
-                <img 
+                <img
                   src={quizSmartphone}
                   alt="Smartphone met SenseGlow quiz interface"
                   className="w-full h-auto"
@@ -28,32 +21,19 @@ export const QuizIntroSection = () => {
               </div>
             </div>
 
-            {/* Content - Right side, right-aligned on desktop */}
+            {/* Content - Right side */}
             <div className="space-y-8 order-2 md:text-right animate-fade-in-slow px-1">
               <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
-                Persoonlijk advies
-              </p>
-              
-              <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight break-words">
-                Welke SenseGlow™ heb jij nodig?
-              </h2>
-              
-              <p className="text-base text-foreground/60 leading-relaxed md:max-w-md md:ml-auto">
-                Elke woning is anders. Ontdek in 15 seconden welke combinatie bij jouw donkere plekken past. Geen verplichtingen, gewoon eerlijk advies.
+                Lichtadvies
               </p>
 
-              {/* Location icons - grid on mobile to avoid cut-off */}
-              <div className="grid grid-cols-2 gap-4 md:flex md:gap-4 md:justify-end">
-                {locations.map((location, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center gap-2 border border-foreground/8 px-5 py-4 rounded-xl"
-                  >
-                    <span className="text-xl">{location.icon}</span>
-                    <span className="text-[11px] text-foreground/50 tracking-wide">{location.label}</span>
-                  </div>
-                ))}
-              </div>
+              <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight break-words">
+                Niet zeker welk product?
+              </h2>
+
+              <p className="text-base text-foreground/60 leading-relaxed md:max-w-md md:ml-auto">
+                Beantwoord 3 vragen. We vertellen je welke SenseGlow bij jouw situatie past.
+              </p>
 
               <div className="flex justify-start md:justify-end pt-2">
                 <Button
@@ -61,7 +41,7 @@ export const QuizIntroSection = () => {
                   size="lg"
                   className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
                 >
-                  Start mijn Lichtadvies
+                  Start mijn lichtadvies
                 </Button>
               </div>
             </div>

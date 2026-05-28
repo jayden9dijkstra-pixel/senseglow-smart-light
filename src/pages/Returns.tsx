@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, RefreshCw, Mail, CheckCircle } from "lucide-react";
+import { ArrowLeft, RotateCcw, Euro, FileText } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Returns = () => {
   const navigate = useNavigate();
@@ -10,129 +16,107 @@ const Returns = () => {
   return (
     <PageLayout>
       <div className="container py-12 max-w-4xl">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/")}
-          className="mb-8"
-        >
+        <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Terug naar home
         </Button>
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              Retourneren & Ruilen
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Retourneren</h1>
             <p className="text-lg text-foreground/60">
-              Wij willen dat je volledig tevreden bent met je aankoop.
+              30 dagen bedenktijd, volledige terugbetaling, geen gedoe.
             </p>
           </div>
 
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Retourvoorwaarden</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-glow flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">30 dagen bedenktijd</h3>
-                    <p className="text-foreground/60">Je hebt 30 dagen de tijd om te beslissen of je het product wilt behouden.</p>
+          {/* 3 info cards */}
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { icon: RotateCcw, title: "30 dagen retour", sub: "Bovenop je wettelijke 14 dagen." },
+              { icon: Euro, title: "Volledige terugbetaling", sub: "Inclusief verzendkosten naar jou." },
+              { icon: FileText, title: "Modelformulier beschikbaar", sub: "Verplicht volgens NL-recht." },
+            ].map(({ icon: Icon, title, sub }) => (
+              <Card key={title} className="border-foreground/10 bg-background">
+                <CardContent className="p-6 space-y-3">
+                  <div className="p-3 bg-glow/10 rounded-lg w-fit">
+                    <Icon className="h-6 w-6 text-glow" />
                   </div>
-                </div>
+                  <h3 className="font-semibold text-lg">{title}</h3>
+                  <p className="text-sm text-foreground/60">{sub}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-                <div className="flex items-start gap-3">
-                  <Package className="h-6 w-6 text-glow flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">Product moet ongebruikt zijn</h3>
-                    <p className="text-foreground/60">Het product moet in originele staat zijn, met alle originele verpakkingen en labels.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <RefreshCw className="h-6 w-6 text-glow flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">Retourkosten</h3>
-                    <p className="text-foreground/60">Retourkosten zijn voor de klant. Wij adviseren track & trace verzending.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-glow flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">Ruilen of terugbetaling</h3>
-                    <p className="text-foreground/60">Je kunt kiezen voor een ander product of volledige terugbetaling.</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-glow/20 bg-glow/5">
-            <CardContent className="p-8">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-glow/10 rounded-lg">
-                  <Mail className="h-6 w-6 text-glow" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold mb-2">Hoe retourneren?</h2>
-                  <p className="text-foreground/60">
-                    Stuur een e-mail naar <a href="mailto:support@senseglow.nl" className="text-glow hover:underline font-semibold">support@senseglow.nl</a>
-                  </p>
-                </div>
-              </div>
-              
-              <div className="bg-background/50 p-6 rounded-lg">
-                <p className="text-foreground/60 mb-4">
-                  Ons team stuurt je het juiste retouradres op basis van je fulfilmentlocatie.
-                </p>
-                <p className="text-sm text-foreground/60">
-                  <strong className="text-foreground">Tip:</strong> Vermeld je ordernummer in de e-mail voor een snelle afhandeling.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
+          {/* Steps */}
           <div>
-            <h2 className="text-3xl font-bold mb-6">Veel gestelde vragen over retourneren</h2>
+            <h2 className="text-3xl font-bold mb-6">Hoe het werkt</h2>
             <div className="space-y-4">
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Hoe lang duurt het voordat ik mijn geld terugkrijg?</h3>
-                  <p className="text-foreground/60">
-                    Zodra we je retour hebben ontvangen en gecontroleerd, verwerken we de terugbetaling binnen 5–7 werkdagen.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Kan ik mijn product ruilen voor een ander formaat?</h3>
-                  <p className="text-foreground/60">
-                    Ja, dat is mogelijk. Vermeld dit in je retour-e-mail en we helpen je graag verder.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Wat als mijn product defect is?</h3>
-                  <p className="text-foreground/60">
-                    Bij een defect product vallen de retourkosten voor ons. Neem contact op via support@senseglow.nl met foto's of een video van het defect.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-foreground/10 bg-background">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Moet ik de originele verpakking gebruiken?</h3>
-                  <p className="text-foreground/60">
-                    Wij adviseren de originele verpakking te gebruiken om schade tijdens transport te voorkomen, maar dit is niet verplicht. Zorg wel voor stevige verpakking.
-                  </p>
-                </CardContent>
-              </Card>
+              {[
+                { n: "1", title: "Mail naar support@senseglow.shop", body: "Vermeld je bestelnummer en welk product je wilt retourneren. Je krijgt binnen 24u werkdagen een retourbevestiging met instructies." },
+                { n: "2", title: "Verpak het product", body: "Bij voorkeur in de originele verpakking. Zorg dat het product onbeschadigd is en compleet (lampen, kabels, montagestrip)." },
+                { n: "3", title: "Verzend terug", body: "Je krijgt van ons een retouradres. Verzending naar ons is voor jouw rekening — tenzij het product defect of verkeerd is geleverd, dan vergoeden wij ook die kosten." },
+                { n: "4", title: "Wij verwerken en betalen terug", body: "Binnen 14 dagen na ontvangst van de retourzending krijg je het volledige aankoopbedrag terug op dezelfde betaalmethode die je gebruikte bij de bestelling." },
+              ].map(({ n, title, body }) => (
+                <Card key={n} className="border-foreground/10 bg-background">
+                  <CardContent className="p-6 flex gap-5">
+                    <div className="text-2xl font-bold text-glow w-10 flex-shrink-0">{n}</div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">{title}</h3>
+                      <p className="text-foreground/60 leading-relaxed">{body}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
+
+          {[
+            { title: "Wat als het product defect is?", body: "Mail ons direct met een foto/video van het defect. Bij erkende defecten sturen we óf direct een vervanger, óf betalen we het volledige bedrag (inclusief jouw retour-verzendkosten) terug. Geen gedoe." },
+            { title: "Wat valt onder de garantie?", body: "Eén jaar functionele garantie. Als het product binnen die periode kapot gaat door normaal gebruik, lossen we het op. Schade door val, water (behalve Solar Lantern die IP65 is), of opzettelijke beschadiging valt er niet onder." },
+          ].map(({ title, body }) => (
+            <Card key={title} className="border-foreground/10 bg-background">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg mb-2">{title}</h3>
+                <p className="text-foreground/60 leading-relaxed">{body}</p>
+              </CardContent>
+            </Card>
+          ))}
+
+          {/* Modelformulier */}
+          <Card className="border-foreground/10 bg-background">
+            <CardContent className="p-2">
+              <Accordion type="single" collapsible>
+                <AccordionItem value="model" className="border-b-0">
+                  <AccordionTrigger className="px-4 text-base font-semibold hover:text-glow hover:no-underline">
+                    Modelformulier voor herroeping
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4">
+                    <pre className="whitespace-pre-wrap text-sm text-foreground/70 bg-background-secondary p-5 rounded-lg border border-foreground/10 font-mono leading-relaxed">
+{`Modelformulier voor herroeping
+
+(Dit formulier alleen invullen en terugsturen wanneer je de overeenkomst wilt herroepen)
+
+Aan: SenseGlow
+E-mail: support@senseglow.shop
+
+Hierbij deel ik/delen wij* mede dat ik/wij* onze overeenkomst betreffende
+de verkoop van de volgende goederen herroep/herroepen*:
+
+Besteld op*/Ontvangen op*: ...........................
+Naam consument(en): ......................................
+Adres consument(en): .....................................
+Bestelnummer: ............................................
+Handtekening (alleen bij papier): ........................
+Datum: ...................................................
+
+* Doorhalen wat niet van toepassing is.`}
+                    </pre>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </PageLayout>

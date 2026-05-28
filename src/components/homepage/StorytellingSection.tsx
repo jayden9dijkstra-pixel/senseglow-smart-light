@@ -12,33 +12,31 @@ export const StorytellingSection = () => {
               <div className="aspect-square overflow-hidden rounded-3xl">
                 <DualImage
                   srcLight={storytellingImage}
-                  alt="SenseGlow LED strip die warm oplicht in het donker"
+                  alt="SenseGlow LED licht in een warme woonruimte"
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
 
-            {/* Content - Right side, right-aligned for balance */}
+            {/* Content - Right side */}
             <div className="space-y-8 md:text-right animate-fade-in-slow">
               <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
                 Ons verhaal
               </p>
-              
+
               <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight">
                 Waarom we SenseGlow™ maakten
               </h2>
 
               <div className="space-y-5 text-base leading-relaxed text-foreground/60">
                 <p>
-                  Mensen struikelen verrassend vaak in donkere gangen en trappen. Kinderen durven niet alleen naar de wc in het donker. Ouderen voelen zich onzeker bij elke stap.
+                  We begonnen met één vraag: waarom moet verlichting altijd gedoe zijn?
                 </p>
-                
                 <p>
-                  Felle lampen verstoren slaapcycli en maken gezinnen wakker. We wilden één simpel product dat dit oplost — zonder verbouwing, zonder gedoe, zonder nadenken.
+                  Boren, kabels, schakelaars die je in het donker niet vindt. Elektriciens die je nooit op tijd kunt bereiken.
                 </p>
-                
                 <p className="text-foreground font-medium">
-                  Alleen een warme, veilige glow die reageert op jouw beweging.
+                  SenseGlow is ons antwoord — lampen die werken zoals jij leeft. Sensor of touch, binnen of buiten, klein of groot. Eén ding gemeen: je hangt 'm op, en hij doet de rest.
                 </p>
               </div>
             </div>
