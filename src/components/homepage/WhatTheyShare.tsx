@@ -3,7 +3,7 @@ import { Wrench, BatteryCharging, Magnet, ShieldCheck } from "lucide-react";
 const items = [
   {
     icon: Wrench,
-    title: "Geen boren, geen elektricien",
+    title: "Geen elektricien nodig",
     body: "Magnetisch, plakstrip of twee schroeven. Geïnstalleerd in minuten, niet uren.",
   },
   {
