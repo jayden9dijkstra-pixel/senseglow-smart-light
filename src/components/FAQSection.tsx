@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "Hoe lang gaat de batterij mee?",
     answer:
-      "Tussen de 3 weken (Ambient bij intensief nachtgebruik) en 8 weken (Flex bij studie-gebruik). De Solar Lantern hoef je niet op te laden — die doet het zonnepaneel zelf.",
+      "Tussen de 3 weken (Ambient bij intensief nachtgebruik) en 8 weken (Flex bij studie-gebruik). De Solar Lantern hoef je niet op te laden, die doet het zonnepaneel zelf.",
   },
   {
     question: "Kan ik bundels combineren?",
@@ -25,7 +25,7 @@ const faqs = [
   {
     question: "Wat is de garantie?",
     answer:
-      "Eén jaar volledige functionele garantie op alle producten. Werkt iets niet zoals beloofd? Mail support@senseglow.shop — we sturen een vervanger of geven je geld terug. Bovenop je wettelijke rechten.",
+      "Eén jaar volledige functionele garantie op alle producten. Werkt iets niet zoals beloofd? Mail support@senseglow.shop, we sturen een vervanger of geven je geld terug. Bovenop je wettelijke rechten.",
   },
   {
     question: "Hoe snel wordt mijn bestelling geleverd?",
@@ -35,7 +35,7 @@ const faqs = [
   {
     question: "Mag ik retourneren als het niet bevalt?",
     answer:
-      "Ja — 30 dagen lang, zonder opgaaf van reden. Stuur het product (graag in originele staat) terug en je hebt binnen 14 dagen je geld retour.",
+      "Ja, 30 dagen lang, zonder opgaaf van reden. Stuur het product (graag in originele staat) terug en je hebt binnen 14 dagen je geld retour.",
   },
 ];
 

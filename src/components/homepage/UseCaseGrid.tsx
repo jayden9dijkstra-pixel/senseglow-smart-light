@@ -5,13 +5,13 @@ const tiles = [
   {
     icon: MoonStar,
     title: "Nooit meer struikelen 's nachts",
-    body: "Bewegingssensor-balk voor gang, slaapkamer en badkamer — zacht licht dat partners niet wakker maakt.",
+    body: "Bewegingssensor-balk voor gang, slaapkamer en badkamer, zacht licht dat partners niet wakker maakt.",
     href: "/product/senseglow_ambient_motion_bar",
   },
   {
     icon: ChefHat,
     title: "Een keuken die eindelijk áf voelt",
-    body: "Sfeerverlichting met golfeffect — reageert als je langsloopt, geen elektricien nodig.",
+    body: "Sfeerverlichting met golfeffect, reageert als je langsloopt, geen elektricien nodig.",
     href: "/product/senseglow_wave",
   },
   {
@@ -23,13 +23,13 @@ const tiles = [
   {
     icon: DoorOpen,
     title: "Voordeur verlicht zonder kabel",
-    body: "Solar buitenlamp met sensor, IP65 — twee schroeven en klaar.",
+    body: "Solar buitenlamp met sensor, IP65, twee schroeven en klaar.",
     href: "/product/senseglow_solar_lantern",
   },
   {
     icon: Lamp,
     title: "Bureau dat niet als studentenkamer aanvoelt",
-    body: "Touch-dimbare lamp voor late studie-sessies — magnetisch, verhuist mee.",
+    body: "Touch-dimbare lamp voor late studie-sessies, magnetisch, verhuist mee.",
     href: "/product/senseglow_flex",
   },
 ];

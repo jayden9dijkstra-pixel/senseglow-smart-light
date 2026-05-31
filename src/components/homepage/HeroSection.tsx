@@ -15,7 +15,7 @@ export const HeroSection = () => {
             <div className="space-y-10 order-2 md:order-1 animate-fade-in-slow">
               <div className="space-y-6">
                 <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
-                  SenseGlow — slimme verlichting
+                  SenseGlow, slimme verlichting
                 </p>
 
                 <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-[1.15] text-foreground">

@@ -55,7 +55,7 @@ const Returns = () => {
               {[
                 { n: "1", title: "Mail naar support@senseglow.shop", body: "Vermeld je bestelnummer en welk product je wilt retourneren. Je krijgt binnen 24u werkdagen een retourbevestiging met instructies." },
                 { n: "2", title: "Verpak het product", body: "Bij voorkeur in de originele verpakking. Zorg dat het product onbeschadigd is en compleet (lampen, kabels, montagestrip)." },
-                { n: "3", title: "Verzend terug", body: "Je krijgt van ons een retouradres. Verzending naar ons is voor jouw rekening — tenzij het product defect of verkeerd is geleverd, dan vergoeden wij ook die kosten." },
+                { n: "3", title: "Verzend terug", body: "Je krijgt van ons een retouradres. Verzending naar ons is voor jouw rekening, tenzij het product defect of verkeerd is geleverd, dan vergoeden wij ook die kosten." },
                 { n: "4", title: "Wij verwerken en betalen terug", body: "Binnen 14 dagen na ontvangst van de retourzending krijg je het volledige aankoopbedrag terug op dezelfde betaalmethode die je gebruikte bij de bestelling." },
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">

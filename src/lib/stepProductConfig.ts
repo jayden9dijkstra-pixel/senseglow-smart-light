@@ -1,16 +1,16 @@
 /**
- * SenseGlow Step™ — Trapverlichting met sensor
+ * SenseGlow Step™, Trapverlichting met sensor
  */
 import { computeBundlePricing } from "./productConfig";
 
 export const STEP_HERO_CONTENT = {
-  h1: "Veilig de trap op en af — ook 's nachts.",
+  h1: "Veilig de trap op en af, ook 's nachts.",
   subtitle:
     "Kleine traplampen met bewegingssensor. Geen boren, geen elektricien. Plakken, opladen, klaar.",
   bundleCta: "Voordeliger met sets ↓",
   bullets: [
-    "Bewegingssensor — automatisch aan/uit",
-    "Zelfklevend — geen boren",
+    "Bewegingssensor, automatisch aan/uit",
+    "Zelfklevend, geen boren",
     "USB-C oplaadbaar",
   ],
 };
@@ -21,7 +21,7 @@ export const STEP_OUTCOMES = [
   {
     icon: "🌙",
     title: "Zacht licht, niet verblindend",
-    description: "Net genoeg om de trap te zien — zonder iemand wakker te maken.",
+    description: "Net genoeg om de trap te zien, zonder iemand wakker te maken.",
   },
   {
     icon: "🛡️",
@@ -56,15 +56,15 @@ export const STEP_USE_CASES = [
 
 export const STEP_TECH_BENEFITS = [
   { icon: "📡", tech: "PIR bewegingssensor", benefit: "Detecteert beweging tot enkele meters" },
-  { icon: "🔋", tech: "USB-C oplaadbaar", benefit: "Eén keer per maand opladen — geen wegwerpbatterijen" },
+  { icon: "🔋", tech: "USB-C oplaadbaar", benefit: "Eén keer per maand opladen, geen wegwerpbatterijen" },
   { icon: "🧲", tech: "Zelfklevende montage", benefit: "Geen boren, geen schade aan de muur" },
-  { icon: "💡", tech: "Zacht warm licht", benefit: "Niet verblindend — ook geschikt voor kinderen" },
+  { icon: "💡", tech: "Zacht warm licht", benefit: "Niet verblindend, ook geschikt voor kinderen" },
 ];
 
 export const STEP_FAQS = [
   { question: "Moet ik boren?", answer: "Nee, de Step lampen plakken zelf op de muur of trap met een zelfklevende strip." },
   { question: "Hoe lang gaat de batterij mee?", answer: "Bij normaal nachtelijk gebruik gaat een lamp ongeveer een maand mee op één lading via USB-C." },
-  { question: "Werkt het overdag ook?", answer: "De ingebouwde lichtsensor zorgt dat de lamp alleen aangaat in het donker — overdag blijft hij uit." },
+  { question: "Werkt het overdag ook?", answer: "De ingebouwde lichtsensor zorgt dat de lamp alleen aangaat in het donker, overdag blijft hij uit." },
   { question: "Welke set heb ik nodig?", answer: "Een 4-pack volstaat voor een korte trap of gang. Voor langere trappen of meerdere ruimtes raden we de 8-pack aan." },
 ];
 

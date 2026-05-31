@@ -10,7 +10,7 @@ const Catalog = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "Onze collectie — SenseGlow";
+    document.title = "Onze collectie, SenseGlow";
     (async () => {
       setLoading(true);
       const list = await fetchProducts(50);
@@ -33,7 +33,7 @@ const Catalog = () => {
               Jij hoeft alleen maar te bewegen.
             </h1>
             <p className="text-base md:text-lg text-foreground/60 max-w-2xl">
-              Zeven slimme lichten — elk ontworpen voor een specifieke ruimte of moment.
+              Zeven slimme lichten, elk ontworpen voor een specifieke ruimte of moment.
               Kies wat past bij jouw huis.
             </p>
           </div>

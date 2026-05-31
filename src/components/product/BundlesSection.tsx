@@ -179,7 +179,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
                         <span>
                           {pack}× {product.node.title}
-                          {variantLabel ? ` — ${variantLabel}` : ""}
+                          {variantLabel ? `, ${variantLabel}` : ""}
                         </span>
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">

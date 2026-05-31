@@ -116,13 +116,13 @@ const Privacy = () => {
             <h2 className="text-xl font-semibold">5. Met wie delen we je gegevens?</h2>
             <p className="text-foreground/70">Voor het uitvoeren van onze dienst werken we met de volgende verwerkers/partijen:</p>
             <ul className="space-y-2 text-foreground/70 list-disc pl-6">
-              <li><strong>Shopify</strong> (Canada/VS) — onze webshop-platform en betaalverwerking. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
-              <li><strong>DHL</strong> (Nederland/EU) — bezorging van pakketten. Ontvangt NAW + telefoonnummer.</li>
-              <li><strong>17TRACK</strong> (China) — pakkettracking. Ontvangt alleen track-code, geen persoonsgegevens.</li>
-              <li><strong>Betaalprovider</strong> (Mollie, Stripe, of vergelijkbaar — EU) — verwerkt betalingen.</li>
-              <li><strong>E-mailprovider</strong> — ontvangt e-mailadres + naam voor transactionele en marketing-mails.</li>
-              <li><strong>Meta (Facebook/Instagram)</strong> — alleen na cookie-toestemming.</li>
-              <li><strong>TikTok</strong> — alleen na cookie-toestemming.</li>
+              <li><strong>Shopify</strong> (Canada/VS), onze webshop-platform en betaalverwerking. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
+              <li><strong>DHL</strong> (Nederland/EU), bezorging van pakketten. Ontvangt NAW + telefoonnummer.</li>
+              <li><strong>17TRACK</strong> (China), pakkettracking. Ontvangt alleen track-code, geen persoonsgegevens.</li>
+              <li><strong>Betaalprovider</strong> (Mollie, Stripe, of vergelijkbaar, EU), verwerkt betalingen.</li>
+              <li><strong>E-mailprovider</strong>, ontvangt e-mailadres + naam voor transactionele en marketing-mails.</li>
+              <li><strong>Meta (Facebook/Instagram)</strong>, alleen na cookie-toestemming.</li>
+              <li><strong>TikTok</strong>, alleen na cookie-toestemming.</li>
             </ul>
             <p className="text-foreground/70">We verkopen geen persoonsgegevens aan derden.</p>
           </section>
@@ -145,13 +145,13 @@ const Privacy = () => {
             <h2 className="text-xl font-semibold">8. Jouw rechten</h2>
             <p className="text-foreground/70">Onder de AVG heb je de volgende rechten:</p>
             <ul className="space-y-1 text-foreground/70 list-disc pl-6">
-              <li><strong>Recht op inzage</strong> — opvragen welke gegevens we van je hebben.</li>
-              <li><strong>Recht op correctie</strong> — onjuiste gegevens laten aanpassen.</li>
-              <li><strong>Recht op verwijdering</strong> — je gegevens laten wissen.</li>
-              <li><strong>Recht op beperking</strong> — verwerking tijdelijk laten stoppen.</li>
-              <li><strong>Recht op dataportabiliteit</strong> — je gegevens in een gangbaar formaat ontvangen.</li>
-              <li><strong>Recht van bezwaar</strong> — bezwaar maken tegen verwerking.</li>
-              <li><strong>Recht om toestemming in te trekken</strong> — bv. uitschrijven nieuwsbrief.</li>
+              <li><strong>Recht op inzage</strong>, opvragen welke gegevens we van je hebben.</li>
+              <li><strong>Recht op correctie</strong>, onjuiste gegevens laten aanpassen.</li>
+              <li><strong>Recht op verwijdering</strong>, je gegevens laten wissen.</li>
+              <li><strong>Recht op beperking</strong>, verwerking tijdelijk laten stoppen.</li>
+              <li><strong>Recht op dataportabiliteit</strong>, je gegevens in een gangbaar formaat ontvangen.</li>
+              <li><strong>Recht van bezwaar</strong>, bezwaar maken tegen verwerking.</li>
+              <li><strong>Recht om toestemming in te trekken</strong>, bv. uitschrijven nieuwsbrief.</li>
             </ul>
             <p className="text-foreground/70">Een verzoek doe je via support@senseglow.shop. We reageren binnen 30 dagen.</p>
           </section>

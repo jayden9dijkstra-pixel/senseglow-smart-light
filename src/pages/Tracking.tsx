@@ -50,7 +50,7 @@ const Tracking = () => {
           {[
             {
               title: "Wat is mijn track-code?",
-              body: "Je vindt 'm in de tweede mail die je van ons kreeg — die hebben we gestuurd zodra je pakket bij DHL lag. Onderwerp: 'Je SenseGlow bestelling is onderweg'. Kun je 'm niet vinden? Check ook je spam-folder.",
+              body: "Je vindt 'm in de tweede mail die je van ons kreeg, die hebben we gestuurd zodra je pakket bij DHL lag. Onderwerp: 'Je SenseGlow bestelling is onderweg'. Kun je 'm niet vinden? Check ook je spam-folder.",
             },
             {
               title: "Hoe lang nog?",
@@ -58,7 +58,7 @@ const Tracking = () => {
             },
             {
               title: "Mijn track-code werkt niet?",
-              body: "Track-codes worden soms pas na 24-48 uur actief in het DHL-systeem. Als je 'm na 3 dagen nog steeds niet kunt volgen, mail support@senseglow.shop met je bestelnummer — we lossen het op.",
+              body: "Track-codes worden soms pas na 24-48 uur actief in het DHL-systeem. Als je 'm na 3 dagen nog steeds niet kunt volgen, mail support@senseglow.shop met je bestelnummer, we lossen het op.",
             },
           ].map(({ title, body }) => (
             <Card key={title} className="border-foreground/10 bg-background">

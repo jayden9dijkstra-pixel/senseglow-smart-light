@@ -1,5 +1,5 @@
 /**
- * Bundle variant filter helpers — used to hide legacy BUNDLE-* Shopify
+ * Bundle variant filter helpers, used to hide legacy BUNDLE-* Shopify
  * variants from the single-variant selectors. Bundle pricing itself is
  * now computed client-side from PACK_RATE in productConfig.
  */

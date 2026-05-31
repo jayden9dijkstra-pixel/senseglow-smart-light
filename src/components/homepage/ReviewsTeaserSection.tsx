@@ -73,7 +73,7 @@ export const ReviewsTeaserSection = () => {
                       "{review.text}"
                     </p>
                     <div className="space-y-2">
-                      <p className="text-sm text-foreground/70">— {review.name}</p>
+                      <p className="text-sm text-foreground/70">, {review.name}</p>
                       <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/40">
                         SenseGlow {review.product}
                       </p>

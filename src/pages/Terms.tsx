@@ -12,7 +12,7 @@ const Placeholder = ({ children }: { children: string }) => (
 
 const Article = ({ n, title, children }: { n: number; title: string; children: React.ReactNode }) => (
   <section className="space-y-3">
-    <h2 className="text-xl font-semibold">Artikel {n} — {title}</h2>
+    <h2 className="text-xl font-semibold">Artikel {n}, {title}</h2>
     <div className="text-foreground/70 leading-relaxed space-y-3">{children}</div>
   </section>
 );
@@ -76,7 +76,7 @@ const Terms = () => {
           </Article>
 
           <Article n={7} title="Herroepingsrecht">
-            <p>De consument heeft het recht om de overeenkomst binnen <strong>30 dagen</strong> zonder opgave van redenen te ontbinden — dit is langer dan de wettelijke 14 dagen termijn. Deze periode gaat in op de dag na ontvangst van het product.</p>
+            <p>De consument heeft het recht om de overeenkomst binnen <strong>30 dagen</strong> zonder opgave van redenen te ontbinden, dit is langer dan de wettelijke 14 dagen termijn. Deze periode gaat in op de dag na ontvangst van het product.</p>
             <p>Tijdens de bedenktijd zal de consument zorgvuldig omgaan met het product en de verpakking. Hij/zij mag het product slechts uitpakken en gebruiken voor zover dat nodig is om de aard en het functioneren ervan vast te stellen.</p>
             <p>Om gebruik te maken van het herroepingsrecht, stuurt de consument een ondubbelzinnige verklaring per e-mail naar support@senseglow.shop, of gebruikt het modelformulier voor herroeping (beschikbaar op senseglow.shop/retourneren).</p>
           </Article>
@@ -90,7 +90,7 @@ const Terms = () => {
           </Article>
 
           <Article n={10} title="Garantie">
-            <p>SenseGlow biedt <strong>bovenop de wettelijke conformiteitsrechten</strong> een additionele functionele garantie van <strong>één jaar</strong> op alle producten. Deze garantie laat de wettelijke rechten van de consument uit hoofde van non-conformiteit onverlet — de consument behoudt te allen tijde zijn wettelijke rechten.</p>
+            <p>SenseGlow biedt <strong>bovenop de wettelijke conformiteitsrechten</strong> een additionele functionele garantie van <strong>één jaar</strong> op alle producten. Deze garantie laat de wettelijke rechten van de consument uit hoofde van non-conformiteit onverlet, de consument behoudt te allen tijde zijn wettelijke rechten.</p>
             <p>De garantie geldt voor defecten bij normaal gebruik. Schade door val, water (uitgezonderd IP65-gecertificeerde producten zoals de Solar Lantern), of opzettelijke beschadiging vallen niet onder de garantie.</p>
           </Article>
 

@@ -35,7 +35,7 @@ const About = () => {
                 Onze LED-sensorverlichting combineert modern design met betrouwbare technologie, waardoor elke ruimte direct comfortabeler en veiliger aanvoelt.
               </p>
               <p className="text-lg text-foreground/60 leading-relaxed">
-                Wij ontwerpen producten die jouw dagelijkse routine ondersteunen — automatisch, energiezuinig en zonder overbodige complexiteit.
+                Wij ontwerpen producten die jouw dagelijkse routine ondersteunen, automatisch, energiezuinig en zonder overbodige complexiteit.
               </p>
             </CardContent>
           </Card>
