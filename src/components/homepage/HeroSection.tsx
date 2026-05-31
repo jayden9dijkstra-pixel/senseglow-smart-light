@@ -22,7 +22,7 @@ export const HeroSection = () => {
                   Het licht gaat aan, vóórdat jij het doorhebt.
                 </h1>
 
-                <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-lg text-center">
+                <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-lg text-left">
                   Vijf lampen die werken zonder elektricien of schakelaar.{"\n"}
                   Sensor-gestuurde verlichting voor elk hoekje van je huis.
                 </p>
