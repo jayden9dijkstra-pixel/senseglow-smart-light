@@ -36,7 +36,7 @@ export const StorytellingSection = () => {
                   Boren, kabels, schakelaars die je in het donker niet vindt. Elektriciens die je nooit op tijd kunt bereiken.
                 </p>
                 <p className="text-foreground font-medium">
-                  SenseGlow is ons antwoord — lampen die werken zoals jij leeft. Sensor of touch, binnen of buiten, klein of groot. Eén ding gemeen: je hangt 'm op, en hij doet de rest.
+                  SenseGlow is ons antwoord, lampen die werken zoals jij leeft. Sensor of touch, binnen of buiten, klein of groot. Eén ding gemeen: je hangt 'm op, en hij doet de rest.
                 </p>
               </div>
             </div>

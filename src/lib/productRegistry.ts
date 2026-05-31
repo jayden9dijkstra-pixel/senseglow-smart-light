@@ -1,5 +1,5 @@
 /**
- * Product registry — single place for variant parsing + key building.
+ * Product registry, single place for variant parsing + key building.
  * Used by VariantPicker, BundlesSection and the checkout discount-code mapper.
  */
 import { ProductKey, HANDLE_TO_KEY } from "./productConfig";
@@ -35,7 +35,7 @@ export function buildVariantKey(productKey: ProductKey, opts: SelectedOption[]):
       return c ? `${c}${w}` : "";
     }
     case "lantern": {
-      // No size — single tier on color-agnostic discount.
+      // No size, single tier on color-agnostic discount.
       return "ALL";
     }
     case "sconce": {

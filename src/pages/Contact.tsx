@@ -41,7 +41,7 @@ const Contact = () => {
                   support@senseglow.shop
                 </a>
                 <p className="text-sm text-foreground/60">
-                  Voor alle vragen — bestellingen, producten, retourzendingen, technische hulp. Reactietijd: binnen 24 uur op werkdagen (ma-vr, 09:00-17:00).
+                  Voor alle vragen, bestellingen, producten, retourzendingen, technische hulp. Reactietijd: binnen 24 uur op werkdagen (ma-vr, 09:00-17:00).
                 </p>
                 <Button
                   onClick={() => (window.location.href = "mailto:support@senseglow.shop")}

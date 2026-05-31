@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 interface DualImageProps {
   /** Image shown in light mode (lamp off) */
   srcLight: string;
-  /** Image shown in dark mode (lamp on) — if omitted, srcLight is used for both */
+  /** Image shown in dark mode (lamp on), if omitted, srcLight is used for both */
   srcDark?: string;
   alt: string;
   className?: string;
@@ -18,7 +18,7 @@ export const DualImage = ({ srcLight, srcDark, alt, className = "" }: DualImageP
     setMounted(true);
   }, []);
 
-  // No dark variant — render single image
+  // No dark variant, render single image
   if (!srcDark) {
     return (
       <img

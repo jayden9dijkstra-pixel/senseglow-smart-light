@@ -16,10 +16,10 @@ export const ARC_PRODUCT_HANDLE =
 export const ARC_HERO_CONTENT = {
   h1: "Shape your space with light.",
   subtitle:
-    "Precision lighting that creates depth, symmetry and presence — inside and outside.",
+    "Precision lighting that creates depth, symmetry and presence, inside and outside.",
   bundleCta: "Voordeliger met bundels ↓",
   bullets: [
-    "IP65 waterproof — geschikt voor binnen & buiten",
+    "IP65 waterproof, geschikt voor binnen & buiten",
     "Up & down light design voor een architectural effect",
     "Energiezuinig & lange levensduur",
   ],
@@ -106,7 +106,7 @@ export const ARC_TECH_BENEFITS = [
   {
     icon: "💧",
     tech: "IP65 waterdicht",
-    benefit: "Bestand tegen regen, sneeuw en stof — volledig geschikt voor buiten",
+    benefit: "Bestand tegen regen, sneeuw en stof, volledig geschikt voor buiten",
   },
   {
     icon: "🏗️",
@@ -131,7 +131,7 @@ export const ARC_TECH_BENEFITS = [
   {
     icon: "🔌",
     tech: "Netstroom (AC85-260V)",
-    benefit: "Stabiele, betrouwbare voeding — geen batterijen nodig",
+    benefit: "Stabiele, betrouwbare voeding, geen batterijen nodig",
   },
   {
     icon: "🎨",
@@ -156,7 +156,7 @@ export const ARC_FAQS = [
   {
     question: "Kan ik meerdere combineren?",
     answer:
-      "Absoluut, dit product komt het beste tot zijn recht in symmetrische setups — bijvoorbeeld links en rechts van je voordeur.",
+      "Absoluut, dit product komt het beste tot zijn recht in symmetrische setups, bijvoorbeeld links en rechts van je voordeur.",
   },
   {
     question: "Welke lichtkleur moet ik kiezen?",
@@ -186,7 +186,7 @@ export type ArcLightColor = "warm" | "cold";
 
 import { computeBundlePricing } from "./productConfig";
 
-/** Bundle pricing — uses centralized 11/13/20% tiers. */
+/** Bundle pricing, uses centralized 11/13/20% tiers. */
 export const computeArcBundlePricing = computeBundlePricing;
 
 /**

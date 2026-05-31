@@ -92,7 +92,7 @@ const Shipping = () => {
             },
             {
               title: "Pakket niet ontvangen na 14 werkdagen?",
-              body: "Mail support@senseglow.shop met je bestelnummer. We gaan direct met DHL in gesprek en zorgen dat je je product krijgt of je geld terug — geen excuses.",
+              body: "Mail support@senseglow.shop met je bestelnummer. We gaan direct met DHL in gesprek en zorgen dat je je product krijgt of je geld terug, geen excuses.",
             },
           ].map(({ title, body }) => (
             <Card key={title} className="border-foreground/10 bg-background">

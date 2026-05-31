@@ -12,12 +12,12 @@ export const LANTERN_PRODUCT_HANDLE = "senseglow_solar_lantern";
 export const LANTERN_HERO_CONTENT = {
   h1: "Warm light. No wires.",
   subtitle:
-    "A solar-powered lantern that automatically lights up your home — no cables, no effort.",
+    "A solar-powered lantern that automatically lights up your home, no cables, no effort.",
   bundleCta: "Voordeliger met bundels ↓",
   bullets: [
-    "Solar powered — geen stroom nodig",
+    "Solar powered, geen stroom nodig",
     "Automatische sensor (dag/nacht + beweging)",
-    "IP65 waterproof — perfect voor buiten",
+    "IP65 waterproof, perfect voor buiten",
   ],
 };
 
@@ -30,7 +30,7 @@ export const LANTERN_OUTCOMES = [
     icon: "🌅",
     title: "Automatisch aan bij schemering",
     description:
-      "SenseGlow Lantern™ creëert een warme en uitnodigende uitstraling rondom je huis — volledig automatisch.",
+      "SenseGlow Lantern™ creëert een warme en uitnodigende uitstraling rondom je huis, volledig automatisch.",
   },
   {
     icon: "☀️",
@@ -42,7 +42,7 @@ export const LANTERN_OUTCOMES = [
     icon: "🏡",
     title: "Sfeer zonder gedoe",
     description:
-      "Geen kabels, geen stekkers, geen installateur — gewoon bevestigen en genieten.",
+      "Geen kabels, geen stekkers, geen installateur, gewoon bevestigen en genieten.",
   },
 ];
 
@@ -57,7 +57,7 @@ export const LANTERN_PROBLEM_SOLUTION = {
   ],
   solutionTitle: "De oplossing:",
   solutionText:
-    "SenseGlow Lantern™ werkt volledig op zonne-energie en schakelt automatisch in — zonder kabels of gedoe.",
+    "SenseGlow Lantern™ werkt volledig op zonne-energie en schakelt automatisch in, zonder kabels of gedoe.",
 };
 
 // ─── Use Cases ─────────────────────────────────────────
@@ -102,7 +102,7 @@ export const LANTERN_TECH_BENEFITS = [
   {
     icon: "☀️",
     tech: "Solar powered",
-    benefit: "Geen elektriciteit nodig — laadt automatisch op met zonlicht",
+    benefit: "Geen elektriciteit nodig, laadt automatisch op met zonlicht",
   },
   {
     icon: "🔋",
@@ -122,7 +122,7 @@ export const LANTERN_TECH_BENEFITS = [
   {
     icon: "💧",
     tech: "IP65 waterproof",
-    benefit: "Bestand tegen regen, sneeuw en stof — het hele jaar door",
+    benefit: "Bestand tegen regen, sneeuw en stof, het hele jaar door",
   },
   {
     icon: "🌙",
@@ -171,5 +171,5 @@ export const LANTERN_FINAL_CTA = {
 
 import { computeBundlePricing } from "./productConfig";
 
-/** Bundle pricing — uses centralized 11/13/20% tiers. */
+/** Bundle pricing, uses centralized 11/13/20% tiers. */
 export const computeLanternBundlePricing = computeBundlePricing;

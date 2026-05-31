@@ -140,7 +140,7 @@ export function CartDrawer() {
                               </div>
                               <h4 className="font-medium text-sm">
                                 {item.bundleName}
-                                {item.bundleVariantLabel ? ` — ${item.bundleVariantLabel}` : ""}
+                                {item.bundleVariantLabel ? `, ${item.bundleVariantLabel}` : ""}
                               </h4>
                               <p className="text-xs text-muted-foreground">
                                 {item.product.node.title} · {item.quantity}×

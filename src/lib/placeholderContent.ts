@@ -4,7 +4,7 @@
  * H1 falls back to the live Shopify product title (passed in by ProductDetail).
  */
 
-const PH = "—"; // visual placeholder
+const PH = ","; // visual placeholder
 
 export interface PlaceholderContent {
   hero: {

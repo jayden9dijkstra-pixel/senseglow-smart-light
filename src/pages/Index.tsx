@@ -33,7 +33,7 @@ const Index = () => {
       {/* 1. Hero */}
       <HeroSection />
 
-      {/* 2. UseCaseGrid — 5 products */}
+      {/* 2. UseCaseGrid, 5 products */}
       <UseCaseGrid />
 
       {/* Editorial separator */}

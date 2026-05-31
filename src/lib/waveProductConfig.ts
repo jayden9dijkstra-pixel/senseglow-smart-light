@@ -4,10 +4,10 @@
 
 export const WAVE_HERO_CONTENT = {
   h1: "Light that moves with you.",
-  subtitle: "A subtle wave of light that activates the moment you enter — without disturbing your space.",
+  subtitle: "A subtle wave of light that activates the moment you enter, without disturbing your space.",
   bundleCta: "Bespaar meer met bundels ↓",
   bullets: [
-    "Bewegingssensor — automatisch aan bij beweging",
+    "Bewegingssensor, automatisch aan bij beweging",
     "Uniek wave lichteffect op de muur",
     "Draadloos & USB oplaadbaar",
   ],
@@ -83,11 +83,11 @@ export const WAVE_TECH_BENEFITS = [
   {
     icon: "🎨",
     tech: "3 lichtkleuren in één lamp",
-    benefit: "Warm (3000K), Neutraal (4000K) en Wit (6000K) — schakel eenvoudig",
+    benefit: "Warm (3000K), Neutraal (4000K) en Wit (6000K), schakel eenvoudig",
   },
   {
     icon: "💡",
-    tech: "Dimbaar — helderheid aanpasbaar",
+    tech: "Dimbaar, helderheid aanpasbaar",
     benefit: "Van subtiele sfeerverlichting tot functioneel licht",
   },
   {
@@ -103,7 +103,7 @@ export const WAVE_TECH_BENEFITS = [
   {
     icon: "📏",
     tech: "Ultra dun design",
-    benefit: "Naadloos in elk interieur — valt niet op, tot het aan gaat",
+    benefit: "Naadloos in elk interieur, valt niet op, tot het aan gaat",
   },
 ];
 
@@ -116,7 +116,7 @@ export const WAVE_FAQS = [
   {
     question: "Hoe bevestig ik de lamp?",
     answer:
-      "Met een magnetische strip — geen gereedschap nodig. Plak de metalen strip op de gewenste plek en klik de lamp erop.",
+      "Met een magnetische strip, geen gereedschap nodig. Plak de metalen strip op de gewenste plek en klik de lamp erop.",
   },
   {
     question: "Hoe lang gaat de batterij mee?",

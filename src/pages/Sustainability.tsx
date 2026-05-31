@@ -8,7 +8,7 @@ const points = [
   {
     icon: BatteryCharging,
     title: "USB-C, geen wegwerpbatterijen",
-    body: "Standaard sensor-lampen verbruiken 4-6 AA-batterijen per jaar. Onze Ambient-, Wave-, en Wall Lamp-producten zijn USB-C oplaadbaar — eens per 3-6 weken. Geen lege batterijen in de afvalbak, geen nieuwe aanschaffen, geen plastic verpakkingen.",
+    body: "Standaard sensor-lampen verbruiken 4-6 AA-batterijen per jaar. Onze Ambient-, Wave-, en Wall Lamp-producten zijn USB-C oplaadbaar, eens per 3-6 weken. Geen lege batterijen in de afvalbak, geen nieuwe aanschaffen, geen plastic verpakkingen.",
   },
   {
     icon: Sun,
@@ -44,7 +44,7 @@ const Sustainability = () => {
               Duurzaamheid bij SenseGlow
             </h1>
             <p className="text-lg text-foreground/60 leading-relaxed">
-              We maken geen klimaat-claims die we niet kunnen onderbouwen. Wel een paar concrete keuzes die het verschil maken — vooral op de lange termijn.
+              We maken geen klimaat-claims die we niet kunnen onderbouwen. Wel een paar concrete keuzes die het verschil maken, vooral op de lange termijn.
             </p>
           </div>
 

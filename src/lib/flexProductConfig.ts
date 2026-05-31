@@ -14,11 +14,11 @@ export const FLEX_PRODUCT_HANDLE = "senseglow_flex";
 export const FLEX_HERO_CONTENT = {
   h1: "Light, exactly where you need it.",
   subtitle:
-    "A flexible, magnetic light that adapts to your space — in seconds.",
+    "A flexible, magnetic light that adapts to your space, in seconds.",
   bundleCta: "Voordeliger met bundels ↓",
   bullets: [
-    "88° verstelbaar — richt het licht precies waar je wil",
-    "Magnetisch & 3M bevestiging — geen boren",
+    "88° verstelbaar, richt het licht precies waar je wil",
+    "Magnetisch & 3M bevestiging, geen boren",
     "Draadloos & oplaadbaar (USB-C)",
   ],
 };
@@ -32,19 +32,19 @@ export const FLEX_OUTCOMES = [
     icon: "🎯",
     title: "Volledige controle",
     description:
-      "SenseGlow Flex™ geeft je volledige controle over richting en sfeer. Geen vaste verlichting — maar licht dat zich aanpast aan jou.",
+      "SenseGlow Flex™ geeft je volledige controle over richting en sfeer. Geen vaste verlichting, maar licht dat zich aanpast aan jou.",
   },
   {
     icon: "🔄",
     title: "88° verstelbaar",
     description:
-      "Richt het licht precies op je werk, boek of ruimte — in één beweging.",
+      "Richt het licht precies op je werk, boek of ruimte, in één beweging.",
   },
   {
     icon: "🧲",
     title: "Overal plaatsbaar",
     description:
-      "Magnetisch of met 3M tape — geen boren, geen kabels, geen gedoe.",
+      "Magnetisch of met 3M tape, geen boren, geen kabels, geen gedoe.",
   },
 ];
 
@@ -59,7 +59,7 @@ export const FLEX_PROBLEM_SOLUTION = {
   ],
   solutionTitle: "De oplossing:",
   solutionText:
-    "Met SenseGlow Flex™ richt je het licht exact naar je werk, boek of ruimte — in seconden. Draadloos, verstelbaar en overal te plaatsen.",
+    "Met SenseGlow Flex™ richt je het licht exact naar je werk, boek of ruimte, in seconden. Draadloos, verstelbaar en overal te plaatsen.",
 };
 
 // ─── Use Cases ─────────────────────────────────────────
@@ -109,32 +109,32 @@ export const FLEX_TECH_BENEFITS = [
   {
     icon: "📐",
     tech: "88° verstelbare hoek",
-    benefit: "Richt het licht precies waar je het nodig hebt — omhoog of omlaag",
+    benefit: "Richt het licht precies waar je het nodig hebt, omhoog of omlaag",
   },
   {
     icon: "🎨",
     tech: "3 lichtkleuren in één lamp",
-    benefit: "Warm (3000K), Neutraal (4500K) en Wit (6000K) — schakel eenvoudig",
+    benefit: "Warm (3000K), Neutraal (4500K) en Wit (6000K), schakel eenvoudig",
   },
   {
     icon: "💡",
     tech: "Traploos dimbaar (touch control)",
-    benefit: "Lang indrukken voor traploos dimmen — van sfeerlicht tot vol vermogen",
+    benefit: "Lang indrukken voor traploos dimmen, van sfeerlicht tot vol vermogen",
   },
   {
     icon: "🔋",
-    tech: "2000mAh batterij — 3 tot 20 uur",
+    tech: "2000mAh batterij, 3 tot 20 uur",
     benefit: "USB-C oplaadbaar, geen batterijen nodig",
   },
   {
     icon: "👁️",
     tech: "Anti-glare / oogvriendelijk",
-    benefit: "Geen flikkering, geen blauw licht — EU RGO gecertificeerd",
+    benefit: "Geen flikkering, geen blauw licht, EU RGO gecertificeerd",
   },
   {
     icon: "🧲",
     tech: "Magnetische bevestiging + 3M",
-    benefit: "Bevestig overal zonder boren — verplaats wanneer je wilt",
+    benefit: "Bevestig overal zonder boren, verplaats wanneer je wilt",
   },
 ];
 
@@ -159,7 +159,7 @@ export const FLEX_FAQS = [
   {
     question: "Is het licht fel?",
     answer:
-      "Je kunt het volledig dimmen met de touch control. Van subtiel sfeerlicht tot heldere werkverlichting — jij bepaalt.",
+      "Je kunt het volledig dimmen met de touch control. Van subtiel sfeerlicht tot heldere werkverlichting, jij bepaalt.",
   },
 ];
 
@@ -202,5 +202,5 @@ export function parseFlexVariant(
 
 import { computeBundlePricing } from "./productConfig";
 
-/** Bundle pricing — uses centralized 11/13/20% tiers. */
+/** Bundle pricing, uses centralized 11/13/20% tiers. */
 export const computeFlexBundlePricing = computeBundlePricing;
