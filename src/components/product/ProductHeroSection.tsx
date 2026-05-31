@@ -124,9 +124,9 @@ export const ProductHeroSection = ({
     <section className="py-10 md:py-16 bg-background animate-fade-in-slow">
       <div className="container">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-0">
+          <div className="grid md:grid-cols-2 gap-0">
             {/* Left - Product Image Gallery */}
-            <div className="relative lg:border-r border-foreground/10 lg:pr-10 pb-8 lg:pb-0">
+            <div className="relative md:border-r border-foreground/10 md:pr-10 pb-8 md:pb-0">
               <ProductImageGallery
                 images={productImages}
                 productTitle={product.node.title}
@@ -134,7 +134,7 @@ export const ProductHeroSection = ({
             </div>
 
             {/* Right - Product Info */}
-            <div className="space-y-6 lg:pl-10 pt-8 lg:pt-0 border-t lg:border-t-0 border-foreground/10 text-left">
+            <div className="space-y-6 md:pl-10 pt-8 md:pt-0 border-t md:border-t-0 border-foreground/10 text-left">
               <div className="space-y-2">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                   {content.h1}
