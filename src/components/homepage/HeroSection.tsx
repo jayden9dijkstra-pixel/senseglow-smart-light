@@ -19,7 +19,7 @@ export const HeroSection = () => {
                 </p>
 
                 <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-[1.15] text-foreground">
-                  Slimme verlichting. Geen gedoe.
+                  Het licht gaat aan, vóórdat jij het doorhebt.
                 </h1>
 
                 <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-lg">
