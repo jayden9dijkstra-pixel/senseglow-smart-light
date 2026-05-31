@@ -16,7 +16,7 @@ const tiles = [
   },
   {
     icon: Footprints,
-    title: "Veilig de trap op — ook 's nachts",
+    title: "Veilig de trap op zelfs 's nachts",
     body: "Traplampen met sensor, zelfklevend gemonteerd. Voor (groot)ouders én voor kleine voetjes.",
     href: "/product/senseglow_wall_lamp",
   },
