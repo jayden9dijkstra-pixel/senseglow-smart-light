@@ -105,13 +105,13 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
     touchEndX.current = null;
   };
 
-  // Lightbox navigation
+  // Lightbox navigation (no wrap)
   const lightboxPrevious = () => {
-    setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setLightboxIndex((prev) => Math.max(0, prev - 1));
   };
 
   const lightboxNext = () => {
-    setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setLightboxIndex((prev) => Math.min(images.length - 1, prev + 1));
   };
 
   const openLightbox = (index: number = selectedIndex) => {
