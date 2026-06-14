@@ -254,19 +254,21 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
               </div>
 
               {/* Main image area */}
-              <div className="relative flex-1 min-h-0 px-3 md:px-10">
+              <div className="relative flex-1 min-h-0 px-3 md:px-10 overflow-hidden">
                 {images.length > 1 && (
                   <>
                     <button
                       onClick={lightboxPrevious}
-                      className="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/30 transition-colors duration-300 hover:text-primary"
+                      disabled={lightboxIndex === 0}
+                      className="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/30 transition-all duration-300 hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
                       aria-label="Vorige afbeelding"
                     >
                       <ChevronLeft className="h-7 w-7 md:h-9 md:w-9" strokeWidth={1.5} />
                     </button>
                     <button
                       onClick={lightboxNext}
-                      className="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/30 transition-colors duration-300 hover:text-primary"
+                      disabled={lightboxIndex === images.length - 1}
+                      className="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/30 transition-all duration-300 hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
                       aria-label="Volgende afbeelding"
                     >
                       <ChevronRight className="h-7 w-7 md:h-9 md:w-9" strokeWidth={1.5} />
@@ -274,15 +276,24 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                   </>
                 )}
 
-                <div className="flex h-full w-full items-center justify-center">
-                  <img
-                    src={images[lightboxIndex].url}
-                    alt={images[lightboxIndex].altText || productTitle}
-                    className="max-h-full max-w-full object-contain"
-                    draggable={false}
-                  />
+                <div
+                  className="flex h-full w-full transition-transform duration-500 ease-out"
+                  style={{ transform: `translateX(-${lightboxIndex * 100}%)` }}
+                >
+                  {images.map((image, idx) => (
+                    <div key={idx} className="flex-shrink-0 w-full h-full flex items-center justify-center px-2">
+                      <img
+                        src={image.url}
+                        alt={image.altText || productTitle}
+                        className="max-h-full max-w-full object-contain"
+                        draggable={false}
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
+
 
               {/* Thumbnails */}
               {images.length > 1 && (
