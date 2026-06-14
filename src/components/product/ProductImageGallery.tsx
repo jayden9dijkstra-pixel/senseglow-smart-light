@@ -136,17 +136,23 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
           onMouseLeave={onMouseLeave}
         >
           <div className="relative aspect-square overflow-hidden">
-            {/* Image with smooth transition */}
-            <div 
-              className="absolute inset-0 transition-opacity duration-500 ease-out"
+            {/* Sliding track for smooth horizontal scroll */}
+            <div
+              className="flex h-full w-full transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
               onClick={() => !isDragging.current && openLightbox()}
             >
-              <img
-                src={currentImage.url}
-                alt={currentImage.altText || productTitle}
-                className="w-full h-full object-contain"
-                draggable={false}
-              />
+              {images.map((image, idx) => (
+                <div key={idx} className="relative flex-shrink-0 w-full h-full">
+                  <img
+                    src={image.url}
+                    alt={image.altText || productTitle}
+                    className="w-full h-full object-contain"
+                    draggable={false}
+                    loading={idx === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              ))}
             </div>
 
             {/* Desktop navigation arrows - subtle, minimal */}
@@ -154,20 +160,22 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
               <>
                 <button
                   onClick={(e) => { e.stopPropagation(); handlePrevious(); }}
+                  disabled={selectedIndex === 0}
                   className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 
                     items-center justify-center w-10 h-10 
                     opacity-0 group-hover:opacity-100 transition-all duration-300
-                    hover:text-primary"
+                    hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
                   aria-label="Vorige afbeelding"
                 >
                   <ChevronLeft className="h-6 w-6 text-foreground/30 hover:text-primary transition-colors" strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                  disabled={selectedIndex === images.length - 1}
                   className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 
                     items-center justify-center w-10 h-10 
                     opacity-0 group-hover:opacity-100 transition-all duration-300
-                    hover:text-primary"
+                    hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
                   aria-label="Volgende afbeelding"
                 >
                   <ChevronRight className="h-6 w-6 text-foreground/30 hover:text-primary transition-colors" strokeWidth={1.5} />
@@ -175,6 +183,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
               </>
             )}
           </div>
+
         </div>
 
         {/* Dot indicators - minimal, always visible on mobile */}
