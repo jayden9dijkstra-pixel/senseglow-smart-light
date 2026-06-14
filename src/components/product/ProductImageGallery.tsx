@@ -39,11 +39,11 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
   const currentImage = images[selectedIndex];
 
   const handlePrevious = useCallback(() => {
-    setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  }, [images.length]);
+    setSelectedIndex((prev) => Math.max(0, prev - 1));
+  }, []);
 
   const handleNext = useCallback(() => {
-    setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setSelectedIndex((prev) => Math.min(images.length - 1, prev + 1));
   }, [images.length]);
 
   // Touch events for main gallery
