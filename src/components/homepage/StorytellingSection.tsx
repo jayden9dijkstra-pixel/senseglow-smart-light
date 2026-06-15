@@ -21,22 +21,25 @@ export const StorytellingSection = () => {
             {/* Content - Right side */}
             <div className="space-y-8 md:text-right animate-fade-in-slow">
               <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
-                Ons verhaal
+                Achter SenseGlow
               </p>
 
               <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight">
-                Waarom we SenseGlow™ maakten
+                Een huis hoort veilig en warm te voelen
               </h2>
 
               <div className="space-y-5 text-base leading-relaxed text-foreground/60">
                 <p>
-                  We begonnen met één vraag: waarom moet verlichting altijd gedoe zijn?
+                  Niet pas nadat je een installateur hebt gebeld. Niet pas na een aannemer of een wand opengebroken voor bekabeling. SenseGlow is gestart vanuit één observatie: de slimste verlichting die online verkocht wordt, komt te zelden in Nederlandse huizen terecht. Te ingewikkeld, slecht vertaald, of simpelweg niet ontworpen voor de markt hier.
                 </p>
                 <p>
-                  Boren, kabels, schakelaars die je in het donker niet vindt. Elektriciens die je nooit op tijd kunt bereiken.
+                  Onze rol is niet uitvinden — onze rol is selecteren. We kiezen lampen die in een Nederlands huis werken: zonder elektricien, zonder app-instellingen, zonder gedoe. Vijf producten, elk voor een ander probleem of moment. Geen catalogus van tweehonderd verschillende modellen waar je in verdwaalt.
                 </p>
                 <p className="text-foreground font-medium">
-                  SenseGlow is ons antwoord, lampen die werken zoals jij leeft. Sensor of touch, binnen of buiten, klein of groot. Eén ding gemeen: je hangt 'm op, en hij doet de rest.
+                  Vanuit Friesland brengen we ze naar jou, met Nederlandse klantenservice en 14 dagen bedenktijd. Veiligheid en sfeer in één lamp — dat is alles wat we doen.
+                </p>
+                <p className="text-sm text-foreground/50 italic pt-2">
+                  — J. Dijkstra, Jayden Ecom
                 </p>
               </div>
             </div>
