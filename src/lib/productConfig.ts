@@ -84,24 +84,10 @@ export function getBundleDiscountCode(
   packSize: PackSize,
   variantKey: string
 ): string | null {
-  switch (productKey) {
-    case "ambient":
-      if (!["20", "30", "40"].includes(variantKey)) return null;
-      return `SG-AB-${variantKey}-${packSize}`;
-    case "wave":
-      if (!["30", "50"].includes(variantKey)) return null;
-      return `SG-WAVE-${variantKey}-${packSize}`;
-    case "lantern":
-      return [2, 3].includes(packSize) ? `SG-SOL-${packSize}` : null;
-    case "sconce":
-      if (variantKey === "4SET" && [2, 3, 4].includes(packSize)) return `SG-WALLLAMP-4-${packSize}`;
-      if (variantKey === "8SET" && packSize === 2) return `SG-WALLLAMP-8-2`;
-      return null;
-    case "flex":
-      return [2, 3].includes(packSize) ? `SG-FLX-${packSize}` : null;
-    default:
-      return null;
-  }
+  // Universal pack-size discount codes - work on total cart quantity.
+  // 2+ items → 10%, 3+ items → 20%, 4+ items → 30%.
+  // Cross-product bundles (e.g. Ambient + Wave + Flex) automatically qualify.
+  return `SG-PACK-${packSize}`;
 }
 
 // ─── Bundle quote helper ───────────────────────────────
