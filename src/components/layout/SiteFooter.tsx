@@ -30,7 +30,7 @@ export const SiteFooter = () => {
             <div>
               <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Blijf op de hoogte</h4>
               <p className="text-sm text-foreground/50">
-                Onze socials komen binnenkort. Stuur een mail naar <a href="mailto:hello@senseglow.shop" className="text-glow hover:underline">hello@senseglow.shop</a> als je geen launch wilt missen.
+                Onze socials komen binnenkort. Stuur een mail naar <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a> als je geen launch wilt missen.
               </p>
             </div>
           </div>
