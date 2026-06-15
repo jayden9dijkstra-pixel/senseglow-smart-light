@@ -1,8 +1,26 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Lightbulb, Shield, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+
+const criteria = [
+  {
+    title: "Geen installateur nodig",
+    body: "Alle producten werken via USB-C, batterij of solar. Plakken, ophangen of plaatsen — geen boren in muren, geen kabels door wanden, geen elektricien-rekening.",
+  },
+  {
+    title: "Geen app, geen wifi",
+    body: "Smart-home klinkt slim, maar elke app-bediening is ook één extra punt waar het fout kan gaan. Onze lampen werken met fysieke sensoren of touch. Eén keer instellen, dan zelfstandig.",
+  },
+  {
+    title: "Onder de €60 per stuk",
+    body: "We selecteren bewust binnen een prijsklasse die toegankelijk blijft. Geen premium-tax, geen €200 wandlamp die hetzelfde doet als een €40 alternatief.",
+  },
+  {
+    title: "14 dagen retour, zonder vragen",
+    body: "Past hij niet bij je gang? Geeft het licht een andere kleur dan verwacht? Stuur terug binnen 14 dagen, dan krijg je je geld retour. Geen rare procedures.",
+  },
+];
 
 const About = () => {
   const navigate = useNavigate();
@@ -10,8 +28,8 @@ const About = () => {
   return (
     <PageLayout>
       <div className="container py-12 max-w-4xl">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           onClick={() => navigate("/")}
           className="mb-8"
         >
@@ -19,64 +37,87 @@ const About = () => {
           Terug naar home
         </Button>
 
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              Over SenseGlow
-            </h1>
-            <p className="text-lg text-foreground/60 leading-relaxed">
-              SenseGlow is ontwikkeld vanuit één visie: verlichting moet slim, stijlvol en zorgeloos zijn.
+        <div className="space-y-16 md:space-y-20">
+          {/* Hero */}
+          <section className="space-y-6">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
+              Achter SenseGlow
             </p>
-          </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+              Slimme verlichting,<br />zonder de gewone hindernissen
+            </h1>
+            <p className="text-lg text-foreground/60 leading-relaxed max-w-2xl">
+              SenseGlow brengt sensorverlichting naar Nederlandse huizen die werkt zonder elektricien, zonder app en zonder bekabeling. Vijf producten, vijf concrete problemen opgelost.
+            </p>
+          </section>
 
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-8">
-              <p className="text-lg text-foreground/60 leading-relaxed mb-6">
-                Onze LED-sensorverlichting combineert modern design met betrouwbare technologie, waardoor elke ruimte direct comfortabeler en veiliger aanvoelt.
+          {/* Wat we doen */}
+          <section className="space-y-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">Wat we doen</h2>
+            <div className="space-y-5 text-base md:text-lg text-foreground/60 leading-relaxed">
+              <p>
+                Wij verkopen geen lampen — wij verkopen opgeloste problemen. Een trap die 's nachts niet meer onveilig voelt. Een keuken die sfeer krijgt zonder smart-home installatie. Een gang waar je niet meer over je tenen struikelt op zoek naar het lichtknopje.
               </p>
-              <p className="text-lg text-foreground/60 leading-relaxed">
-                Wij ontwerpen producten die jouw dagelijkse routine ondersteunen, automatisch, energiezuinig en zonder overbodige complexiteit.
+              <p>
+                Onze rol in die keten is selectie. De wereld is overvol met slimme verlichting, maar veruit het meeste daarvan is ontworpen voor andere markten — andere stopcontacten, andere afmetingen, andere gebruiksverwachtingen. Wij filteren op wat in een Nederlands huis werkt.
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </section>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-glow/10 rounded-full flex items-center justify-center">
-                  <Lightbulb className="h-8 w-8 text-glow" />
+          {/* Onze criteria */}
+          <section className="space-y-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">Onze criteria</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {criteria.map((c) => (
+                <div
+                  key={c.title}
+                  className="p-6 md:p-8 rounded-2xl border border-foreground/10 bg-background-secondary"
+                >
+                  <h3 className="text-lg font-semibold text-foreground mb-3">
+                    {c.title}
+                  </h3>
+                  <p className="text-foreground/60 leading-relaxed text-sm md:text-base">
+                    {c.body}
+                  </p>
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Slim Design</h3>
-                <p className="text-sm text-foreground/60">
-                  Modern en minimalistisch, past in elke ruimte
-                </p>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
+          </section>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-glow/10 rounded-full flex items-center justify-center">
-                  <Zap className="h-8 w-8 text-glow" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Energiezuinig</h3>
-                <p className="text-sm text-foreground/60">
-                  LED-technologie met lange levensduur
-                </p>
-              </CardContent>
-            </Card>
+          {/* Wie */}
+          <section className="space-y-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">Wie</h2>
+            <div className="space-y-5 text-base md:text-lg text-foreground/60 leading-relaxed">
+              <p>
+                SenseGlow is een handelsnaam van Jayden Ecom, een Nederlandse eenmanszaak gevestigd in Kimswerd, Friesland. Geregistreerd bij de Kamer van Koophandel onder nummer 99634929.
+              </p>
+              <p>
+                Bestellingen worden afgehandeld via een logistiek partner in Europa. Klantcontact, advies en garantie-afhandeling lopen rechtstreeks vanuit Nederland — geen overzeese helpdesk, geen vertraging.
+              </p>
+            </div>
+          </section>
 
-            <Card className="border-foreground/10 bg-background">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-glow/10 rounded-full flex items-center justify-center">
-                  <Shield className="h-8 w-8 text-glow" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Betrouwbaar</h3>
-                <p className="text-sm text-foreground/60">
-                  Kwaliteit waar je op kunt vertrouwen
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          {/* Contact CTA */}
+          <section className="space-y-6 p-8 md:p-12 rounded-3xl bg-background-secondary border border-foreground/10">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+              Vragen vóór je iets bestelt?
+            </h2>
+            <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-2xl">
+              Of advies welke lamp bij jouw situatie past — stuur een mail of een bericht via de contactpagina. We reageren meestal binnen één werkdag.
+            </p>
+            <Button onClick={() => navigate("/contact")} className="rounded-full">
+              Naar contact
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </section>
+
+          {/* Handtekening */}
+          <section className="pt-4 border-t border-foreground/10">
+            <p className="text-sm text-foreground/50 italic">
+              — J. Dijkstra<br />
+              Eigenaar, Jayden Ecom (SenseGlow™)
+            </p>
+          </section>
         </div>
       </div>
     </PageLayout>
