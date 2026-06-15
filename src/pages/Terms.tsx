@@ -1,14 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, AlertCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 
-const Placeholder = ({ children }: { children: string }) => (
-  <span className="px-2 py-0.5 bg-muted/40 border border-dashed border-foreground/20 rounded text-foreground/50 text-sm font-mono">
-    {children}
-  </span>
-);
 
 const Article = ({ n, title, children }: { n: number; title: string; children: React.ReactNode }) => (
   <section className="space-y-3">
@@ -28,31 +22,23 @@ const Terms = () => {
           Terug naar home
         </Button>
 
-        <Card className="border-glow/40 bg-glow/5 mb-8">
-          <CardContent className="p-5 flex gap-3">
-            <AlertCircle className="h-5 w-5 text-glow flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-foreground/70">
-              <strong>Template-versie.</strong> Vóór live gaan: laat deze tekst nakijken door een NL-jurist. Verplicht volgens de Wet Koop op Afstand en gerelateerde consumentenwetgeving.
-            </p>
-          </CardContent>
-        </Card>
-
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">Algemene Voorwaarden</h1>
             <p className="text-sm text-foreground/50">
-              Laatst bijgewerkt: <Placeholder>[datum]</Placeholder>
+              Laatst bijgewerkt: 15 juni 2026
             </p>
           </div>
 
           <Article n={1} title="Identiteit van de ondernemer">
-            <p>SenseGlow</p>
-            <p>Vestigingsadres: <Placeholder>[Vestigingsadres]</Placeholder></p>
-            <p>KvK-nummer: <Placeholder>[KvK-nummer]</Placeholder></p>
-            <p>BTW-nummer: <Placeholder>[BTW-nummer]</Placeholder></p>
+            <p>Jayden Ecom (handelend onder de naam SenseGlow™)</p>
+            <p>Vestigingsadres: Tolheksleane 4 A, 8821 MD Kimswerd</p>
+            <p>KvK-nummer: 99634929</p>
+            <p>BTW-nummer: NL005399692B39</p>
             <p>E-mail: support@senseglow.shop</p>
-            <p>Website: senseglow.shop / senseglow.nl</p>
+            <p>Website: senseglow.shop</p>
           </Article>
+
 
           <Article n={2} title="Toepasselijkheid">
             <p>Deze algemene voorwaarden zijn van toepassing op elk aanbod van SenseGlow en op elke tot stand gekomen overeenkomst tussen SenseGlow en de consument. De tekst van deze voorwaarden is vóór het sluiten van de overeenkomst voor de consument beschikbaar op senseglow.shop/voorwaarden.</p>
