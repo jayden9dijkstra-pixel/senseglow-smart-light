@@ -147,6 +147,8 @@ const ProductDetail = () => {
 
       <Curve from="bg-background-secondary" to="bg-background" />
 
+      {handle && <ProductRelatedSection currentHandle={handle} />}
+
       <FinalProductCTA
         headline={finalCta?.headline}
         subtext={finalCta?.subtext}
