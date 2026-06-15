@@ -10,6 +10,7 @@ import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
 import { HowItWorksSection } from "@/components/product/HowItWorksSection";
+import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
 import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { getProductContent } from "@/lib/productContent";
@@ -145,6 +146,8 @@ const ProductDetail = () => {
       </div>
 
       <Curve from="bg-background-secondary" to="bg-background" />
+
+      {handle && <ProductRelatedSection currentHandle={handle} />}
 
       <FinalProductCTA
         headline={finalCta?.headline}
