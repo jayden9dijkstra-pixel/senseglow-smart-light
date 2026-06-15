@@ -28,14 +28,14 @@ export const SiteFooter = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Volg ons</h4>
+              <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Blijf op de hoogte</h4>
               <p className="text-sm text-foreground/50">
-                Instagram · Facebook · Pinterest
+                Onze socials komen binnenkort. Stuur een mail naar <a href="mailto:hello@senseglow.shop" className="text-glow hover:underline">hello@senseglow.shop</a> als je geen launch wilt missen.
               </p>
             </div>
           </div>
           <div className="text-[11px] text-foreground/30 pt-12 border-t border-foreground/6">
-            <p>© 2026 SenseGlow™. Alle rechten voorbehouden.</p>
+            <p>© 2026 Jayden Ecom (SenseGlow™). Alle rechten voorbehouden. KvK 99634929 · BTW NL005399692B39</p>
           </div>
         </div>
       </div>

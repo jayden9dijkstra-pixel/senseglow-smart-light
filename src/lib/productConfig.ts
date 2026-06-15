@@ -43,9 +43,9 @@ export const HANDLE_TO_KEY: Record<string, ProductKey> = {
 // ─── Standardized bundle tiers (same for every product) ──
 export type PackSize = 2 | 3 | 4;
 export const PACK_RATE: Record<PackSize, number> = {
-  2: 0.08,
-  3: 0.12,
-  4: 0.15,
+  2: 0.10,
+  3: 0.20,
+  4: 0.30,
 };
 export const PACK_LABEL: Record<PackSize, string> = {
   2: "Duopak",
@@ -66,9 +66,9 @@ export interface ProductBundleConfig {
 export const BUNDLE_CONFIG: Record<ProductKey, ProductBundleConfig> = {
   ambient: { packSizes: [2, 3, 4] },
   wave: { packSizes: [2, 3, 4] },
-  lantern: { packSizes: [2] },
-  sconce: { packSizes: [2] },
-  flex: { packSizes: [] },
+  lantern: { packSizes: [2, 3] },
+  sconce: { packSizes: [2, 3, 4] },
+  flex: { packSizes: [2, 3] },
   arc: { packSizes: [] },
 };
 
@@ -92,9 +92,13 @@ export function getBundleDiscountCode(
       if (!["30", "50"].includes(variantKey)) return null;
       return `SG-WAVE-${variantKey}-${packSize}`;
     case "lantern":
-      return packSize === 2 ? "SG-SOL-2" : null;
+      return [2, 3].includes(packSize) ? `SG-SOL-${packSize}` : null;
     case "sconce":
-      return packSize === 2 ? "SG-WALLLAMP-2" : null;
+      if (variantKey === "4SET" && [2, 3, 4].includes(packSize)) return `SG-WALLLAMP-4-${packSize}`;
+      if (variantKey === "8SET" && packSize === 2) return `SG-WALLLAMP-8-2`;
+      return null;
+    case "flex":
+      return [2, 3].includes(packSize) ? `SG-FLX-${packSize}` : null;
     default:
       return null;
   }
@@ -136,13 +140,13 @@ export type SizeVariant = "20cm" | "30cm" | "40cm";
 export const incVatPrices: Record<SizeVariant, string> = {
   "20cm": "24.95",
   "30cm": "29.95",
-  "40cm": "34.95",
+  "40cm": "39.95",
 };
 
 export const shopifyExVatPrices: Record<SizeVariant, number> = {
   "20cm": 24.95,
   "30cm": 29.95,
-  "40cm": 34.95,
+  "40cm": 39.95,
 };
 
 export function getIncVatPrice(shopifyAmount: string): string {

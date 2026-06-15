@@ -52,8 +52,11 @@ export const ReviewsTeaserSection = () => {
               Ervaringen
             </p>
             <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight max-w-2xl mx-auto">
-              Wat klanten zeggen, per product
+              Wat testklanten zeggen, per product
             </h2>
+            <p className="text-base text-foreground/60 max-w-2xl mx-auto mt-5">
+              Vrienden en familie hebben onze lampen als eerste getest. Echte reviews verschijnen zodra de eerste bestellingen binnen zijn.
+            </p>
           </div>
 
           <Carousel opts={{ align: "start", loop: true }} className="w-full">

@@ -4,11 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Mail, Package, Clock, RotateCcw, Shield, FileText } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 
-const Placeholder = ({ children }: { children: string }) => (
-  <span className="px-2 py-0.5 bg-muted/40 border border-dashed border-foreground/20 rounded text-foreground/50 text-sm font-mono">
-    {children}
-  </span>
-);
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -100,12 +95,12 @@ const Contact = () => {
             <CardContent className="p-6">
               <h2 className="text-lg font-semibold mb-4">Bedrijfsgegevens</h2>
               <div className="space-y-2 text-sm text-foreground/70">
-                <p><strong>SenseGlow</strong></p>
-                <p>KvK-nummer: <Placeholder>[KvK-nummer]</Placeholder></p>
-                <p>BTW-nummer: <Placeholder>[BTW-nummer]</Placeholder></p>
-                <p>Vestigingsadres: <Placeholder>[Vestigingsadres]</Placeholder></p>
+                <p><strong>Jayden Ecom (handelend onder de naam SenseGlow™)</strong></p>
+                <p>KvK-nummer: 99634929</p>
+                <p>BTW-nummer: NL005399692B39</p>
+                <p>Vestigingsadres: Tolheksleane 4 A, 8821 MD Kimswerd</p>
                 <p>E-mail: <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a></p>
-                <p>Web: senseglow.shop / senseglow.nl</p>
+                <p>Web: senseglow.shop</p>
               </div>
             </CardContent>
           </Card>
