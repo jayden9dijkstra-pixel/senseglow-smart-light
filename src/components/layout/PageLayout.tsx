@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { PageTransition } from "@/components/PageTransition";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
+import { NewsletterPopup } from "@/components/NewsletterPopup";
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />
+        <NewsletterPopup />
       </div>
     </PageTransition>
   );
