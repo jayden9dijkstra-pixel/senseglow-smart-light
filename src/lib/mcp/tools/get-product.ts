@@ -10,7 +10,10 @@ export default defineTool({
     handle: z.string().min(1).describe("The product handle, e.g. 'senseglow_wave' or 'senseglow_ambient_motion_bar'."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async ({ handle }) => {
+  handler: async ({ handle }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const product = await getProductByHandle(handle);
     if (!product) {
       return {

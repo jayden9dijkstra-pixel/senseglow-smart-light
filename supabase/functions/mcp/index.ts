@@ -152,7 +152,10 @@ var list_products_default = defineTool({
   description: "List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async () => {
+  handler: async (_input, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const products = await listEnabledProducts();
     return {
       content: [{ type: "text", text: JSON.stringify(products, null, 2) }],
@@ -172,7 +175,10 @@ var get_product_default = defineTool2({
     handle: z.string().min(1).describe("The product handle, e.g. 'senseglow_wave' or 'senseglow_ambient_motion_bar'.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async ({ handle }) => {
+  handler: async ({ handle }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const product = await getProductByHandle(handle);
     if (!product) {
       return {
@@ -199,7 +205,10 @@ var search_products_default = defineTool3({
     limit: z2.number().int().min(1).max(20).default(10).describe("Maximum results to return (1-20).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async ({ query, limit }) => {
+  handler: async ({ query, limit }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const products = await searchProducts(query, limit);
     return {
       content: [{ type: "text", text: JSON.stringify(products, null, 2) }],

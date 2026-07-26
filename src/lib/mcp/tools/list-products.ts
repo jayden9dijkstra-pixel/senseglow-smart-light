@@ -7,7 +7,10 @@ export default defineTool({
   description: "List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async () => {
+  handler: async (_input, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const products = await listEnabledProducts();
     return {
       content: [{ type: "text", text: JSON.stringify(products, null, 2) }],

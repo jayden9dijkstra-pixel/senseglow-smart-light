@@ -11,7 +11,10 @@ export default defineTool({
     limit: z.number().int().min(1).max(20).default(10).describe("Maximum results to return (1-20)."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async ({ query, limit }) => {
+  handler: async ({ query, limit }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const products = await searchProducts(query, limit);
     return {
       content: [{ type: "text", text: JSON.stringify(products, null, 2) }],
