@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.24.0";
+import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.24.0";
 
 // src/lib/mcp/tools/list-products.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.24.0";
@@ -209,11 +209,16 @@ var search_products_default = defineTool3({
 });
 
 // src/lib/mcp/index.ts
+var projectRef = "bepcnohdxsoxhdjlviqu";
 var mcp_default = defineMcp({
   name: "senseglow-mcp",
   title: "SenseGlow Shop",
-  version: "0.1.0",
-  instructions: "Read-only access to SenseGlow's public product catalog (senseglow.shop). Use `list_products` to see all products, `search_products` to find products by keyword, and `get_product` to fetch full details (variants, images, prices) for a specific product by its handle.",
+  version: "0.2.0",
+  instructions: "Read-only access to SenseGlow's public product catalog (senseglow.shop). Sign in with your SenseGlow account. Use `list_products` to see all products, `search_products` to find products by keyword, and `get_product` to fetch full details (variants, images, prices) for a specific product by its handle.",
+  auth: auth.oauth.issuer({
+    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    acceptedAudiences: "authenticated"
+  }),
   tools: [list_products_default, get_product_default, search_products_default]
 });
 
