@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.24.0";
+import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.24.0";
 
 // src/lib/mcp/tools/list-products.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.24.0";
@@ -152,7 +152,10 @@ var list_products_default = defineTool({
   description: "List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async () => {
+  handler: async (_input, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const products = await listEnabledProducts();
     return {
       content: [{ type: "text", text: JSON.stringify(products, null, 2) }],
@@ -172,7 +175,10 @@ var get_product_default = defineTool2({
     handle: z.string().min(1).describe("The product handle, e.g. 'senseglow_wave' or 'senseglow_ambient_motion_bar'.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async ({ handle }) => {
+  handler: async ({ handle }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const product = await getProductByHandle(handle);
     if (!product) {
       return {
@@ -199,7 +205,10 @@ var search_products_default = defineTool3({
     limit: z2.number().int().min(1).max(20).default(10).describe("Maximum results to return (1-20).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
-  handler: async ({ query, limit }) => {
+  handler: async ({ query, limit }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
     const products = await searchProducts(query, limit);
     return {
       content: [{ type: "text", text: JSON.stringify(products, null, 2) }],
@@ -209,11 +218,16 @@ var search_products_default = defineTool3({
 });
 
 // src/lib/mcp/index.ts
+var projectRef = "bepcnohdxsoxhdjlviqu";
 var mcp_default = defineMcp({
   name: "senseglow-mcp",
   title: "SenseGlow Shop",
-  version: "0.1.0",
-  instructions: "Read-only access to SenseGlow's public product catalog (senseglow.shop). Use `list_products` to see all products, `search_products` to find products by keyword, and `get_product` to fetch full details (variants, images, prices) for a specific product by its handle.",
+  version: "0.2.0",
+  instructions: "Read-only access to SenseGlow's public product catalog (senseglow.shop). Sign in with your SenseGlow account. Use `list_products` to see all products, `search_products` to find products by keyword, and `get_product` to fetch full details (variants, images, prices) for a specific product by its handle.",
+  auth: auth.oauth.issuer({
+    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    acceptedAudiences: "authenticated"
+  }),
   tools: [list_products_default, get_product_default, search_products_default]
 });
 
