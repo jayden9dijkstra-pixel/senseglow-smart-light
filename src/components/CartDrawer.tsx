@@ -72,8 +72,8 @@ export function CartDrawer() {
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
         setIsOpen(false);
+        window.location.href = checkoutUrl;
       }
     } catch {
       // handled by store
