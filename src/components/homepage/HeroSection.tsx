@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Truck, RotateCcw, Shield } from "lucide-react";
 import { DualImage } from "@/components/ui/DualImage";
-import heroImage from "@/assets/hero-lifestyle.png";
+import heroImage from "@/assets/hero-lifestyle.png?w=1600&format=webp";
+import heroImageSrcSet from "@/assets/hero-lifestyle.png?w=600;1024;1600&format=webp&as=srcset";
 
 export const HeroSection = () => {
   const navigate = useNavigate();
@@ -69,6 +70,10 @@ export const HeroSection = () => {
               <div className="aspect-[4/5] overflow-hidden rounded-3xl">
                 <DualImage
                   srcLight={heroImage}
+                  srcSetLight={heroImageSrcSet}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="eager"
+                  fetchPriority="high"
                   alt="SenseGlow slimme verlichting in een warme, ontspannen ruimte"
                   className="w-full h-full object-cover"
                 />

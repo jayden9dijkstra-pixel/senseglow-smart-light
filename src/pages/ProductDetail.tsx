@@ -15,6 +15,9 @@ import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { getProductContent } from "@/lib/productContent";
 import { buildPlaceholderContent } from "@/lib/placeholderContent";
+import { getProductSeo, DEFAULT_SEO } from "@/lib/seoContent";
+import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
+
 
 const Curve = ({ from, to }: { from: string; to: string }) => (
   <div className="relative h-12 md:h-20">
@@ -77,9 +80,38 @@ const ProductDetail = () => {
     loadProduct();
   }, [handle]);
 
+  const path = `/product/${handle ?? ""}`;
+  const seoEntry = getProductSeo(handle);
+  const seoTitle =
+    seoEntry?.title ?? (product ? `${product.node.title} | SenseGlow` : DEFAULT_SEO.title);
+  const seoDescription =
+    seoEntry?.description ??
+    (product?.node.description
+      ? product.node.description.slice(0, 158)
+      : DEFAULT_SEO.description);
+
+  const jsonLd = product
+    ? [
+        productSchema(product, { path, description: seoDescription }),
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Producten", path: "/producten" },
+          { name: product.node.title, path },
+        ]),
+      ]
+    : undefined;
+
+  const seo = {
+    title: seoTitle,
+    description: seoDescription,
+    path,
+    jsonLd,
+    noindex: !loading && !product,
+  };
+
   if (loading) {
     return (
-      <PageLayout>
+      <PageLayout seo={seo}>
         <div className="min-h-[60vh] flex items-center justify-center bg-background">
           <p className="text-base text-muted-foreground">Product laden...</p>
         </div>
@@ -89,7 +121,7 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <PageLayout>
+      <PageLayout seo={seo}>
         <div className="min-h-[60vh] flex items-center justify-center bg-background">
           <div className="text-left">
             <p className="text-base text-muted-foreground mb-4">Product niet gevonden</p>
@@ -101,7 +133,8 @@ const ProductDetail = () => {
   }
 
   return (
-    <PageLayout>
+    <PageLayout seo={seo}>
+
       <ProductHeroSection
         product={product}
         selectedVariant={selectedVariant}

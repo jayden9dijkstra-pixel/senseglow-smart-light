@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import quizSmartphone from "@/assets/quiz-smartphone.png";
+import quizSmartphone from "@/assets/quiz-smartphone.png?w=1024&format=webp";
+import quizSmartphoneSrcSet from "@/assets/quiz-smartphone.png?w=600;1024&format=webp&as=srcset";
 
 export const QuizIntroSection = () => {
   const navigate = useNavigate();
@@ -15,9 +16,14 @@ export const QuizIntroSection = () => {
               <div className="max-w-xs overflow-hidden">
                 <img
                   src={quizSmartphone}
+                  srcSet={quizSmartphoneSrcSet}
+                  sizes="(max-width: 768px) 80vw, 320px"
                   alt="Smartphone met SenseGlow quiz interface"
                   className="w-full h-auto"
+                  loading="lazy"
+                  decoding="async"
                 />
+
               </div>
             </div>
 

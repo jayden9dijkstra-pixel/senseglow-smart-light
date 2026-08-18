@@ -8,9 +8,28 @@ interface DualImageProps {
   srcDark?: string;
   alt: string;
   className?: string;
+  /** Responsive srcset for the light image */
+  srcSetLight?: string;
+  /** Responsive srcset for the dark image */
+  srcSetDark?: string;
+  sizes?: string;
+  /** Set to "eager" for above-the-fold images */
+  loading?: "eager" | "lazy";
+  /** Set to "high" for the LCP image */
+  fetchPriority?: "high" | "low" | "auto";
 }
 
-export const DualImage = ({ srcLight, srcDark, alt, className = "" }: DualImageProps) => {
+export const DualImage = ({
+  srcLight,
+  srcDark,
+  alt,
+  className = "",
+  srcSetLight,
+  srcSetDark,
+  sizes,
+  loading = "lazy",
+  fetchPriority,
+}: DualImageProps) => {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -23,9 +42,13 @@ export const DualImage = ({ srcLight, srcDark, alt, className = "" }: DualImageP
     return (
       <img
         src={srcLight}
+        srcSet={srcSetLight}
+        sizes={sizes}
         alt={alt}
         className={className}
-        loading="lazy"
+        loading={loading}
+        {...(fetchPriority ? { fetchpriority: fetchPriority } : {})}
+        decoding={loading === "eager" ? "sync" : "async"}
       />
     );
   }
@@ -37,9 +60,12 @@ export const DualImage = ({ srcLight, srcDark, alt, className = "" }: DualImageP
       {/* Light image (lamp off) */}
       <img
         src={srcLight}
+        srcSet={srcSetLight}
+        sizes={sizes}
         alt={alt}
         className={`absolute inset-0 w-full h-full object-cover ${className}`}
-        loading="lazy"
+        loading={loading}
+        {...(fetchPriority ? { fetchpriority: fetchPriority } : {})}
         style={{
           opacity: isDark ? 0 : 1,
           transition: "opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)",
@@ -48,6 +74,8 @@ export const DualImage = ({ srcLight, srcDark, alt, className = "" }: DualImageP
       {/* Dark image (lamp on) */}
       <img
         src={srcDark}
+        srcSet={srcSetDark}
+        sizes={sizes}
         alt={alt}
         className={`absolute inset-0 w-full h-full object-cover ${className}`}
         loading="lazy"

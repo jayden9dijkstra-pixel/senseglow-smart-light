@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, ChevronLeft } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
+import { Seo } from "@/components/seo/Seo";
+import { getRouteSeo } from "@/lib/seoContent";
 
 // ─── Quiz structure ────────────────────────────────────────────────────────────
 
@@ -167,6 +169,8 @@ const Quiz = () => {
 
     return (
       <PageTransition>
+      <Seo {...getRouteSeo("/quiz")} path="/quiz" />
+
         <div className="min-h-screen bg-background">
           <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center justify-between">
@@ -231,6 +235,8 @@ const Quiz = () => {
   // ─── Question screen ───────────────────────────────────────────────────────
   return (
     <PageTransition>
+      <Seo {...getRouteSeo("/quiz")} path="/quiz" />
+
       <div className="min-h-screen bg-background">
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container flex h-16 items-center justify-between">
