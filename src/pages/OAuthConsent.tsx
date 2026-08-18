@@ -29,6 +29,8 @@ function getOAuth(): OAuthApi | null {
   return auth.oauth ?? null;
 }
 
+import { Seo } from "@/components/seo/Seo";
+
 export default function OAuthConsent() {
   const [params] = useSearchParams();
   const authorizationId = params.get("authorization_id") ?? "";
@@ -139,6 +141,7 @@ export default function OAuthConsent() {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-16 bg-background">
+      <Seo title="Toegang goedkeuren | SenseGlow" description="Geef een externe app toegang tot SenseGlow." path="/.lovable/oauth/consent" noindex />
       <div className="w-full max-w-md rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm">
         <h1 className="text-2xl font-semibold mb-2">
           Verbind {clientName} met SenseGlow
