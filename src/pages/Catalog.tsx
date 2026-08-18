@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { getRouteSeo } from "@/lib/seoContent";
+
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Catalog = () => {
@@ -20,7 +22,7 @@ const Catalog = () => {
   }, []);
 
   return (
-    <PageLayout>
+    <PageLayout seo={{ ...getRouteSeo("/producten"), path: "/producten" }}>
       <section className="bg-background pt-20 md:pt-28 pb-12">
         <div className="container">
           <div className="max-w-6xl mx-auto">

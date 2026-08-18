@@ -1,9 +1,16 @@
 import { PageTransition } from "@/components/PageTransition";
+import { Seo } from "@/components/seo/Seo";
 
 const NotFound = () => {
 
   return (
     <PageTransition>
+      <Seo
+        title="Pagina niet gevonden | SenseGlow"
+        description="Deze pagina bestaat niet of is verplaatst. Ga terug naar de homepage van SenseGlow."
+        path="/404"
+        noindex
+      />
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
         <div className="text-center">
           <h1 className="mb-4 text-4xl font-bold">404</h1>

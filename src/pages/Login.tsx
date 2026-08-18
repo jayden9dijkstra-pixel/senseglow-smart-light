@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Seo } from "@/components/seo/Seo";
+
 
 function safeNext(raw: string | null): string {
   if (!raw) return "/";
@@ -70,6 +72,8 @@ export default function Login() {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 bg-background">
+      <Seo title="Inloggen | SenseGlow" description="Log in op je SenseGlow account." path="/login" noindex />
+
       <div className="w-full max-w-md rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm">
         <h1 className="text-2xl font-semibold mb-1">
           {mode === "signin" ? "Inloggen" : "Account aanmaken"}
