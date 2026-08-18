@@ -16,9 +16,14 @@ export const QuizIntroSection = () => {
               <div className="max-w-xs overflow-hidden">
                 <img
                   src={quizSmartphone}
+                  srcSet={quizSmartphoneSrcSet}
+                  sizes="(max-width: 768px) 80vw, 320px"
                   alt="Smartphone met SenseGlow quiz interface"
                   className="w-full h-auto"
+                  loading="lazy"
+                  decoding="async"
                 />
+
               </div>
             </div>
 
