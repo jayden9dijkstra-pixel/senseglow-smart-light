@@ -47,7 +47,7 @@ export const DualImage = ({
         alt={alt}
         className={className}
         loading={loading}
-        fetchPriority={fetchPriority}
+        {...(fetchPriority ? { fetchpriority: fetchPriority } : {})}
         decoding={loading === "eager" ? "sync" : "async"}
       />
     );
@@ -65,7 +65,7 @@ export const DualImage = ({
         alt={alt}
         className={`absolute inset-0 w-full h-full object-cover ${className}`}
         loading={loading}
-        fetchPriority={fetchPriority}
+        {...(fetchPriority ? { fetchpriority: fetchPriority } : {})}
         style={{
           opacity: isDark ? 0 : 1,
           transition: "opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)",

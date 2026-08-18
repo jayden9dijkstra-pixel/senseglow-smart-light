@@ -46,7 +46,7 @@ export const SiteHeader = () => {
             {/* Center - Logo + Lamp toggle */}
             <div className="flex items-center gap-2">
               <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
-                <img src={logoNew} alt="SenseGlow logo" width={256} height={256} loading="eager" fetchPriority="high" className="h-[76px] w-auto object-contain" />
+                <img src={logoNew} alt="SenseGlow logo" width={256} height={256} loading="eager" {...{ fetchpriority: "high" }} className="h-[76px] w-auto object-contain" />
               </button>
               <ThemeToggle />
             </div>
@@ -79,7 +79,7 @@ export const SiteHeader = () => {
             {/* Center - Logo + Lamp toggle */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
               <button onClick={() => navigate("/")} className="cursor-pointer" aria-label="Ga naar homepage">
-                <img src={logoNew} alt="SenseGlow logo" width={256} height={256} loading="eager" fetchPriority="high" className="h-20 w-auto object-contain" />
+                <img src={logoNew} alt="SenseGlow logo" width={256} height={256} loading="eager" {...{ fetchpriority: "high" }} className="h-20 w-auto object-contain" />
               </button>
               <ThemeToggle />
             </div>
