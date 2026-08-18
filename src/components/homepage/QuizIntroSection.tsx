@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import quizSmartphone from "@/assets/quiz-smartphone.png";
+import quizSmartphone from "@/assets/quiz-smartphone.png?w=1024&format=webp";
+import quizSmartphoneSrcSet from "@/assets/quiz-smartphone.png?w=600;1024&format=webp&as=srcset";
 
 export const QuizIntroSection = () => {
   const navigate = useNavigate();
