@@ -15,6 +15,9 @@ import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { getProductContent } from "@/lib/productContent";
 import { buildPlaceholderContent } from "@/lib/placeholderContent";
+import { getProductSeo, DEFAULT_SEO } from "@/lib/seoContent";
+import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
+
 
 const Curve = ({ from, to }: { from: string; to: string }) => (
   <div className="relative h-12 md:h-20">
