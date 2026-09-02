@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   Carousel,
   CarouselContent,
@@ -41,8 +40,6 @@ const reviews = [
 ];
 
 export const ReviewsTeaserSection = () => {
-  const navigate = useNavigate();
-
   return (
     <section className="py-24 md:py-32 bg-background">
       <div className="container">
