@@ -32,7 +32,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const imageUrl = product.node.images?.edges?.[0]?.node?.url;
   const price = product.node.priceRange.minVariantPrice;
-  const hasMultiplePrices = new Set(product.node.variants.edges.map(({ node: variant }) => variant.price.amount)).size > 1;
 
 
   return (
@@ -66,7 +65,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <span className="text-xs text-muted-foreground ml-1">4.7/5</span>
         </div>
         <p className="text-xl font-bold text-foreground mb-4">
-          {hasMultiplePrices ? "Vanaf " : ""}€{parseFloat(price.amount).toFixed(2)}
+          Vanaf €{parseFloat(price.amount).toFixed(2)}
         </p>
         
         {product.node.variants.edges.length > 1 && (
