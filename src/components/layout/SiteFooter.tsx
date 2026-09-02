@@ -17,12 +17,12 @@ const FooterNewsletter = () => {
     setLoading(true);
     const result = await subscribeToNewsletter(email, "SenseGlow footer");
     setLoading(false);
-    if (result.ok) {
+    if (result.ok === true) {
       setSuccess(true);
       setEmail("");
-    } else {
-      toast.error(result.message);
+      return;
     }
+    toast.error(result.message);
   };
 
   if (success) {
