@@ -76,16 +76,10 @@ export const ReviewsTeaserSection = () => {
                       "{review.text}"
                     </p>
                     <div className="space-y-2">
-                      <p className="text-sm text-foreground/70">, {review.name}</p>
+                      <p className="text-sm text-foreground/70">— {review.name}</p>
                       <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/40">
                         SenseGlow {review.product}
                       </p>
-                      <button
-                        onClick={() => navigate(`/product/${review.handle}`)}
-                        className="text-[11px] uppercase tracking-[0.18em] text-glow hover:text-glow/80 transition-colors pt-1"
-                      >
-                        Lees meer reviews →
-                      </button>
                     </div>
                   </div>
                 </CarouselItem>
