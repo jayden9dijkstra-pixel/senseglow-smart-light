@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   Carousel,
   CarouselContent,
@@ -11,38 +10,31 @@ const reviews = [
   {
     name: "Sarah M.",
     product: "Ambient Motion Bar",
-    handle: "senseglow_ambient_motion_bar",
     text: "Mijn dochter (5) durft eindelijk zelf naar de wc 's nachts. Het warme licht geeft haar vertrouwen.",
   },
   {
     name: "Lieke V.",
     product: "Wave",
-    handle: "senseglow_wave",
     text: "Mijn keuken voelt eindelijk áf. Dat ene puzzelstukje dat ik niet wist dat het miste.",
   },
   {
     name: "Marieke H.",
     product: "Wall Lamp",
-    handle: "senseglow_wall_lamp",
     text: "Voor mijn moeder van 76. Ze gebruikt ze elke nacht. Mijn beste cadeau dit jaar.",
   },
   {
     name: "Robert J.",
     product: "Solar Lantern",
-    handle: "senseglow_solar_lantern",
     text: "Een aan de voordeur, een aan de achterdeur. Mijn vrouw voelt zich eindelijk veilig als ze 's avonds laat thuiskomt.",
   },
   {
     name: "Mila R.",
     product: "Flex",
-    handle: "senseglow_flex",
     text: "Mijn bureau ziet er eindelijk niet meer uit als een studentenkamer. Late-night essay schrijven is veel chiller met dim-licht.",
   },
 ];
 
 export const ReviewsTeaserSection = () => {
-  const navigate = useNavigate();
-
   return (
     <section className="py-24 md:py-32 bg-background">
       <div className="container">
@@ -76,16 +68,10 @@ export const ReviewsTeaserSection = () => {
                       "{review.text}"
                     </p>
                     <div className="space-y-2">
-                      <p className="text-sm text-foreground/70">, {review.name}</p>
+                      <p className="text-sm text-foreground/70">— {review.name}</p>
                       <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/40">
                         SenseGlow {review.product}
                       </p>
-                      <button
-                        onClick={() => navigate(`/product/${review.handle}`)}
-                        className="text-[11px] uppercase tracking-[0.18em] text-glow hover:text-glow/80 transition-colors pt-1"
-                      >
-                        Lees meer reviews →
-                      </button>
                     </div>
                   </div>
                 </CarouselItem>

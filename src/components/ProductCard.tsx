@@ -31,7 +31,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   const imageUrl = product.node.images?.edges?.[0]?.node?.url;
-  const price = selectedVariant?.price || product.node.priceRange.minVariantPrice;
+  const price = product.node.priceRange.minVariantPrice;
+
 
   return (
     <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-500 hover:-translate-y-1 group">
@@ -64,7 +65,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <span className="text-xs text-muted-foreground ml-1">4.7/5</span>
         </div>
         <p className="text-xl font-bold text-foreground mb-4">
-          €{parseFloat(price.amount).toFixed(2)}
+          Vanaf €{parseFloat(price.amount).toFixed(2)}
         </p>
         
         {product.node.variants.edges.length > 1 && (
