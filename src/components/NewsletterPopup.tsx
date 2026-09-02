@@ -54,55 +54,18 @@ export const NewsletterPopup = () => {
     }
 
     setLoading(true);
-    try {
-      const res = await fetch(
-        `https://a.klaviyo.com/client/subscriptions/?company_id=${KLAVIYO_COMPANY_ID}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            revision: "2024-10-15",
-          },
-          body: JSON.stringify({
-            data: {
-              type: "subscription",
-              attributes: {
-                custom_source: "SenseGlow website popup",
-                profile: {
-                  data: {
-                    type: "profile",
-                    attributes: { email: parsed.data },
-                  },
-                },
-              },
-              relationships: {
-                list: {
-                  data: { type: "list", id: KLAVIYO_LIST_ID },
-                },
-              },
-            },
-          }),
-        }
-      );
+    const result = await subscribeToNewsletter(parsed.data, "SenseGlow website popup");
+    setLoading(false);
 
-      if (!res.ok && res.status !== 202) {
-        const text = await res.text().catch(() => "");
-        console.error("Klaviyo subscribe failed:", res.status, text);
-        toast.error("Inschrijven mislukt. Probeer het later opnieuw.");
-        setLoading(false);
-        return;
-      }
-
+    if (result.ok === true) {
       setSuccess(true);
       try {
         localStorage.setItem(STORAGE_KEY, "subscribed");
       } catch {}
-    } catch (err) {
-      console.error(err);
-      toast.error("Verbindingsfout. Probeer het later opnieuw.");
-    } finally {
-      setLoading(false);
+      return;
     }
+
+    toast.error(result.message);
   };
 
   const copyCode = async () => {
