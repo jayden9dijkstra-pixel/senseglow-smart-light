@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
 import { X, Check, Copy, Mail } from "lucide-react";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { subscribeToNewsletter, DISCOUNT_CODE, emailSchema } from "@/lib/klaviyo";
 
-const KLAVIYO_COMPANY_ID = "SP7Nf3";
-const KLAVIYO_LIST_ID = "YsiDqz";
-const DISCOUNT_CODE = "WELKOM10";
 const STORAGE_KEY = "senseglow_newsletter_popup_v1";
 const SHOW_AFTER_MS = 8000;
-
-const emailSchema = z
-  .string()
-  .trim()
-  .email({ message: "Vul een geldig e-mailadres in" })
-  .max(255);
 
 export const NewsletterPopup = () => {
   const [open, setOpen] = useState(false);
