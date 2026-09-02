@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const VoetCTA = () => {
   const navigate = useNavigate();
@@ -22,13 +22,12 @@ export const VoetCTA = () => {
             >
               Bekijk alle producten
             </Button>
-            <button
-              type="button"
-              onClick={() => navigate("/contact")}
+            <Link
+              to="/contact"
               className="text-sm text-foreground/60 hover:text-glow transition-colors duration-500"
             >
               Nog vragen? Neem contact op →
-            </button>
+            </Link>
           </div>
         </div>
       </div>

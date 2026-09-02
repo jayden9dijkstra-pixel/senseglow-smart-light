@@ -30,7 +30,6 @@ const reviews = [
   {
     name: "Mila R.",
     product: "Flex",
-    handle: "senseglow_flex",
     text: "Mijn bureau ziet er eindelijk niet meer uit als een studentenkamer. Late-night essay schrijven is veel chiller met dim-licht.",
   },
 ];
