@@ -10,25 +10,21 @@ const reviews = [
   {
     name: "Sarah M.",
     product: "Ambient Motion Bar",
-    handle: "senseglow_ambient_motion_bar",
     text: "Mijn dochter (5) durft eindelijk zelf naar de wc 's nachts. Het warme licht geeft haar vertrouwen.",
   },
   {
     name: "Lieke V.",
     product: "Wave",
-    handle: "senseglow_wave",
     text: "Mijn keuken voelt eindelijk áf. Dat ene puzzelstukje dat ik niet wist dat het miste.",
   },
   {
     name: "Marieke H.",
     product: "Wall Lamp",
-    handle: "senseglow_wall_lamp",
     text: "Voor mijn moeder van 76. Ze gebruikt ze elke nacht. Mijn beste cadeau dit jaar.",
   },
   {
     name: "Robert J.",
     product: "Solar Lantern",
-    handle: "senseglow_solar_lantern",
     text: "Een aan de voordeur, een aan de achterdeur. Mijn vrouw voelt zich eindelijk veilig als ze 's avonds laat thuiskomt.",
   },
   {

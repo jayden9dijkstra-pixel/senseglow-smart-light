@@ -34,7 +34,7 @@ const Index = () => {
       <HeroSection />
 
       {/* 2. UseCaseGrid, 5 products */}
-      <UseCaseGrid />
+      <UseCaseGrid products={products} />
 
       {/* Editorial separator */}
       <div className="container">

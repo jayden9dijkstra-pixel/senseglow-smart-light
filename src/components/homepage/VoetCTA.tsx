@@ -14,13 +14,22 @@ export const VoetCTA = () => {
           <p className="text-base text-foreground/60 max-w-md mx-auto">
             Vijf producten. Eén plek. Gratis verzending, 30 dagen retour.
           </p>
-          <Button
-            onClick={() => navigate("/producten")}
-            size="lg"
-            className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
-          >
-            Bekijk alle producten
-          </Button>
+          <div className="flex flex-col items-center gap-4">
+            <Button
+              onClick={() => navigate("/producten")}
+              size="lg"
+              className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
+            >
+              Bekijk alle producten
+            </Button>
+            <button
+              type="button"
+              onClick={() => navigate("/contact")}
+              className="text-sm text-foreground/60 hover:text-glow transition-colors duration-500"
+            >
+              Nog vragen? Neem contact op →
+            </button>
+          </div>
         </div>
       </div>
     </section>
