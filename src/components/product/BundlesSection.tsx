@@ -89,7 +89,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const headline = headlineOverride || "Meer kiezen, meer besparen";
 
   return (
-    <section className="py-20 md:py-32">
+    <section id="bundels" className="py-20 md:py-32 scroll-mt-24">
       <div className="container">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 space-y-4">
