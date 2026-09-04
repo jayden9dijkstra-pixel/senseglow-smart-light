@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
+import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 
 export interface CartItem {
@@ -41,6 +41,8 @@ interface CartStore {
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
   createCheckout: () => Promise<void>;
+  /** Re-sync every line's unit price with the live Shopify variant price. */
+  refreshPrices: () => Promise<void>;
 }
 
 function bundleLineKey(item: Pick<CartItem, 'variantId' | 'bundlePackSize'>): string {
@@ -54,6 +56,20 @@ export const useCartStore = create<CartStore>()(
       cartId: null,
       checkoutUrl: null,
       isLoading: false,
+
+      refreshPrices: async () => {
+        const { items } = get();
+        if (items.length === 0) return;
+        const prices = await fetchVariantPrices(items.map((i) => i.variantId));
+        if (Object.keys(prices).length === 0) return;
+        set({
+          items: get().items.map((i) => {
+            const live = prices[i.variantId];
+            return live ? { ...i, price: { amount: live.amount, currencyCode: live.currencyCode } } : i;
+          }),
+        });
+      },
+
 
       addItem: (item) => {
         const { items } = get();

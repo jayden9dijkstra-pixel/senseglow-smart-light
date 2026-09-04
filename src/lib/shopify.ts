@@ -257,3 +257,42 @@ export async function createStorefrontCheckout(
   url.searchParams.set('channel', 'online_store');
   return url.toString();
 }
+
+/**
+ * Fetch the current Shopify price for a set of variant IDs.
+ * Used to keep cart line prices in sync with what checkout will charge.
+ */
+export async function fetchVariantPrices(
+  variantIds: string[]
+): Promise<Record<string, { amount: string; currencyCode: string }>> {
+  const ids = Array.from(new Set(variantIds.filter(Boolean))).slice(0, 100);
+  if (ids.length === 0) return {};
+
+  try {
+    const query = `
+      query VariantPrices($ids: [ID!]!) {
+        nodes(ids: $ids) {
+          ... on ProductVariant {
+            id
+            price { amount currencyCode }
+          }
+        }
+      }
+    `;
+    const data = await storefrontApiRequest(query, { ids });
+    const nodes =
+      (data as {
+        data?: {
+          nodes?: Array<{ id?: string; price?: { amount: string; currencyCode: string } } | null>;
+        };
+      } | undefined)?.data?.nodes || [];
+
+    const map: Record<string, { amount: string; currencyCode: string }> = {};
+    for (const node of nodes) {
+      if (node?.id && node.price) map[node.id] = node.price;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
