@@ -57,6 +57,20 @@ export const useCartStore = create<CartStore>()(
       checkoutUrl: null,
       isLoading: false,
 
+      refreshPrices: async () => {
+        const { items } = get();
+        if (items.length === 0) return;
+        const prices = await fetchVariantPrices(items.map((i) => i.variantId));
+        if (Object.keys(prices).length === 0) return;
+        set({
+          items: get().items.map((i) => {
+            const live = prices[i.variantId];
+            return live ? { ...i, price: { amount: live.amount, currencyCode: live.currencyCode } } : i;
+          }),
+        });
+      },
+
+
       addItem: (item) => {
         const { items } = get();
 
