@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
+import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 
 export interface CartItem {
