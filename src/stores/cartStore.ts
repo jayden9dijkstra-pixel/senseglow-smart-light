@@ -41,6 +41,8 @@ interface CartStore {
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
   createCheckout: () => Promise<void>;
+  /** Re-sync every line's unit price with the live Shopify variant price. */
+  refreshPrices: () => Promise<void>;
 }
 
 function bundleLineKey(item: Pick<CartItem, 'variantId' | 'bundlePackSize'>): string {
