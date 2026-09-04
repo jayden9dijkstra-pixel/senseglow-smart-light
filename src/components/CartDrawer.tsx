@@ -38,8 +38,16 @@ export function CartDrawer() {
     isLoading,
     updateQuantity,
     removeItem,
-    createCheckout
+    createCheckout,
+    refreshPrices
   } = useCartStore();
+
+  // Keep line prices in sync with the live Shopify variant prices so the
+  // drawer total always matches the checkout subtotal.
+  React.useEffect(() => {
+    if (isOpen) refreshPrices();
+  }, [isOpen, refreshPrices]);
+
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
