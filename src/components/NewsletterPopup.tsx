@@ -1,82 +1,115 @@
-import { useEffect, useState } from "react";
-import { X, Check, Copy, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { subscribeToNewsletter, DISCOUNT_CODE, emailSchema } from "@/lib/klaviyo";
+import { useEffect, useRef, useState } from "react";
+import { X, Check, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import { subscribeToNewsletter } from "@/lib/klaviyo";
 
-const STORAGE_KEY = "senseglow_newsletter_popup_v1";
+const STORAGE_KEY = "senseglow_popup_dismissed";
 const SHOW_AFTER_MS = 8000;
+const SUCCESS_CLOSE_MS = 3000;
 
 export const NewsletterPopup = () => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const firstFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (localStorage.getItem(STORAGE_KEY)) return;
-
-    let exitBound = false;
+    if (localStorage.getItem(STORAGE_KEY) === "true") return;
 
     const timer = window.setTimeout(() => setOpen(true), SHOW_AFTER_MS);
 
     const onExit = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !localStorage.getItem(STORAGE_KEY)) {
+      if (e.clientY <= 0 && localStorage.getItem(STORAGE_KEY) !== "true") {
         setOpen(true);
       }
     };
 
     document.addEventListener("mouseleave", onExit);
-    exitBound = true;
 
     return () => {
       window.clearTimeout(timer);
-      if (exitBound) document.removeEventListener("mouseleave", onExit);
+      document.removeEventListener("mouseleave", onExit);
     };
   }, []);
 
-  const close = () => {
-    setOpen(false);
+  // Focus first field when opened
+  useEffect(() => {
+    if (open) firstFieldRef.current?.focus();
+  }, [open]);
+
+  // Auto-close after success
+  useEffect(() => {
+    if (!success) return;
+    const t = window.setTimeout(close, SUCCESS_CLOSE_MS);
+    return () => window.clearTimeout(t);
+  }, [success]);
+
+  const markDismissed = () => {
     try {
-      localStorage.setItem(STORAGE_KEY, success ? "subscribed" : "dismissed");
+      localStorage.setItem(STORAGE_KEY, "true");
     } catch {}
   };
 
+  const close = () => {
+    setOpen(false);
+    markDismissed();
+  };
+
+  // Escape to close + focus trap
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = emailSchema.safeParse(email);
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Ongeldig e-mailadres");
-      return;
-    }
-
+    setError(null);
     setLoading(true);
-    const result = await subscribeToNewsletter(parsed.data, "SenseGlow website popup");
+    const result = await subscribeToNewsletter(email, "Website popup", {
+      firstName,
+      signupSource: "website_popup",
+      signupPage: window.location.pathname,
+    });
     setLoading(false);
 
     if (result.ok === true) {
       setSuccess(true);
-      try {
-        localStorage.setItem(STORAGE_KEY, "subscribed");
-      } catch {}
+      markDismissed();
       return;
     }
 
-    toast.error(result.message);
-  };
-
-  const copyCode = async () => {
-    try {
-      await navigator.clipboard.writeText(DISCOUNT_CODE);
-      setCopied(true);
-      toast.success("Code gekopieerd");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Kopiëren mislukt");
-    }
+    setError(result.message);
   };
 
   if (!open) return null;
@@ -93,16 +126,20 @@ export const NewsletterPopup = () => {
         type="button"
         aria-label="Sluit pop-up"
         onClick={close}
-        className="absolute inset-0 bg-foreground/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
       />
 
       {/* Card */}
-      <div className="relative w-full max-w-md glass border border-foreground/10 rounded-2xl shadow-2xl p-8 md:p-10 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+      <div
+        ref={dialogRef}
+        className="relative w-full max-w-[420px] rounded-xl shadow-2xl p-8 md:p-10 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+        style={{ backgroundColor: "#1a1613", color: "#f5efe6" }}
+      >
         <button
           type="button"
           onClick={close}
           aria-label="Sluiten"
-          className="absolute top-4 right-4 text-foreground/40 hover:text-foreground/80 transition-colors"
+          className="absolute top-4 right-4 text-[#f5efe6]/50 hover:text-[#f5efe6] transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
@@ -110,27 +147,37 @@ export const NewsletterPopup = () => {
         {!success ? (
           <>
             <div className="flex justify-center mb-5">
-              <div className="h-12 w-12 rounded-full bg-glow/10 flex items-center justify-center">
-                <Mail className="h-5 w-5 text-glow" />
+              <div
+                className="h-12 w-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "rgba(242, 185, 85, 0.12)" }}
+              >
+                <Mail className="h-5 w-5" style={{ color: "#f2b955" }} />
               </div>
             </div>
 
-            <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 text-center mb-3">
-              SenseGlow Nieuwsbrief
-            </p>
             <h2
               id="newsletter-popup-title"
               className="text-2xl md:text-3xl font-semibold text-center mb-3 leading-snug"
             >
               10% korting op je eerste bestelling
             </h2>
-            <p className="text-sm text-foreground/60 text-center mb-7 leading-relaxed">
-              Schrijf je in voor de nieuwsbrief en ontvang als eerste nieuwe
-              lampen, rustige interieurideeën en je welkomstcode.
+            <p className="text-sm text-center mb-7 leading-relaxed" style={{ color: "rgba(245, 239, 230, 0.65)" }}>
+              Meld je aan voor onze nieuwsbrief en ontvang WELKOM10 in je inbox.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-3">
-              <Input
+              <input
+                ref={firstFieldRef}
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Voornaam (optioneel)"
+                maxLength={30}
+                disabled={loading}
+                aria-label="Voornaam (optioneel)"
+                className="w-full h-12 rounded-lg px-4 text-sm bg-white/5 border border-white/10 placeholder:text-[#f5efe6]/35 focus:outline-none focus:border-[#f2b955]/60 transition-colors disabled:opacity-50"
+              />
+              <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -138,61 +185,60 @@ export const NewsletterPopup = () => {
                 required
                 disabled={loading}
                 aria-label="E-mailadres"
-                className="h-12 text-center"
+                className="w-full h-12 rounded-lg px-4 text-sm bg-white/5 border border-white/10 placeholder:text-[#f5efe6]/35 focus:outline-none focus:border-[#f2b955]/60 transition-colors disabled:opacity-50"
               />
-              <Button
+              <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 rounded-full bg-glow hover:bg-glow/90 text-white text-sm uppercase tracking-[0.2em] font-medium"
+                className="w-full h-12 rounded-full text-sm font-semibold tracking-wide transition-colors disabled:opacity-60"
+                style={{ backgroundColor: "#f2b955", color: "#1a1613" }}
               >
-                {loading ? "Bezig..." : "Stuur me de code"}
-              </Button>
+                {loading ? "Bezig..." : "Ik wil 10% korting"}
+              </button>
             </form>
 
-            <p className="text-[11px] text-foreground/40 text-center mt-5 leading-relaxed">
-              Geen spam. Uitschrijven kan altijd met één klik.
+            {error && (
+              <p className="text-[13px] text-center mt-4 leading-relaxed" style={{ color: "#f2b955" }}>
+                Er ging iets mis. Probeer het later opnieuw of mail ons op{" "}
+                <a href="mailto:support@senseglow.shop" className="underline">
+                  support@senseglow.shop
+                </a>
+              </p>
+            )}
+
+            <p className="text-[11px] text-center mt-5 leading-relaxed" style={{ color: "rgba(245, 239, 230, 0.4)" }}>
+              Door je aan te melden ga je akkoord met onze{" "}
+              <Link to="/privacy" onClick={close} className="underline hover:text-[#f2b955] transition-colors">
+                privacyverklaring
+              </Link>
+              . Uitschrijven kan altijd.
             </p>
           </>
         ) : (
           <div className="text-center">
             <div className="flex justify-center mb-5">
-              <div className="h-12 w-12 rounded-full bg-glow/10 flex items-center justify-center">
-                <Check className="h-6 w-6 text-glow" />
+              <div
+                className="h-16 w-16 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "rgba(242, 185, 85, 0.15)" }}
+              >
+                <Check className="h-8 w-8" style={{ color: "#f2b955" }} />
               </div>
             </div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-3">
-              Welkom bij SenseGlow
-            </p>
             <h2 className="text-2xl md:text-3xl font-semibold mb-3 leading-snug">
-              Bedankt voor je inschrijving
+              Je zit erbij!
             </h2>
-            <p className="text-sm text-foreground/60 mb-7 leading-relaxed">
-              Gebruik onderstaande code bij het afrekenen voor 10% korting op je
-              eerste bestelling.
+            <p className="text-sm mb-7 leading-relaxed" style={{ color: "rgba(245, 239, 230, 0.65)" }}>
+              Check je inbox voor je 10% kortingscode. Handig voor je eerste
+              bestelling.
             </p>
-
             <button
               type="button"
-              onClick={copyCode}
-              className="w-full h-14 rounded-xl border-2 border-dashed border-glow/40 bg-glow/5 hover:bg-glow/10 transition-colors flex items-center justify-center gap-3 mb-5"
-            >
-              <span className="text-xl tracking-[0.3em] font-semibold text-glow">
-                {DISCOUNT_CODE}
-              </span>
-              {copied ? (
-                <Check className="h-4 w-4 text-glow" />
-              ) : (
-                <Copy className="h-4 w-4 text-glow/70" />
-              )}
-            </button>
-
-            <Button
-              type="button"
               onClick={close}
-              className="w-full h-12 rounded-full bg-glow hover:bg-glow/90 text-white text-sm uppercase tracking-[0.2em] font-medium"
+              className="w-full h-12 rounded-full text-sm font-semibold tracking-wide transition-colors"
+              style={{ backgroundColor: "#f2b955", color: "#1a1613" }}
             >
-              Verder winkelen
-            </Button>
+              Sluiten
+            </button>
           </div>
         )}
       </div>
