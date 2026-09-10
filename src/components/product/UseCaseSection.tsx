@@ -23,7 +23,7 @@ const defaultUseCases: UseCase[] = [
 
 export const UseCaseSection = ({
   headline = "Perfect voor elke donkere plek",
-  subtitle = "Ontdek waar SenseGlow™ het verschil maakt in jouw huis",
+  subtitle = "Bekijk waar SenseGlow™ het verschil maakt in jouw huis",
   useCases = defaultUseCases,
 }: UseCaseSectionProps) => {
   const gridCols = useCases.length === 5 ? "md:grid-cols-2 lg:grid-cols-5" : "md:grid-cols-2 lg:grid-cols-4";
