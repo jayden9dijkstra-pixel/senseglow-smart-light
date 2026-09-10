@@ -53,11 +53,11 @@ const Terms = () => {
           </Article>
 
           <Article n={5} title="Prijzen en betaling">
-            <p>Alle prijzen zijn in euro's en inclusief 21% BTW, exclusief verzendkosten (verzending is gratis binnen Nederland). Betaling vindt plaats via de op de website aangeboden betaalmethoden. SenseGlow gebruikt erkende betaalproviders; betaalgegevens worden niet door SenseGlow zelf opgeslagen.</p>
+            <p>Alle prijzen zijn in euro's en inclusief 21% BTW, exclusief verzendkosten (verzending is gratis naar Nederland en België). Betaling vindt plaats via de op de website aangeboden betaalmethoden. SenseGlow gebruikt erkende betaalproviders; betaalgegevens worden niet door SenseGlow zelf opgeslagen.</p>
           </Article>
 
           <Article n={6} title="Levering">
-            <p>SenseGlow verzendt bestellingen binnen 1-3 werkdagen na ontvangst. De gemiddelde bezorgtijd is 7-14 werkdagen via DHL. SenseGlow levert binnen Nederland; verzending naar het buitenland is op dit moment niet beschikbaar.</p>
+            <p>De totale levertijd, inclusief het verwerken van de bestelling, bedraagt 7 tot 14 dagen. SenseGlow levert aan adressen in Nederland en België; verzending naar beide landen is gratis. Levering buiten Nederland en België is op dit moment niet beschikbaar.</p>
             <p>Het risico van beschadiging of vermissing van producten berust bij SenseGlow tot het moment van bezorging aan de consument.</p>
           </Article>
 
@@ -68,7 +68,7 @@ const Terms = () => {
           </Article>
 
           <Article n={8} title="Kosten van retournering">
-            <p>De directe kosten van het retourneren komen voor rekening van de consument, tenzij het product defect is of niet conform de overeenkomst is geleverd. In dat geval vergoedt SenseGlow ook de retourkosten.</p>
+            <p>De kosten van het retourneren komen voor rekening van SenseGlow. Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit adres is uitsluitend een post- en retouradres en geen bezoekadres.</p>
           </Article>
 
           <Article n={9} title="Terugbetaling">

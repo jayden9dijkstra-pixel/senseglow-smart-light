@@ -58,12 +58,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             {product.node.title}
           </h3>
         </Link>
-        <div className="flex items-center gap-1 mb-3">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} className="text-glow text-sm">★</span>
-          ))}
-          <span className="text-xs text-muted-foreground ml-1">4.7/5</span>
-        </div>
         <p className="text-xl font-bold text-foreground mb-4">
           Vanaf €{parseFloat(price.amount).toFixed(2)}
         </p>

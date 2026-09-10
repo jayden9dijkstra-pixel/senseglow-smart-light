@@ -192,7 +192,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>30 dagen retourrecht</span>
+                        <span>30 dagen gratis retour</span>
                       </li>
                     </ul>
 

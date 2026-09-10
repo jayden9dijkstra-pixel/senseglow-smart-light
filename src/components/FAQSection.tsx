@@ -30,19 +30,19 @@ const faqs = [
   {
     question: "Hoe snel wordt mijn bestelling geleverd?",
     answer:
-      "Tussen de 7 en 14 werkdagen, via DHL. Je krijgt een track-code per mail zodra het pakket onderweg is. Track via senseglow.shop/bestelling-volgen of de DHL-app.",
+      "Tussen de 7 en 14 dagen in totaal, inclusief verwerking. Je krijgt een track-code per mail zodra het pakket onderweg is. Track via senseglow.shop/bestelling-volgen.",
   },
   {
     question: "Mag ik retourneren als het niet bevalt?",
     answer:
-      "Ja, 30 dagen lang, zonder opgaaf van reden. Stuur het product (graag in originele staat) terug en je hebt binnen 14 dagen je geld retour.",
+      "Ja, 30 dagen lang, zonder opgaaf van reden. De retourkosten zijn voor onze rekening. Stuur het product in originele staat terug naar Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres) en je hebt binnen 14 dagen je geld retour.",
   },
 ];
 
 const trustIcons = [
   { icon: Shield, text: "1 jaar garantie" },
   { icon: Truck, text: "Gratis verzending" },
-  { icon: RotateCcw, text: "30 dagen retour" },
+  { icon: RotateCcw, text: "30 dagen gratis retour" },
 ];
 
 export const FAQSection = () => {

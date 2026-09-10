@@ -168,6 +168,49 @@ function extractOgImage(html: string): string | undefined {
   return m?.[1];
 }
 
+/**
+ * Statische catalogus-markup in de SPA-root. React vervangt deze inhoud bij
+ * hydratie; crawlers en HTML-only checks zien wel de echte producten.
+ */
+function catalogFallback(products: ShopifyProduct[]): string {
+  if (!products.length) return "";
+  const items = products
+    .map((p) => {
+      const n = p.node;
+      const img = n.images?.edges?.[0]?.node;
+      const price = n.priceRange?.minVariantPrice;
+      return [
+        `<li>`,
+        img?.url
+          ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || n.title)}" width="600" height="600" />`
+          : "",
+        `<a href="${escapeAttr(`${SITE_URL}/product/${n.handle}`)}"><h2>${escapeHtml(n.title)}</h2></a>`,
+        price
+          ? `<p>Vanaf &euro;${escapeHtml(parseFloat(price.amount).toFixed(2))} ${escapeHtml(price.currencyCode)}</p>`
+          : "",
+        `</li>`,
+      ].join("");
+    })
+    .join("");
+  return `<section id="prerendered-catalog"><h1>SenseGlow collectie</h1><ul>${items}</ul></section>`;
+}
+
+function catalogSchema(products: ShopifyProduct[], path: string): unknown {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "SenseGlow collectie",
+    url: `${SITE_URL}${path}`,
+    numberOfItems: products.length,
+    itemListElement: products.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE_URL}/product/${p.node.handle}`,
+      name: p.node.title,
+    })),
+  };
+}
+
 function writeRoute(path: string, html: string) {
   const outPath =
     path === "/" ? resolve(DIST, "index.html") : resolve(DIST, `.${path}/index.html`);
@@ -201,6 +244,25 @@ async function main() {
   let written = 0;
   let degraded = 0;
 
+  // Catalogus eenmalig ophalen voor home en /producten.
+  const catalogProducts: ShopifyProduct[] = [];
+  const fetched = await Promise.all(
+    ENABLED_PRODUCT_HANDLES.map(async (handle) => {
+      try {
+        return await fetchProduct(handle);
+      } catch {
+        return null;
+      }
+    }),
+  );
+  for (const p of fetched) if (p) catalogProducts.push(p);
+  if (catalogProducts.length !== ENABLED_PRODUCT_HANDLES.length) {
+    console.warn(
+      `[prerender] catalogus onvolledig: ${catalogProducts.length}/${ENABLED_PRODUCT_HANDLES.length} producten opgehaald.`,
+    );
+  }
+  const catalogMarkup = catalogFallback(catalogProducts);
+
   // Vaste routes
   for (const path of STATIC_ROUTES) {
     const seo = getRouteSeo(path) ?? DEFAULT_SEO;
@@ -216,7 +278,13 @@ async function main() {
             ],
       ),
     );
-    writeRoute(path, render({ path, seo, schemas, ogType: "website" }));
+    const withCatalog = path === "/" || path === "/producten";
+    if (withCatalog && catalogProducts.length) schemas.push(catalogSchema(catalogProducts, path));
+    let html = render({ path, seo, schemas, ogType: "website" });
+    if (withCatalog && catalogMarkup) {
+      html = html.replace(/(<div id="root">)/i, `$1${catalogMarkup}`);
+    }
+    writeRoute(path, html);
     written++;
   }
 

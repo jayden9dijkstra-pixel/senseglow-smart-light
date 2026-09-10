@@ -26,9 +26,9 @@ const Shipping = () => {
           {/* 3 info cards */}
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { icon: Truck, title: "Gratis verzending", sub: "Geen drempel, geen kleine lettertjes." },
-              { icon: Clock, title: "7-14 werkdagen", sub: "Vanaf het moment dat we je bestelling verwerken." },
-              { icon: Package, title: "Met DHL", sub: "Je krijgt een track-code per mail." },
+              { icon: Truck, title: "Gratis verzending", sub: "Naar Nederland en België, zonder minimumbedrag." },
+              { icon: Clock, title: "7-14 dagen", sub: "Totale tijd, inclusief het verwerken van je bestelling." },
+              { icon: Package, title: "Met track & trace", sub: "Je krijgt een track-code per mail." },
             ].map(({ icon: Icon, title, sub }) => (
               <Card key={title} className="border-foreground/10 bg-background">
                 <CardContent className="p-6 space-y-3">
@@ -55,12 +55,12 @@ const Shipping = () => {
                 {
                   n: "2",
                   title: "We verwerken en verzenden",
-                  body: "Binnen 1-3 werkdagen verwerken we je bestelling en geven hem af bij DHL. Op dat moment krijg je een tweede mail met je track-code.",
+                  body: "We verwerken je bestelling en geven hem af bij de vervoerder. Op dat moment krijg je een tweede mail met je track-code.",
                 },
                 {
                   n: "3",
                   title: "DHL bezorgt",
-                  body: "Vanaf overdracht aan DHL duurt het 7-14 werkdagen voordat het pakket bij je voor de deur staat. Via senseglow.shop/bestelling-volgen of de DHL-app volg je 'm live.",
+                  body: "Vanaf je bestelling duurt het in totaal 7 tot 14 dagen voordat het pakket bij je voor de deur staat, verwerking inbegrepen. Via senseglow.shop/bestelling-volgen volg je 'm met je track-code.",
                 },
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">
@@ -79,20 +79,20 @@ const Shipping = () => {
           {/* Toelichting */}
           {[
             {
-              title: "Waarom 7-14 werkdagen?",
-              body: "We verzenden vanuit ons hoofdmagazijn buiten Nederland om de prijzen laag te houden. Dat scheelt jou geld; het kost wat extra dagen verzending. We zijn er eerlijk over: dit is sneller dan AliExpress maar langzamer dan Bol-bezorging morgen-thuis.",
+              title: "Waarom 7-14 dagen?",
+              body: "We werken met een logistiek partner buiten Nederland om de prijzen laag te houden. Dat scheelt jou geld en kost een paar dagen extra verzendtijd. We zijn daar liever eerlijk over dan dat we bezorging van morgen beloven.",
             },
             {
-              title: "Verzending alleen binnen Nederland",
-              body: "Op dit moment leveren we alleen aan adressen in Nederland. België en Duitsland staan op de planning. Vragen over een specifiek adres? Mail support@senseglow.shop.",
+              title: "Verzendgebied: Nederland en België",
+              body: "We leveren aan adressen in Nederland en België. Verzending is naar beide landen gratis. Vragen over een specifiek adres? Mail support@senseglow.shop.",
             },
             {
               title: "Niet thuis bij bezorging?",
-              body: "DHL probeert het twee keer. Lukt het beide keren niet, dan brengen ze het naar een DHL-ServicePoint in de buurt. Je krijgt een bericht waar je het kunt ophalen.",
+              body: "De vervoerder probeert het opnieuw of brengt het pakket naar een afhaalpunt in de buurt. Je krijgt bericht waar je het kunt ophalen.",
             },
             {
-              title: "Pakket niet ontvangen na 14 werkdagen?",
-              body: "Mail support@senseglow.shop met je bestelnummer. We gaan direct met DHL in gesprek en zorgen dat je je product krijgt of je geld terug, geen excuses.",
+              title: "Pakket niet ontvangen na 14 dagen?",
+              body: "Mail support@senseglow.shop met je bestelnummer. We zoeken het uit met de vervoerder en zorgen dat je je product krijgt of je geld terug.",
             },
           ].map(({ title, body }) => (
             <Card key={title} className="border-foreground/10 bg-background">
