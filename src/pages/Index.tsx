@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
-import { ProductCard } from "@/components/ProductCard";
 import { Loader2 } from "lucide-react";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -51,7 +50,9 @@ const Index = () => {
       <TrustBar />
 
       {/* 2. UseCaseGrid, 5 products */}
-      <UseCaseGrid products={products} />
+      <div id="products" className="scroll-mt-24">
+        <UseCaseGrid products={products} />
+      </div>
 
       {/* Editorial separator */}
       <div className="container">
