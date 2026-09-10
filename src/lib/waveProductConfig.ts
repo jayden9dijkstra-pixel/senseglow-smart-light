@@ -17,12 +17,12 @@ export const WAVE_OUTCOMES = [
   {
     icon: "🌊",
     title: "Sfeer in één beweging",
-    description: "Een zachte golf van licht die je ruimte direct transformeert.",
+    description: "Een zachte golf van licht die je ruimte meteen anders laat voelen.",
   },
   {
     icon: "✨",
     title: "Van functioneel naar bijzonder",
-    description: "Verlichting die niet alleen werkt, maar inspireert.",
+    description: "Verlichting die werkt en er mooi uitziet.",
   },
   {
     icon: "🎨",
@@ -111,7 +111,7 @@ export const WAVE_FAQS = [
   {
     question: "Hoe werkt de sensor?",
     answer:
-      "De lamp gaat automatisch aan wanneer beweging wordt gedetecteerd. Na een korte periode zonder beweging schakelt het licht weer uit.",
+      "De lamp gaat vanzelf aan bij beweging. Blijft het stil, dan gaat het licht na korte tijd weer uit.",
   },
   {
     question: "Hoe bevestig ik de lamp?",

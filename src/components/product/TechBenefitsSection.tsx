@@ -13,7 +13,7 @@ interface TechBenefitsSectionProps {
 
 const defaultBenefits: TechBenefit[] = [
   { icon: "🌡️", tech: "2700K warm licht", benefit: "Beter voor melatonine productie en slaapkwaliteit" },
-  { icon: "📡", tech: "3–5 meter sensorbereik", benefit: "Reageert precies op jou, niet op huisdieren" },
+  { icon: "📡", tech: "3-5 meter sensorbereik", benefit: "Reageert precies op jou, niet op huisdieren" },
   { icon: "⚡", tech: "30 seconden installatie", benefit: "3M tape + magnetisch bevestigingssysteem" },
   { icon: "🔋", tech: "USB-C oplaadbaar", benefit: "Duurzaam, geen batterijen nodig" },
   { icon: "⏱️", tech: "Tot 60 dagen gebruik", benefit: "Zuinig sensor ontwerp bespaart energie" },

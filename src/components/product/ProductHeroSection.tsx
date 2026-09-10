@@ -37,7 +37,7 @@ export const ProductHeroSection = ({
     bundleCta: "Voordeliger met bundels",
     bullets: [
       "Automatische bewegingssensor",
-      "Warm licht (2700K) - slaapvriendelijk",
+      "Warm licht (2700K), slaapvriendelijk",
       "Installatie zonder gereedschap",
     ],
   };

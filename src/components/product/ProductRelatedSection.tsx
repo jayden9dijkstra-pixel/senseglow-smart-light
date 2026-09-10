@@ -117,7 +117,7 @@ export function ProductRelatedSection({ currentHandle }: Props) {
             Maak je verlichting compleet
           </h2>
           <p className="text-base leading-relaxed text-foreground/60">
-            Combineer met 1 of meer producten en je krijgt automatisch 10% korting vanaf 2 stuks, 20% vanaf 3, 30% vanaf 4 — over alle producten heen.
+            Combineer met 1 of meer producten en je krijgt automatisch 10% korting vanaf 2 stuks, 20% vanaf 3 en 30% vanaf 4. Dat geldt over alle producten heen.
           </p>
         </div>
 
