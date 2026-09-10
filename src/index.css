@@ -48,6 +48,7 @@ html {
     --ring: 33 52% 50%;
     
     /* Amber glow voor subtiele effecten */
+    --hero-foreground: 38 40% 96%;
     --glow: 33 52% 50%;
     --glow-light: 33 52% 70%;
     
@@ -105,6 +106,7 @@ html {
     --input: 0 0% 24%;
     --ring: 33 52% 50%;
     
+    --hero-foreground: 38 40% 96%;
     --glow: 33 52% 50%;
     --glow-light: 33 60% 75%;
     
@@ -177,9 +179,6 @@ html {
     background: linear-gradient(120deg, hsl(24 13% 9% / 0.92) 0%, hsl(24 13% 9% / 0.72) 50%, hsl(33 52% 30% / 0.55) 100%);
   }
 
-  .text-hero-foreground {
-    color: hsl(38 40% 96%);
-  }
 
   .animate-fade-in {
     animation: fadeIn 800ms ease-out forwards;
