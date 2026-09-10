@@ -10,16 +10,30 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 const Catalog = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     document.title = "Onze collectie, SenseGlow";
+    let active = true;
     (async () => {
       setLoading(true);
-      const list = await fetchProducts(50);
-      setProducts(list);
-      setLoading(false);
+      setFailed(false);
+      try {
+        const list = await fetchProducts(50);
+        if (!active) return;
+        setProducts(list);
+      } catch {
+        if (!active) return;
+        setFailed(true);
+      } finally {
+        if (active) setLoading(false);
+      }
     })();
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
 
   return (
     <PageLayout seo={{ ...getRouteSeo("/producten"), path: "/producten" }}>
@@ -49,9 +63,24 @@ const Catalog = () => {
               <div className="flex justify-center items-center py-32">
                 <Loader2 className="w-6 h-6 animate-spin text-foreground/30" />
               </div>
+            ) : failed ? (
+              <div className="py-20 text-center space-y-4">
+                <p className="text-foreground/70">
+                  De collectie kon nu niet geladen worden. Dit is een tijdelijke storing, niet een lege winkel.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setAttempt((a) => a + 1)}
+                  className="text-[11px] uppercase tracking-[0.2em] text-glow hover:text-glow/80 transition-colors"
+                >
+                  Opnieuw proberen →
+                </button>
+              </div>
             ) : products.length === 0 ? (
               <div className="py-20 text-center">
-                <p className="text-foreground/60">Geen producten gevonden.</p>
+                <p className="text-foreground/60">
+                  Er zijn op dit moment geen producten beschikbaar. Mail support@senseglow.shop als je iets zoekt.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/6 overflow-hidden rounded-2xl">

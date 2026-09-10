@@ -15,17 +15,31 @@ import { FAQSection } from "@/components/FAQSection";
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
+    let active = true;
     const loadProducts = async () => {
       setLoading(true);
-      const fetchedProducts = await fetchProducts(50);
-      setProducts(fetchedProducts);
-      setLoading(false);
+      setFailed(false);
+      try {
+        const fetchedProducts = await fetchProducts(50);
+        if (!active) return;
+        setProducts(fetchedProducts);
+      } catch {
+        if (!active) return;
+        setFailed(true);
+      } finally {
+        if (active) setLoading(false);
+      }
     };
 
     loadProducts();
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
 
   return (
     <PageLayout>
@@ -105,11 +119,23 @@ const Index = () => {
                   </div>
                 ))}
               </div>
+            ) : failed ? (
+              <div className="py-20">
+                <p className="text-foreground/70 mb-3">
+                  De collectie kon nu niet geladen worden. Dit is een tijdelijke storing.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setAttempt((a) => a + 1)}
+                  className="text-[11px] uppercase tracking-[0.25em] text-glow hover:text-glow/80 transition-colors"
+                >
+                  Opnieuw proberen →
+                </button>
+              </div>
             ) : (
               <div className="py-20">
-                <p className="text-foreground/60 mb-2">Geen producten gevonden</p>
-                <p className="text-sm text-foreground/40">
-                  Voeg producten toe via de Shopify Storefront API.
+                <p className="text-foreground/60 mb-2">
+                  Er zijn op dit moment geen producten beschikbaar.
                 </p>
               </div>
             )}

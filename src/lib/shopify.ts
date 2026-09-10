@@ -166,8 +166,11 @@ export async function fetchProducts(limit: number = 10): Promise<ShopifyProduct[
     const responseData = data as { data?: { products?: { edges?: ShopifyProduct[] } } } | undefined;
     const allProducts = responseData?.data?.products?.edges || [];
     return allProducts.filter(p => ENABLED_PRODUCT_HANDLES.includes(p.node.handle));
-  } catch {
-    return [];
+  } catch (error) {
+    // Laat de fout doorgaan zodat de UI onderscheid kan maken tussen
+    // "catalogus is echt leeg" en "ophalen is mislukt".
+    console.error("fetchProducts failed:", error);
+    throw error instanceof Error ? error : new Error("Producten ophalen mislukt");
   }
 }
 
