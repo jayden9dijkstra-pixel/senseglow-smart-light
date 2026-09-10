@@ -7,6 +7,8 @@ const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.co
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 // Shopify Storefront Access Tokens are designed for client-side use (read-only public access)
 const SHOPIFY_STOREFRONT_TOKEN = 'd888e2f5ee17de858e6626f4c34cf9b7';
+// Branded checkout domain connected to the Shopify store.
+const SHOPIFY_CHECKOUT_DOMAIN = 'shop.senseglow.shop';
 
 // Input validation schemas
 const limitSchema = z.number().int().min(1).max(250);
@@ -97,17 +99,6 @@ const STOREFRONT_QUERY = `
   }
 `;
 
-const CART_CREATE_MUTATION = `
-  mutation cartCreate($input: CartInput!) {
-    cartCreate(input: $input) {
-      cart {
-        id checkoutUrl totalQuantity
-        cost { totalAmount { amount currencyCode } }
-      }
-      userErrors { field message }
-    }
-  }
-`;
 
 export async function storefrontApiRequest(
   query: string,
@@ -215,18 +206,22 @@ interface CheckoutItem {
   quantity: number;
 }
 
-interface CartCreateResponse {
-  data?: {
-    cartCreate?: {
-      cart?: { checkoutUrl?: string };
-      userErrors?: Array<{ message?: string }>;
-    };
-  };
+/**
+ * Extract the numeric variant ID from a GraphQL gid
+ * (e.g. gid://shopify/ProductVariant/123456789 → 123456789).
+ * Passes the value through unchanged if it is already numeric.
+ */
+function toNumericVariantId(variantId: string): string {
+  const match = variantId.match(/\/(\d+)$/);
+  return match ? match[1] : variantId;
 }
 
 /**
- * Create a Shopify cart via the Storefront API. Optionally applies one or
- * more discount codes (Shopify combines them based on shop configuration).
+ * Build a Shopify cart permalink on the branded checkout domain
+ * (shop.senseglow.shop). Optionally applies a discount code via the
+ * `discount` query parameter so bundle discounts still resolve at checkout.
+ *
+ * Example: https://shop.senseglow.shop/cart/123:1,456:2?discount=SG-PACK-3
  */
 export async function createStorefrontCheckout(
   items: CheckoutItem[],
@@ -234,27 +229,14 @@ export async function createStorefrontCheckout(
 ): Promise<string> {
   const validatedItems = checkoutItemsSchema.parse(items);
 
-  const lines = validatedItems.map(item => ({
-    quantity: item.quantity,
-    merchandiseId: item.variantId,
-  }));
+  const cartPath = validatedItems
+    .map(item => `${toNumericVariantId(item.variantId)}:${item.quantity}`)
+    .join(',');
 
-  const input: Record<string, unknown> = { lines };
-  if (discountCodes.length > 0) input.discountCodes = discountCodes;
-
-  const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, { input }) as CartCreateResponse | undefined;
-
-  const userErrors = cartData?.data?.cartCreate?.userErrors;
-  if (userErrors && userErrors.length > 0) {
-    const errorMessages = userErrors.map(e => e.message || 'Unknown error').join(', ');
-    throw new Error(`Cart creation failed: ${errorMessages}`);
+  const url = new URL(`https://${SHOPIFY_CHECKOUT_DOMAIN}/cart/${cartPath}`);
+  if (discountCodes.length > 0) {
+    url.searchParams.set('discount', discountCodes[0]);
   }
-
-  const checkoutUrl = cartData?.data?.cartCreate?.cart?.checkoutUrl;
-  if (!checkoutUrl) throw new Error('No checkout URL returned from Shopify');
-
-  const url = new URL(checkoutUrl);
-  url.searchParams.set('channel', 'online_store');
   return url.toString();
 }
 
