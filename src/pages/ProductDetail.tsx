@@ -40,7 +40,6 @@ const ProductDetail = () => {
   const fallback = product ? buildPlaceholderContent(product.node.title) : undefined;
 
   const hero = content?.hero ?? fallback?.hero;
-  const reviews = content?.reviews;
   const techHeadline = content?.techHeadline;
   const techBenefits = content?.techBenefits;
   const stepsHeadline = content?.stepsHeadline;
@@ -154,7 +153,7 @@ const ProductDetail = () => {
 
       <Curve from="bg-background-secondary" to="bg-background" />
 
-      <ProductReviewsSection reviews={reviews} />
+      <ProductReviewsSection />
       <div className="border-t border-foreground/8" />
 
       <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />

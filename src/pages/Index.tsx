@@ -9,7 +9,6 @@ import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
 import { WhatTheyShare } from "@/components/homepage/WhatTheyShare";
 import { StorytellingSection } from "@/components/homepage/StorytellingSection";
 import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
-import { ReviewsTeaserSection } from "@/components/homepage/ReviewsTeaserSection";
 import { VoetCTA } from "@/components/homepage/VoetCTA";
 import { FAQSection } from "@/components/FAQSection";
 
@@ -71,9 +70,6 @@ const Index = () => {
         <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
         <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
       </div>
-
-      {/* 6. ReviewsCarousel */}
-      <ReviewsTeaserSection />
 
       {/* 7. Onze collectie */}
       <section id="products" className="py-24 md:py-32 bg-background">
