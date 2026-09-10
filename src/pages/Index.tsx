@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { HeroSection } from "@/components/homepage/HeroSection";
+import { TrustBar } from "@/components/homepage/TrustBar";
 import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
 import { WhatTheyShare } from "@/components/homepage/WhatTheyShare";
 import { StorytellingSection } from "@/components/homepage/StorytellingSection";
@@ -45,6 +46,9 @@ const Index = () => {
     <PageLayout>
       {/* 1. Hero */}
       <HeroSection />
+
+      {/* Trust bar */}
+      <TrustBar />
 
       {/* 2. UseCaseGrid, 5 products */}
       <UseCaseGrid products={products} />
