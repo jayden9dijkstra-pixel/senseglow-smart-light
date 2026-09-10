@@ -205,7 +205,7 @@ export const ProductHeroSection = ({
                 </div>
                 <div className="flex items-center gap-2">
                   <RotateCcw className="w-3.5 h-3.5 text-glow" />
-                  <span>30 dagen retour</span>
+                  <span>30 dagen gratis retour</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Shield className="w-3.5 h-3.5 text-glow" />

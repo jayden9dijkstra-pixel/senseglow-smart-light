@@ -31,7 +31,7 @@ export interface ProductPageContent {
   finalCta: { headline: string; subtext: string; cta: string };
 }
 
-const TRUST_SUBTEXT = "Gratis verzending • 30 dagen retour • 1 jaar garantie";
+const TRUST_SUBTEXT = "Gratis verzending NL/BE • 30 dagen gratis retour • 1 jaar garantie";
 
 // ─── Ambient Motion Bar ────────────────────────────────
 const AMBIENT: ProductPageContent = {
