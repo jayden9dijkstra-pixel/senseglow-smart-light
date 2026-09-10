@@ -264,7 +264,7 @@ const LANTERN: ProductPageContent = {
       answer: "1 jaar volledige garantie, inclusief de accu. Probleem? Mail support@senseglow.shop." },
   ],
   bundleHeadline: "Verlicht je hele buitenruimte",
-  finalCta: { headline: "Licht je huis, moeiteloos.", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
+  finalCta: { headline: "Licht in huis, zonder gedoe.", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
 };
 
 // ─── Flex (Student Desk Lamp) ──────────────────────────
