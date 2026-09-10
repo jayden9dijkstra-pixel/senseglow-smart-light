@@ -1,10 +1,10 @@
-import { Truck, Clock, Shield, Flag } from "lucide-react";
+import { Truck, Clock, Shield, Package } from "lucide-react";
 
 const items = [
   { icon: Truck, label: "Gratis verzending NL/BE" },
   { icon: Clock, label: "30 dagen retour" },
   { icon: Shield, label: "1 jaar garantie" },
-  { icon: Flag, label: "Verstuurd vanuit Groningen" },
+  { icon: Package, label: "Bezorgd in 7-14 dagen" },
 ];
 
 export const TrustBar = () => {
