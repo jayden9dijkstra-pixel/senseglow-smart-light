@@ -8,7 +8,7 @@ const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${
 // Shopify Storefront Access Tokens are designed for client-side use (read-only public access)
 const SHOPIFY_STOREFRONT_TOKEN = 'd888e2f5ee17de858e6626f4c34cf9b7';
 // Branded checkout domain connected to the Shopify store.
-const SHOPIFY_CHECKOUT_DOMAIN = 'shop.senseglow.shop';
+const SHOPIFY_CHECKOUT_DOMAIN = 'checkout.senseglow.shop';
 
 // Input validation schemas
 const limitSchema = z.number().int().min(1).max(250);
@@ -221,10 +221,10 @@ function toNumericVariantId(variantId: string): string {
 
 /**
  * Build a Shopify cart permalink on the branded checkout domain
- * (shop.senseglow.shop). Optionally applies a discount code via the
+ * (checkout.senseglow.shop). Optionally applies a discount code via the
  * `discount` query parameter so bundle discounts still resolve at checkout.
  *
- * Example: https://shop.senseglow.shop/cart/123:1,456:2?discount=SG-PACK-3
+ * Example: https://checkout.senseglow.shop/cart/123:1,456:2?discount=SG-PACK-3
  */
 export async function createStorefrontCheckout(
   items: CheckoutItem[],
