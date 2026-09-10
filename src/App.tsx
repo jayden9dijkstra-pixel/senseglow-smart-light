@@ -19,6 +19,8 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Login from "./pages/Login";
 import OAuthConsent from "./pages/OAuthConsent";
+import Bundles from "./pages/Bundles";
+import WhySenseGlow from "./pages/WhySenseGlow";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,8 @@ const App = () => (
             <Route path="/bestelling-volgen" element={<Tracking />} />
             <Route path="/retourneren" element={<Returns />} />
             <Route path="/over" element={<About />} />
+            <Route path="/bundels" element={<Bundles />} />
+            <Route path="/waarom-senseglow" element={<WhySenseGlow />} />
             <Route path="/duurzaamheid" element={<Sustainability />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/voorwaarden" element={<Terms />} />
