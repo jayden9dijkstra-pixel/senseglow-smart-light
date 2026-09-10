@@ -22,7 +22,7 @@ export interface SeoEntry {
 export const DEFAULT_SEO: SeoEntry = {
   title: "SenseGlow, slimme sensor verlichting zonder bedrading | Gratis verzending NL",
   description:
-    "Sensor-gestuurde verlichting zonder elektricien of schakelaar. Oplaadbaar, eenvoudig te plaatsen. Gratis verzending NL, 30 dagen retour, 1 jaar garantie.",
+    "Sensor-gestuurde verlichting zonder elektricien of schakelaar. Oplaadbaar, eenvoudig te plaatsen. Gratis verzending NL/BE, 30 dagen retour, 1 jaar garantie.",
 };
 
 /** SEO per route pathname (zonder trailing slash, behalve "/"). */
@@ -31,12 +31,12 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
   "/producten": {
     title: "Alle SenseGlow lampen, sensor verlichting voor elk hoekje | SenseGlow",
     description:
-      "Bekijk alle SenseGlow lampen: lichtbalken, wandlampjes, bureaulamp en solar buitenlamp met bewegingssensor. Vanaf €24,95. Gratis verzending NL, 30 dagen retour.",
+      "Bekijk alle SenseGlow lampen: lichtbalken, wandlampjes, bureaulamp en solar buitenlamp met bewegingssensor. Vanaf €24,95. Gratis verzending NL/BE, 30 dagen retour.",
   },
   "/quiz": {
     title: "Welke SenseGlow past bij jou? Doe de lampenkeuzehulp | SenseGlow",
     description:
-      "Beantwoord een paar korte vragen over je ruimtes en ontvang direct een passend SenseGlow advies, inclusief voordeelpakket. Gratis verzending NL, 30 dagen retour.",
+      "Beantwoord een paar korte vragen over je ruimtes en ontvang direct een passend SenseGlow advies, inclusief voordeelpakket. Gratis verzending NL/BE, 30 dagen retour.",
   },
   "/verzending": {
     title: "Verzending en levertijd, gratis bezorging in Nederland | SenseGlow",
@@ -85,27 +85,27 @@ export const PRODUCT_SEO: Record<string, SeoEntry> = {
   [WAVE_PRODUCT_HANDLE]: {
     title: "SenseGlow Wave™, sensor lichtbalk 30/50cm | Vanaf €24,95",
     description:
-      "Wave sensor lichtbalk, springt aan bij beweging, USB-C oplaadbaar en magnetisch te plaatsen. Vanaf €24,95. Gratis verzending NL, 30 dagen retour.",
+      "Wave sensor lichtbalk, springt aan bij beweging, USB-C oplaadbaar en magnetisch te plaatsen. Vanaf €24,95. Gratis verzending NL/BE, 30 dagen retour.",
   },
   [PRODUCT_HANDLE]: {
     title: "SenseGlow Ambient Motion Bar, sensor sfeerlicht 20/30/40cm",
     description:
-      "Ambient Motion Bar geeft warm sfeerlicht zodra je beweegt. Draadloos, oplaadbaar en zo geplakt. Vanaf €24,95. Gratis verzending NL, 30 dagen retour.",
+      "Ambient Motion Bar geeft warm sfeerlicht zodra je beweegt. Draadloos, oplaadbaar en zo geplakt. Vanaf €24,95. Gratis verzending NL/BE, 30 dagen retour.",
   },
   [FLEX_PRODUCT_HANDLE]: {
     title: "SenseGlow Flex™, bureaulamp met touch en USB-C | Zwart of Wit",
     description:
-      "Flex bureaulamp met touchbediening, traploos dimbaar en USB-C oplaadbaar. Verkrijgbaar in zwart of wit. Gratis verzending NL, 30 dagen retour.",
+      "Flex bureaulamp met touchbediening, traploos dimbaar en USB-C oplaadbaar. Verkrijgbaar in zwart of wit. Gratis verzending NL/BE, 30 dagen retour.",
   },
   [LANTERN_PRODUCT_HANDLE]: {
     title: "SenseGlow Solar Lantern™, solar buitenlamp met bewegingssensor",
     description:
-      "Solar Lantern laadt overdag op zon en licht 's avonds op bij beweging. Weerbestendig, geen bedrading nodig. Gratis verzending NL, 30 dagen retour.",
+      "Solar Lantern laadt overdag op zon en licht 's avonds op bij beweging. Weerbestendig, geen bedrading nodig. Gratis verzending NL/BE, 30 dagen retour.",
   },
   [STEP_PRODUCT_HANDLE]: {
     title: "SenseGlow Wall Lamp™, draadloze LED wandlampjes (4 of 8 pack)",
     description:
-      "Draadloze LED wandlampjes met bewegingssensor voor trap, gang en kast. Verkrijgbaar als 4 of 8 pack. Gratis verzending NL, 30 dagen retour.",
+      "Draadloze LED wandlampjes met bewegingssensor voor trap, gang en kast. Verkrijgbaar als 4 of 8 pack. Gratis verzending NL/BE, 30 dagen retour.",
   },
 };
 
