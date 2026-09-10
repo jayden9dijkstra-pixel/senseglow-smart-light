@@ -20,7 +20,7 @@ export interface SeoEntry {
 }
 
 export const DEFAULT_SEO: SeoEntry = {
-  title: "SenseGlow, slimme sensor verlichting zonder bedrading | Gratis verzending NL",
+  title: "SenseGlow, slimme sensor verlichting zonder bedrading | Gratis verzending NL/BE",
   description:
     "Sensor-gestuurde verlichting zonder elektricien of schakelaar. Oplaadbaar, eenvoudig te plaatsen. Gratis verzending NL/BE, 30 dagen retour, 1 jaar garantie.",
 };
