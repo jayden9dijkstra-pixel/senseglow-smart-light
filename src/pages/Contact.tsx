@@ -98,7 +98,7 @@ const Contact = () => {
                 <p><strong>Jayden Ecom (handelend onder de naam SenseGlow™)</strong></p>
                 <p>KvK-nummer: 99634929</p>
                 <p>BTW-nummer: NL005399692B39</p>
-                <p>Vestigingsadres: Tolheksleane 4 A, 8821 MD Kimswerd</p>
+                <p>Vestigings- en retouradres: Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres, geen bezoekadres of winkel)</p>
                 <p>E-mail: <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a></p>
                 <p>Web: senseglow.shop</p>
               </div>
