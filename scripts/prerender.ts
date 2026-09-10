@@ -155,8 +155,8 @@ function stripTemplateHead(html: string): string {
     .replace(/[ \t]*<title>[\s\S]*?<\/title>\s*\n?/gi, "")
     .replace(/[ \t]*<meta\s+name=["']description["'][^>]*>\s*\n?/gi, "")
     .replace(/[ \t]*<link\s+rel=["']canonical["'][^>]*>\s*\n?/gi, "")
-    .replace(/[ \t]*<meta\s+property=["']og:(?:type|url|title|description|site_name)["'][^>]*>\s*\n?/gi, "")
-    .replace(/[ \t]*<meta\s+name=["']twitter:(?:card|title|description)["'][^>]*>\s*\n?/gi, "")
+    .replace(/[ \t]*<meta\s+property=["']og:(?:type|url|title|description|site_name|image)["'][^>]*>\s*\n?/gi, "")
+    .replace(/[ \t]*<meta\s+name=["']twitter:(?:card|title|description|image)["'][^>]*>\s*\n?/gi, "")
     .replace(
       /[ \t]*<script type="application\/ld\+json">[\s\S]*?<\/script>\s*\n?/gi,
       "",
@@ -193,7 +193,10 @@ async function main() {
   }
 
   const render = (input: HeadInput) =>
-    template.replace(/<\/head>/i, `${buildHead({ ...input, ogImage })}\n  </head>`);
+    template.replace(
+      /<\/head>/i,
+      `${buildHead({ ogImage, ...input })}\n  </head>`,
+    );
 
   let written = 0;
   let degraded = 0;
@@ -223,11 +226,18 @@ async function main() {
       const path = `/product/${handle}`;
       const seo = getProductSeo(handle) ?? DEFAULT_SEO;
       const schemas: unknown[] = [];
+      let productImage: string | undefined;
 
       try {
         const product = await fetchProduct(handle);
         if (!product) throw new Error("product niet gevonden in Shopify");
         schemas.push(productSchema(product, { path, description: seo.description }));
+        const firstImage = product.node.images?.edges?.[0]?.node?.url;
+        if (firstImage) {
+          productImage = firstImage.includes("?")
+            ? `${firstImage}&width=1200&height=630&crop=center`
+            : `${firstImage}?width=1200&height=630&crop=center`;
+        }
         schemas.push(
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -251,7 +261,10 @@ async function main() {
         );
       }
 
-      writeRoute(path, render({ path, seo, schemas, ogType: "product" }));
+      writeRoute(
+        path,
+        render({ path, seo, schemas, ogType: "product", ogImage: productImage ?? ogImage }),
+      );
       written++;
     }),
   );
