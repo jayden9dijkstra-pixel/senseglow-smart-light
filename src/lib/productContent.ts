@@ -10,14 +10,6 @@ import {
   FLEX_PRODUCT_HANDLE,
 } from "./productConfig";
 
-export interface Review {
-  name: string;
-  role: string;
-  rating: number;
-  text: string;
-  image: string;
-}
-
 export interface ProductPageContent {
   hero: {
     h1: string;
@@ -25,7 +17,6 @@ export interface ProductPageContent {
     bundleCta: string;
     bullets: string[];
   };
-  reviews: Review[];
   techHeadline: string;
   techBenefits: Array<{ icon: string; tech: string; benefit: string }>;
   stepsHeadline: string;
@@ -54,20 +45,6 @@ const AMBIENT: ProductPageContent = {
       "Magnetisch + USB-C, installatie in 30 seconden",
     ],
   },
-  reviews: [
-    { name: "Sarah M.", role: "Pre-launch testklant", rating: 5, image: "SM",
-      text: "Mijn dochter (5) durft nu eindelijk zelf naar de wc 's nachts. Het warme licht geeft haar vertrouwen. Beste aankoop dit jaar." },
-    { name: "Jan P.", role: "Pre-launch testklant", rating: 5, image: "JP",
-      text: "Na een val op de trap vorig jaar wilde ik iets veranderen. Simpel, werkt perfect, mijn kinderen zijn ook gerustgesteld." },
-    { name: "Lisa K.", role: "Pre-launch testklant", rating: 5, image: "LK",
-      text: "Perfect voor mijn studentenkamer. Geen gedoe met schakelaars als ik naar de gedeelde keuken ga, en mijn huisgenoten blijven lekker slapen." },
-    { name: "Mark V.", role: "Pre-launch testklant", rating: 5, image: "MV",
-      text: "Geen discussies meer over het grote licht aan 's nachts. De baby blijft slapen, wij kunnen veilig bewegen. Win-win." },
-    { name: "Emma R.", role: "Pre-launch testklant", rating: 5, image: "ER",
-      text: "Geïnstalleerd in gang, trap en badkamer. Voelt alsof ik in een high-end hotel woon. De warme gloed is écht prachtig." },
-    { name: "Tom B.", role: "Pre-launch testklant", rating: 5, image: "TB",
-      text: "Mijn kleinkinderen hebben ze voor mij geïnstalleerd. Wat een verschil, ik voel me veel veiliger op de trap 's avonds." },
-  ],
   techHeadline: "Waarom de Motion Bar werkt",
   techBenefits: [
     { icon: "🌙", tech: "Slim genoeg om niet te storen",
@@ -126,20 +103,6 @@ const WAVE: ProductPageContent = {
       "Magnetisch + USB-C, geen gedoe",
     ],
   },
-  reviews: [
-    { name: "Lieke V.", role: "Pre-launch testklant", rating: 5, image: "LV",
-      text: "Mijn keuken voelt eindelijk áf. Dat ene puzzelstukje dat ik niet wist dat het miste." },
-    { name: "Daan B.", role: "Pre-launch testklant", rating: 5, image: "DB",
-      text: "Achter mijn bureau geïnstalleerd voor de Zoom-calls. Niemand gelooft dat ik geen elektricien heb gebeld." },
-    { name: "Femke K.", role: "Pre-launch testklant", rating: 5, image: "FK",
-      text: "In een huurhuis mocht ik niet boren. Magnetisch, USB-C, klaar. Verhuis ik straks, gaat 'ie gewoon mee." },
-    { name: "Bram T.", role: "Pre-launch testklant", rating: 5, image: "BT",
-      text: "Eerst kookte ik onder dat felle plafondlicht. Nu schenk ik wijn in en dan begint het koken pas echt." },
-    { name: "Saskia M.", role: "Pre-launch testklant", rating: 5, image: "SM",
-      text: "Het golf-effect als je langsloopt is echt magisch. Mijn vriendinnen vragen elke keer waar ik 'm vandaan heb." },
-    { name: "Tom van der V.", role: "Pre-launch testklant", rating: 5, image: "TV",
-      text: "Achter mijn setup. De kleurmodi maken streams meteen beter. Top quality voor de prijs." },
-  ],
   techHeadline: "Waarom de Wave anders is",
   techBenefits: [
     { icon: "🌊", tech: "Golfeffect dat meebeweegt",
@@ -197,20 +160,6 @@ const SCONCE: ProductPageContent = {
       "USB-C oplaadbaar per lamp",
     ],
   },
-  reviews: [
-    { name: "Marieke H.", role: "Pre-launch testklant", rating: 5, image: "MH",
-      text: "Voor mijn moeder van 76. Ze gebruikt ze elke nacht. Mijn beste cadeau dit jaar, geen twijfel." },
-    { name: "Pieter J.", role: "Pre-launch testklant", rating: 5, image: "PJ",
-      text: "Mijn vrouw was bang dat ik nog eens zou vallen. Eén keer plakken, klaar. Geen gedoe." },
-    { name: "Lisa de B.", role: "Pre-launch testklant", rating: 5, image: "LB",
-      text: "Mijn dochter van 4 durft eindelijk zelf naar boven. Geen 'mama loop mee'-spelletje meer 's avonds." },
-    { name: "Thijs K.", role: "Pre-launch testklant", rating: 5, image: "TK",
-      text: "Verbouwing klaar, deze waren de laatste touch. Het hotel-trap-gevoel, voor een schijntje." },
-    { name: "Anouk V.", role: "Pre-launch testklant", rating: 5, image: "AV",
-      text: "Voor mijn schoonvader. Hij vond elektronica altijd 'gedoe'. Deze begreep hij meteen. Werkt al maanden zonder klacht." },
-    { name: "Joost M.", role: "Pre-launch testklant", rating: 5, image: "JM",
-      text: "Huur dit appartement, mag niet boren. Plakken, klaar, verhuizen ze gewoon mee." },
-  ],
   techHeadline: "Waarom de Wall Lamp werkt",
   techBenefits: [
     { icon: "🛡️", tech: "Fall prevention die écht werkt",
@@ -271,20 +220,6 @@ const LANTERN: ProductPageContent = {
       "Bewegingssensor tot 6 meter (120°)",
     ],
   },
-  reviews: [
-    { name: "Robert J.", role: "Pre-launch testklant", rating: 5, image: "RJ",
-      text: "Een aan de voordeur, een aan de achterdeur. Mijn vrouw voelt zich eindelijk veilig als ze 's avonds laat thuiskomt." },
-    { name: "Karin S.", role: "Pre-launch testklant", rating: 5, image: "KS",
-      text: "Drie zomers buiten gehangen, nog steeds elke avond aan. Geen probleem met regen of vorst." },
-    { name: "Henk P.", role: "Pre-launch testklant", rating: 5, image: "HP",
-      text: "Twee schroeven, klaar. Echt waar. Zelf gemonteerd zonder enige hulp." },
-    { name: "Sofie B.", role: "Pre-launch testklant", rating: 5, image: "SB",
-      text: "Nul stroomkosten. Letterlijk nul. En 'ie is fel genoeg dat de bezorger m'n voordeur kan vinden in november." },
-    { name: "Dirk V.", role: "Pre-launch testklant", rating: 5, image: "DV",
-      text: "Voor mijn Airbnb in de Veluwe. Gasten komen vaak laat aan. Geen kabel trekken nodig, perfect." },
-    { name: "Yvonne M.", role: "Pre-launch testklant", rating: 5, image: "YM",
-      text: "Heb 'm eerst voor mezelf gekocht, daarna nog vier voor de buren. Hele straat ziet er nu beter uit." },
-  ],
   techHeadline: "Waarom de Solar Lantern werkt",
   techBenefits: [
     { icon: "☀️", tech: "100% op zonne-energie",
@@ -344,20 +279,6 @@ const FLEX: ProductPageContent = {
       "Warm en koel licht, voor elk moment",
     ],
   },
-  reviews: [
-    { name: "Mila R.", role: "Pre-launch testklant", rating: 5, image: "MR",
-      text: "Mijn bureau ziet er eindelijk niet meer uit als een studentenkamer. En late-night essay schrijven is veel chiller met dim-licht." },
-    { name: "Bas T.", role: "Pre-launch testklant", rating: 5, image: "BT",
-      text: "Magnetisch, USB-C, geen schroef. Verhuis volgend jaar, gaat gewoon mee. Geen sporen in de muur." },
-    { name: "Yara K.", role: "Pre-launch testklant", rating: 5, image: "YK",
-      text: "Mijn videos zien er beter uit met de warme stand. Niemand gelooft dat 'ie geen kabel heeft. Aesthetic + functional." },
-    { name: "Lars de V.", role: "Pre-launch testklant", rating: 5, image: "LV",
-      text: "Cadeau van m'n ouders voor m'n diploma. Eerlijk gezegd het beste cadeau dat ik kreeg. Touch-dimmen voor late werkavonden." },
-    { name: "Senna B.", role: "Pre-launch testklant", rating: 5, image: "SB",
-      text: "Warm voor essays, koel voor tentamens, pas je aan met één knop. Ben er klaar mee om naar de bieb te moeten voor goed licht." },
-    { name: "Tijn M.", role: "Pre-launch testklant", rating: 5, image: "TM",
-      text: "Eindelijk geen rommelige IKEA-lamp meer op m'n bureau. Mijn huisgenoten hebben ondertussen alle drie eentje besteld." },
-  ],
   techHeadline: "Waarom de Flex werkt",
   techBenefits: [
     { icon: "✋", tech: "Touch-dimming voor late sessies",
