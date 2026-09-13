@@ -42,13 +42,11 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
     });
   };
 
-  if (!selectedVariant) return null;
+  if (!selectedVariant || !visible) return null;
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl transition-transform duration-300 md:hidden"
-      style={{ transform: visible ? "translateY(0)" : "translateY(100%)" }}
-      aria-hidden={!visible}
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl animate-fade-in md:hidden"
     >
       <div className="mx-auto flex max-w-md items-center gap-3">
         <div className="h-12 w-12 flex-none overflow-hidden rounded-md bg-muted">
