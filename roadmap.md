@@ -32,10 +32,15 @@
 - [ ] Publiceren
 
 ## Bundels upgrade
-- [ ] Prominente bundelsectie op homepage met drie grote kaarten
-- [ ] Bundlepagina met grote beeldkaarten, productpreview en besparingsberekening
-- [ ] Teaser voor eigen combinatie en drie bundelvoordelen
-- [ ] Amber hoverglow, collage-effect en staggered animatie
-- [ ] Uniforme aansluiting van top-level secties op homepage en productpagina's
-- [ ] Mobiel en desktop controleren
+- [x] Prominente bundelsectie op homepage met drie grote kaarten
+- [x] Bundlepagina met grote beeldkaarten, productpreview en besparingsberekening
+- [x] Teaser voor eigen combinatie en drie bundelvoordelen
+- [x] Amber hoverglow, collage-effect en staggered animatie
+- [x] Uniforme aansluiting van top-level secties op homepage en productpagina's
+- [x] Mobiel en desktop controleren
 - [ ] Publiceren
+
+## Bundels upgrade log
+- Nieuw: `src/lib/bundles.ts`, `src/components/bundles/BundleShowcase.tsx`, `src/components/homepage/HomeBundlesSection.tsx`.
+- Bijgewerkt: homepage, bundelpagina, hoofdnavigatie, winkelwagenknop, animatiestijlen en 17 homepage-/productsecties.
+- Controle: typecheck, productiebuild, 16 prerender-routes, desktop 1280 px en mobiel 390 px; geen horizontale scroll of consolefouten.
