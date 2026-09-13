@@ -14,6 +14,13 @@
 - Merchant Center: 32 artikelen = 32 varianten van 5 producten (5+5+6+7+9). Feedinstellingen, domeinclaim en afkeuringsdetails niet gecontroleerd — geen toegang.
 - Publiceren: wijzigingen staan nog niet op het openbare domein.
 
+## Laatste fixes voor publicatie
+- [x] Bezorgtekst overal gelijkgezet op 7-14 werkdagen
+- [x] Video alleen tonen bij een ingevulde URL
+- [x] Productsecties gelijkmatig laten aansluiten
+- [x] Eindcontrole afgerond
+- [ ] Publiceren
+
 ## Ronde 3 optimalisatie
 - [x] Mobiele sticky winkelwagenbalk na het bovenste productgedeelte
 - [x] Reviewplaceholder en reviews-anker

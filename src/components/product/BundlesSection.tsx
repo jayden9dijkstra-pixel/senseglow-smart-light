@@ -89,7 +89,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const headline = headlineOverride || "Meer kiezen, meer besparen";
 
   return (
-    <section id="bundels" className="py-20 md:py-32 scroll-mt-24">
+    <section id="bundels" className="scroll-mt-24 overflow-hidden py-16 md:py-24">
       <div className="container">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 space-y-4">
@@ -182,9 +182,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                           {variantLabel ? `, ${variantLabel}` : ""}
                         </span>
                       </li>
-                      <li className="flex items-start gap-2 text-sm text-foreground/70">
-                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>Gratis verzending</span>
+                      <li className="flex items-start gap-2 text-sm text-green-700 dark:text-green-400">
+                        <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>Bij je thuis binnen 7-14 werkdagen</span>
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />

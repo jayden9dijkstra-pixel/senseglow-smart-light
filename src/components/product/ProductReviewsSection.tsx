@@ -4,7 +4,7 @@
  */
 export const ProductReviewsSection = () => {
   return (
-    <section id="reviews" className="scroll-mt-24 py-16 md:py-20 bg-gradient-to-b from-muted/20 to-background">
+    <section id="reviews" className="scroll-mt-24 overflow-hidden bg-background py-16 md:py-24">
       <div className="container">
         <div className="max-w-2xl mx-auto text-center space-y-4">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground">

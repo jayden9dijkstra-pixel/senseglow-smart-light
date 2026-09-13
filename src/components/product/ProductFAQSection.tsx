@@ -45,7 +45,7 @@ export const ProductFAQSection = ({
   faqs = purchaseFaqs,
 }: ProductFAQSectionProps) => {
   return (
-    <section className="py-16 md:py-20 bg-background-secondary">
+    <section className="overflow-hidden bg-background py-16 md:py-24">
       <div className="container">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10 space-y-3">

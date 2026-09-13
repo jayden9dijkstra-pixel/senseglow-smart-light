@@ -21,5 +21,5 @@ export const PRODUCT_VIDEO_URLS: Record<string, string> = {
 };
 
 export function getProductVideoUrl(handle: string): string {
-  return PRODUCT_VIDEO_URLS[handle] ?? "";
+  return PRODUCT_VIDEO_URLS[handle]?.trim() ?? "";
 }

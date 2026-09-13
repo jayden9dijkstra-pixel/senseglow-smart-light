@@ -19,7 +19,7 @@ export const HowItWorksSection = ({
   steps = defaultSteps,
 }: HowItWorksSectionProps) => {
   return (
-    <section className="py-20 md:py-28 bg-background">
+    <section className="overflow-hidden bg-background py-16 md:py-24">
       <div className="container">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
