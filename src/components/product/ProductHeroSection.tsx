@@ -123,9 +123,9 @@ export const ProductHeroSection = ({
     : "0.00";
 
   return (
-    <section id="product-hero" className="overflow-hidden bg-background py-16 md:py-24 animate-fade-in-slow">
-      <div className="container">
-        <div className="max-w-7xl mx-auto">
+    <section id="product-hero" className="w-full overflow-hidden bg-background py-16 md:py-24 lg:py-32 animate-fade-in-slow">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div>
           <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] gap-0">
             {/* Left - Product Image Gallery */}
             <div className="relative md:border-r border-foreground/10 md:pr-8 pb-6 md:pb-0 md:max-h-[730px]">

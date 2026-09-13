@@ -45,8 +45,8 @@ export const ProductFAQSection = ({
   faqs = purchaseFaqs,
 }: ProductFAQSectionProps) => {
   return (
-    <section className="overflow-hidden bg-background py-16 md:py-24">
-      <div className="container">
+    <section className="w-full overflow-hidden bg-background py-16 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10 space-y-3">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground">{headline}</h2>

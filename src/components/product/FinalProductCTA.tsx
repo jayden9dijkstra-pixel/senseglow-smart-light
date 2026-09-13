@@ -16,8 +16,8 @@ export const FinalProductCTA = ({
   };
 
   return (
-    <section className="overflow-hidden bg-background py-16 md:py-24 animate-fade-in">
-      <div className="container">
+    <section className="w-full overflow-hidden bg-background py-16 md:py-24 lg:py-32 animate-fade-in">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
             {headline}

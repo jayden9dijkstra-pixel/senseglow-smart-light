@@ -5,8 +5,8 @@ export const VoetCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 md:py-24 bg-background-secondary">
-      <div className="container">
+    <section className="w-full bg-background-secondary py-16 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-2xl mx-auto text-center space-y-6 animate-fade-in-slow">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
             Klaar om te beginnen?
