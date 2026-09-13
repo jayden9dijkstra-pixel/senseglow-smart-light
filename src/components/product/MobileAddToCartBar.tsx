@@ -46,7 +46,8 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl transition-transform duration-300 md:hidden ${visible ? "translate-y-0" : "translate-y-full"}`}
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl transition-transform duration-300 md:hidden"
+      style={{ transform: visible ? "translateY(0)" : "translateY(100%)" }}
       aria-hidden={!visible}
     >
       <div className="mx-auto flex max-w-md items-center gap-3">
