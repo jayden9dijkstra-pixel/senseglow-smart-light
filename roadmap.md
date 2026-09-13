@@ -44,3 +44,9 @@
 - Nieuw: `src/lib/bundles.ts`, `src/components/bundles/BundleShowcase.tsx`, `src/components/homepage/HomeBundlesSection.tsx`.
 - Bijgewerkt: homepage, bundelpagina, hoofdnavigatie, winkelwagenknop, animatiestijlen en 17 homepage-/productsecties.
 - Controle: typecheck, productiebuild, 16 prerender-routes, desktop 1280 px en mobiel 390 px; geen horizontale scroll of consolefouten.
+
+## Correcties vóór definitieve publicatie
+- [ ] Geen voorraad-aantallen of schaarstetaal; overal groene melding 7-14 werkdagen
+- [ ] Lege videoconfiguratie toont uitsluitend statische foto
+- [ ] Productsecties sluiten zonder overlap of harde kieren aan
+- [ ] Opnieuw controleren en publiceren
