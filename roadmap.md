@@ -15,9 +15,9 @@
 - Publiceren: wijzigingen staan nog niet op het openbare domein.
 
 ## Laatste fixes voor publicatie
-- [ ] Bezorgtekst overal gelijkzetten op 7-14 werkdagen
-- [ ] Video alleen tonen bij een ingevulde URL
-- [ ] Productsecties gelijkmatig laten aansluiten
+- [x] Bezorgtekst overal gelijkgezet op 7-14 werkdagen
+- [x] Video alleen tonen bij een ingevulde URL
+- [x] Productsecties gelijkmatig laten aansluiten
 - [ ] Eindcontrole en publiceren
 
 ## Ronde 3 optimalisatie
