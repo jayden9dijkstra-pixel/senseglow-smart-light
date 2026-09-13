@@ -30,3 +30,12 @@
 - [x] Drie echte catalogusaanbevelingen en compacte FAQ onderaan
 - [x] Mobiel en desktop getest
 - [ ] Publiceren
+
+## Bundels upgrade
+- [ ] Prominente bundelsectie op homepage met drie grote kaarten
+- [ ] Bundlepagina met grote beeldkaarten, productpreview en besparingsberekening
+- [ ] Teaser voor eigen combinatie en drie bundelvoordelen
+- [ ] Amber hoverglow, collage-effect en staggered animatie
+- [ ] Uniforme aansluiting van top-level secties op homepage en productpagina's
+- [ ] Mobiel en desktop controleren
+- [ ] Publiceren
