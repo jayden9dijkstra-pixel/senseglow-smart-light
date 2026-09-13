@@ -76,7 +76,11 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                       <img
                         src={image.url}
                         alt={image.altText || product?.node.title || title}
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                         className={`w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
+                           handle === "senseglow_ambient_motion_bar"
+                             ? "object-contain p-3"
+                             : "object-cover"
+                         }`}
                         loading="lazy"
                       />
                     ) : (
