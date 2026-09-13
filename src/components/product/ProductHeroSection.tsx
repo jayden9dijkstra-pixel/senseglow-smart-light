@@ -209,8 +209,8 @@ export const ProductHeroSection = ({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-4">
-                <span className="flex items-center gap-1.5 text-green-700 dark:text-green-400"><Check className="h-3.5 w-3.5" />Bij je thuis binnen 7-14 werkdagen</span>
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-3">
+                <span className="col-span-2 flex items-center gap-1.5 text-green-700 dark:text-green-400 sm:col-span-3"><Check className="h-3.5 w-3.5" />Bij je thuis binnen 7-14 werkdagen</span>
                 <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
                 <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />1 jaar garantie</span>
                 <span className="flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" />iDEAL / PayPal</span>
