@@ -46,7 +46,7 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl animate-fade-in md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl md:hidden"
     >
       <div className="mx-auto flex max-w-md items-center gap-3">
         <div className="h-12 w-12 flex-none overflow-hidden rounded-md bg-muted">
