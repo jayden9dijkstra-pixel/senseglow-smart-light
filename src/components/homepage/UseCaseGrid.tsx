@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import { MoonStar, ChefHat, Footprints, DoorOpen, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
+import wallLampHomepageAsset from "@/assets/wall-lamp-homepage-square.png.asset.json";
+import waveHomepageAsset from "@/assets/wave-homepage-square.png.asset.json";
+import ambientHomepageAsset from "@/assets/ambient-homepage-square.png.asset.json";
+
+const homepageImages: Record<string, { url: string; altText: string }> = {
+  senseglow_wall_lamp: {
+    url: wallLampHomepageAsset.url,
+    altText: "SenseGlow Wall Lamp naast een bed",
+  },
+  senseglow_wave: {
+    url: waveHomepageAsset.url,
+    altText: "SenseGlow Wave onder een wandplank",
+  },
+  senseglow_ambient_motion_bar: {
+    url: ambientHomepageAsset.url,
+    altText: "SenseGlow Ambient Bar boven een wastafel",
+  },
+};
 
 const tiles = [
   {
@@ -62,7 +80,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
             {tiles.map(({ icon: Icon, title, body, href }, i) => {
               const handle = href.replace("/product/", "");
               const product = productsByHandle.get(handle);
-              const image = product?.node.images?.edges?.[0]?.node;
+               const image = homepageImages[handle] || product?.node.images?.edges?.[0]?.node;
 
               return (
                 <Link
@@ -71,16 +89,12 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                   className="group text-left overflow-hidden rounded-2xl border border-foreground/8 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow"
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
-                  <div className="relative aspect-video overflow-hidden bg-muted/10">
+                   <div className="relative aspect-square overflow-hidden bg-muted/10">
                     {image?.url ? (
                       <img
                         src={image.url}
                         alt={image.altText || product?.node.title || title}
-                         className={`w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
-                           handle === "senseglow_ambient_motion_bar"
-                             ? "object-contain p-3"
-                             : "object-cover"
-                         }`}
+                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                         loading="lazy"
                       />
                     ) : (
