@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import heroImage from "@/assets/hero-lifestyle.png?w=1920&format=webp";
-import heroImageSrcSet from "@/assets/hero-lifestyle.png?w=768;1280;1920&format=webp&as=srcset";
+import homepageHero from "@/assets/wave-landscape-homepage.png.asset.json";
 import { HOMEPAGE_HERO_VIDEO_URL } from "@/lib/videos";
 
 export const HeroSection = () => {
@@ -19,7 +18,7 @@ export const HeroSection = () => {
       {heroVideoUrl ? (
         <video
           src={heroVideoUrl}
-          poster={heroImage}
+          poster={homepageHero.url}
           autoPlay
           muted
           loop
@@ -29,10 +28,9 @@ export const HeroSection = () => {
         />
       ) : (
         <img
-          src={heroImage}
-          srcSet={heroImageSrcSet}
+          src={homepageHero.url}
           sizes="100vw"
-          alt="Warme sensorverlichting die aangaat in een donkere hal"
+          alt="SenseGlow verlichting onder keukenkasten in een warme keuken"
           loading="eager"
           {...{ fetchpriority: "high" }}
           className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25"
