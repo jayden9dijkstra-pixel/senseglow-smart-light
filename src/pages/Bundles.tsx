@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Loader2, PackageCheck, Palette, PiggyBank } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { PackageCheck, Palette, PiggyBank } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -10,53 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
-import { useCartStore } from "@/stores/cartStore";
-
-type BundleDef = {
-  id: string;
-  name: string;
-  tagline: string;
-  handles: string[];
-  rate: number;
-  code: string;
-  packSize: 2 | 3 | 4;
-};
-
-const BUNDLES: BundleDef[] = [
-  {
-    id: "kast",
-    name: "Kast Starter",
-    tagline: "Voor keuken, kast en werkblad.",
-    handles: ["senseglow_wave", "senseglow_ambient_motion_bar"],
-    rate: 0.1,
-    code: "SG-KAST",
-    packSize: 2,
-  },
-  {
-    id: "hal",
-    name: "Hal Starter",
-    tagline: "Voor gang, trap en overloop.",
-    handles: ["senseglow_ambient_motion_bar", "senseglow_wall_lamp"],
-    rate: 0.08,
-    code: "SG-HAL",
-    packSize: 2,
-  },
-  {
-    id: "wholehome",
-    name: "Whole Home",
-    tagline: "Alle vijf lampen, binnen en buiten.",
-    handles: [
-      "senseglow_wave",
-      "senseglow_ambient_motion_bar",
-      "senseglow_wall_lamp",
-      "senseglow_solar_lantern",
-      "senseglow_flex",
-    ],
-    rate: 0.08,
-    code: "SG-WHOLEHOME",
-    packSize: 4,
-  },
-];
+import { BundleShowcase } from "@/components/bundles/BundleShowcase";
 
 const REASONS = [
   {
@@ -95,10 +47,7 @@ const FAQ = [
   },
 ];
 
-const euro = (value: number) => `€${value.toFixed(2).replace(".", ",")}`;
-
 const Bundles = () => {
-  const addItem = useCartStore((state) => state.addItem);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -120,42 +69,11 @@ const Bundles = () => {
     };
   }, []);
 
-  const byHandle = useMemo(
-    () => new Map(products.map((p) => [p.node.handle, p])),
-    [products]
-  );
-
-  const handleAdd = (bundle: BundleDef) => {
-    const picked = bundle.handles
-      .map((handle) => byHandle.get(handle))
-      .filter((p): p is ShopifyProduct => Boolean(p));
-    if (picked.length !== bundle.handles.length) return;
-
-    picked.forEach((product) => {
-      const variant = product.node.variants.edges[0]?.node;
-      if (!variant) return;
-      addItem({
-        product,
-        variantId: variant.id,
-        variantTitle: variant.title,
-        price: variant.price,
-        quantity: 1,
-        selectedOptions: variant.selectedOptions || [],
-        isBundle: true,
-        bundleName: bundle.name,
-        bundleVariantLabel: product.node.title,
-        bundlePackSize: bundle.packSize,
-        bundleRate: bundle.rate,
-        bundleDiscountCode: bundle.code,
-      });
-    });
-  };
-
   return (
     <PageLayout>
       {/* Hero */}
-      <section className="py-20 md:py-28 bg-background">
-        <div className="container">
+      <section className="w-full bg-background py-16 md:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-5">
             <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
               Bundels met korting
@@ -171,99 +89,27 @@ const Bundles = () => {
       </section>
 
       {/* Bundle cards */}
-      <section className="pb-20 md:pb-28 bg-background">
-        <div className="container">
-          {loading ? (
-            <div className="flex justify-center py-16">
-              <Loader2 className="w-5 h-5 animate-spin text-foreground/30" />
+      <section className="w-full bg-background pb-16 md:pb-24 lg:pb-32">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <BundleShowcase products={products} loading={loading} failed={failed} immersive />
+
+          <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-lg border border-dashed border-primary/40 bg-primary/5 p-7 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase text-primary">Binnenkort</p>
+              <h2 className="mt-2 text-2xl font-bold text-foreground">Bouw je eigen combinatie</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Kies straks zelf de lampen die het beste bij jouw huis passen.</p>
             </div>
-          ) : failed ? (
-            <p className="text-center text-foreground/70 py-16">
-              De bundels konden nu niet geladen worden. Probeer het later opnieuw.
-            </p>
-          ) : (
-            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {BUNDLES.map((bundle) => {
-                const picked = bundle.handles
-                  .map((handle) => byHandle.get(handle))
-                  .filter((p): p is ShopifyProduct => Boolean(p));
-                const available = picked.length === bundle.handles.length;
-                const full = picked.reduce(
-                  (sum, p) => sum + parseFloat(p.node.priceRange.minVariantPrice.amount),
-                  0
-                );
-                const discounted = full * (1 - bundle.rate);
-                const image = picked[0]?.node.images?.edges?.[0]?.node;
-
-                return (
-                  <div
-                    key={bundle.id}
-                    className="flex flex-col overflow-hidden rounded-2xl border border-foreground/8 bg-background-secondary/40 hover:border-glow/40 transition-colors duration-500"
-                  >
-                    <div className="relative aspect-[4/3] bg-muted/10 overflow-hidden">
-                      {image?.url && (
-                        <img
-                          src={image.url}
-                          alt={bundle.name}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                      )}
-                      <span className="absolute top-4 left-4 rounded-full bg-glow text-background text-[11px] font-semibold uppercase tracking-[0.15em] px-3 py-1.5">
-                        {Math.round(bundle.rate * 100)}% korting
-                      </span>
-                    </div>
-
-                    <div className="p-7 flex flex-col flex-1">
-                      <h2 className="text-xl font-bold text-foreground mb-2">{bundle.name}</h2>
-                      <p className="text-sm text-foreground/60 mb-5">{bundle.tagline}</p>
-
-                      <ul className="space-y-2 mb-6">
-                        {picked.map((p) => (
-                          <li key={p.node.handle} className="text-sm text-foreground/70">
-                            <Link
-                              to={`/product/${p.node.handle}`}
-                              className="hover:text-glow transition-colors"
-                            >
-                              {p.node.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {available && (
-                        <div className="flex items-baseline gap-3 mb-6">
-                          <span className="text-sm text-foreground/40 line-through">
-                            {euro(full)}
-                          </span>
-                          <span className="text-2xl font-bold text-foreground">
-                            {euro(discounted)}
-                          </span>
-                        </div>
-                      )}
-
-                      <Button
-                        onClick={() => handleAdd(bundle)}
-                        disabled={!available}
-                        className="mt-auto w-full rounded-full"
-                      >
-                        Voeg bundel toe
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+            <span className="rounded-full border border-primary/30 px-4 py-2 text-sm text-primary">In ontwikkeling</span>
+          </div>
         </div>
       </section>
 
       {/* Waarom een bundel */}
-      <section className="py-16 md:py-20 bg-background-secondary">
-        <div className="container">
-          <div className="max-w-5xl mx-auto">
+      <section className="w-full bg-background-secondary py-16 md:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <div>
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-10 text-center">
-              Waarom een bundel?
+              Waarom bundelen
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {REASONS.map(({ icon: Icon, title, body }) => (
@@ -279,8 +125,8 @@ const Bundles = () => {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 md:py-28 bg-background">
-        <div className="container">
+      <section className="w-full bg-background py-16 md:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
               Vragen over bundels

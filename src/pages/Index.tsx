@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { HeroSection } from "@/components/homepage/HeroSection";
 import { TrustBar } from "@/components/homepage/TrustBar";
 import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
+import { HomeBundlesSection } from "@/components/homepage/HomeBundlesSection";
 import { WhatTheyShare } from "@/components/homepage/WhatTheyShare";
 import { StorytellingSection } from "@/components/homepage/StorytellingSection";
 import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
@@ -54,46 +56,25 @@ const Index = () => {
         <UseCaseGrid products={products} />
       </div>
 
-      {/* Editorial separator */}
-      <div className="container">
-        <div className="max-w-6xl mx-auto border-t border-foreground/6" />
-      </div>
+      <HomeBundlesSection products={products} loading={loading} failed={failed} />
 
       {/* 3. WhatTheyShare */}
       <WhatTheyShare />
 
-      {/* Curved transition into Storytelling */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
-      <div className="bg-background-secondary relative z-10">
+      <div className="w-full bg-background-secondary">
         {/* 4. Storytelling */}
         <StorytellingSection />
       </div>
 
-      {/* Curved transition back */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
       {/* 5. QuizIntro */}
-      <div className="bg-background-secondary">
+      <div className="w-full bg-background-secondary">
         <QuizIntroSection />
       </div>
 
-      {/* Curved transition back */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
       {/* 7. Naar de volledige collectie */}
-      <section className="py-20 md:py-24 bg-background">
-        <div className="container">
-          <div className="max-w-6xl mx-auto text-center">
+      <section className="w-full bg-background py-16 md:py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <div className="text-center">
             {loading ? (
               <div className="flex justify-center items-center py-6">
                 <Loader2 className="w-5 h-5 animate-spin text-foreground/30" />
@@ -103,13 +84,14 @@ const Index = () => {
                 <p className="text-foreground/70 mb-3">
                   De collectie kon nu niet geladen worden. Dit is een tijdelijke storing.
                 </p>
-                <button
+                <Button
+                  variant="link"
                   type="button"
                   onClick={() => setAttempt((a) => a + 1)}
-                  className="text-[11px] uppercase tracking-[0.25em] text-glow hover:text-glow/80 transition-colors"
+                  className="text-[11px] uppercase tracking-[0.25em] text-glow"
                 >
                   Opnieuw proberen →
-                </button>
+                </Button>
               </div>
             ) : (
               <>
@@ -117,12 +99,9 @@ const Index = () => {
                 <p className="text-base text-foreground/60 mb-8">
                   Bekijk alle lampen met prijzen, maten en kleuren.
                 </p>
-                <a
-                  href="/producten"
-                  className="text-[11px] uppercase tracking-[0.25em] text-glow hover:text-glow/80 transition-colors duration-500"
-                >
-                  Bekijk alle producten →
-                </a>
+                <Button asChild variant="link" className="text-[11px] uppercase tracking-[0.25em] text-glow">
+                  <a href="/producten">Bekijk alle producten →</a>
+                </Button>
               </>
             )}
           </div>
@@ -131,12 +110,7 @@ const Index = () => {
 
 
       {/* 8. FAQ */}
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background-secondary rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
-
-      <div id="faq" className="bg-background-secondary">
+      <div id="faq" className="w-full bg-background-secondary">
         <FAQSection />
       </div>
 
@@ -145,10 +119,6 @@ const Index = () => {
 
       <ScrollToTop />
 
-      <div className="relative h-16 md:h-24">
-        <div className="absolute inset-x-0 top-0 h-full bg-background-secondary" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-background rounded-t-[60px] md:rounded-t-[80px]" />
-      </div>
     </PageLayout>
   );
 };
