@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
 import { MoonStar, ChefHat, Footprints, DoorOpen, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
+import ambientCardImage from "@/assets/ambient-home-card.png.asset.json";
+import waveCardImage from "@/assets/wave-home-card.png.asset.json";
+import wallLampCardImage from "@/assets/wall-lamp-home-card.png.asset.json";
+
+const featuredImages: Record<string, string> = {
+  senseglow_ambient_motion_bar: ambientCardImage.url,
+  senseglow_wave: waveCardImage.url,
+  senseglow_wall_lamp: wallLampCardImage.url,
+};
 
 const tiles = [
   {
@@ -63,6 +72,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
               const handle = href.replace("/product/", "");
               const product = productsByHandle.get(handle);
               const image = product?.node.images?.edges?.[0]?.node;
+              const imageUrl = featuredImages[handle] || image?.url;
 
               return (
                 <Link
@@ -72,15 +82,11 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
                   <div className="relative aspect-video overflow-hidden bg-muted/10">
-                    {image?.url ? (
+                    {imageUrl ? (
                       <img
-                        src={image.url}
+                        src={imageUrl}
                         alt={image.altText || product?.node.title || title}
-                         className={`w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
-                           handle === "senseglow_ambient_motion_bar"
-                             ? "object-contain p-3"
-                             : "object-cover"
-                         }`}
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                         loading="lazy"
                       />
                     ) : (
