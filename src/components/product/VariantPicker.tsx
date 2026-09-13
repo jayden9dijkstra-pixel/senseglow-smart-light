@@ -310,7 +310,7 @@ export const VariantPicker = ({
     label: string; hint?: string; values: string[]; selected: string;
     onChange: (v: string) => void; highlightValue?: string;
   }) => (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
         {hint && <span className="text-xs text-foreground/40">{hint}</span>}
@@ -324,7 +324,7 @@ export const VariantPicker = ({
               key={v}
               onClick={() => onChange(v)}
               className={cn(
-                "relative flex-1 min-w-[60px] py-4 px-3 rounded-lg border transition-all duration-500 ease-out",
+                "relative flex-1 min-w-[60px] py-3 px-3 rounded-lg border transition-all duration-500 ease-out",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-glow/50",
                 isSelected
                   ? "border-glow bg-glow/5 shadow-[0_0_20px_-5px_hsl(var(--glow)/0.3),inset_0_1px_0_0_hsl(var(--glow)/0.1)]"
@@ -351,7 +351,7 @@ export const VariantPicker = ({
   }: {
     label: string; values: string[]; selected: string; onChange: (v: string) => void;
   }) => (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <div className="flex items-center gap-3">
         <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
         <span className="text-xs text-foreground/40 capitalize">{selected}</span>
@@ -393,7 +393,7 @@ export const VariantPicker = ({
 
   if (productType === "arc") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         {wattages.length > 1 && (
           <PillPicker label="Vermogen" hint="Kies het vermogen dat past bij je ruimte" values={wattages} selected={selectedWattage} onChange={handleWattageChange} highlightValue="12W" />
         )}
@@ -409,7 +409,7 @@ export const VariantPicker = ({
 
   if (productType === "flex") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         {colors.length > 1 && (
           <SwatchPicker label="Kleur" values={colors} selected={selectedColor} onChange={handleColorChange} />
         )}
@@ -425,7 +425,7 @@ export const VariantPicker = ({
   const sizeLabel = isCmSize ? "Lengte" : "Maat";
   const sizeHint = isCmSize ? "Kies de lengte die past bij jouw ruimte" : "Kies de set die past bij jouw ruimte";
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {sizes.length > 1 && (
         <PillPicker label={sizeLabel} hint={sizeHint} values={sizes} selected={selectedSize} onChange={handleSizeChange} highlightValue={sizes.find((s) => s.includes("30")) || sizes.find((s) => s.includes("8"))} />
       )}

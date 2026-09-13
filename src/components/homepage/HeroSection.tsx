@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-lifestyle.png?w=1920&format=webp";
 import heroImageSrcSet from "@/assets/hero-lifestyle.png?w=768;1280;1920&format=webp&as=srcset";
+import { HOMEPAGE_HERO_VIDEO_URL } from "@/lib/videos";
 
 export const HeroSection = () => {
   const navigate = useNavigate();
@@ -14,16 +15,28 @@ export const HeroSection = () => {
 
   return (
     <section className="relative isolate overflow-hidden hero-gradient">
-      {/* Lifestyle achtergrond, subtiel */}
-      <img
-        src={heroImage}
-        srcSet={heroImageSrcSet}
-        sizes="100vw"
-        alt="Warme sensorverlichting die aangaat in een donkere hal"
-        loading="eager"
-        {...{ fetchpriority: "high" }}
-        className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25"
-      />
+      {HOMEPAGE_HERO_VIDEO_URL ? (
+        <video
+          src={HOMEPAGE_HERO_VIDEO_URL}
+          poster={heroImage}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-label="SenseGlow Wave in een warme keuken"
+          className="absolute inset-0 -z-10 h-full w-full object-cover opacity-35"
+        />
+      ) : (
+        <img
+          src={heroImage}
+          srcSet={heroImageSrcSet}
+          sizes="100vw"
+          alt="Warme sensorverlichting die aangaat in een donkere hal"
+          loading="eager"
+          {...{ fetchpriority: "high" }}
+          className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25"
+        />
+      )}
       <div className="absolute inset-0 -z-10 hero-gradient-overlay" />
 
       <div className="container">
