@@ -6,6 +6,7 @@ import { HOMEPAGE_HERO_VIDEO_URL } from "@/lib/videos";
 
 export const HeroSection = () => {
   const navigate = useNavigate();
+  const heroVideoUrl = HOMEPAGE_HERO_VIDEO_URL.trim();
 
   const scrollToProducts = () => {
     const el = document.getElementById("products");
@@ -15,9 +16,9 @@ export const HeroSection = () => {
 
   return (
     <section className="relative isolate overflow-hidden hero-gradient">
-      {HOMEPAGE_HERO_VIDEO_URL ? (
+      {heroVideoUrl ? (
         <video
-          src={HOMEPAGE_HERO_VIDEO_URL}
+          src={heroVideoUrl}
           poster={heroImage}
           autoPlay
           muted
