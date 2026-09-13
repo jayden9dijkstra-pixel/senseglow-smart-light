@@ -11,6 +11,8 @@ import { ProductReviewsSection } from "@/components/product/ProductReviewsSectio
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
 import { HowItWorksSection } from "@/components/product/HowItWorksSection";
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
+import { MobileAddToCartBar } from "@/components/product/MobileAddToCartBar";
+import { purchaseFaqs } from "@/components/product/ProductFAQSection";
 import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { getProductContent } from "@/lib/productContent";
@@ -173,19 +175,20 @@ const ProductDetail = () => {
 
       <Curve from="bg-background" to="bg-background-secondary" />
 
-      <div className="bg-background-secondary">
-        <ProductFAQSection subtitle={faqSubtitle} faqs={faqs} />
-      </div>
-
-      <Curve from="bg-background-secondary" to="bg-background" />
-
       {handle && <ProductRelatedSection currentHandle={handle} />}
+
+      <ProductFAQSection
+        subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
+        faqs={purchaseFaqs}
+      />
 
       <FinalProductCTA
         headline={finalCta?.headline}
         subtext={finalCta?.subtext}
         ctaLabel={finalCta?.cta}
       />
+
+      <MobileAddToCartBar product={product} selectedVariant={selectedVariant} />
     </PageLayout>
   );
 };
