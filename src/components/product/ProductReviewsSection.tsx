@@ -4,8 +4,8 @@
  */
 export const ProductReviewsSection = () => {
   return (
-    <section id="reviews" className="scroll-mt-24 overflow-hidden bg-background py-16 md:py-24">
-      <div className="container">
+    <section id="reviews" className="w-full scroll-mt-24 overflow-hidden bg-background py-16 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-2xl mx-auto text-center space-y-4">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground">
             Klantreviews

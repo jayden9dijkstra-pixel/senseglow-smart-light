@@ -188,12 +188,35 @@ html {
     animation: fadeIn 1200ms ease-out forwards;
   }
 
+  .animate-bundle-rise {
+    opacity: 0;
+    animation: bundleRise 700ms ease-out forwards;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
     }
     to {
       opacity: 1;
+    }
+  }
+
+  @keyframes bundleRise {
+    from {
+      opacity: 0;
+      transform: translateY(-18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-bundle-rise {
+      opacity: 1;
+      animation: none;
     }
   }
 

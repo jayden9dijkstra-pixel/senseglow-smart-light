@@ -47,8 +47,8 @@ const trustIcons = [
 
 export const FAQSection = () => {
   return (
-    <section className="py-24 md:py-32 bg-background-secondary">
-      <div className="container">
+    <section className="w-full bg-background-secondary py-16 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-4xl mx-auto animate-fade-in-slow">
           <div className="text-center mb-16">
             <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-5">
