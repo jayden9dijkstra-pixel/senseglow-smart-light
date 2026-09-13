@@ -126,47 +126,40 @@ const ProductDetail = () => {
 
   return (
     <PageLayout seo={seo}>
+      <div className="w-full overflow-hidden">
+        <ProductHeroSection
+          product={product}
+          selectedVariant={selectedVariant}
+          onVariantChange={setSelectedVariant}
+          heroContent={hero}
+        />
 
-      <ProductHeroSection
-        product={product}
-        selectedVariant={selectedVariant}
-        onVariantChange={setSelectedVariant}
-        heroContent={hero}
-      />
-
-      <div className="bg-background-secondary">
         <BundlesSection
           product={product}
           selectedVariant={selectedVariant || undefined}
           headlineOverride={bundleHeadline}
         />
+
+        <ProductReviewsSection />
+        <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
+        <HowItWorksSection headline={stepsHeadline} steps={steps} />
+        <BeforeAfterSection
+          headline={beforeAfterHeadline}
+          beforeLabel={beforeLabel}
+          afterLabel={afterLabel}
+          rows={beforeAfter}
+        />
+        <FinalProductCTA
+          headline={finalCta?.headline}
+          subtext={finalCta?.subtext}
+          ctaLabel={finalCta?.cta}
+        />
+        {handle && <ProductRelatedSection currentHandle={handle} />}
+        <ProductFAQSection
+          subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
+          faqs={purchaseFaqs}
+        />
       </div>
-
-      <ProductReviewsSection />
-
-      <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
-
-      <HowItWorksSection headline={stepsHeadline} steps={steps} />
-
-      <BeforeAfterSection
-        headline={beforeAfterHeadline}
-        beforeLabel={beforeLabel}
-        afterLabel={afterLabel}
-        rows={beforeAfter}
-      />
-
-      <FinalProductCTA
-        headline={finalCta?.headline}
-        subtext={finalCta?.subtext}
-        ctaLabel={finalCta?.cta}
-      />
-
-      {handle && <ProductRelatedSection currentHandle={handle} />}
-
-      <ProductFAQSection
-        subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
-        faqs={purchaseFaqs}
-      />
 
       <MobileAddToCartBar product={product} selectedVariant={selectedVariant} />
     </PageLayout>
