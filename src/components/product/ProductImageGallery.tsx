@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { ChevronLeft, ChevronRight, X, Grid2X2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Grid2X2, Play, Volume2, VolumeX } from "lucide-react";
 import { Dialog, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface ProductImage {
   url: string;
@@ -11,11 +12,14 @@ interface ProductImage {
 interface ProductImageGalleryProps {
   images: ProductImage[];
   productTitle: string;
+  videoUrl?: string;
 }
 
-export const ProductImageGallery = ({ images, productTitle }: ProductImageGalleryProps) => {
+export const ProductImageGallery = ({ images, productTitle, videoUrl = "" }: ProductImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   
   // Touch/swipe handling
@@ -154,6 +158,21 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 </div>
               ))}
             </div>
+
+            {videoUrl && (
+              <Button
+                type="button"
+                size="icon"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setIsVideoOpen(true);
+                }}
+                className="absolute bottom-4 left-4 h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
+                aria-label="Bekijk productvideo"
+              >
+                <Play className="h-5 w-5 fill-current" />
+              </Button>
+            )}
 
             {/* Desktop navigation arrows - subtle, minimal */}
             {images.length > 1 && (
@@ -323,6 +342,44 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
           </DialogPrimitive.Content>
         </DialogPortal>
       </Dialog>
+
+      {videoUrl && (
+        <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+          <DialogPortal>
+            <DialogOverlay />
+            <DialogPrimitive.Content className="fixed inset-0 z-50 flex h-[100dvh] w-[100dvw] items-center justify-center bg-foreground p-0 outline-none">
+              <DialogPrimitive.Title className="sr-only">Productvideo van {productTitle}</DialogPrimitive.Title>
+              <video
+                src={videoUrl}
+                autoPlay
+                muted={isMuted}
+                loop
+                playsInline
+                className="h-full w-full object-contain"
+              />
+              <Button
+                type="button"
+                size="icon"
+                variant="secondary"
+                onClick={() => setIsVideoOpen(false)}
+                className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] h-11 w-11 rounded-full"
+                aria-label="Video sluiten"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setIsMuted((value) => !value)}
+                className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 min-h-11 -translate-x-1/2 rounded-full px-5"
+              >
+                {isMuted ? <VolumeX className="mr-2 h-4 w-4" /> : <Volume2 className="mr-2 h-4 w-4" />}
+                {isMuted ? "Geluid aan" : "Geluid uit"}
+              </Button>
+            </DialogPrimitive.Content>
+          </DialogPortal>
+        </Dialog>
+      )}
     </>
   );
 };
