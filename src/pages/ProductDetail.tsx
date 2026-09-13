@@ -173,13 +173,13 @@ const ProductDetail = () => {
 
       <Curve from="bg-background" to="bg-background-secondary" />
 
-      {handle && <ProductRelatedSection currentHandle={handle} />}
-
       <FinalProductCTA
         headline={finalCta?.headline}
         subtext={finalCta?.subtext}
         ctaLabel={finalCta?.cta}
       />
+
+      {handle && <ProductRelatedSection currentHandle={handle} />}
 
       <ProductFAQSection
         subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
