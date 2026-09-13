@@ -50,8 +50,6 @@ const ProductDetail = () => {
   const beforeLabel = content?.beforeLabel;
   const afterLabel = content?.afterLabel;
   const beforeAfter = content?.beforeAfter;
-  const faqSubtitle = content?.faqSubtitle ?? fallback?.faqSubtitle;
-  const faqs = content?.faqs ?? fallback?.faqs;
   const bundleHeadline = content?.bundleHeadline ?? fallback?.bundleHeadline;
   const finalCta = content?.finalCta ?? fallback?.finalCta;
 
