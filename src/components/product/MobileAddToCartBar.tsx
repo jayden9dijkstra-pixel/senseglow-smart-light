@@ -20,12 +20,14 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
     const hero = document.getElementById("product-hero");
     if (!hero) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setVisible(!entry.isIntersecting && entry.boundingClientRect.bottom < 0),
-      { threshold: 0 }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
+    const updateVisibility = () => setVisible(hero.getBoundingClientRect().bottom <= 0);
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+    };
   }, []);
 
   const handleAdd = () => {
