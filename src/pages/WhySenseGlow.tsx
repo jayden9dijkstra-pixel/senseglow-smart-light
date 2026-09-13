@@ -96,7 +96,7 @@ const WhySenseGlow = () => {
               </div>
               <div>
                 <dt className="text-foreground/40 mb-1">KVK</dt>
-                <dd className="text-foreground/80">94904929</dd>
+                <dd className="text-foreground/80">99634929</dd>
               </div>
               <div>
                 <dt className="text-foreground/40 mb-1">BTW</dt>
