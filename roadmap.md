@@ -13,3 +13,12 @@
 - Contactformulier met echte aflevering: nu opent de knop de mailapp (geen valse succesmelding). Voor verzending vanaf de site is een e-maildienst-sleutel nodig.
 - Merchant Center: 32 artikelen = 32 varianten van 5 producten (5+5+6+7+9). Feedinstellingen, domeinclaim en afkeuringsdetails niet gecontroleerd — geen toegang.
 - Publiceren: wijzigingen staan nog niet op het openbare domein.
+
+## Ronde 3 optimalisatie
+- [ ] Mobiele sticky winkelwagenbalk na het bovenste productgedeelte
+- [ ] Reviewplaceholder en reviews-anker
+- [ ] Aangeleverde voorraadindicatie per product
+- [ ] Productvideo-modal en homepage-videofallback via centrale configuratie
+- [ ] Compact koopgedeelte op desktop
+- [ ] Drie echte catalogusaanbevelingen en compacte FAQ onderaan
+- [ ] Mobiel en desktop testen en publiceren
