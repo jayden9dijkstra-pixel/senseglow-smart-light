@@ -15,10 +15,10 @@
 - Publiceren: wijzigingen staan nog niet op het openbare domein.
 
 ## Ronde 3 optimalisatie
-- [ ] Mobiele sticky winkelwagenbalk na het bovenste productgedeelte
-- [ ] Reviewplaceholder en reviews-anker
-- [ ] Eén groene beschikbaarheidsmelding voor alle producten, zonder aantallen of schaarstetaal
-- [ ] Productvideo-modal en homepage-videofallback via centrale configuratie
-- [ ] Compact koopgedeelte op desktop
-- [ ] Drie echte catalogusaanbevelingen en compacte FAQ onderaan
+- [x] Mobiele sticky winkelwagenbalk na het bovenste productgedeelte
+- [x] Reviewplaceholder en reviews-anker
+- [x] Eén groene beschikbaarheidsmelding voor alle producten, zonder aantallen of schaarstetaal
+- [x] Productvideo-modal en homepage-videofallback via centrale configuratie
+- [x] Compact koopgedeelte op desktop
+- [x] Drie echte catalogusaanbevelingen en compacte FAQ onderaan
 - [ ] Mobiel en desktop testen en publiceren
