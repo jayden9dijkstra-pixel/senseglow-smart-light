@@ -16,9 +16,9 @@ export const ProblemSolutionProductSection = ({
   solutionText = "SenseGlow™ springt automatisch aan, geeft warm licht, en begeleidt je lichaam kalm door de nacht.",
 }: ProblemSolutionProductSectionProps) => {
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-b from-muted/20 to-background">
-      <div className="container">
-        <div className="max-w-6xl mx-auto">
+    <section className="w-full bg-gradient-to-b from-muted/20 to-background py-16 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div>
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">{headline}</h2>

@@ -51,7 +51,6 @@ const navItems: NavItem[] = [
 const mobileLinks: NavChild[] = [
   { label: "Alle producten", href: "/producten" },
   ...navItems.flatMap((i) => i.children ?? []),
-  { label: "Bundels", hint: "Combineer en bespaar", href: "/bundels" },
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   { label: "Bestelling volgen", href: "/bestelling-volgen" },
   { label: "Contact", href: "/contact" },

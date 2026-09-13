@@ -16,9 +16,9 @@ export const OutcomeSection = ({
   outcomes = defaultOutcomes 
 }: OutcomeSectionProps) => {
   return (
-    <section className="py-20 md:py-32 bg-background">
-      <div className="container">
-        <div className="max-w-6xl mx-auto">
+    <section className="w-full bg-background py-16 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div>
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">{headline}</h2>
           </div>

@@ -93,7 +93,7 @@ export function BundleShowcase({ products, loading, failed, immersive = false }:
                 <Sparkles className="h-3.5 w-3.5" /> Bespaar {Math.round(bundle.rate * 100)}%
               </span>
 
-              <div className="mb-5 translate-y-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <div className="mb-5 translate-y-0 opacity-100 transition-all duration-500 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
                 <div className="flex flex-wrap items-center gap-2">
                   {picked.map((product, productIndex) => (
                     <div key={product.node.handle} className="contents">

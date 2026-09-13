@@ -13,17 +13,17 @@ import { BundleShowcase } from "@/components/bundles/BundleShowcase";
 const REASONS = [
   {
     icon: PackageCheck,
-    title: "Direct alles in huis",
-    body: "Eén levering, één keer plakken en je bent klaar.",
+    title: "Alles in 1 zending",
+    body: "Je ontvangt de gekozen lampen samen in één bestelling.",
   },
   {
     icon: Palette,
-    title: "Consistent design overal",
-    body: "Dezelfde warme lichtkleur en afwerking in elke ruimte.",
+    title: "Consistente warme sfeer",
+    body: "Laat dezelfde rustige lichtsfeer terugkomen in meerdere ruimtes.",
   },
   {
     icon: PiggyBank,
-    title: "Meer korting bij meer lampen",
+    title: "Meer korting bij meer",
     body: "De korting rekent automatisch af in de checkout.",
   },
 ];
