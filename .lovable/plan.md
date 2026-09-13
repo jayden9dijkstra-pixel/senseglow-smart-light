@@ -1,59 +1,42 @@
-# SenseGlow herstel: catalogus, reviews, transparantie
+# Site-optimalisatie ronde 3
 
-## Wat het onderzoek nu al aantoont
+## Resultaat
+De productpagina krijgt een compacter koopgedeelte, eerlijke reviewstatus, aangeleverde voorraadmeldingen, video-voorbereiding, een mobiele winkelbalk en drie echte catalogusaanbevelingen. De homepage krijgt een videolaag met de bestaande foto als fallback.
 
-- **/producten is niet leeg voor bezoekers.** Live test met een echte browser: de pagina toont alle 5 producten, 5 werkende productlinks, geen fouten. De winkel levert ook precies 5 producten: Ambient Motion Bar, Wave, Wall Lamp, Solar Lantern, Flex.
-- **Maar in de kant-en-klare paginabron staat de lijst niet.** `/producten` wordt vooraf gebouwd zonder producten, terwijl productpagina's dat wél hebben. Wie de pagina beoordeelt zonder scripts (zoals een controle-robot) ziet dus een lege collectie. Dat is de waarschijnlijke bron van de melding.
-- **Alle reviews op de site zijn testreviews van vrienden/familie**, verspreid over vijf plekken: de homepage-carrousel, de sfeersectie, de reviewsectie op productpagina's, de losse teksten in het productbestand, en de "4.7/5" met sterren op de productkaart.
-- **Bedrijfsgegevens staan er al** (Jayden Ecom, KvK 99634929, BTW NL005399692B39, Kimswerd). Wel spreken de pagina's elkaar tegen over verzending: "magazijn buiten Nederland", "logistiek partner in Europa", "1-3 werkdagen verzenden, 7-14 dagen bezorgen", en elders 5-10 dagen.
-- **Toegang tot je Shopify-beheer is verlopen** en Merchant Center kan ik niet inzien. De 32 artikelen kan ik daardoor niet zelf nakijken.
+## Uitvoering
+1. **Centrale productpresentatie**
+   - Voeg `videos.ts` toe met lege velden per product en voor de homepage.
+   - Voeg een centrale voorraadmapping toe voor Wave 7, Ambient 15, Flex 4, Solar Lantern 12 en Wall Lamp 8.
+   - Toon onder 10 rood met vlam, anders groen met vinkje en de opgegeven verzendtekst.
 
-## Wat ik ga doen
+2. **Productgedeelte bovenaan**
+   - Herschik desktop naar foto/video links en compacte koopinformatie rechts.
+   - Toon titel, klikbare vijfsterren-placeholder, amber prijs, voorraad, drie korte voordelen, varianten, brede winkelwagenknop, Kast Starter-link en vier horizontale vertrouwenspunten.
+   - Houd dit op 1440×900 binnen het eerste scherm door afstanden en beeldhoogte te begrenzen.
 
-### 1. Catalogus ook zichtbaar in de kale paginabron
-De vooraf gebouwde versie van `/producten` en de homepage krijgt de echte productlijst mee (naam, foto, vanaf-prijs, link), opgehaald bij het bouwen uit de winkel. Bezoeker en robot zien dan hetzelfde.
+3. **Video-ervaring**
+   - Plaats alleen bij een ingevulde productvideo een afspeelknop op de galerij.
+   - Open de video schermvullend, automatisch, gedempt en herhalend, met sluiten en geluid aan/uit.
+   - Gebruik zonder URL automatisch de bestaande productfoto, zodat lege configuratie geen lege ruimte of fout geeft.
+   - De homepage gebruikt dezelfde aanpak: video op de achtergrond wanneer ingevuld, anders de huidige foto.
 
-### 2. Eerlijk onderscheid laden / fout / leeg
-Nu wordt elke mislukte aanvraag getoond als "Geen producten gevonden". Dat wordt: laden, of een duidelijke foutmelding met opnieuw-proberen, of pas bij een echt lege winkel de melding "geen producten".
+4. **Mobiele winkelbalk**
+   - Toon onder 768px zodra het bovenste productgedeelte uit beeld is.
+   - Neem actuele variantprijs, miniatuur, productnaam, reviewstatus en een amber winkelwagenknop van minimaal 44×44 op.
+   - Gebruik exact dezelfde geselecteerde variant en winkelwagenactie als de hoofdknop.
 
-### 3. Alle niet-echte reviews weg
-Volledig verwijderd uit de pagina's, niet verborgen:
-- homepage-carrousel met testimonials
-- sfeersectie met sterren en citaten
-- reviewsectie op alle vijf productpagina's
-- alle reviewteksten in het productbestand
-- de "4.7/5" en sterrenrij op productkaarten
-De oorspronkelijke teksten bewaar ik in één intern bestand dat niet op de site komt. Er komt geen enkel cijfer of ster voor in de plaats, en ook geen review-gegevens in de gestructureerde data (die staan er nu al niet in — ik controleer dat opnieuw na de wijziging). Op productpagina's komt een neutrale plek: "Nog geen klantreviews."
+5. **Reviews, aanbevelingen en FAQ**
+   - Maak de reviewplaceholder klikbaar naar `#reviews` en geef de bestaande eerlijke reviewsectie dat anker.
+   - Vervang de huidige vaste aanbevelingen door drie andere echte producten uit de actuele Shopify-catalogus.
+   - Zet “Vaak samen gekocht” onderaan, gevolgd door één compacte FAQ-accordion met vijf vragen over sensor door glas, accu, montage, defect en retour.
 
-### 4. Verzendinformatie gelijktrekken
-Eén set feiten op verzendpagina, voorwaarden, over-ons, footer en productpagina's. Ik gebruik alleen wat jij bevestigt (zie vragen hieronder) en verwijder tegenstrijdige zinnen. "Gratis verzending" blijft alleen staan als dat echt zo is.
-
-### 5. Vertrouwensclaims controleren
-Ik loop alle badges, urgentieteksten, kortingsclaims en tellers na en verwijder wat niet aantoonbaar is. Betaalmethoden blijven alleen als ze in de kassa echt worden aangeboden.
-
-### 6. Contactformulier echt laten bezorgen
-De knop opent nu de mailapp van de bezoeker; er wordt niets verstuurd als dat mislukt. Ik maak er een echt formulier van dat het bericht per e-mail naar support@senseglow.shop stuurt via de backend, met een eerlijke fout- en succesmelding.
-
-### 7. Technische controle en bewijs
-Ik test op mobiel en desktop: /producten en de vijf productpagina's direct openen en verversen, variant kiezen, in winkelwagen, doorgaan naar de kassa (zonder te betalen), links, afbeeldingen, doorverwijzing van senseglow.shop naar www, en of titels/prijzen in de gestructureerde data overeenkomen met het zichtbare. Ik lever schermafbeeldingen en een tabel: probleem, oorzaak, oplossing, geteste link, resultaat.
-
-## Wat ik niet doe
-
-- Geen verzonnen reviews, keurmerken, voorraad, levertijden of artikelcodes.
-- Geen 32 losse producten aanmaken.
-- Geen wijzigingen in Merchant Center of Shopify-instellingen (geen toegang).
+6. **Controle en publicatie**
+   - Controleer winkelwagenacties, varianten, modalbediening, ankers en foutvrije weergave.
+   - Test 390px mobiel en 1440×900 desktop, inclusief zichtbaarheidsgrens van de mobiele balk en videofallback.
+   - Bouw één keer en publiceer daarna naar productie.
 
 ## Technisch
-
-- `scripts/prerender.ts`: producten ophalen bij build en de kaartenlijst in de HTML van `/` en `/producten` schrijven.
-- `src/lib/shopify.ts`: `fetchProducts` geeft fouten door in plaats van een lege lijst; `Catalog.tsx` en `Index.tsx` krijgen drie toestanden.
-- Reviews verwijderen uit `ReviewsTeaserSection.tsx`, `LifestyleSection.tsx`, `ProductReviewsSection.tsx`, `ProductCard.tsx`, `productContent.ts`; archief in `src/lib/_internal/legacy-testreviews.ts` (niet geïmporteerd).
-- Contact: backend-functie `send-contact` met Resend, aangeroepen vanaf `Contact.tsx`.
-
-## Vragen die ik van jou nodig heb
-
-1. Wat is de echte levertijd (verwerken + bezorgen) en vanaf waar wordt verzonden?
-2. Is verzending werkelijk gratis, en alleen naar Nederland?
-3. Retouren: termijn, wie betaalt de retourkosten, en naar welk adres?
-4. Wil je dat ik je Shopify-beheer opnieuw koppel, zodat ik de 32 artikelen kan nakijken? Zo niet, stuur dan een export of schermafbeelding van de afkeuringsmeldingen.
-5. Voor het contactformulier heb ik een verzendsleutel van een e-maildienst nodig (bijvoorbeeld Resend) — akkoord?
+- De opgegeven aantallen worden als vaste, door jou aangeleverde voorraadwaarden getoond. Ze worden niet live uit Shopify gelezen.
+- De bestaande Shopify-producten en checkout blijven leidend voor namen, varianten, prijzen en winkelwagenregels.
+- De videovelden blijven bewust leeg; invullen activeert de video zonder verdere pagina-aanpassing.
+- Geen nieuwe reviewscore of klantclaim: de vijf sterren zijn alleen de gevraagde visuele placeholder naast “Nog geen reviews”.
