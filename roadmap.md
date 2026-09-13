@@ -18,7 +18,8 @@
 - [x] Bezorgtekst overal gelijkgezet op 7-14 werkdagen
 - [x] Video alleen tonen bij een ingevulde URL
 - [x] Productsecties gelijkmatig laten aansluiten
-- [ ] Eindcontrole en publiceren
+- [x] Eindcontrole afgerond
+- [ ] Publiceren
 
 ## Ronde 3 optimalisatie
 - [x] Mobiele sticky winkelwagenbalk na het bovenste productgedeelte
