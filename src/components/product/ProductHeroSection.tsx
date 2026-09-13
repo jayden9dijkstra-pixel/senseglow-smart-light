@@ -2,12 +2,14 @@ import { Button } from "@/components/ui/button";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 
 
 import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
-import { Check, Truck, RotateCcw, Shield } from "lucide-react";
+import { Check, Truck, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
+import { getProductVideoUrl } from "@/lib/videos";
 
 interface HeroContent {
   h1: string;
@@ -121,22 +123,23 @@ export const ProductHeroSection = ({
     : "0.00";
 
   return (
-    <section className="py-10 md:py-16 bg-background animate-fade-in-slow">
+    <section id="product-hero" className="py-6 md:py-8 bg-background animate-fade-in-slow">
       <div className="container">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-0">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] gap-0">
             {/* Left - Product Image Gallery */}
-            <div className="relative md:border-r border-foreground/10 md:pr-10 pb-8 md:pb-0">
+            <div className="relative md:border-r border-foreground/10 md:pr-8 pb-6 md:pb-0 md:max-h-[730px]">
               <ProductImageGallery
                 images={productImages}
                 productTitle={product.node.title}
+                videoUrl={getProductVideoUrl(product.node.handle)}
               />
             </div>
 
             {/* Right - Product Info */}
-            <div className="space-y-6 md:pl-10 pt-8 md:pt-0 border-t md:border-t-0 border-foreground/10 text-left">
-              <div className="space-y-2">
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
+            <div className="space-y-4 md:pl-8 pt-6 md:pt-0 border-t md:border-t-0 border-foreground/10 text-left">
+              <div className="space-y-1.5">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.08]">
                   {content.h1}
                 </h1>
                 <p className="text-base text-muted-foreground leading-relaxed">
@@ -144,39 +147,31 @@ export const ProductHeroSection = ({
                 </p>
               </div>
 
+              <a href="#reviews" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                <span className="flex" aria-label="Vijf sterren">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star key={index} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
+                </span>
+                <span>Nog geen reviews. Wees de eerste na je aankoop.</span>
+              </a>
+
               {/* Price with animation */}
               <div className="space-y-1">
                 <div className="flex items-baseline gap-4">
                   <span
                     key={priceKey}
-                    className="text-2xl font-bold text-foreground animate-fade-in"
+                    className="text-3xl font-bold text-primary animate-fade-in"
                     style={{ animation: "fade-in 0.4s ease-out" }}
                   >
                     €{displayPrice}
                   </span>
                 </div>
-                
+                <div className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
+                  <Check className="h-4 w-4" />
+                  <span>Op voorraad, verzonden binnen 1-3 werkdagen</span>
+                </div>
               </div>
-
-              {/* Bundle CTA Link */}
-              <button
-                onClick={() => {
-                  const bundlesSection = document.getElementById("bundels");
-                  if (bundlesSection) {
-                    bundlesSection.scrollIntoView({ behavior: "smooth", block: "start" });
-                    setTimeout(() => {
-                      bundlesSection.classList.add("bundle-highlight");
-                      setTimeout(() => {
-                        bundlesSection.classList.remove("bundle-highlight");
-                      }, 1000);
-                    }, 600);
-                  }
-                }}
-                className="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-glow border border-glow/40 rounded-full bg-glow/5 hover:bg-glow/10 hover:border-glow/60 hover:shadow-[0_0_20px_-5px_hsl(var(--glow)/0.4)] transition-all duration-300"
-              >
-                <span>{content.bundleCta}</span>
-                <span className="group-hover:translate-y-0.5 transition-transform duration-300">↓</span>
-              </button>
 
               {/* Premium Variant Picker */}
               {product.node.variants.edges.length > 1 && (
@@ -188,7 +183,7 @@ export const ProductHeroSection = ({
               )}
 
               {/* 3 Bullets */}
-              <div className="space-y-2 py-4 border-y border-foreground/10">
+              <div className="space-y-1.5 py-3 border-y border-foreground/10">
                 {content.bullets.map((bullet, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-glow flex-shrink-0" />
@@ -197,30 +192,29 @@ export const ProductHeroSection = ({
                 ))}
               </div>
 
-              {/* Trust Guarantees */}
-              <div className="flex flex-col gap-2 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Truck className="w-3.5 h-3.5 text-glow" />
-                  <span>Gratis verzending</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RotateCcw className="w-3.5 h-3.5 text-glow" />
-                  <span>30 dagen gratis retour</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-3.5 h-3.5 text-glow" />
-                  <span>1 jaar garantie</span>
-                </div>
-              </div>
-
               {/* CTA */}
               <Button
                 onClick={handleAddToCart}
                 size="lg"
-                className="w-full text-sm px-10 py-6 h-auto font-medium tracking-wide rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
+                disabled={!selectedVariant?.availableForSale}
+                className="w-full min-h-12 text-sm px-10 py-4 h-auto font-medium tracking-wide rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
               >
-                In winkelwagen
+                {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
               </Button>
+
+              <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3">
+                <p className="text-sm text-foreground">Voeg toe aan Kast Starter en bespaar 10%</p>
+                <Button asChild variant="link" className="h-auto shrink-0 p-0 text-primary">
+                  <Link to="/bundels">Bekijk bundel</Link>
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-4">
+                <span className="flex items-center gap-1.5"><Truck className="h-3.5 w-3.5 text-primary" />Gratis verzending</span>
+                <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
+                <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />1 jaar garantie</span>
+                <span className="flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" />iDEAL / PayPal</span>
+              </div>
             </div>
           </div>
         </div>
