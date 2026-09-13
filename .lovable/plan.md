@@ -1,17 +1,17 @@
 # Site-optimalisatie ronde 3
 
 ## Resultaat
-De productpagina krijgt een compacter koopgedeelte, eerlijke reviewstatus, aangeleverde voorraadmeldingen, video-voorbereiding, een mobiele winkelbalk en drie echte catalogusaanbevelingen. De homepage krijgt een videolaag met de bestaande foto als fallback.
+De productpagina krijgt een compacter koopgedeelte, eerlijke reviewstatus, een vaste beschikbaarheidsmelding, video-voorbereiding, een mobiele winkelbalk en drie echte catalogusaanbevelingen. De homepage krijgt een videolaag met de bestaande foto als fallback.
 
 ## Uitvoering
 1. **Centrale productpresentatie**
    - Voeg `videos.ts` toe met lege velden per product en voor de homepage.
-   - Voeg een centrale voorraadmapping toe voor Wave 7, Ambient 15, Flex 4, Solar Lantern 12 en Wall Lamp 8.
-   - Toon onder 10 rood met vlam, anders groen met vinkje en de opgegeven verzendtekst.
+   - Toon bij ieder product dezelfde groene vinkje-indicator: “Op voorraad, verzonden binnen 1-3 werkdagen”.
+   - Toon geen aantallen, vlam-icoon of schaarstetaal.
 
 2. **Productgedeelte bovenaan**
    - Herschik desktop naar foto/video links en compacte koopinformatie rechts.
-   - Toon titel, klikbare vijfsterren-placeholder, amber prijs, voorraad, drie korte voordelen, varianten, brede winkelwagenknop, Kast Starter-link en vier horizontale vertrouwenspunten.
+   - Toon titel, klikbare vijfsterren-placeholder, amber prijs, vaste beschikbaarheidsmelding, drie korte voordelen, varianten, brede winkelwagenknop, Kast Starter-link en vier horizontale vertrouwenspunten.
    - Houd dit op 1440×900 binnen het eerste scherm door afstanden en beeldhoogte te begrenzen.
 
 3. **Video-ervaring**
@@ -36,7 +36,7 @@ De productpagina krijgt een compacter koopgedeelte, eerlijke reviewstatus, aange
    - Bouw één keer en publiceer daarna naar productie.
 
 ## Technisch
-- De opgegeven aantallen worden als vaste, door jou aangeleverde voorraadwaarden getoond. Ze worden niet live uit Shopify gelezen.
+- Er worden nergens voorraadaantallen of schaarsteclaims getoond. Elk product krijgt dezelfde vaste groene beschikbaarheidsmelding.
 - De bestaande Shopify-producten en checkout blijven leidend voor namen, varianten, prijzen en winkelwagenregels.
 - De videovelden blijven bewust leeg; invullen activeert de video zonder verdere pagina-aanpassing.
 - Geen nieuwe reviewscore of klantclaim: de vijf sterren zijn alleen de gevraagde visuele placeholder naast “Nog geen reviews”.
