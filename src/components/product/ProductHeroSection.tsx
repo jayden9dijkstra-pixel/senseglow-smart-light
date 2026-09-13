@@ -10,6 +10,24 @@ import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
 import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
+import ambientHeroImage from "@/assets/ambient-home-card.png.asset.json";
+import waveHeroImage from "@/assets/wave-home-card.png.asset.json";
+import wallLampHeroImage from "@/assets/wall-lamp-home-card.png.asset.json";
+
+const productHeroImages: Record<string, { url: string; altText: string }> = {
+  senseglow_ambient_motion_bar: {
+    url: ambientHeroImage.url,
+    altText: "SenseGlow Ambient Motion Bar onder een badkamerkast",
+  },
+  senseglow_wave: {
+    url: waveHeroImage.url,
+    altText: "SenseGlow Wave onder een houten plank",
+  },
+  senseglow_wall_lamp: {
+    url: wallLampHeroImage.url,
+    altText: "SenseGlow Wall Lamp naast een bed",
+  },
+};
 
 interface HeroContent {
   h1: string;
@@ -112,11 +130,15 @@ export const ProductHeroSection = ({
     });
   };
 
-  const productImages =
+  const shopifyImages =
     product.node.images?.edges?.map((edge) => ({
       url: edge.node.url,
       altText: edge.node.altText,
     })) || [];
+  const featuredHeroImage = productHeroImages[product.node.handle];
+  const productImages = featuredHeroImage
+    ? [featuredHeroImage, ...shopifyImages.filter((image) => image.url !== featuredHeroImage.url)]
+    : shopifyImages;
 
   const displayPrice = selectedVariant
     ? parseFloat(selectedVariant.price.amount).toFixed(2)
