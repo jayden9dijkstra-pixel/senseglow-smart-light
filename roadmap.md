@@ -21,4 +21,5 @@
 - [x] Productvideo-modal en homepage-videofallback via centrale configuratie
 - [x] Compact koopgedeelte op desktop
 - [x] Drie echte catalogusaanbevelingen en compacte FAQ onderaan
-- [ ] Mobiel en desktop testen en publiceren
+- [x] Mobiel en desktop getest
+- [ ] Publiceren
