@@ -175,15 +175,15 @@ const ProductDetail = () => {
 
       {handle && <ProductRelatedSection currentHandle={handle} />}
 
-      <ProductFAQSection
-        subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
-        faqs={purchaseFaqs}
-      />
-
       <FinalProductCTA
         headline={finalCta?.headline}
         subtext={finalCta?.subtext}
         ctaLabel={finalCta?.cta}
+      />
+
+      <ProductFAQSection
+        subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
+        faqs={purchaseFaqs}
       />
 
       <MobileAddToCartBar product={product} selectedVariant={selectedVariant} />
