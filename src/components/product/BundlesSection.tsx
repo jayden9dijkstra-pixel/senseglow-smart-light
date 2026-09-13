@@ -182,9 +182,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                           {variantLabel ? `, ${variantLabel}` : ""}
                         </span>
                       </li>
-                      <li className="flex items-start gap-2 text-sm text-foreground/70">
-                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>Gratis verzending</span>
+                      <li className="flex items-start gap-2 text-sm text-green-700 dark:text-green-400">
+                        <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>Bij je thuis binnen 7-14 werkdagen</span>
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />

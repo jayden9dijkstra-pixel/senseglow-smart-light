@@ -8,7 +8,7 @@ import { useCartStore } from "@/stores/cartStore";
 
 import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
-import { Check, Truck, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
+import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
 
 interface HeroContent {
