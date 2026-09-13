@@ -21,13 +21,6 @@ import { getProductSeo, DEFAULT_SEO } from "@/lib/seoContent";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 
 
-const Curve = ({ from, to }: { from: string; to: string }) => (
-  <div className="relative h-12 md:h-20">
-    <div className={`absolute inset-x-0 top-0 h-full ${from}`} />
-    <div className={`absolute inset-x-0 bottom-0 h-full ${to} rounded-t-[40px] md:rounded-t-[60px]`} />
-  </div>
-);
-
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
   const navigate = useNavigate();
@@ -141,8 +134,6 @@ const ProductDetail = () => {
         heroContent={hero}
       />
 
-      <Curve from="bg-background" to="bg-background-secondary" />
-
       <div className="bg-background-secondary">
         <BundlesSection
           product={product}
@@ -151,18 +142,11 @@ const ProductDetail = () => {
         />
       </div>
 
-      <Curve from="bg-background-secondary" to="bg-background" />
-
       <ProductReviewsSection />
-      <div className="border-t border-foreground/8" />
 
       <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
 
-      <Curve from="bg-muted/20" to="bg-background" />
-
       <HowItWorksSection headline={stepsHeadline} steps={steps} />
-
-      <div className="border-t border-foreground/8" />
 
       <BeforeAfterSection
         headline={beforeAfterHeadline}
@@ -170,8 +154,6 @@ const ProductDetail = () => {
         afterLabel={afterLabel}
         rows={beforeAfter}
       />
-
-      <Curve from="bg-background" to="bg-background-secondary" />
 
       <FinalProductCTA
         headline={finalCta?.headline}

@@ -123,7 +123,7 @@ export const ProductHeroSection = ({
     : "0.00";
 
   return (
-    <section id="product-hero" className="py-6 md:py-8 bg-background animate-fade-in-slow">
+    <section id="product-hero" className="overflow-hidden bg-background py-16 md:py-24 animate-fade-in-slow">
       <div className="container">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] gap-0">
@@ -169,7 +169,7 @@ export const ProductHeroSection = ({
                 </div>
                 <div className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
-                  <span>Op voorraad, verzonden binnen 1-3 werkdagen</span>
+                  <span>Bij je thuis binnen 7-14 werkdagen</span>
                 </div>
               </div>
 
@@ -210,7 +210,7 @@ export const ProductHeroSection = ({
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-4">
-                <span className="flex items-center gap-1.5"><Truck className="h-3.5 w-3.5 text-primary" />Gratis verzending</span>
+                <span className="flex items-center gap-1.5 text-green-700 dark:text-green-400"><Check className="h-3.5 w-3.5" />Bij je thuis binnen 7-14 werkdagen</span>
                 <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
                 <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />1 jaar garantie</span>
                 <span className="flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" />iDEAL / PayPal</span>

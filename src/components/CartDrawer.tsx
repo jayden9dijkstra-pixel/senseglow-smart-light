@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package, Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 
@@ -210,6 +210,10 @@ export function CartDrawer() {
               </div>
 
               <div className="flex-shrink-0 space-y-2 pt-4 border-t bg-background">
+                <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
+                  <Check className="h-4 w-4" />
+                  <span>Bij je thuis binnen 7-14 werkdagen</span>
+                </div>
                 {totalSavings > 0 && (
                   <div className="flex justify-between items-center text-sm text-glow">
                     <span>Bundelkorting</span>
