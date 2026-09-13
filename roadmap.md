@@ -17,7 +17,7 @@
 ## Ronde 3 optimalisatie
 - [ ] Mobiele sticky winkelwagenbalk na het bovenste productgedeelte
 - [ ] Reviewplaceholder en reviews-anker
-- [ ] Aangeleverde voorraadindicatie per product
+- [ ] Eén groene beschikbaarheidsmelding voor alle producten, zonder aantallen of schaarstetaal
 - [ ] Productvideo-modal en homepage-videofallback via centrale configuratie
 - [ ] Compact koopgedeelte op desktop
 - [ ] Drie echte catalogusaanbevelingen en compacte FAQ onderaan
