@@ -56,4 +56,4 @@
 ## Beeldcorrecties homepage
 - [x] Ambient Motion Bar volledig passend in de productkaart
 - [x] Aangeleverde brede Wave-foto als achtergrond van de homepagekop
-- [x] Vierkante sfeerfoto's toegevoegd aan Ambient Bar, Wave en Wall Lamp
+- [x] Vierkante sfeerfoto's als eerste galerijbeeld toegevoegd aan Ambient Bar, Wave en Wall Lamp
