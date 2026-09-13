@@ -50,3 +50,5 @@
 - [x] Lege videoconfiguratie toont uitsluitend statische foto
 - [x] Productsecties sluiten zonder overlap of harde kieren aan
 - [ ] Opnieuw controleren en publiceren
+
+- [x] KVK-nummer 94904929 vervangen door 99634929 (WhySenseGlow.tsx)
