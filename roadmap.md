@@ -52,3 +52,7 @@
 - [ ] Opnieuw controleren en publiceren
 
 - [x] KVK-nummer 94904929 vervangen door 99634929 (WhySenseGlow.tsx)
+
+## Beeldcorrecties homepage
+- [x] Ambient Motion Bar volledig passend in de productkaart
+- [x] Aangeleverde brede Wave-foto als achtergrond van de homepagekop
