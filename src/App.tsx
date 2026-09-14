@@ -19,7 +19,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Login from "./pages/Login";
 import OAuthConsent from "./pages/OAuthConsent";
-import Bundles from "./pages/Bundles";
+import BundleBuilder from "./pages/BundleBuilder";
 import WhySenseGlow from "./pages/WhySenseGlow";
 import NotFound from "./pages/NotFound";
 
@@ -52,7 +52,8 @@ const App = () => (
             <Route path="/bestelling-volgen" element={<OrderTracking />} />
             <Route path="/retourneren" element={<Returns />} />
             <Route path="/over" element={<About />} />
-            <Route path="/bundels" element={<Bundles />} />
+            <Route path="/stel-je-bundel-samen" element={<BundleBuilder />} />
+            <Route path="/bundels" element={<BundleBuilder />} />
             <Route path="/waarom-senseglow" element={<WhySenseGlow />} />
             <Route path="/duurzaamheid" element={<Sustainability />} />
             <Route path="/privacy" element={<Privacy />} />

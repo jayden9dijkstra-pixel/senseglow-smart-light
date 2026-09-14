@@ -205,7 +205,7 @@ export const ProductHeroSection = ({
               <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3">
                 <p className="text-sm text-foreground">Voeg toe aan Kast Starter en bespaar 10%</p>
                 <Button asChild variant="link" className="h-auto shrink-0 p-0 text-primary">
-                  <Link to="/bundels">Bekijk bundel</Link>
+                  <Link to="/stel-je-bundel-samen">Bekijk bundel</Link>
                 </Button>
               </div>
 

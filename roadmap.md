@@ -64,3 +64,9 @@
 - [x] Footerlink "Waar is mijn pakket?"
 - [ ] Geldig Shopify Admin API token nodig (huidige token geeft 401)
 - [ ] Link naar trackingpagina in Shopify bevestigingsmail (handmatig in Shopify)
+
+## Bundelbouwer (2026-09-14)
+- /stel-je-bundel-samen + alias /bundels; oude vaste bundels verwijderd
+- Kortingen naar 10/15/20% (SG-PACK-2/3/4)
+- Live Shopify-varianten, 5 min cache, concept in localStorage 24u
+- Openstaand: Shopify Admin-token voor bestelling volgen werkt niet (401)
