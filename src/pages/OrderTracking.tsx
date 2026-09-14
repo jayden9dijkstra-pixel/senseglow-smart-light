@@ -171,7 +171,7 @@ const OrderTracking = () => {
     const nextErrors: { orderNumber?: string; email?: string } = {};
     const normalized = normalizeOrderNumber(orderNumber);
 
-    if (!normalized) nextErrors.orderNumber = "Vul je ordernummer in, bijvoorbeeld #SG1042.";
+    if (!normalized) nextErrors.orderNumber = "Vul je ordernummer in, bijvoorbeeld #1003.";
     if (!EMAIL_RE.test(email.trim())) nextErrors.email = "Vul een geldig e-mailadres in.";
 
     setErrors(nextErrors);
