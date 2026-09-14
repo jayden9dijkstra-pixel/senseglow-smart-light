@@ -54,7 +54,7 @@ function normalizeOrderNumber(raw: string) {
 
 const ORDER_QUERY = `
   query FindOrder($query: String!) {
-    orders(first: 1, query: $query) {
+    orders(first: 5, query: $query) {
       edges {
         node {
           id
