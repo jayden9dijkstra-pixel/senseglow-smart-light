@@ -77,7 +77,7 @@ export const DualImage = ({
         {...(fetchPriority ? { fetchpriority: fetchPriority } : {})}
         style={{
           opacity: isDark ? 0 : 1,
-          transition: "opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: fadeTransition,
         }}
       />
       {/* Dark image (lamp on) */}
@@ -90,7 +90,7 @@ export const DualImage = ({
         loading="lazy"
         style={{
           opacity: isDark ? 1 : 0,
-          transition: "opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: fadeTransition,
         }}
       />
     </div>
