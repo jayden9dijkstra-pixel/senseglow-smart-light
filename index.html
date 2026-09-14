@@ -10,6 +10,14 @@
       gtag('config', 'AW-18351813640');
     </script>
     <meta charset="UTF-8" />
+    <script>
+      try {
+        var t = localStorage.getItem('theme');
+        document.documentElement.classList.add(t === 'light' ? 'light' : 'dark');
+      } catch (e) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SenseGlow, slimme sensor verlichting zonder bedrading | Gratis verzending NL</title>
     <meta name="description" content="Sensor-gestuurde verlichting zonder elektricien of schakelaar. Oplaadbaar, eenvoudig te plaatsen. Gratis verzending NL, 30 dagen retour, 1 jaar garantie.">
