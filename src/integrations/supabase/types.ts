@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      order_lookups: {
+        Row: {
+          created_at: string
+          found: boolean
+          id: string
+          ip: string | null
+          order_number: string
+        }
+        Insert: {
+          created_at?: string
+          found?: boolean
+          id?: string
+          ip?: string | null
+          order_number: string
+        }
+        Update: {
+          created_at?: string
+          found?: boolean
+          id?: string
+          ip?: string | null
+          order_number?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
