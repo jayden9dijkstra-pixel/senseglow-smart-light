@@ -30,7 +30,7 @@ const faqs = [
   {
     question: "Hoe snel wordt mijn bestelling geleverd?",
     answer:
-      "Tussen de 7 en 14 dagen in totaal, inclusief verwerking. Je krijgt een track-code per mail zodra het pakket onderweg is. Track via senseglow.shop/bestelling-volgen.",
+      "Tussen de 7 en 14 dagen in totaal, inclusief verwerking. Je krijgt een track-code per mail zodra het pakket onderweg is. Track via senseglow.shop/volg-je-bestelling.",
   },
   {
     question: "Mag ik retourneren als het niet bevalt?",

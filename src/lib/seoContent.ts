@@ -43,7 +43,7 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
     description:
       "Alles over onze verzending: gratis bezorging in Nederland en België, een levertijd van 7 tot 14 werkdagen en track & trace. Bekijk de voorwaarden.",
   },
-  "/bestelling-volgen": {
+  "/volg-je-bestelling": {
     title: "Volg je bestelling · SenseGlow",
     description:
       "Bekijk de status van je SenseGlow bestelling. Vul je ordernummer en e-mailadres in en zie direct waar je pakket is.",

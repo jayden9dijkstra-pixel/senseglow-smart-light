@@ -52,7 +52,7 @@ const mobileLinks: NavChild[] = [
   { label: "Alle producten", href: "/producten" },
   ...navItems.flatMap((i) => i.children ?? []),
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
-  { label: "Bestelling volgen", href: "/bestelling-volgen" },
+  { label: "Bestelling volgen", href: "/volg-je-bestelling" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -144,7 +144,7 @@ export const SiteHeader = () => {
               variant="ghost"
               size="icon"
               className="hidden sm:inline-flex text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
-              onClick={() => navigate("/bestelling-volgen")}
+              onClick={() => navigate("/volg-je-bestelling")}
               aria-label="Mijn bestelling"
             >
               <User className="h-5 w-5" />
