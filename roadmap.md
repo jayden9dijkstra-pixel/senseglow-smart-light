@@ -71,4 +71,4 @@
 - /stel-je-bundel-samen + alias /bundels; oude vaste bundels verwijderd
 - Kortingen naar 10/15/20% (SG-PACK-2/3/4)
 - Live Shopify-varianten, 5 min cache, concept in localStorage 24u
-- Openstaand: Shopify Admin-token voor bestelling volgen werkt niet (401)
+- Shopify Admin-token voor bestelling volgen werkt sinds 14-09
