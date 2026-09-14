@@ -44,8 +44,8 @@ export const HANDLE_TO_KEY: Record<string, ProductKey> = {
 export type PackSize = 2 | 3 | 4;
 export const PACK_RATE: Record<PackSize, number> = {
   2: 0.10,
-  3: 0.20,
-  4: 0.30,
+  3: 0.15,
+  4: 0.20,
 };
 export const PACK_LABEL: Record<PackSize, string> = {
   2: "Duopak",
