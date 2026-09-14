@@ -47,8 +47,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function normalizeOrderNumber(raw: string) {
   const digits = raw.replace(/\D/g, "");
-  if (!digits) return null;
-  return `#SG${digits}`;
+  return digits || null;
 }
 
 /* ---------------------------------------------------------------- query */
