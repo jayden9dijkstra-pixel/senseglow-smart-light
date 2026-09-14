@@ -61,10 +61,7 @@ type ViewState = "form" | "loading" | "found" | "notfound";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const normalizeOrderNumber = (raw: string) => {
-  const digits = raw.replace(/\D/g, "");
-  return digits ? `#SG${digits}` : "";
-};
+const normalizeOrderNumber = (raw: string) => raw.replace(/\D/g, "");
 
 const formatMoney = (money: Money | null) => {
   if (!money) return "";
