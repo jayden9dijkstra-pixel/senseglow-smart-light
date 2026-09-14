@@ -41,6 +41,7 @@ const STATIC_ROUTES = [
   "/bestelling-volgen",
   "/volg-je-bestelling",
   "/quiz",
+  "/stel-je-bundel-samen",
 ];
 
 /* ---------------------------------------------------------------- Shopify */

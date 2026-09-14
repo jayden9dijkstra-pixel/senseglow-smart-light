@@ -41,6 +41,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.senseglow.shop/stel-je-bundel-samen</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.senseglow.shop/verzending</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
