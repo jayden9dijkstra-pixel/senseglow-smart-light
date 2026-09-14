@@ -169,7 +169,9 @@ Deno.serve(async (req) => {
         },
         body: JSON.stringify({
           query: ORDER_QUERY,
-          variables: { query: `name:${orderNumber} email:${rawEmail}` },
+          variables: {
+            query: `(name:#${orderNumber} OR name:#SG${orderNumber}) AND email:${rawEmail}`,
+          },
         }),
       },
     );
