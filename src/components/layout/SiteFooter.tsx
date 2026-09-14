@@ -86,7 +86,7 @@ export const SiteFooter = () => {
                 <li><Link to="/contact" className={linkClass}>Contact</Link></li>
                 <li><Link to="/verzending" className={linkClass}>Verzending</Link></li>
                 <li><Link to="/retourneren" className={linkClass}>Retourneren</Link></li>
-                <li><Link to="/bestelling-volgen" className={linkClass}>Bestelling volgen</Link></li>
+                <li><Link to="/volg-je-bestelling" className={linkClass}>Waar is mijn pakket? →</Link></li>
               </ul>
             </div>
             <div>

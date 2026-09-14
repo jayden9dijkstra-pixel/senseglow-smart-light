@@ -11,7 +11,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Catalog from "./pages/Catalog";
 import Contact from "./pages/Contact";
 import Shipping from "./pages/Shipping";
-import Tracking from "./pages/Tracking";
+import OrderTracking from "./pages/OrderTracking";
 import Returns from "./pages/Returns";
 import About from "./pages/About";
 import Sustainability from "./pages/Sustainability";
@@ -47,7 +47,9 @@ const App = () => (
             <Route path="/catalogus" element={<Catalog />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/verzending" element={<Shipping />} />
-            <Route path="/bestelling-volgen" element={<Tracking />} />
+            <Route path="/volg-je-bestelling" element={<OrderTracking />} />
+            <Route path="/track" element={<OrderTracking />} />
+            <Route path="/bestelling-volgen" element={<OrderTracking />} />
             <Route path="/retourneren" element={<Returns />} />
             <Route path="/over" element={<About />} />
             <Route path="/bundels" element={<Bundles />} />
