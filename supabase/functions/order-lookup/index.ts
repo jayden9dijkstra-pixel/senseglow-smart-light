@@ -63,6 +63,7 @@ const ORDER_QUERY = `
           displayFinancialStatus
           displayFulfillmentStatus
           email
+          customer { email }
           shippingAddress { name address1 address2 city zip country }
           lineItems(first: 20) {
             edges {
