@@ -223,8 +223,8 @@ const OrderTracking = () => {
 
                     {view === "notfound" && (
                       <p className="rounded-[10px] border border-destructive/30 bg-destructive/5 p-4 text-sm text-foreground/80 leading-relaxed">
-                        We kunnen deze bestelling niet vinden. Controleer of je ordernummer en
-                        e-mailadres kloppen. Nog steeds problemen? Mail{" "}
+                        We kunnen deze bestelling niet vinden. Controleer je ordernummer en gebruik
+                        het e-mailadres waarmee je hebt besteld. Nog steeds problemen? Mail{" "}
                         <a className="text-glow underline" href="mailto:support@senseglow.shop">
                           support@senseglow.shop
                         </a>
