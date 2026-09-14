@@ -191,14 +191,15 @@ Deno.serve(async (req) => {
     }
 
     const edges = json?.data?.orders?.edges ?? [];
+    const wanted = rawEmail.toLowerCase();
     const node = edges
       .map((e: any) => e?.node)
-      .find(
-        (n: any) =>
-          n &&
-          typeof n.email === "string" &&
-          n.email.toLowerCase() === rawEmail.toLowerCase(),
-      );
+      .find((n: any) => {
+        const candidates = [n?.email, n?.customer?.email]
+          .filter((v: unknown): v is string => typeof v === "string")
+          .map((v) => v.toLowerCase());
+        return candidates.includes(wanted);
+      });
     if (!node) {
       await logLookup(false);
       return notFound();
