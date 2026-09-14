@@ -47,6 +47,14 @@ const navItems: NavItem[] = [
   },
   { label: "Bundels", href: "/stel-je-bundel-samen" },
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
+  {
+    label: "Service",
+    href: "/contact",
+    children: [
+      { label: "Bestelling volgen", hint: "Je pakket traceren", href: "/volg-je-bestelling" },
+      { label: "Contact", hint: "Stel je vraag", href: "/contact" },
+    ],
+  },
 ];
 
 const mobileLinks: NavChild[] = [
