@@ -73,6 +73,23 @@ export const useCartStore = create<CartStore>()(
       },
 
 
+      addBundleItems: (newItems, message) => {
+        if (newItems.length === 0) return;
+        const merged = [...get().items];
+        for (const item of newItems) {
+          const index = merged.findIndex(
+            (i) => i.isBundle && bundleLineKey(i) === bundleLineKey(item)
+          );
+          if (index >= 0) {
+            merged[index] = { ...merged[index], quantity: merged[index].quantity + item.quantity };
+          } else {
+            merged.push(item);
+          }
+        }
+        set({ items: merged });
+        toast.success(message);
+      },
+
       addItem: (item) => {
         const { items } = get();
 
