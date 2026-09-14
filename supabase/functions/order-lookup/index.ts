@@ -189,8 +189,16 @@ Deno.serve(async (req) => {
       return notFound();
     }
 
-    const node = json?.data?.orders?.edges?.[0]?.node;
-    if (!node || String(node.email ?? "").toLowerCase() !== rawEmail.toLowerCase()) {
+    const edges = json?.data?.orders?.edges ?? [];
+    const node = edges
+      .map((e: any) => e?.node)
+      .find(
+        (n: any) =>
+          n &&
+          typeof n.email === "string" &&
+          n.email.toLowerCase() === rawEmail.toLowerCase(),
+      );
+    if (!node) {
       await logLookup(false);
       return notFound();
     }
