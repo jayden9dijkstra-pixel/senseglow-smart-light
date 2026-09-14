@@ -62,7 +62,9 @@
 - [x] Zoekformulier, laadstaat, statusoverzicht met stepper, niet-gevonden staat
 - [x] Serverfunctie order-lookup met rate limit, e-mailcheck en logging in order_lookups
 - [x] Footerlink "Waar is mijn pakket?"
-- [ ] Geldig Shopify Admin API token nodig (huidige token geeft 401)
+- [x] Shopify Admin API token werkt (shpat_, leesrechten op bestellingen)
+- [x] Ordernummer flexibel: #1003, 1003, SG1003 werken allemaal
+- [ ] Testbestelling met e-mailadres nodig om de statusweergave te controleren
 - [ ] Link naar trackingpagina in Shopify bevestigingsmail (handmatig in Shopify)
 
 ## Bundelbouwer (2026-09-14)
