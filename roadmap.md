@@ -56,3 +56,11 @@
 ## Beeldcorrecties homepage
 - [x] Ambient Motion Bar volledig passend in de productkaart
 - [x] Aangeleverde brede Wave-foto als achtergrond van de homepagekop
+
+## Volg je bestelling (trackingpagina)
+- [x] Pagina /volg-je-bestelling met alias /track en /bestelling-volgen
+- [x] Zoekformulier, laadstaat, statusoverzicht met stepper, niet-gevonden staat
+- [x] Serverfunctie order-lookup met rate limit, e-mailcheck en logging in order_lookups
+- [x] Footerlink "Waar is mijn pakket?"
+- [ ] Geldig Shopify Admin API token nodig (huidige token geeft 401)
+- [ ] Link naar trackingpagina in Shopify bevestigingsmail (handmatig in Shopify)

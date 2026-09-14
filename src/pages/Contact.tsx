@@ -57,7 +57,7 @@ const Contact = () => {
                   Bestelnummer of track-code bij de hand? Volg je pakket direct via DHL.
                 </p>
                 <Button
-                  onClick={() => navigate("/bestelling-volgen")}
+                  onClick={() => navigate("/volg-je-bestelling")}
                   variant="outline"
                   className="rounded-full mt-2"
                 >

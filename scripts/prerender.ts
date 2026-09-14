@@ -39,6 +39,7 @@ const STATIC_ROUTES = [
   "/duurzaamheid",
   "/contact",
   "/bestelling-volgen",
+  "/volg-je-bestelling",
   "/quiz",
 ];
 

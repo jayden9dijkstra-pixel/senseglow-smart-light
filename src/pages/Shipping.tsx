@@ -60,7 +60,7 @@ const Shipping = () => {
                 {
                   n: "3",
                   title: "DHL bezorgt",
-                  body: "Vanaf je bestelling duurt het in totaal 7 tot 14 dagen voordat het pakket bij je voor de deur staat, verwerking inbegrepen. Via senseglow.shop/bestelling-volgen volg je 'm met je track-code.",
+                  body: "Vanaf je bestelling duurt het in totaal 7 tot 14 dagen voordat het pakket bij je voor de deur staat, verwerking inbegrepen. Via senseglow.shop/volg-je-bestelling volg je 'm met je track-code.",
                 },
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">

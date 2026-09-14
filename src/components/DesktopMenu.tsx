@@ -11,7 +11,7 @@ export const DesktopMenu = () => {
   const menuItems = [
     { label: "HOME", href: "/", newTab: false },
     { label: "PRODUCTEN", href: "/producten", newTab: true },
-    { label: "BESTELLING VOLGEN", href: "/bestelling-volgen", newTab: false },
+    { label: "BESTELLING VOLGEN", href: "/volg-je-bestelling", newTab: false },
     { label: "CONTACT", href: "/contact", newTab: false },
   ];
 
