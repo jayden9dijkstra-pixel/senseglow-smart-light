@@ -238,7 +238,7 @@ const OrderTracking = () => {
                         id="order-number"
                         value={orderNumber}
                         onChange={(e) => setOrderNumber(e.target.value)}
-                        placeholder="bijv. #SG1042"
+                        placeholder="bijv. #1003"
                         autoComplete="off"
                         maxLength={32}
                         aria-invalid={!!errors.orderNumber}
