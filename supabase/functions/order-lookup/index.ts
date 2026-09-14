@@ -47,15 +47,14 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function normalizeOrderNumber(raw: string) {
   const digits = raw.replace(/\D/g, "");
-  if (!digits) return null;
-  return `#SG${digits}`;
+  return digits || null;
 }
 
 /* ---------------------------------------------------------------- query */
 
 const ORDER_QUERY = `
   query FindOrder($query: String!) {
-    orders(first: 1, query: $query) {
+    orders(first: 5, query: $query) {
       edges {
         node {
           id
@@ -170,7 +169,9 @@ Deno.serve(async (req) => {
         },
         body: JSON.stringify({
           query: ORDER_QUERY,
-          variables: { query: `name:${orderNumber} email:${rawEmail}` },
+          variables: {
+            query: `(name:#${orderNumber} OR name:#SG${orderNumber}) AND email:${rawEmail}`,
+          },
         }),
       },
     );
@@ -188,8 +189,16 @@ Deno.serve(async (req) => {
       return notFound();
     }
 
-    const node = json?.data?.orders?.edges?.[0]?.node;
-    if (!node || String(node.email ?? "").toLowerCase() !== rawEmail.toLowerCase()) {
+    const edges = json?.data?.orders?.edges ?? [];
+    const node = edges
+      .map((e: any) => e?.node)
+      .find(
+        (n: any) =>
+          n &&
+          typeof n.email === "string" &&
+          n.email.toLowerCase() === rawEmail.toLowerCase(),
+      );
+    if (!node) {
       await logLookup(false);
       return notFound();
     }

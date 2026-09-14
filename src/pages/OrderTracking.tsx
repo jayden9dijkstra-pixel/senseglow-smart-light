@@ -61,10 +61,7 @@ type ViewState = "form" | "loading" | "found" | "notfound";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const normalizeOrderNumber = (raw: string) => {
-  const digits = raw.replace(/\D/g, "");
-  return digits ? `#SG${digits}` : "";
-};
+const normalizeOrderNumber = (raw: string) => raw.replace(/\D/g, "");
 
 const formatMoney = (money: Money | null) => {
   if (!money) return "";
@@ -174,7 +171,7 @@ const OrderTracking = () => {
     const nextErrors: { orderNumber?: string; email?: string } = {};
     const normalized = normalizeOrderNumber(orderNumber);
 
-    if (!normalized) nextErrors.orderNumber = "Vul je ordernummer in, bijvoorbeeld #SG1042.";
+    if (!normalized) nextErrors.orderNumber = "Vul je ordernummer in, bijvoorbeeld #1003.";
     if (!EMAIL_RE.test(email.trim())) nextErrors.email = "Vul een geldig e-mailadres in.";
 
     setErrors(nextErrors);
@@ -226,8 +223,8 @@ const OrderTracking = () => {
 
                     {view === "notfound" && (
                       <p className="rounded-[10px] border border-destructive/30 bg-destructive/5 p-4 text-sm text-foreground/80 leading-relaxed">
-                        We kunnen deze bestelling niet vinden. Controleer of je ordernummer en
-                        e-mailadres kloppen. Nog steeds problemen? Mail{" "}
+                        We kunnen deze bestelling niet vinden. Controleer je ordernummer en gebruik
+                        het e-mailadres waarmee je hebt besteld. Nog steeds problemen? Mail{" "}
                         <a className="text-glow underline" href="mailto:support@senseglow.shop">
                           support@senseglow.shop
                         </a>
@@ -241,7 +238,7 @@ const OrderTracking = () => {
                         id="order-number"
                         value={orderNumber}
                         onChange={(e) => setOrderNumber(e.target.value)}
-                        placeholder="bijv. #SG1042"
+                        placeholder="bijv. #1003"
                         autoComplete="off"
                         maxLength={32}
                         aria-invalid={!!errors.orderNumber}

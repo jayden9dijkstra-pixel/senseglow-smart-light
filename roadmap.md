@@ -62,11 +62,13 @@
 - [x] Zoekformulier, laadstaat, statusoverzicht met stepper, niet-gevonden staat
 - [x] Serverfunctie order-lookup met rate limit, e-mailcheck en logging in order_lookups
 - [x] Footerlink "Waar is mijn pakket?"
-- [ ] Geldig Shopify Admin API token nodig (huidige token geeft 401)
+- [x] Shopify Admin API token werkt (shpat_, leesrechten op bestellingen)
+- [x] Ordernummer flexibel: #1003, 1003, SG1003 werken allemaal
+- [ ] Testbestelling met e-mailadres nodig om de statusweergave te controleren
 - [ ] Link naar trackingpagina in Shopify bevestigingsmail (handmatig in Shopify)
 
 ## Bundelbouwer (2026-09-14)
 - /stel-je-bundel-samen + alias /bundels; oude vaste bundels verwijderd
 - Kortingen naar 10/15/20% (SG-PACK-2/3/4)
 - Live Shopify-varianten, 5 min cache, concept in localStorage 24u
-- Openstaand: Shopify Admin-token voor bestelling volgen werkt niet (401)
+- Shopify Admin-token voor bestelling volgen werkt sinds 14-09
