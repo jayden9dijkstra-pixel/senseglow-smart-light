@@ -49,7 +49,7 @@ const App = () => (
             <Route path="/verzending" element={<Shipping />} />
             <Route path="/volg-je-bestelling" element={<OrderTracking />} />
             <Route path="/track" element={<OrderTracking />} />
-            <Route path="/volg-je-bestelling" element={<OrderTracking />} />
+            <Route path="/bestelling-volgen" element={<OrderTracking />} />
             <Route path="/retourneren" element={<Returns />} />
             <Route path="/over" element={<About />} />
             <Route path="/bundels" element={<Bundles />} />
