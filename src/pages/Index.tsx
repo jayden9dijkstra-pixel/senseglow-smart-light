@@ -56,7 +56,7 @@ const Index = () => {
         <UseCaseGrid products={products} />
       </div>
 
-      <HomeBundlesSection products={products} loading={loading} failed={failed} />
+      <HomeBundlesSection />
 
       {/* 3. WhatTheyShare */}
       <WhatTheyShare />

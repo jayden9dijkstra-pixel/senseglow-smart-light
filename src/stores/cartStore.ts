@@ -34,6 +34,8 @@ interface CartStore {
   isLoading: boolean;
 
   addItem: (item: CartItem) => void;
+  /** Meerdere regels van een zelf samengestelde bundel, met één melding. */
+  addBundleItems: (items: CartItem[], message: string) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
   removeItem: (variantId: string, isBundle?: boolean, packSize?: number) => void;
   clearCart: () => void;
