@@ -53,7 +53,16 @@ export const DualImage = ({
     );
   }
 
-  const isDark = mounted && theme === "dark";
+  // Before mount, read the theme class already set on <html> (see index.html)
+  // so the correct image shows immediately without a light-image flash.
+  const isDark = mounted
+    ? theme === "dark"
+    : typeof document !== "undefined" &&
+      document.documentElement.classList.contains("dark");
+
+  const fadeTransition = mounted
+    ? "opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)"
+    : "none";
 
   return (
     <div className="relative w-full h-full overflow-hidden">
