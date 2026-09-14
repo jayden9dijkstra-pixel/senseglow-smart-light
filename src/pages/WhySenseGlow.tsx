@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Award, Brush, MessageCircle, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
+import whyLandscapeAsset from "@/assets/wave-landscape-why.png.asset.json";
 
 const PILLARS = [
   {
@@ -60,7 +61,14 @@ const WhySenseGlow = () => {
                 de rest.
               </p>
             </div>
-            <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-glow/25 via-background-secondary to-background border border-foreground/8" />
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-foreground/8">
+              <img
+                src={whyLandscapeAsset.url}
+                alt="SenseGlow verlichting in een warm interieur"
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
