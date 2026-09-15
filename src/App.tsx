@@ -2,9 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { useEffect, useRef } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { captureClickIds, trackPageView } from "@/lib/adsTracking";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
@@ -28,6 +30,27 @@ const queryClient = new QueryClient();
 // Component to handle scroll to top on route change
 const ScrollToTopHandler = () => {
   useScrollToTop();
+  return null;
+};
+
+// Bewaart de Google Ads klik-informatie en meldt paginaweergaves bij routewissels.
+const AdsTracking = () => {
+  const { pathname, search } = useLocation();
+  const isFirst = useRef(true);
+
+  useEffect(() => {
+    captureClickIds();
+  }, []);
+
+  useEffect(() => {
+    if (isFirst.current) {
+      // De eerste weergave stuurt gtag zelf al vanuit de <head>.
+      isFirst.current = false;
+      return;
+    }
+    trackPageView(`${pathname}${search}`);
+  }, [pathname, search]);
+
   return null;
 };
 
