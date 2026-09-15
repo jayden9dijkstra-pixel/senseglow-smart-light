@@ -9,7 +9,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Package, Check } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Package, Check, RotateCcw, Shield, Truck } from "lucide-react";
+import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/layout/PaymentIcons";
 import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 
@@ -212,7 +213,7 @@ export function CartDrawer() {
               <div className="flex-shrink-0 space-y-2 pt-4 border-t bg-background">
                 <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
-                  <span>Bij je thuis binnen 7-14 werkdagen</span>
+                  <span>Gratis bezorgd, bij je thuis binnen 7-14 werkdagen</span>
                 </div>
                 {totalSavings > 0 && (
                   <div className="flex justify-between items-center text-sm text-glow">
@@ -220,6 +221,10 @@ export function CartDrawer() {
                     <span>−€{totalSavings.toFixed(2)}</span>
                   </div>
                 )}
+                <div className="flex justify-between items-center text-sm text-muted-foreground">
+                  <span>Verzending</span>
+                  <span>Gratis</span>
+                </div>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Totaal</span>
                   <span className="text-xl font-bold">
@@ -240,11 +245,23 @@ export function CartDrawer() {
                     </>
                   ) : (
                     <>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Afrekenen
+                      <Lock className="w-4 h-4 mr-2" />
+                      Veilig afrekenen
                     </>
                   )}
                 </Button>
+
+                <div className="grid grid-cols-3 gap-2 pt-1 text-[11px] text-muted-foreground">
+                  <span className="flex items-center gap-1.5"><Truck className="h-3.5 w-3.5 text-primary" />Gratis NL en BE</span>
+                  <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
+                  <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />1 jaar garantie</span>
+                </div>
+                <div className="flex items-center gap-2 pb-1">
+                  <IdealIcon className="h-5 w-auto text-foreground/40" />
+                  <BancontactIcon className="h-5 w-auto text-foreground/40" />
+                  <PaypalIcon className="h-5 w-auto text-foreground/40" />
+                  <KlarnaIcon className="h-5 w-auto text-foreground/40" />
+                </div>
               </div>
             </>
           )}
