@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, RotateCcw, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
@@ -57,7 +57,7 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
           <div className="mt-0.5 flex items-center gap-2">
             <span className="font-semibold text-primary">€{parseFloat(selectedVariant.price.amount).toFixed(2)}</span>
             <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-              <Star className="h-3 w-3 fill-primary text-primary" /> Nog geen reviews
+              <Star className="h-3 w-3 text-muted-foreground/50" /> Nog geen reviews
             </span>
           </div>
         </div>
