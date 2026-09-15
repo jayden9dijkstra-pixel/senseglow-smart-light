@@ -106,11 +106,21 @@ export const useCartStore = create<CartStore>()(
           }
         }
         set({ items: merged });
+        trackAdsEvent('add_to_cart', {
+          value: adsValue(newItems),
+          currency: 'EUR',
+          items: toAdsItems(newItems),
+        });
         toast.success(message);
       },
 
       addItem: (item) => {
         const { items } = get();
+        trackAdsEvent('add_to_cart', {
+          value: adsValue([item]),
+          currency: 'EUR',
+          items: toAdsItems([item]),
+        });
 
         if (item.isBundle && item.bundlePackSize) {
           // Bundles: stack identical (variant + pack size) lines
