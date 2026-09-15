@@ -240,7 +240,8 @@ export async function createStorefrontCheckout(
   if (discountCodes.length > 0) {
     url.searchParams.set('discount', discountCodes[0]);
   }
-  return url.toString();
+  // Neem de Google Ads klik-informatie mee zodat attributie blijft werken.
+  return appendClickIdsToUrl(url.toString());
 }
 
 /**

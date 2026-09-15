@@ -62,6 +62,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ScrollToTopHandler />
+          <AdsTracking />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/quiz" element={<Quiz />} />
