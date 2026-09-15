@@ -201,6 +201,12 @@ export const useCartStore = create<CartStore>()(
         const { items, setLoading, setCheckoutUrl } = get();
         if (items.length === 0) return;
 
+        trackAdsEvent('begin_checkout', {
+          value: adsValue(items),
+          currency: 'EUR',
+          items: toAdsItems(items),
+        });
+
         setLoading(true);
         try {
           // Merge identical variants across single + bundle lines so Shopify
