@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { SITE_URL } from "@/lib/seoContent";
+import { addLocale, stripLocale, useI18n } from "@/i18n/I18nProvider";
 
 interface SeoProps {
   title: string;
@@ -23,20 +24,31 @@ export const Seo = ({
   preloadImage,
   preloadImageSrcSet,
 }: SeoProps) => {
-  const canonical = `${SITE_URL}${path === "/" ? "/" : path.replace(/\/+$/, "")}`;
+  const { locale, t } = useI18n();
+  const cleanPath = stripLocale(path);
+  const localePath = addLocale(cleanPath, locale);
+  const canonical = `${SITE_URL}${localePath === "/" ? "/" : localePath.replace(/\/+$/, "")}`;
+  const localizedTitle = t(title);
+  const localizedDescription = t(description);
   const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
   return (
     <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
+      <html lang={locale} />
+      <title>{localizedTitle}</title>
+      <meta name="description" content={localizedDescription} />
       <link rel="canonical" href={canonical} />
+      <link rel="alternate" hrefLang="nl" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />
+      <link rel="alternate" hrefLang="en" href={`${SITE_URL}${addLocale(cleanPath, "en")}`} />
+      <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${addLocale(cleanPath, "fr")}`} />
+      <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />
       {noindex && <meta name="robots" content="noindex, nofollow" />}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
+      <meta property="og:title" content={localizedTitle} />
+      <meta property="og:description" content={localizedDescription} />
       <meta property="og:url" content={canonical} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
+      <meta property="og:locale" content={locale === "nl" ? "nl_NL" : locale === "fr" ? "fr_FR" : "en_US"} />
+      <meta name="twitter:title" content={localizedTitle} />
+      <meta name="twitter:description" content={localizedDescription} />
       {preloadImage && (
         <link
           rel="preload"

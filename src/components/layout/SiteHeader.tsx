@@ -3,6 +3,8 @@ import { Menu, Search, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/i18n/I18nProvider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,13 +69,14 @@ const mobileLinks: NavChild[] = [
 ];
 
 const NavDropdown = ({ item }: { item: NavItem }) => {
+  const { t, localizePath } = useI18n();
   return (
     <div className="relative group">
       <Link
-        to={item.href}
+        to={localizePath(item.href)}
         className="flex items-center gap-1 px-3 py-2 text-[13px] tracking-wide text-foreground/70 hover:text-glow transition-colors duration-300"
       >
-        {item.label}
+        {t(item.label)}
         <ChevronDown className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
       </Link>
 
@@ -82,12 +85,12 @@ const NavDropdown = ({ item }: { item: NavItem }) => {
           {item.children?.map((child) => (
             <Link
               key={child.href}
-              to={child.href}
+              to={localizePath(child.href)}
               className="block rounded-xl px-4 py-3 hover:bg-foreground/5 transition-colors"
             >
-              <span className="block text-sm font-medium text-foreground">{child.label}</span>
+              <span className="block text-sm font-medium text-foreground">{t(child.label)}</span>
               {child.hint && (
-                <span className="block text-xs text-foreground/50 mt-0.5">{child.hint}</span>
+                <span className="block text-xs text-foreground/50 mt-0.5">{t(child.hint)}</span>
               )}
             </Link>
           ))}
@@ -99,6 +102,7 @@ const NavDropdown = ({ item }: { item: NavItem }) => {
 
 export const SiteHeader = () => {
   const navigate = useNavigate();
+  const { t, localizePath } = useI18n();
 
   return (
     <header className="w-full glass sticky top-0 z-50">
@@ -106,9 +110,9 @@ export const SiteHeader = () => {
         <div className="flex h-20 md:h-24 items-center justify-between gap-4">
           {/* Links: logo */}
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(localizePath("/"))}
             className="flex items-center shrink-0"
-            aria-label="Ga naar homepage"
+            aria-label={t("Ga naar homepage")}
           >
             <img
               src={logoNew}
@@ -122,17 +126,17 @@ export const SiteHeader = () => {
           </button>
 
           {/* Midden: navigatie */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Hoofdmenu">
+          <nav className="hidden lg:flex items-center gap-1" aria-label={t("Hoofdmenu")}>
             {navItems.map((item) =>
               item.children ? (
                 <NavDropdown key={item.label} item={item} />
               ) : (
                 <Link
                   key={item.href}
-                  to={item.href}
+                  to={localizePath(item.href)}
                   className="px-3 py-2 text-[13px] tracking-wide text-foreground/70 hover:text-glow transition-colors duration-300"
                 >
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               )
             )}
@@ -140,13 +144,14 @@ export const SiteHeader = () => {
 
           {/* Rechts: acties */}
           <div className="flex items-center gap-1">
+            <LanguageSwitcher />
             <ThemeToggle />
             <Button
               variant="ghost"
               size="icon"
               className="hidden sm:inline-flex text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
-              onClick={() => navigate("/producten")}
-              aria-label="Zoek in de collectie"
+              onClick={() => navigate(localizePath("/producten"))}
+              aria-label={t("Zoek in de collectie")}
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -154,8 +159,8 @@ export const SiteHeader = () => {
               variant="ghost"
               size="icon"
               className="hidden sm:inline-flex text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
-              onClick={() => navigate("/volg-je-bestelling")}
-              aria-label="Mijn bestelling"
+              onClick={() => navigate(localizePath("/volg-je-bestelling"))}
+              aria-label={t("Mijn bestelling")}
             >
               <User className="h-5 w-5" />
             </Button>
@@ -168,19 +173,19 @@ export const SiteHeader = () => {
                   variant="ghost"
                   size="icon"
                   className="lg:hidden text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
-                  aria-label="Menu openen"
+                  aria-label={t("Menu openen")}
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-60 bg-background border-foreground/10">
                 {mobileLinks.map((link) => (
-                  <DropdownMenuItem key={link.label + link.href} asChild>
+                  <DropdownMenuItem key={`${link.label}-${link.href}-${mobileLinks.indexOf(link)}`} asChild>
                     <Link
-                      to={link.href}
+                      to={localizePath(link.href)}
                       className="cursor-pointer text-sm text-foreground/70 hover:text-glow transition-colors py-2"
                     >
-                      {link.label}
+                      {t(link.label)}
                     </Link>
                   </DropdownMenuItem>
                 ))}

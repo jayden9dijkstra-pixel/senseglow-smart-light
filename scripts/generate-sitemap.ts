@@ -31,6 +31,8 @@ const entries: SitemapEntry[] = [
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
 ];
 
+const localizedEntries = entries.flatMap((entry) => [entry, { ...entry, path: `/en${entry.path === "/" ? "/" : entry.path}` }, { ...entry, path: `/fr${entry.path === "/" ? "/" : entry.path}` }]);
+
 function generateSitemap(list: SitemapEntry[]) {
   const urls = list.map((e) =>
     [
@@ -52,5 +54,5 @@ function generateSitemap(list: SitemapEntry[]) {
   ].join("\n");
 }
 
-writeFileSync(resolve("public/sitemap.xml"), generateSitemap(entries));
-console.log(`sitemap.xml written (${entries.length} entries)`);
+writeFileSync(resolve("public/sitemap.xml"), generateSitemap(localizedEntries));
+console.log(`sitemap.xml written (${localizedEntries.length} entries)`);
