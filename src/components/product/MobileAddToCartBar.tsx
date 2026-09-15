@@ -71,6 +71,10 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
           <ShoppingCart className="h-5 w-5" />
         </Button>
       </div>
+      <div className="mx-auto mt-2 flex max-w-md items-center gap-4 text-[10px] text-muted-foreground">
+        <span className="flex items-center gap-1"><Truck className="h-3 w-3 text-primary" />Gratis verzending</span>
+        <span className="flex items-center gap-1"><RotateCcw className="h-3 w-3 text-primary" />30 dagen retour</span>
+      </div>
     </div>
   );
 }
