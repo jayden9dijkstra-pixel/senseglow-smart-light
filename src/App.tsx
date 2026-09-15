@@ -90,25 +90,27 @@ const App = () => (
             <Route path="/voorwaarden" element={<Terms />} />
             <Route path="/login" element={<Login />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
-            <Route path="/:locale(en|fr)" element={<Index />} />
-            <Route path="/:locale(en|fr)/quiz" element={<Quiz />} />
-            <Route path="/:locale(en|fr)/product/:handle" element={<ProductDetail />} />
-            <Route path="/:locale(en|fr)/producten" element={<Catalog />} />
-            <Route path="/:locale(en|fr)/catalogus" element={<Catalog />} />
-            <Route path="/:locale(en|fr)/contact" element={<Contact />} />
-            <Route path="/:locale(en|fr)/verzending" element={<Shipping />} />
-            <Route path="/:locale(en|fr)/volg-je-bestelling" element={<OrderTracking />} />
-            <Route path="/:locale(en|fr)/track" element={<OrderTracking />} />
-            <Route path="/:locale(en|fr)/bestelling-volgen" element={<OrderTracking />} />
-            <Route path="/:locale(en|fr)/retourneren" element={<Returns />} />
-            <Route path="/:locale(en|fr)/over" element={<About />} />
-            <Route path="/:locale(en|fr)/stel-je-bundel-samen" element={<BundleBuilder />} />
-            <Route path="/:locale(en|fr)/bundels" element={<BundleBuilder />} />
-            <Route path="/:locale(en|fr)/waarom-senseglow" element={<WhySenseGlow />} />
-            <Route path="/:locale(en|fr)/duurzaamheid" element={<Sustainability />} />
-            <Route path="/:locale(en|fr)/privacy" element={<Privacy />} />
-            <Route path="/:locale(en|fr)/voorwaarden" element={<Terms />} />
-            <Route path="/:locale(en|fr)/login" element={<Login />} />
+            {(["en", "fr"] as const).flatMap((locale) => [
+              <Route key={`${locale}-home`} path={`/${locale}`} element={<Index />} />,
+              <Route key={`${locale}-quiz`} path={`/${locale}/quiz`} element={<Quiz />} />,
+              <Route key={`${locale}-product`} path={`/${locale}/product/:handle`} element={<ProductDetail />} />,
+              <Route key={`${locale}-producten`} path={`/${locale}/producten`} element={<Catalog />} />,
+              <Route key={`${locale}-catalogus`} path={`/${locale}/catalogus`} element={<Catalog />} />,
+              <Route key={`${locale}-contact`} path={`/${locale}/contact`} element={<Contact />} />,
+              <Route key={`${locale}-verzending`} path={`/${locale}/verzending`} element={<Shipping />} />,
+              <Route key={`${locale}-tracking`} path={`/${locale}/volg-je-bestelling`} element={<OrderTracking />} />,
+              <Route key={`${locale}-track`} path={`/${locale}/track`} element={<OrderTracking />} />,
+              <Route key={`${locale}-legacy-track`} path={`/${locale}/bestelling-volgen`} element={<OrderTracking />} />,
+              <Route key={`${locale}-returns`} path={`/${locale}/retourneren`} element={<Returns />} />,
+              <Route key={`${locale}-about`} path={`/${locale}/over`} element={<About />} />,
+              <Route key={`${locale}-builder`} path={`/${locale}/stel-je-bundel-samen`} element={<BundleBuilder />} />,
+              <Route key={`${locale}-bundles`} path={`/${locale}/bundels`} element={<BundleBuilder />} />,
+              <Route key={`${locale}-why`} path={`/${locale}/waarom-senseglow`} element={<WhySenseGlow />} />,
+              <Route key={`${locale}-sustainability`} path={`/${locale}/duurzaamheid`} element={<Sustainability />} />,
+              <Route key={`${locale}-privacy`} path={`/${locale}/privacy`} element={<Privacy />} />,
+              <Route key={`${locale}-terms`} path={`/${locale}/voorwaarden`} element={<Terms />} />,
+              <Route key={`${locale}-login`} path={`/${locale}/login`} element={<Login />} />,
+            ])}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
