@@ -180,7 +180,7 @@ export const SiteHeader = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-60 bg-background border-foreground/10">
                 {mobileLinks.map((link) => (
-                  <DropdownMenuItem key={link.label + link.href} asChild>
+                  <DropdownMenuItem key={`${link.label}-${link.href}-${mobileLinks.indexOf(link)}`} asChild>
                     <Link
                       to={localizePath(link.href)}
                       className="cursor-pointer text-sm text-foreground/70 hover:text-glow transition-colors py-2"
