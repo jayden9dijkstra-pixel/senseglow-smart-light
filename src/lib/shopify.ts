@@ -229,7 +229,8 @@ function toNumericVariantId(variantId: string): string {
  */
 export async function createStorefrontCheckout(
   items: CheckoutItem[],
-  discountCodes: string[] = []
+  discountCodes: string[] = [],
+  locale?: 'nl' | 'en' | 'fr'
 ): Promise<string> {
   const validatedItems = checkoutItemsSchema.parse(items);
 
@@ -241,6 +242,11 @@ export async function createStorefrontCheckout(
   if (discountCodes.length > 0) {
     url.searchParams.set('discount', discountCodes[0]);
   }
+  // Shopify Markets gebruikt deze parameter om de checkouttaal te kiezen.
+  const checkoutLocale = locale ?? (typeof document !== 'undefined' && ['nl', 'en', 'fr'].includes(document.documentElement.lang)
+    ? document.documentElement.lang
+    : undefined);
+  if (checkoutLocale) url.searchParams.set('locale', checkoutLocale);
   // Neem de Google Ads klik-informatie mee zodat attributie blijft werken.
   return appendClickIdsToUrl(url.toString());
 }

@@ -24,6 +24,9 @@ import OAuthConsent from "./pages/OAuthConsent";
 import BundleBuilder from "./pages/BundleBuilder";
 import WhySenseGlow from "./pages/WhySenseGlow";
 import NotFound from "./pages/NotFound";
+import { I18nProvider } from "@/i18n/I18nProvider";
+import { DomTranslator } from "@/i18n/DomTranslator";
+import { LanguageChooser } from "@/components/LanguageChooser";
 
 const queryClient = new QueryClient();
 
@@ -61,8 +64,11 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <I18nProvider>
           <ScrollToTopHandler />
           <AdsTracking />
+          <DomTranslator />
+          <LanguageChooser />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/quiz" element={<Quiz />} />
@@ -84,9 +90,29 @@ const App = () => (
             <Route path="/voorwaarden" element={<Terms />} />
             <Route path="/login" element={<Login />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
+            <Route path="/:locale(en|fr)" element={<Index />} />
+            <Route path="/:locale(en|fr)/quiz" element={<Quiz />} />
+            <Route path="/:locale(en|fr)/product/:handle" element={<ProductDetail />} />
+            <Route path="/:locale(en|fr)/producten" element={<Catalog />} />
+            <Route path="/:locale(en|fr)/catalogus" element={<Catalog />} />
+            <Route path="/:locale(en|fr)/contact" element={<Contact />} />
+            <Route path="/:locale(en|fr)/verzending" element={<Shipping />} />
+            <Route path="/:locale(en|fr)/volg-je-bestelling" element={<OrderTracking />} />
+            <Route path="/:locale(en|fr)/track" element={<OrderTracking />} />
+            <Route path="/:locale(en|fr)/bestelling-volgen" element={<OrderTracking />} />
+            <Route path="/:locale(en|fr)/retourneren" element={<Returns />} />
+            <Route path="/:locale(en|fr)/over" element={<About />} />
+            <Route path="/:locale(en|fr)/stel-je-bundel-samen" element={<BundleBuilder />} />
+            <Route path="/:locale(en|fr)/bundels" element={<BundleBuilder />} />
+            <Route path="/:locale(en|fr)/waarom-senseglow" element={<WhySenseGlow />} />
+            <Route path="/:locale(en|fr)/duurzaamheid" element={<Sustainability />} />
+            <Route path="/:locale(en|fr)/privacy" element={<Privacy />} />
+            <Route path="/:locale(en|fr)/voorwaarden" element={<Terms />} />
+            <Route path="/:locale(en|fr)/login" element={<Login />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </I18nProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

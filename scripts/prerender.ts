@@ -28,7 +28,7 @@ import type { ShopifyProduct } from "../src/lib/shopify";
 const DIST = resolve("dist");
 const TEMPLATE_PATH = resolve(DIST, "index.html");
 
-const STATIC_ROUTES = [
+const BASE_STATIC_ROUTES = [
   "/",
   "/producten",
   "/verzending",
@@ -43,6 +43,7 @@ const STATIC_ROUTES = [
   "/quiz",
   "/stel-je-bundel-samen",
 ];
+const STATIC_ROUTES = BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]);
 
 /* ---------------------------------------------------------------- Shopify */
 
@@ -126,11 +127,16 @@ interface HeadInput {
 }
 
 function buildHead({ path, seo, schemas, ogType, ogImage }: HeadInput): string {
+  const cleanPath = path.replace(/^\/(en|fr)(?=\/|$)/, "") || "/";
   const url = `${SITE_URL}${path === "/" ? "/" : path}`;
   const lines = [
     `<title>${escapeHtml(seo.title)}</title>`,
     `<meta name="description" content="${escapeAttr(seo.description)}" />`,
     `<link rel="canonical" href="${escapeAttr(url)}" />`,
+    `<link rel="alternate" hreflang="nl" href="${SITE_URL}${cleanPath}" />`,
+    `<link rel="alternate" hreflang="en" href="${SITE_URL}/en${cleanPath}" />`,
+    `<link rel="alternate" hreflang="fr" href="${SITE_URL}/fr${cleanPath}" />`,
+    `<link rel="alternate" hreflang="x-default" href="${SITE_URL}${cleanPath}" />`,
     `<meta property="og:site_name" content="${escapeAttr(SITE_NAME)}" />`,
     `<meta property="og:type" content="${ogType}" />`,
     `<meta property="og:url" content="${escapeAttr(url)}" />`,
@@ -267,7 +273,8 @@ async function main() {
 
   // Vaste routes
   for (const path of STATIC_ROUTES) {
-    const seo = getRouteSeo(path) ?? DEFAULT_SEO;
+    const cleanPath = path.replace(/^\/(en|fr)(?=\/|$)/, "") || "/";
+    const seo = getRouteSeo(cleanPath) ?? DEFAULT_SEO;
     const schemas: unknown[] = [];
     if (path === "/") schemas.push(organizationSchema());
     schemas.push(
@@ -280,7 +287,7 @@ async function main() {
             ],
       ),
     );
-    const withCatalog = path === "/" || path === "/producten";
+    const withCatalog = cleanPath === "/" || cleanPath === "/producten";
     if (withCatalog && catalogProducts.length) schemas.push(catalogSchema(catalogProducts, path));
     let html = render({ path, seo, schemas, ogType: "website" });
     if (withCatalog && catalogMarkup) {
@@ -292,8 +299,8 @@ async function main() {
 
   // Productroutes (parallel, faalveilig per route)
   await Promise.all(
-    ENABLED_PRODUCT_HANDLES.map(async (handle) => {
-      const path = `/product/${handle}`;
+    ENABLED_PRODUCT_HANDLES.flatMap((handle) => ["nl", "en", "fr"].map(async (locale) => {
+      const path = `${locale === "nl" ? "" : `/${locale}`}/product/${handle}`;
       const seo = getProductSeo(handle) ?? DEFAULT_SEO;
       const schemas: unknown[] = [];
       let productImage: string | undefined;
@@ -336,7 +343,7 @@ async function main() {
         render({ path, seo, schemas, ogType: "product", ogImage: productImage ?? ogImage }),
       );
       written++;
-    }),
+    })),
   );
 
   console.log(
