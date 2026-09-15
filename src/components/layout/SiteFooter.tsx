@@ -42,7 +42,7 @@ const FooterNewsletter = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <p className="text-sm text-foreground/50">
-        Krijg 10% korting bij launch en wees als eerste op de hoogte.
+        Krijg 10% korting op je eerste bestelling en blijf op de hoogte.
       </p>
       <Input
         type="email"

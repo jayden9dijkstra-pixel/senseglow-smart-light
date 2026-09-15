@@ -148,12 +148,12 @@ export const ProductHeroSection = ({
               </div>
 
               <a href="#reviews" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                <span className="flex" aria-label="Vijf sterren">
+                <span className="flex" aria-hidden="true">
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} className="h-4 w-4 fill-primary text-primary" />
+                    <Star key={index} className="h-4 w-4 text-muted-foreground/50" />
                   ))}
                 </span>
-                <span>Nog geen reviews. Wees de eerste na je aankoop.</span>
+                <span>Nog geen reviews, wees de eerste.</span>
               </a>
 
               {/* Price with animation */}
@@ -169,7 +169,7 @@ export const ProductHeroSection = ({
                 </div>
                 <div className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
-                  <span>Bij je thuis binnen 7-14 werkdagen</span>
+                  <span>Gratis bezorgd, bij je thuis binnen 7-14 werkdagen</span>
                 </div>
               </div>
 
