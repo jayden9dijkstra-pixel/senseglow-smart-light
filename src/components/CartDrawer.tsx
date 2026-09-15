@@ -82,7 +82,12 @@ export function CartDrawer() {
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
         setIsOpen(false);
-        window.location.href = checkoutUrl;
+        const checkoutWindow = window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
+        if (!checkoutWindow) {
+          toast.error('Checkout kon niet openen', {
+            description: 'Sta pop-ups toe en probeer het opnieuw.',
+          });
+        }
       }
     } catch {
       // handled by store

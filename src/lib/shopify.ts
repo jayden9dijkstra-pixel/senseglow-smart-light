@@ -220,13 +220,7 @@ function toNumericVariantId(variantId: string): string {
   return match ? match[1] : variantId;
 }
 
-/**
- * Build a Shopify cart permalink on the branded checkout domain
- * (checkout.senseglow.shop). Optionally applies a discount code via the
- * `discount` query parameter so bundle discounts still resolve at checkout.
- *
- * Example: https://checkout.senseglow.shop/cart/123:1,456:2?discount=SG-PACK-3
- */
+/** Maak een echte Shopify-cart aan en geef de beveiligde checkout-URL terug. */
 export async function createStorefrontCheckout(
   items: CheckoutItem[],
   discountCodes: string[] = [],
@@ -234,14 +228,43 @@ export async function createStorefrontCheckout(
 ): Promise<string> {
   const validatedItems = checkoutItemsSchema.parse(items);
 
-  const cartPath = validatedItems
-    .map(item => `${toNumericVariantId(item.variantId)}:${item.quantity}`)
-    .join(',');
-
-  const url = new URL(`https://${SHOPIFY_CHECKOUT_DOMAIN}/cart/${cartPath}`);
-  if (discountCodes.length > 0) {
-    url.searchParams.set('discount', discountCodes[0]);
+  const mutation = `
+    mutation CreateCart($input: CartInput!) {
+      cartCreate(input: $input) {
+        cart { id checkoutUrl }
+        userErrors { field message }
+      }
+    }
+  `;
+  const data = await storefrontApiRequest(mutation, {
+    input: {
+      lines: validatedItems.map((item) => ({
+        merchandiseId: item.variantId.startsWith('gid://')
+          ? item.variantId
+          : `gid://shopify/ProductVariant/${toNumericVariantId(item.variantId)}`,
+        quantity: item.quantity,
+      })),
+      discountCodes,
+    },
+  });
+  const result = data as {
+    data?: {
+      cartCreate?: {
+        cart?: { checkoutUrl?: string };
+        userErrors?: Array<{ message?: string }>;
+      };
+    };
+  } | undefined;
+  const errors = result?.data?.cartCreate?.userErrors || [];
+  if (errors.length > 0) {
+    throw new Error(errors.map((error) => error.message || 'Shopify cart error').join(', '));
   }
+  const checkoutUrl = result?.data?.cartCreate?.cart?.checkoutUrl;
+  if (!checkoutUrl) throw new Error('Shopify checkout URL ontbreekt');
+
+  const url = new URL(checkoutUrl);
+  url.hostname = SHOPIFY_CHECKOUT_DOMAIN;
+  url.searchParams.set('channel', 'online_store');
   // Shopify Markets gebruikt deze parameter om de checkouttaal te kiezen.
   const checkoutLocale = locale ?? (typeof document !== 'undefined' && ['nl', 'en', 'fr'].includes(document.documentElement.lang)
     ? document.documentElement.lang

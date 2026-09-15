@@ -8,6 +8,11 @@
 
 export const ADS_CONVERSION_ID = "AW-18351813640";
 
+const ADS_EVENT_LABELS: Partial<Record<string, string>> = {
+  add_to_cart: "OR-lCMDbmvMcEIjo6a5E",
+  begin_checkout: "WiOLCL3bmvMcEIjo6a5E",
+};
+
 const CLICK_ID_KEYS = ["gclid", "gbraid", "wbraid"] as const;
 type ClickIdKey = (typeof CLICK_ID_KEYS)[number];
 
@@ -138,6 +143,14 @@ export function trackAdsEvent(name: string, params: Record<string, unknown> = {}
     const gtag = typeof window !== "undefined" ? window.gtag : undefined;
     if (typeof gtag !== "function") return;
     gtag("event", name, { send_to: ADS_CONVERSION_ID, ...params });
+
+    const label = ADS_EVENT_LABELS[name];
+    if (label) {
+      gtag("event", "conversion", {
+        send_to: `${ADS_CONVERSION_ID}/${label}`,
+        ...params,
+      });
+    }
   } catch {
     // tracking mag nooit de flow blokkeren
   }
