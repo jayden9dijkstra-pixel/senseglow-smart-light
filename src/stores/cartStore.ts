@@ -2,6 +2,25 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
+import { trackAdsEvent } from '@/lib/adsTracking';
+
+/** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
+function toAdsItems(items: CartItem[]) {
+  return items.map((i) => ({
+    item_id: i.variantId,
+    item_name: i.product.node.title,
+    price: parseFloat(i.price.amount),
+    quantity: i.quantity,
+  }));
+}
+
+function adsValue(items: CartItem[]): number {
+  const total = items.reduce((sum, i) => {
+    const gross = parseFloat(i.price.amount) * i.quantity;
+    return sum + (i.isBundle && i.bundleRate ? gross * (1 - i.bundleRate) : gross);
+  }, 0);
+  return Math.round(total * 100) / 100;
+}
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -87,11 +106,21 @@ export const useCartStore = create<CartStore>()(
           }
         }
         set({ items: merged });
+        trackAdsEvent('add_to_cart', {
+          value: adsValue(newItems),
+          currency: 'EUR',
+          items: toAdsItems(newItems),
+        });
         toast.success(message);
       },
 
       addItem: (item) => {
         const { items } = get();
+        trackAdsEvent('add_to_cart', {
+          value: adsValue([item]),
+          currency: 'EUR',
+          items: toAdsItems([item]),
+        });
 
         if (item.isBundle && item.bundlePackSize) {
           // Bundles: stack identical (variant + pack size) lines
@@ -171,6 +200,12 @@ export const useCartStore = create<CartStore>()(
       createCheckout: async () => {
         const { items, setLoading, setCheckoutUrl } = get();
         if (items.length === 0) return;
+
+        trackAdsEvent('begin_checkout', {
+          value: adsValue(items),
+          currency: 'EUR',
+          items: toAdsItems(items),
+        });
 
         setLoading(true);
         try {

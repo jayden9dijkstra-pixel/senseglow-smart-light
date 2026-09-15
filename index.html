@@ -7,7 +7,10 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'AW-18351813640');
+      gtag('config', 'AW-18351813640', {
+        send_page_view: true,
+        linker: { domains: ['senseglow.shop', 'www.senseglow.shop', 'checkout.senseglow.shop'] }
+      });
     </script>
     <meta charset="UTF-8" />
     <script>

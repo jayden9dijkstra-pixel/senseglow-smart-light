@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import { z } from "zod";
 import { ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
+import { appendClickIdsToUrl } from "@/lib/adsTracking";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
@@ -240,7 +241,8 @@ export async function createStorefrontCheckout(
   if (discountCodes.length > 0) {
     url.searchParams.set('discount', discountCodes[0]);
   }
-  return url.toString();
+  // Neem de Google Ads klik-informatie mee zodat attributie blijft werken.
+  return appendClickIdsToUrl(url.toString());
 }
 
 /**
