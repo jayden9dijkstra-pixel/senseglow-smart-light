@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { PageTransition } from "@/components/PageTransition";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
-import { NewsletterPopup } from "@/components/NewsletterPopup";
 import { Seo } from "@/components/seo/Seo";
 import { getRouteSeo } from "@/lib/seoContent";
 
@@ -41,7 +40,6 @@ export const PageLayout = ({ children, seo }: PageLayoutProps) => {
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />
-        <NewsletterPopup />
       </div>
     </PageTransition>
   );

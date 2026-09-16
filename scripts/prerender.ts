@@ -200,7 +200,11 @@ function catalogFallback(products: ShopifyProduct[]): string {
       ].join("");
     })
     .join("");
-  return `<section id="prerendered-catalog"><h1>SenseGlow collectie</h1><ul>${items}</ul></section>`;
+  // Visueel verborgen (blijft leesbaar voor crawlers) zodat bezoekers bij een
+  // refresh geen flits van productafbeeldingen zien voor React hydrateert.
+  const hidden =
+    "position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0";
+  return `<section id="prerendered-catalog" style="${hidden}"><h1>SenseGlow collectie</h1><ul>${items}</ul></section>`;
 }
 
 function catalogSchema(products: ShopifyProduct[], path: string): unknown {
