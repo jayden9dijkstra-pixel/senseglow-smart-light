@@ -4,6 +4,7 @@ import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/
 import { toast } from 'sonner';
 import { trackAdsEvent } from '@/lib/adsTracking';
 import { trackSiteEvent } from '@/lib/siteAnalytics';
+import { translateStatic as tr } from '@/i18n/I18nProvider';
 
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
