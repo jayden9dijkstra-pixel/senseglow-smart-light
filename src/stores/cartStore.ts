@@ -155,7 +155,7 @@ export const useCartStore = create<CartStore>()(
           } else {
             set({ items: [...items, item] });
           }
-          toast.success('Bundel toegevoegd aan winkelwagen', {
+          toast.success(tr('Bundel toegevoegd aan winkelwagen'), {
             description: `${item.bundleName}${item.bundleVariantLabel ? `, ${item.bundleVariantLabel}` : ''}`,
           });
           return;
