@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import wordmark from "@/assets/logo-wordmark-sharp.png";
+import wordmark from "@/assets/logo-wordmark.png";
 import {
   PRODUCT_HANDLE,
   WAVE_PRODUCT_HANDLE,
@@ -106,13 +106,13 @@ export const SiteHeader = () => {
   return (
     <header className="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md">
       <div className="bg-primary text-primary-foreground">
-        <div className="container flex h-7 md:h-8 items-center justify-center gap-2 text-[9px] md:text-[10px] tracking-[0.12em]">
-          <span className="h-1 w-1 rounded-full bg-accent" aria-hidden="true" />
+        <div className="container flex h-11 items-center justify-center gap-2 text-xs tracking-[0.14em]">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
           {t("Gratis verzending in Nederland en België")}
         </div>
       </div>
       <div className="container">
-        <div className="flex h-[4.5rem] md:h-20 items-center justify-between gap-4">
+        <div className="flex h-20 md:h-24 items-center justify-between gap-4">
           {/* Links: logo */}
           <button
             onClick={() => navigate(localizePath("/"))}
@@ -124,7 +124,7 @@ export const SiteHeader = () => {
               alt="SenseGlow logo"
               loading="eager"
               {...{ fetchpriority: "high" }}
-              className="h-8 md:h-10 w-auto object-contain"
+              className="h-11 md:h-14 w-auto object-contain"
               style={{ imageRendering: "auto" }}
             />
           </button>
