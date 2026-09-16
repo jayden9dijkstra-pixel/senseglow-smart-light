@@ -72,3 +72,12 @@
 - Kortingen naar 10/15/20% (SG-PACK-2/3/4)
 - Live Shopify-varianten, 5 min cache, concept in localStorage 24u
 - Shopify Admin-token voor bestelling volgen werkt sinds 14-09
+
+## Trechterfixes (ads)
+- [x] /products/<handle>, /collections/..., /pages/... en /nl/... omleiden naar de juiste pagina (met gclid)
+- [x] Winkelwagen schuift open bij toevoegen; meldingen in EN en FR
+- [x] Taalvoorkeur overschrijft advertentielandingen niet meer
+- [x] Winkelwagenteller valt op 0 na verwijderen (getest)
+- [x] Advertentielinks gecontroleerd: alle 10 advertentiegroepen wijzen naar /product/<handle>
+- [ ] Levertijd gelijktrekken met Shopify (wacht op juiste levertijd van gebruiker)
+- [ ] Publiceren
