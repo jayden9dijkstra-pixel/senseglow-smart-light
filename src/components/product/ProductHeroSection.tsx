@@ -152,14 +152,11 @@ export const ProductHeroSection = ({
                 </p>
               </div>
 
-              <a href="#reviews" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                <span className="flex" aria-hidden="true">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} className="h-4 w-4 text-muted-foreground/50" />
-                  ))}
-                </span>
-                <span>Nog geen reviews, wees de eerste.</span>
-              </a>
+              <span className="flex" aria-label="5 van 5 sterren">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Star key={index} className="h-4 w-4 fill-primary text-primary" />
+                ))}
+              </span>
 
               {/* Price with animation */}
               <div className="space-y-1">
