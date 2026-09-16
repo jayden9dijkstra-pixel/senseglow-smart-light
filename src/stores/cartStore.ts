@@ -127,6 +127,7 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         const { items } = get();
+        set({ lastAddedAt: Date.now() });
         trackAdsEvent('add_to_cart', {
           value: adsValue([item]),
           currency: 'EUR',
