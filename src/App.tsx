@@ -26,6 +26,7 @@ import OAuthConsent from "./pages/OAuthConsent";
 import BundleBuilder from "./pages/BundleBuilder";
 import WhySenseGlow from "./pages/WhySenseGlow";
 import NotFound from "./pages/NotFound";
+import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
 import { LanguageChooser } from "@/components/LanguageChooser";
