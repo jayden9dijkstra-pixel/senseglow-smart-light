@@ -13,6 +13,7 @@ import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Package, Check, Rotat
 import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/layout/PaymentIcons";
 import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
+import { toast } from "sonner";
 
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
   const key = getProductKeyFromHandle(item.product.node.handle);
