@@ -80,7 +80,12 @@ export function CartDrawer() {
   const handleCheckout = async () => {
     // Open het tabblad meteen bij de klik, zolang de browser de klik nog als
     // handeling van de bezoeker ziet. De afrekenpagina wordt er daarna in geladen.
-    const checkoutWindow = window.open('', '_blank', 'noopener,noreferrer');
+    const checkoutWindow = window.open('', '_blank');
+    try {
+      if (checkoutWindow) checkoutWindow.opener = null;
+    } catch {
+      // sommige browsers staan dit niet toe
+    }
     try {
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
