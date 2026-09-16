@@ -106,7 +106,7 @@ export const SiteHeader = () => {
   return (
     <header className="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md">
       <div className="bg-primary text-primary-foreground">
-        <div className="container flex h-9 items-center justify-center gap-2 text-[11px] tracking-[0.12em]">
+        <div className="container flex h-11 items-center justify-center gap-2 text-xs tracking-[0.14em]">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
           {t("Gratis verzending in Nederland en België")}
         </div>
@@ -124,7 +124,8 @@ export const SiteHeader = () => {
               alt="SenseGlow logo"
               loading="eager"
               {...{ fetchpriority: "high" }}
-              className="h-9 md:h-11 w-auto object-contain"
+              className="h-11 md:h-14 w-auto object-contain"
+              style={{ imageRendering: "auto" }}
             />
           </button>
 
