@@ -81,6 +81,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (redirected.current) return;
     redirected.current = true;
     if (locale !== "nl") return;
+    // Een klik uit een advertentie of zoekresultaat landt op het adres dat daar
+    // staat; die mag een oude taalkeuze niet omzeilen.
+    if (isCampaignEntry()) return;
     let stored: string | null = null;
     try {
       if (localStorage.getItem(LANGUAGE_CHOICE_KEY) !== "true") return;
