@@ -46,20 +46,20 @@ export const HeroSection = () => {
       />
 
       <div className="container">
-        <div className="max-w-3xl py-28 md:py-40 animate-fade-in-slow">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-hero-foreground/50 font-medium mb-6">
+        <div className="max-w-3xl py-20 sm:py-24 md:py-28 lg:py-32 animate-fade-in-slow">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-hero-foreground/50 font-medium mb-4 md:mb-5">
             SenseGlow, draadloze sensorverlichting
           </p>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-hero-foreground">
+          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.08] text-hero-foreground max-w-2xl">
             Licht dat aangaat wanneer jij binnenkomt.
           </h1>
 
-          <p className="mt-6 text-base md:text-lg leading-relaxed text-hero-foreground/70 max-w-xl">
+          <p className="mt-5 text-base md:text-lg leading-relaxed text-hero-foreground/70 max-w-xl">
             Draadloze sensor-verlichting voor kast, hal, tuin en werkplek. Geplaatst binnen 60 seconden, zonder boren of stopcontact.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-5">
+          <div className="mt-7 md:mt-8 flex flex-col sm:flex-row sm:items-center gap-4 md:gap-5">
             <Button
               onClick={scrollToProducts}
               size="lg"
