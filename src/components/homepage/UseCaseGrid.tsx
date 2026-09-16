@@ -4,8 +4,11 @@ import { ShopifyProduct } from "@/lib/shopify";
 import wallLampHomepageAsset from "@/assets/wall-lamp-homepage-square.png.asset.json";
 import waveHomepageAsset from "@/assets/wave-homepage-square.png.asset.json";
 import ambientHomepageAsset from "@/assets/ambient-homepage-square.png.asset.json";
+import ambientFallbackImage from "@/assets/ba/ambient-on.jpg";
 import flexHomepageImage from "@/assets/ba/flex-on.jpg";
 import lanternHomepageImage from "@/assets/ba/lantern-on.jpg";
+import wallLampFallbackImage from "@/assets/ba/wall-lamp-on.jpg";
+import waveFallbackImage from "@/assets/ba/wave-on.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const homepageImages: Record<string, { url: string; altText: string }> = {
@@ -29,6 +32,14 @@ const homepageImages: Record<string, { url: string; altText: string }> = {
     url: flexHomepageImage,
     altText: "SenseGlow Flex met warm licht op een bureau",
   },
+};
+
+const homepageImageFallbacks: Record<string, string> = {
+  senseglow_wall_lamp: wallLampFallbackImage,
+  senseglow_wave: waveFallbackImage,
+  senseglow_ambient_motion_bar: ambientFallbackImage,
+  senseglow_solar_lantern: lanternHomepageImage,
+  senseglow_flex: flexHomepageImage,
 };
 
 const tiles = [
@@ -114,6 +125,12 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                         alt={image.altText || product?.node.title || title}
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                         loading="lazy"
+                        onError={(event) => {
+                          const fallback = homepageImageFallbacks[handle];
+                          if (fallback && event.currentTarget.src !== fallback) {
+                            event.currentTarget.src = fallback;
+                          }
+                        }}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
