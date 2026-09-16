@@ -9,12 +9,14 @@ import { translateStatic as tr } from '@/i18n/I18nProvider';
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
   return items.map((i) => ({
-    item_id: i.variantId,
+    item_id: numericVariantId(i.variantId),
     item_name: i.product.node.title,
+    item_variant: i.variantTitle,
     price: parseFloat(i.price.amount),
     quantity: i.quantity,
   }));
 }
+
 
 function adsValue(items: CartItem[]): number {
   const total = items.reduce((sum, i) => {
