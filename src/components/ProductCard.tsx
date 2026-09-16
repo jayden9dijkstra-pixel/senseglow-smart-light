@@ -6,6 +6,7 @@ import { ShoppingCart } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { trackSelectItem, numericVariantId } from "@/lib/adsTracking";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -32,6 +33,23 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const imageUrl = product.node.images?.edges?.[0]?.node?.url;
   const price = product.node.priceRange.minVariantPrice;
+
+  const handleSelect = () => {
+    trackSelectItem(
+      [
+        {
+          item_id: selectedVariant ? numericVariantId(selectedVariant.id) : product.node.handle,
+          item_name: product.node.title,
+          item_variant: selectedVariant?.title,
+          price: parseFloat(price.amount),
+          quantity: 1,
+        },
+      ],
+      "Productoverzicht"
+    );
+  };
+
+
 
 
   return (

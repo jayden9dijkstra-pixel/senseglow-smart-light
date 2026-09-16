@@ -14,6 +14,7 @@ import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/
 import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
+import { trackViewCart, numericVariantId } from "@/lib/adsTracking";
 
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
   const key = getProductKeyFromHandle(item.product.node.handle);
