@@ -35,6 +35,33 @@ export function addLocale(path: string, locale: Locale): string {
   return `${locale === "nl" ? "" : `/${locale}`}${clean === "/" ? "/" : clean}${suffix}`;
 }
 
+/**
+ * Vertaling buiten React (bijvoorbeeld voor meldingen vanuit de winkelwagen).
+ * Leest de actieve taal van het document.
+ */
+export function translateStatic(text: string): string {
+  if (typeof document === "undefined") return text;
+  const lang = document.documentElement.lang;
+  if (lang !== "en" && lang !== "fr") return text;
+  return dictionaries[lang][text] || text;
+}
+
+/** Bezoeker komt via een advertentie of een externe verwijzer binnen. */
+function isCampaignEntry(): boolean {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  if (["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign"].some((key) => params.has(key))) {
+    return true;
+  }
+  try {
+    const referrer = document.referrer;
+    if (!referrer) return false;
+    return new URL(referrer).hostname !== window.location.hostname;
+  } catch {
+    return false;
+  }
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,6 +81,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (redirected.current) return;
     redirected.current = true;
     if (locale !== "nl") return;
+    // Een klik uit een advertentie of zoekresultaat landt op het adres dat daar
+    // staat; die mag een oude taalkeuze niet omzeilen.
+    if (isCampaignEntry()) return;
     let stored: string | null = null;
     try {
       if (localStorage.getItem(LANGUAGE_CHOICE_KEY) !== "true") return;

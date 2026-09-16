@@ -26,6 +26,7 @@ import OAuthConsent from "./pages/OAuthConsent";
 import BundleBuilder from "./pages/BundleBuilder";
 import WhySenseGlow from "./pages/WhySenseGlow";
 import NotFound from "./pages/NotFound";
+import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
 import { LanguageChooser } from "@/components/LanguageChooser";
@@ -117,6 +118,16 @@ const App = () => (
               <Route key={`${locale}-terms`} path={`/${locale}/voorwaarden`} element={<Terms />} />,
               <Route key={`${locale}-login`} path={`/${locale}/login`} element={<Login />} />,
             ])}
+            {/* Shopify-adressen uit de advertenties en de feed opvangen */}
+            <Route path="/products/:handle" element={<LegacyRedirect />} />
+            <Route path="/collections/*" element={<LegacyRedirect />} />
+            <Route path="/pages/*" element={<LegacyRedirect />} />
+            {(["en", "fr"] as const).flatMap((locale) => [
+              <Route key={`${locale}-legacy-product`} path={`/${locale}/products/:handle`} element={<LegacyRedirect />} />,
+              <Route key={`${locale}-legacy-collections`} path={`/${locale}/collections/*`} element={<LegacyRedirect />} />,
+              <Route key={`${locale}-legacy-pages`} path={`/${locale}/pages/*`} element={<LegacyRedirect />} />,
+            ])}
+            <Route path="/nl/*" element={<DutchPrefixRedirect />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

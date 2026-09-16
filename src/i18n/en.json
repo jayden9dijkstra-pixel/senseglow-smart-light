@@ -635,5 +635,16 @@
   "Veilig afrekenen": "Secure checkout",
   "Je winkelwagen is leeg": "Your cart is empty",
   "Nederlands": "Dutch",
-  "Taal kiezen": "Choose language"
+  "Taal kiezen": "Choose language",
+  "Toegevoegd aan winkelwagen": "Added to cart",
+  "Bundel toegevoegd aan winkelwagen": "Bundle added to cart",
+  "Verwijderd uit winkelwagen": "Removed from cart",
+  "Checkout mislukt": "Checkout failed",
+  "Probeer het opnieuw.": "Please try again.",
+  "Winkelwagen": "Cart",
+  "Checkout aanmaken...": "Preparing checkout...",
+  "Totaal": "Total",
+  "Gratis": "Free",
+  "Bundelkorting": "Bundle discount",
+  "Gratis NL en BE": "Free NL and BE"
 }

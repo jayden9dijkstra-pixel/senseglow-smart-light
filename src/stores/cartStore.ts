@@ -4,6 +4,7 @@ import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/
 import { toast } from 'sonner';
 import { trackAdsEvent } from '@/lib/adsTracking';
 import { trackSiteEvent } from '@/lib/siteAnalytics';
+import { translateStatic as tr } from '@/i18n/I18nProvider';
 
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
@@ -52,6 +53,8 @@ interface CartStore {
   cartId: string | null;
   checkoutUrl: string | null;
   isLoading: boolean;
+  /** Telt op bij elke toevoeging, zodat de winkelwagen zichtbaar opengaat. */
+  lastAddedAt: number;
 
   addItem: (item: CartItem) => void;
   /** Meerdere regels van een zelf samengestelde bundel, met één melding. */
@@ -78,6 +81,7 @@ export const useCartStore = create<CartStore>()(
       cartId: null,
       checkoutUrl: null,
       isLoading: false,
+      lastAddedAt: 0,
 
       refreshPrices: async () => {
         const { items } = get();
@@ -107,6 +111,7 @@ export const useCartStore = create<CartStore>()(
           }
         }
         set({ items: merged });
+        set({ lastAddedAt: Date.now() });
         trackAdsEvent('add_to_cart', {
           value: adsValue(newItems),
           currency: 'EUR',
@@ -116,11 +121,13 @@ export const useCartStore = create<CartStore>()(
           itemName: newItems[0]?.product.node.title,
           value: adsValue(newItems),
         });
-        toast.success(message);
+        toast.success(tr(message));
       },
+
 
       addItem: (item) => {
         const { items } = get();
+        set({ lastAddedAt: Date.now() });
         trackAdsEvent('add_to_cart', {
           value: adsValue([item]),
           currency: 'EUR',
@@ -148,7 +155,7 @@ export const useCartStore = create<CartStore>()(
           } else {
             set({ items: [...items, item] });
           }
-          toast.success('Bundel toegevoegd aan winkelwagen', {
+          toast.success(tr('Bundel toegevoegd aan winkelwagen'), {
             description: `${item.bundleName}${item.bundleVariantLabel ? `, ${item.bundleVariantLabel}` : ''}`,
           });
           return;
@@ -164,12 +171,12 @@ export const useCartStore = create<CartStore>()(
                 : i
             ),
           });
-          toast.success('Toegevoegd aan winkelwagen', {
+          toast.success(tr('Toegevoegd aan winkelwagen'), {
             description: `${item.product.node.title} (${existingItem.quantity + item.quantity}x)`,
           });
         } else {
           set({ items: [...items, item] });
-          toast.success('Toegevoegd aan winkelwagen', {
+          toast.success(tr('Toegevoegd aan winkelwagen'), {
             description: item.product.node.title,
           });
         }
@@ -196,7 +203,7 @@ export const useCartStore = create<CartStore>()(
             return !(item.variantId === variantId && !item.isBundle);
           }),
         });
-        toast.info('Verwijderd uit winkelwagen');
+        toast.info(tr('Verwijderd uit winkelwagen'));
       },
 
       clearCart: () => {
@@ -251,8 +258,8 @@ export const useCartStore = create<CartStore>()(
           );
           setCheckoutUrl(checkoutUrl);
         } catch {
-          toast.error('Checkout mislukt', {
-            description: 'Probeer het opnieuw.',
+          toast.error(tr('Checkout mislukt'), {
+            description: tr('Probeer het opnieuw.'),
           });
           throw new Error('Checkout failed');
         } finally {
@@ -263,6 +270,11 @@ export const useCartStore = create<CartStore>()(
     {
       name: 'shopify-cart',
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        items: state.items,
+        cartId: state.cartId,
+        checkoutUrl: state.checkoutUrl,
+      }),
     }
   )
 );

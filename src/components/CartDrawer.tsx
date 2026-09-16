@@ -43,12 +43,19 @@ export function CartDrawer() {
     createCheckout,
     refreshPrices
   } = useCartStore();
+  const lastAddedAt = useCartStore(state => state.lastAddedAt);
 
   // Keep line prices in sync with the live Shopify variant prices so the
   // drawer total always matches the checkout subtotal.
   React.useEffect(() => {
     if (isOpen) refreshPrices();
   }, [isOpen, refreshPrices]);
+
+  // Zichtbare bevestiging: de winkelwagen schuift open zodra er iets bij komt.
+  React.useEffect(() => {
+    if (lastAddedAt > 0) setIsOpen(true);
+  }, [lastAddedAt]);
+
 
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);

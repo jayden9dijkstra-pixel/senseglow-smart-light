@@ -635,5 +635,16 @@
   "Veilig afrekenen": "Paiement sécurisé",
   "Je winkelwagen is leeg": "Votre panier est vide",
   "Nederlands": "Néerlandais",
-  "Taal kiezen": "Choisir la langue"
+  "Taal kiezen": "Choisir la langue",
+  "Toegevoegd aan winkelwagen": "Ajouté au panier",
+  "Bundel toegevoegd aan winkelwagen": "Pack ajouté au panier",
+  "Verwijderd uit winkelwagen": "Retiré du panier",
+  "Checkout mislukt": "Le paiement n'a pas pu démarrer",
+  "Probeer het opnieuw.": "Veuillez réessayer.",
+  "Winkelwagen": "Panier",
+  "Checkout aanmaken...": "Préparation du paiement...",
+  "Totaal": "Total",
+  "Gratis": "Gratuite",
+  "Bundelkorting": "Remise pack",
+  "Gratis NL en BE": "Gratuit NL et BE"
 }
