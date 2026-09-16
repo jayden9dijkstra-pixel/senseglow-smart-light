@@ -171,7 +171,7 @@ export const useCartStore = create<CartStore>()(
                 : i
             ),
           });
-          toast.success('Toegevoegd aan winkelwagen', {
+          toast.success(tr('Toegevoegd aan winkelwagen'), {
             description: `${item.product.node.title} (${existingItem.quantity + item.quantity}x)`,
           });
         } else {
