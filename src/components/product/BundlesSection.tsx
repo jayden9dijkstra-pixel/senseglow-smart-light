@@ -194,7 +194,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                       </p>
                     </div>
 
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-1.5">
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
                         <span>
@@ -210,17 +210,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
                         <span>Gratis bezorging, alles in één zending</span>
                       </li>
-                      <li className="flex items-start gap-2 text-sm text-green-700 dark:text-green-400">
+                      <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                        <span>Bij je thuis binnen 7-14 werkdagen na verwerking</span>
-                      </li>
-                      <li className="flex items-start gap-2 text-sm text-foreground/70">
-                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>1 jaar garantie</span>
-                      </li>
-                      <li className="flex items-start gap-2 text-sm text-foreground/70">
-                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>30 dagen gratis retour</span>
+                        <span>1 jaar garantie · 30 dagen retour</span>
                       </li>
                     </ul>
 
