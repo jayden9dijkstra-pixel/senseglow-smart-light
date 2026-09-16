@@ -91,6 +91,21 @@ const Catalog = () => {
                     <Link
                       key={p.node.id}
                       to={`/product/${p.node.handle}`}
+                      onClick={() =>
+                        trackSelectItem(
+                          [
+                            {
+                              item_id: numericVariantId(
+                                p.node.variants?.edges?.[0]?.node?.id ?? p.node.handle
+                              ),
+                              item_name: p.node.title,
+                              price: parseFloat(price.amount),
+                              quantity: 1,
+                            },
+                          ],
+                          "Producten"
+                        )
+                      }
                       className="group bg-background p-8 flex flex-col gap-6 transition-all duration-500 hover:bg-foreground/[0.02]"
                     >
                       <div className="aspect-square overflow-hidden rounded-sm bg-muted/10 glass">
