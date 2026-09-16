@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import en from "./en.json";
 import fr from "./fr.json";
@@ -69,16 +69,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    // Alleen een bewuste keuze onthouden; de URL mag die keuze niet overschrijven.
-    try {
-      if (locale !== "nl" || localStorage.getItem(LANGUAGE_CHOICE_KEY) === "true") {
-        if (!(locale === "nl" && !redirected.current)) {
-          localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
-        }
-      }
-    } catch {
-      // opslag kan geblokkeerd zijn
-    }
+    // De keuze zelf wordt in setLocale bewaard; de URL mag die niet overschrijven.
   }, [locale]);
 
   const value = useMemo(() => ({ locale, t, localizePath, setLocale }), [locale, localizePath, setLocale, t]);
