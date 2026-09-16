@@ -13,6 +13,11 @@ Wat ik heb nagekeken (live, vandaag):
 Nieuwe routes `/products/:handle`, `/en/products/:handle` en `/fr/products/:handle` die direct doorsturen naar de juiste productpagina, met behoud van alle vragen in het adres (gclid en dergelijke). Een onbekende handle gaat naar de productenpagina in plaats van de homepage.
 Ook `/nl/...` (nu een 404) stuurt door naar dezelfde pagina zonder taalvoorvoegsel, en `/collections/...` en `/pages/...` gaan naar een zinnige pagina in plaats van 404.
 
+Daarnaast controleer ik voor alle vijf producten dat de eindbestemming exact deze vorm heeft:
+`https://www.senseglow.shop/product/<handle>`, bijvoorbeeld `https://www.senseglow.shop/product/senseglow_wave`.
+Ik lees de handles op bij Shopify, vergelijk ze met de adressen die de site gebruikt en met de eindbestemming in Google Ads, en meld je per product of het klopt. Waar ik de eindbestemming in Google Ads zelf kan zetten doe ik dat na jouw akkoord; de feedlink vanuit Merchant Center blijft een instelling in Shopify die jij bevestigt.
+
+
 ### 2. Zichtbare bevestiging bij "in winkelwagen"
 De winkelwagen schuift voortaan open zodra er iets is toegevoegd, in alle drie de talen. De meldingsteksten en de knopteksten in de winkelwagen krijgen een Engelse en Franse vertaling, zodat er niets meer in het Nederlands blijft staan.
 
