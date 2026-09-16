@@ -4,7 +4,7 @@ const items = [
   { icon: Truck, label: "Gratis verzending NL/BE" },
   { icon: Clock, label: "30 dagen retour" },
   { icon: Shield, label: "1 jaar garantie" },
-  { icon: Package, label: "Bij je thuis binnen 7-14 werkdagen" },
+  { icon: Package, label: "Bij je thuis binnen 7-14 werkdagen na verwerking" },
 ];
 
 export const TrustBar = () => {

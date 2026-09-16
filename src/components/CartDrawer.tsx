@@ -237,7 +237,7 @@ export function CartDrawer() {
               <div className="flex-shrink-0 space-y-2 pt-4 border-t bg-background">
                 <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
-                  <span>Gratis bezorgd, bij je thuis binnen 7-14 werkdagen</span>
+                  <span>Gratis bezorgd, binnen 7-14 werkdagen na verwerking</span>
                 </div>
                 {totalSavings > 0 && (
                   <div className="flex justify-between items-center text-sm text-glow">

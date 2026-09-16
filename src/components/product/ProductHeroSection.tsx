@@ -169,7 +169,7 @@ export const ProductHeroSection = ({
                 </div>
                 <div className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
-                  <span>Gratis bezorgd, bij je thuis binnen 7-14 werkdagen</span>
+                  <span>Gratis bezorgd, binnen 7-14 werkdagen na verwerking</span>
                 </div>
               </div>
 
