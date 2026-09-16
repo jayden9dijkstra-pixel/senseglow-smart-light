@@ -220,6 +220,43 @@ function toNumericVariantId(variantId: string): string {
   return match ? match[1] : variantId;
 }
 
+/**
+ * Bepaal het land van de bezoeker (alleen NL/BE) zodat Shopify checkout de
+ * lokale betaalmethoden zoals iDEAL en Bancontact bovenaan toont in plaats van
+ * onder "andere betaalmethoden".
+ */
+let cachedBuyerCountry: 'NL' | 'BE' | null | undefined;
+
+async function getBuyerCountry(
+  locale?: 'nl' | 'en' | 'fr'
+): Promise<'NL' | 'BE' | null> {
+  if (cachedBuyerCountry !== undefined) return cachedBuyerCountry;
+
+  let country: 'NL' | 'BE' | null = null;
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2000);
+    const response = await fetch('/cdn-cgi/trace', { signal: controller.signal });
+    clearTimeout(timeout);
+    if (response.ok) {
+      const text = await response.text();
+      const loc = text.match(/^loc=(\w+)$/m)?.[1];
+      if (loc === 'NL' || loc === 'BE') country = loc;
+    }
+  } catch {
+    country = null;
+  }
+
+  if (!country) {
+    // Nederlandstalige bezoekers krijgen standaard de Nederlandse betaalmethoden.
+    const lang = locale ?? (typeof document !== 'undefined' ? document.documentElement.lang : '');
+    if (lang === 'nl') country = 'NL';
+  }
+
+  cachedBuyerCountry = country;
+  return country;
+}
+
 /** Maak een echte Shopify-cart aan en geef de beveiligde checkout-URL terug. */
 export async function createStorefrontCheckout(
   items: CheckoutItem[],
