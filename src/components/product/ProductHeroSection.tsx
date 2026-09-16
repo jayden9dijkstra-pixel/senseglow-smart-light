@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 
 
@@ -207,13 +206,6 @@ export const ProductHeroSection = ({
               >
                 {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
               </Button>
-
-              <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-4 py-3">
-                <p className="text-sm text-foreground">Voeg toe aan Kast Starter en bespaar 10%</p>
-                <Button asChild variant="link" className="h-auto shrink-0 p-0 text-primary">
-                  <Link to="/stel-je-bundel-samen">Bekijk bundel</Link>
-                </Button>
-              </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-3">
                 <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
