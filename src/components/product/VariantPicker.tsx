@@ -327,7 +327,7 @@ export const VariantPicker = ({
                 "relative flex-1 min-w-[60px] py-3 px-3 rounded-lg border transition-all duration-500 ease-out",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-glow/50",
                 isSelected
-                  ? "border-glow bg-glow/5 shadow-[0_0_20px_-5px_hsl(var(--glow)/0.3),inset_0_1px_0_0_hsl(var(--glow)/0.1)]"
+                  ? "border-glow bg-glow/5 shadow-[0_10px_26px_-22px_hsl(var(--foreground)/0.5)]"
                   : "border-foreground/10 bg-background hover:border-foreground/25 hover:bg-foreground/[0.02]"
               )}
             >
@@ -372,7 +372,7 @@ export const VariantPicker = ({
                 className={cn(
                   "relative w-10 h-10 rounded-full transition-all duration-500 ease-out ring-offset-background ring-offset-2",
                   isSelected
-                    ? "ring-2 ring-glow shadow-[0_0_15px_-3px_hsl(var(--glow)/0.5)]"
+                    ? "ring-2 ring-glow shadow-[0_8px_20px_-14px_hsl(var(--foreground)/0.5)]"
                     : "ring-1 ring-foreground/20 group-hover:ring-foreground/40"
                 )}
                 style={{ backgroundColor: hex }}

@@ -1,4 +1,4 @@
-import { DualImage } from "@/components/ui/DualImage";
+
 import storytellingImage from "@/assets/storytelling-glow.png";
 
 export const StorytellingSection = () => {
@@ -9,10 +9,11 @@ export const StorytellingSection = () => {
           <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
             {/* Image - Left side */}
             <div className="relative animate-fade-in-slow">
-              <div className="aspect-square overflow-hidden rounded-3xl">
-                <DualImage
-                  srcLight={storytellingImage}
+              <div className="aspect-square overflow-hidden rounded-sm">
+                <img
+                  src={storytellingImage}
                   alt="SenseGlow LED licht in een warme woonruimte"
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </div>

@@ -56,7 +56,7 @@ export const HeroSection = () => {
             <Button
               onClick={scrollToProducts}
               size="lg"
-              className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.5)] transition-all duration-500 w-full sm:w-auto"
+              className="text-sm font-medium tracking-wide rounded-sm px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500 w-full sm:w-auto"
             >
               Bekijk de collectie
             </Button>

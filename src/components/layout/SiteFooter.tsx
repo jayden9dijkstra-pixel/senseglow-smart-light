@@ -54,12 +54,12 @@ const FooterNewsletter = () => {
         required
         disabled={loading}
         aria-label="E-mailadres"
-        className="h-11 rounded-full"
+        className="h-11 rounded-sm"
       />
       <Button
         type="submit"
         disabled={loading}
-        className="w-full h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-500"
+        className="w-full h-11 rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-500"
       >
         {loading ? "Bezig..." : "Houd me op de hoogte"}
       </Button>

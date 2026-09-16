@@ -157,7 +157,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                     relative p-7 cursor-pointer transition-all duration-500 ease-out
                     ${
                       isHighlighted
-                        ? "border-glow shadow-[0_0_40px_-10px_hsl(var(--glow)/0.4)] -translate-y-1 bg-card"
+                        ? "border-glow shadow-[0_18px_40px_-30px_hsl(var(--foreground)/0.55)] -translate-y-1 bg-card"
                         : "border-foreground/10 hover:border-foreground/25 hover:-translate-y-0.5"
                     }
                   `}
@@ -229,7 +229,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         e.stopPropagation();
                         handleAdd(pack);
                       }}
-                      className={`w-full rounded-full transition-all duration-500 ${
+                      className={`w-full rounded-sm transition-all duration-500 ${
                         isHighlighted
                           ? "bg-glow text-background hover:bg-glow/90"
                           : "bg-foreground/5 text-foreground hover:bg-foreground/10"

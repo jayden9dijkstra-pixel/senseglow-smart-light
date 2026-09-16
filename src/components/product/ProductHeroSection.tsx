@@ -7,6 +7,7 @@ import { useCartStore } from "@/stores/cartStore";
 
 
 import { ProductImageGallery } from "./ProductImageGallery";
+import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { VariantPicker } from "./VariantPicker";
 import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
@@ -112,11 +113,16 @@ export const ProductHeroSection = ({
     });
   };
 
-  const productImages =
-    product.node.images?.edges?.map((edge) => ({
+  const beforeAfterPair = getBeforeAfterPair(product.node.handle);
+  const productImages = [
+    ...(product.node.images?.edges?.map((edge) => ({
       url: edge.node.url,
       altText: edge.node.altText,
-    })) || [];
+    })) || []),
+    ...(beforeAfterPair
+      ? [{ url: beforeAfterPair.on, altText: beforeAfterPair.alt }]
+      : []),
+  ];
 
   const displayPrice = selectedVariant
     ? parseFloat(selectedVariant.price.amount).toFixed(2)
@@ -197,7 +203,7 @@ export const ProductHeroSection = ({
                 onClick={handleAddToCart}
                 size="lg"
                 disabled={!selectedVariant?.availableForSale}
-                className="w-full min-h-12 text-sm px-10 py-4 h-auto font-medium tracking-wide rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
+                className="w-full min-h-12 text-sm px-10 py-4 h-auto font-medium tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
               >
                 {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
               </Button>

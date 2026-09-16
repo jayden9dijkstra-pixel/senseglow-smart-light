@@ -1,4 +1,6 @@
 import { X, Check } from "lucide-react";
+import { BeforeAfterSlider } from "./BeforeAfterSlider";
+import type { BeforeAfterPair } from "@/lib/beforeAfterImages";
 
 interface BeforeAfterRow {
   before: string;
@@ -10,6 +12,7 @@ interface BeforeAfterSectionProps {
   beforeLabel?: string;
   afterLabel?: string;
   rows?: BeforeAfterRow[];
+  imagePair?: BeforeAfterPair;
 }
 
 const defaultRows: BeforeAfterRow[] = [
@@ -23,23 +26,36 @@ export const BeforeAfterSection = ({
   beforeLabel = "Zonder SenseGlow",
   afterLabel = "Met SenseGlow",
   rows = defaultRows,
+  imagePair,
 }: BeforeAfterSectionProps) => {
   return (
     <section className="w-full overflow-hidden bg-background-secondary py-16 md:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-4">
-              Het verschil
-            </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+            <p className="eyebrow mb-4">Het verschil</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl text-foreground">
               {headline}
             </h2>
           </div>
 
+          {imagePair && (
+            <div className="mb-10 md:mb-14">
+              <BeforeAfterSlider
+                beforeSrc={imagePair.off}
+                afterSrc={imagePair.on}
+                alt={imagePair.alt}
+                className="aspect-[4/3] md:aspect-[16/10]"
+              />
+              <p className="mt-3 text-center text-xs text-foreground/50">
+                Sleep de schuif om het verschil te zien
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {/* Before column */}
-            <div className="rounded-2xl border border-foreground/8 bg-background-secondary/40 p-6 md:p-8">
+            <div className="rounded-sm border border-border bg-background p-6 md:p-8">
               <h3 className="text-sm font-medium text-foreground/60 mb-5 uppercase tracking-wider">
                 {beforeLabel}
               </h3>
@@ -56,14 +72,14 @@ export const BeforeAfterSection = ({
             </div>
 
             {/* After column */}
-            <div className="rounded-2xl border border-glow/30 bg-glow/5 p-6 md:p-8 shadow-[0_0_40px_-15px_hsl(var(--glow)/0.4)]">
-              <h3 className="text-sm font-medium text-glow mb-5 uppercase tracking-wider">
+            <div className="rounded-sm border border-accent/40 bg-accent/5 p-6 md:p-8">
+              <h3 className="text-sm font-medium text-accent mb-5 uppercase tracking-wider">
                 {afterLabel}
               </h3>
               <ul className="space-y-4">
                 {rows.map((row, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <Check className="w-4 h-4 mt-1 text-glow flex-shrink-0" />
+                    <Check className="w-4 h-4 mt-1 text-accent flex-shrink-0" />
                     <span className="text-sm md:text-base text-foreground leading-relaxed">
                       {row.after}
                     </span>

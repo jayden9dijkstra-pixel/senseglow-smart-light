@@ -14,6 +14,7 @@ import { ProductRelatedSection } from "@/components/product/ProductRelatedSectio
 import { MobileAddToCartBar } from "@/components/product/MobileAddToCartBar";
 import { purchaseFaqs } from "@/components/product/ProductFAQSection";
 import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
+import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { getProductContent } from "@/lib/productContent";
 import { buildPlaceholderContent } from "@/lib/placeholderContent";
@@ -148,6 +149,7 @@ const ProductDetail = () => {
           beforeLabel={beforeLabel}
           afterLabel={afterLabel}
           rows={beforeAfter}
+          imagePair={handle ? getBeforeAfterPair(handle) : undefined}
         />
         <FinalProductCTA
           headline={finalCta?.headline}

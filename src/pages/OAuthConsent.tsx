@@ -121,7 +121,7 @@ export default function OAuthConsent() {
   if (error) {
     return (
       <main className="min-h-screen flex items-center justify-center px-4 bg-background">
-        <div className="w-full max-w-md rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm text-center">
+        <div className="w-full max-w-md rounded-sm border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm text-center">
           <h1 className="text-xl font-semibold mb-2">Autorisatie mislukt</h1>
           <p className="text-sm text-foreground/70">{error}</p>
         </div>
@@ -142,7 +142,7 @@ export default function OAuthConsent() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-16 bg-background">
       <Seo title="Toegang goedkeuren | SenseGlow" description="Geef een externe app toegang tot SenseGlow." path="/.lovable/oauth/consent" noindex />
-      <div className="w-full max-w-md rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm">
+      <div className="w-full max-w-md rounded-sm border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm">
         <h1 className="text-2xl font-semibold mb-2">
           Verbind {clientName} met SenseGlow
         </h1>

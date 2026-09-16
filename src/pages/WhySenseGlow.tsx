@@ -61,7 +61,7 @@ const WhySenseGlow = () => {
                 de rest.
               </p>
             </div>
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-foreground/8">
+            <div className="aspect-[4/3] rounded-sm overflow-hidden border border-foreground/8">
               <img
                 src={whyLandscapeAsset.url}
                 alt="SenseGlow verlichting in een warm interieur"
@@ -79,7 +79,7 @@ const WhySenseGlow = () => {
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
             {PILLARS.map(({ icon: Icon, title, body }) => (
               <div key={title} className="flex gap-5">
-                <div className="shrink-0 p-3 rounded-xl bg-background/70 text-glow h-fit">
+                <div className="shrink-0 p-3 rounded-sm bg-background/70 text-glow h-fit">
                   <Icon className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <div>
@@ -95,7 +95,7 @@ const WhySenseGlow = () => {
       {/* Bedrijfsinfo */}
       <section className="py-16 md:py-20 bg-background">
         <div className="container">
-          <div className="max-w-3xl mx-auto rounded-2xl border border-foreground/8 p-8">
+          <div className="max-w-3xl mx-auto rounded-sm border border-foreground/8 p-8">
             <h2 className="text-lg font-semibold text-foreground mb-4">Wie zijn wij</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
               <div>
@@ -127,10 +127,10 @@ const WhySenseGlow = () => {
               Mail direct met support@senseglow.shop of bekijk de collectie.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild className="rounded-full px-8">
+              <Button asChild className="rounded-sm px-8">
                 <Link to="/producten">Bekijk de collectie</Link>
               </Button>
-              <Button asChild variant="ghost" className="rounded-full px-6">
+              <Button asChild variant="ghost" className="rounded-sm px-6">
                 <a href="mailto:support@senseglow.shop">Mail ons</a>
               </Button>
             </div>

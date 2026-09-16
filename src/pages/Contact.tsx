@@ -40,7 +40,7 @@ const Contact = () => {
                 </p>
                 <Button
                   onClick={() => (window.location.href = "mailto:support@senseglow.shop")}
-                  className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 mt-2"
+                  className="rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 mt-2"
                 >
                   Stuur een mail
                 </Button>
@@ -59,7 +59,7 @@ const Contact = () => {
                 <Button
                   onClick={() => navigate("/volg-je-bestelling")}
                   variant="outline"
-                  className="rounded-full mt-2"
+                  className="rounded-sm mt-2"
                 >
                   Volg mijn bestelling →
                 </Button>

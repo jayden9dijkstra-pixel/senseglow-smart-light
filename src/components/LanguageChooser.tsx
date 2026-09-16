@@ -58,7 +58,7 @@ export function LanguageChooser() {
             variant="outline"
             size="sm"
             onClick={() => choose(option.locale)}
-            className="h-8 rounded-full border-primary/20 px-3 text-xs"
+            className="h-8 rounded-sm border-primary/20 px-3 text-xs"
           >
             {option.label}
           </Button>

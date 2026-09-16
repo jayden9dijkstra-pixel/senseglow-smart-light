@@ -44,10 +44,10 @@ export const WhatTheyShare = () => {
             {items.map(({ icon: Icon, title, body }, i) => (
               <div
                 key={title}
-                className="p-7 rounded-2xl border border-foreground/8 bg-background-secondary/40 backdrop-blur-sm animate-fade-in-slow"
+                className="p-7 rounded-sm border border-foreground/8 bg-background-secondary/40 backdrop-blur-sm animate-fade-in-slow"
                 style={{ animationDelay: `${i * 80}ms` }}
               >
-                <div className="p-3 bg-glow/10 rounded-xl w-fit mb-5">
+                <div className="p-3 bg-glow/10 rounded-sm w-fit mb-5">
                   <Icon className="h-6 w-6 text-glow" />
                 </div>
                 <h3 className="font-semibold text-lg text-foreground mb-3">

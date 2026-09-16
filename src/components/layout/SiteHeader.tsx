@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, Search, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
@@ -11,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import logoNew from "@/assets/logo-new.png?w=256&format=webp";
+import wordmark from "@/assets/senseglow-wordmark.png.asset.json";
 import {
   PRODUCT_HANDLE,
   WAVE_PRODUCT_HANDLE,
@@ -74,19 +73,19 @@ const NavDropdown = ({ item }: { item: NavItem }) => {
     <div className="relative group">
       <Link
         to={localizePath(item.href)}
-        className="flex items-center gap-1 px-3 py-2 text-[13px] tracking-wide text-foreground/70 hover:text-glow transition-colors duration-300"
+        className="flex items-center gap-1 px-3 py-2 text-[13px] tracking-wide text-foreground/70 hover:text-foreground transition-colors duration-300"
       >
         {t(item.label)}
         <ChevronDown className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
       </Link>
 
       <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100 transition-opacity duration-200 absolute left-0 top-full pt-3 z-50">
-        <div className="min-w-[260px] rounded-2xl border border-foreground/10 bg-background shadow-xl p-2">
+        <div className="min-w-[260px] rounded-sm border border-border bg-background shadow-[0_18px_40px_-28px_hsl(var(--foreground)/0.5)] p-2">
           {item.children?.map((child) => (
             <Link
               key={child.href}
               to={localizePath(child.href)}
-              className="block rounded-xl px-4 py-3 hover:bg-foreground/5 transition-colors"
+              className="block rounded-sm px-4 py-3 hover:bg-secondary transition-colors"
             >
               <span className="block text-sm font-medium text-foreground">{t(child.label)}</span>
               {child.hint && (
@@ -105,7 +104,13 @@ export const SiteHeader = () => {
   const { t, localizePath } = useI18n();
 
   return (
-    <header className="w-full glass sticky top-0 z-50">
+    <header className="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md">
+      <div className="bg-primary text-primary-foreground">
+        <div className="container flex h-9 items-center justify-center gap-2 text-[11px] tracking-[0.12em]">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+          {t("Gratis verzending in Nederland en België")}
+        </div>
+      </div>
       <div className="container">
         <div className="flex h-20 md:h-24 items-center justify-between gap-4">
           {/* Links: logo */}
@@ -115,18 +120,16 @@ export const SiteHeader = () => {
             aria-label={t("Ga naar homepage")}
           >
             <img
-              src={logoNew}
+              src={wordmark.url}
               alt="SenseGlow logo"
-              width={256}
-              height={256}
               loading="eager"
               {...{ fetchpriority: "high" }}
-              className="h-14 md:h-16 w-auto object-contain"
+              className="h-9 md:h-11 w-auto object-contain"
             />
           </button>
 
           {/* Midden: navigatie */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label={t("Hoofdmenu")}>
+          <nav className="hidden lg:flex items-center gap-2" aria-label={t("Hoofdmenu")}>
             {navItems.map((item) =>
               item.children ? (
                 <NavDropdown key={item.label} item={item} />
@@ -134,7 +137,7 @@ export const SiteHeader = () => {
                 <Link
                   key={item.href}
                   to={localizePath(item.href)}
-                  className="px-3 py-2 text-[13px] tracking-wide text-foreground/70 hover:text-glow transition-colors duration-300"
+                  className="px-3 py-2 text-[13px] tracking-wide text-foreground/70 hover:text-foreground transition-colors duration-300"
                 >
                   {t(item.label)}
                 </Link>
@@ -145,7 +148,6 @@ export const SiteHeader = () => {
           {/* Rechts: acties */}
           <div className="flex items-center gap-1">
             <LanguageSwitcher />
-            <ThemeToggle />
             <Button
               variant="ghost"
               size="icon"
@@ -178,12 +180,12 @@ export const SiteHeader = () => {
                   <Menu className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-60 bg-background border-foreground/10">
+              <DropdownMenuContent align="end" className="w-60 bg-background border-border rounded-sm">
                 {mobileLinks.map((link) => (
                   <DropdownMenuItem key={`${link.label}-${link.href}-${mobileLinks.indexOf(link)}`} asChild>
                     <Link
                       to={localizePath(link.href)}
-                      className="cursor-pointer text-sm text-foreground/70 hover:text-glow transition-colors py-2"
+                      className="cursor-pointer text-sm text-foreground/70 hover:text-foreground transition-colors py-2"
                     >
                       {t(link.label)}
                     </Link>
@@ -195,7 +197,7 @@ export const SiteHeader = () => {
         </div>
       </div>
 
-      <div className="border-b border-foreground/8" />
+      <div className="border-b border-border" />
     </header>
   );
 };

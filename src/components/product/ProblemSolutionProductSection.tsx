@@ -24,7 +24,7 @@ export const ProblemSolutionProductSection = ({
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">{headline}</h2>
               <div className="space-y-4">
                 {problems.map((problem, index) => (
-                  <div key={index} className="flex items-start gap-4 p-6 bg-background rounded-2xl border border-border">
+                  <div key={index} className="flex items-start gap-4 p-6 bg-background rounded-sm border border-border">
                     <span className="text-brand-orange font-bold text-xl flex-shrink-0">⚠</span>
                     <p className="text-lg text-foreground">{problem}</p>
                   </div>
@@ -36,7 +36,7 @@ export const ProblemSolutionProductSection = ({
               </div>
             </div>
             <div className="relative">
-              <div className="rounded-3xl overflow-hidden shadow-2xl aspect-[4/5] bg-gradient-to-br from-brand-orange/20 to-muted flex items-center justify-center">
+              <div className="rounded-sm overflow-hidden shadow-2xl aspect-[4/5] bg-gradient-to-br from-brand-orange/20 to-muted flex items-center justify-center">
                 <div className="text-center space-y-4 p-8">
                   <div className="text-6xl">🏠</div>
                   <p className="text-sm text-muted-foreground">[Foto placeholder]</p>
