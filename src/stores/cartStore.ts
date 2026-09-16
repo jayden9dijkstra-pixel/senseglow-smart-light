@@ -81,6 +81,7 @@ export const useCartStore = create<CartStore>()(
       cartId: null,
       checkoutUrl: null,
       isLoading: false,
+      lastAddedAt: 0,
 
       refreshPrices: async () => {
         const { items } = get();
