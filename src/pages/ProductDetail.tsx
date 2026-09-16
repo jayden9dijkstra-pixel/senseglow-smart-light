@@ -7,7 +7,7 @@ import { ProductHeroSection } from "@/components/product/ProductHeroSection";
 import { BundlesSection } from "@/components/product/BundlesSection";
 import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
-import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
+
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
 import { HowItWorksSection } from "@/components/product/HowItWorksSection";
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
@@ -141,7 +141,6 @@ const ProductDetail = () => {
           headlineOverride={bundleHeadline}
         />
 
-        <ProductReviewsSection />
         <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
         <HowItWorksSection headline={stepsHeadline} steps={steps} />
         <BeforeAfterSection
