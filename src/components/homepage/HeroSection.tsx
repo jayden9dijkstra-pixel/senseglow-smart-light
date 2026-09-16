@@ -37,6 +37,13 @@ export const HeroSection = () => {
         />
       )}
       <div className="absolute inset-0 -z-10 hero-gradient-overlay" />
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 100%, hsl(33 62% 54% / 0.22) 0%, hsl(33 62% 54% / 0) 70%)",
+        }}
+      />
 
       <div className="container">
         <div className="max-w-3xl py-28 md:py-40 animate-fade-in-slow">
