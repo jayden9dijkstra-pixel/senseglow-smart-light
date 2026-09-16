@@ -126,6 +126,11 @@ export const useCartStore = create<CartStore>()(
           currency: 'EUR',
           items: toAdsItems([item]),
         });
+        void trackSiteEvent('add_to_cart', {
+          itemName: item.product.node.title,
+          value: adsValue([item]),
+        });
+
 
         if (item.isBundle && item.bundlePackSize) {
           // Bundles: stack identical (variant + pack size) lines
@@ -211,6 +216,8 @@ export const useCartStore = create<CartStore>()(
           currency: 'EUR',
           items: toAdsItems(items),
         });
+        void trackSiteEvent('begin_checkout', { value: adsValue(items) });
+
 
         setLoading(true);
         try {
