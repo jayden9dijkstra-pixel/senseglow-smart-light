@@ -102,20 +102,20 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     <section id="bundels" className="w-full scroll-mt-24 overflow-hidden py-10 md:py-14 lg:py-16">
       <div className="mx-auto max-w-5xl px-6 md:px-8">
         <div>
-          <div className="text-center mb-10 space-y-4">
+          <div className="text-center mb-6 md:mb-8 space-y-2">
             <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
               Bundels
             </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
               {headline}
             </h2>
-            <p className="text-sm md:text-base text-foreground/60 max-w-2xl mx-auto">
+            <p className="text-sm text-foreground/60 max-w-2xl mx-auto">
               90% van onze klanten kiest voor meer dan één lamp.
             </p>
           </div>
 
           {/* Same variant picker as the single product page */}
-          <div className="max-w-2xl mx-auto mb-12">
+          <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <VariantPicker
               product={product}
               selectedVariant={pickedVariant}
