@@ -113,13 +113,14 @@ export const SiteFooter = () => {
             </div>
           </div>
 
-          <div className="pt-10 border-t border-foreground/6">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-foreground/35 text-center mb-6">
+          <div className="pt-10 border-t border-foreground/10">
+            <p className="flex items-center justify-center gap-2 text-xs uppercase tracking-[0.22em] text-primary font-semibold text-center mb-7">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
               Veilig betalen met
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
               {paymentMethods.map(({ name, Icon }) => (
-                <Icon key={name} className="h-7 w-auto text-foreground/40" />
+                <Icon key={name} className="h-8 md:h-9 w-auto text-primary/80 transition-colors duration-300 hover:text-accent" />
               ))}
             </div>
           </div>

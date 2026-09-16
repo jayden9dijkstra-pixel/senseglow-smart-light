@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import wordmark from "@/assets/logo-wordmark.png";
+import wordmark from "@/assets/logo-wordmark-sharp.png";
 import {
   PRODUCT_HANDLE,
   WAVE_PRODUCT_HANDLE,
@@ -105,12 +105,6 @@ export const SiteHeader = () => {
 
   return (
     <header className="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md">
-      <div className="bg-primary text-primary-foreground">
-        <div className="container flex h-11 items-center justify-center gap-2 text-xs tracking-[0.14em]">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-          {t("Gratis verzending in Nederland en België")}
-        </div>
-      </div>
       <div className="container">
         <div className="flex h-20 md:h-24 items-center justify-between gap-4">
           {/* Links: logo */}
@@ -125,7 +119,6 @@ export const SiteHeader = () => {
               loading="eager"
               {...{ fetchpriority: "high" }}
               className="h-11 md:h-14 w-auto object-contain"
-              style={{ imageRendering: "auto" }}
             />
           </button>
 
