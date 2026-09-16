@@ -4,6 +4,8 @@ import { ShopifyProduct } from "@/lib/shopify";
 import wallLampHomepageAsset from "@/assets/wall-lamp-homepage-square.png.asset.json";
 import waveHomepageAsset from "@/assets/wave-homepage-square.png.asset.json";
 import ambientHomepageAsset from "@/assets/ambient-homepage-square.png.asset.json";
+import flexHomepageImage from "@/assets/ba/flex-on.jpg";
+import lanternHomepageImage from "@/assets/ba/lantern-on.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const homepageImages: Record<string, { url: string; altText: string }> = {
@@ -18,6 +20,14 @@ const homepageImages: Record<string, { url: string; altText: string }> = {
   senseglow_ambient_motion_bar: {
     url: ambientHomepageAsset.url,
     altText: "SenseGlow Ambient Bar boven een wastafel",
+  },
+  senseglow_solar_lantern: {
+    url: lanternHomepageImage,
+    altText: "SenseGlow Solar Lantern met warm licht buiten",
+  },
+  senseglow_flex: {
+    url: flexHomepageImage,
+    altText: "SenseGlow Flex met warm licht op een bureau",
   },
 };
 
