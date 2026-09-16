@@ -53,6 +53,8 @@ interface CartStore {
   cartId: string | null;
   checkoutUrl: string | null;
   isLoading: boolean;
+  /** Telt op bij elke toevoeging, zodat de winkelwagen zichtbaar opengaat. */
+  lastAddedAt: number;
 
   addItem: (item: CartItem) => void;
   /** Meerdere regels van een zelf samengestelde bundel, met één melding. */
