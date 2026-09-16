@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { addLocale, localeFromPath, stripLocale } from "@/i18n/I18nProvider";
+import { ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
 
 /**
  * Vangt de Shopify-adressen op (/products/<handle>, /collections/..., /pages/...)
@@ -14,8 +15,11 @@ export function LegacyRedirect() {
   const productMatch = path.match(/^\/products\/([^/]+)/);
   let target = "/producten";
   if (productMatch) {
-    target = `/product/${decodeURIComponent(productMatch[1])}`;
+    const handle = decodeURIComponent(productMatch[1]);
+    // Onbekende handle gaat naar het overzicht, nooit naar de homepage.
+    target = ENABLED_PRODUCT_HANDLES.includes(handle) ? `/product/${handle}` : "/producten";
   } else if (path.startsWith("/pages/")) {
+
     const slug = path.slice("/pages/".length).replace(/\/$/, "");
     const pages: Record<string, string> = {
       contact: "/contact",

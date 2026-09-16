@@ -2,19 +2,21 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
-import { trackAdsEvent } from '@/lib/adsTracking';
+import { trackAdsEvent, numericVariantId } from '@/lib/adsTracking';
 import { trackSiteEvent } from '@/lib/siteAnalytics';
 import { translateStatic as tr } from '@/i18n/I18nProvider';
 
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
   return items.map((i) => ({
-    item_id: i.variantId,
+    item_id: numericVariantId(i.variantId),
     item_name: i.product.node.title,
+    item_variant: i.variantTitle,
     price: parseFloat(i.price.amount),
     quantity: i.quantity,
   }));
 }
+
 
 function adsValue(items: CartItem[]): number {
   const total = items.reduce((sum, i) => {
@@ -257,7 +259,11 @@ export const useCartStore = create<CartStore>()(
             bestCode ? [bestCode] : []
           );
           setCheckoutUrl(checkoutUrl);
-        } catch {
+        } catch (error) {
+          console.error('Checkout failed', {
+            variantIds: items.map((i) => i.variantId),
+            error,
+          });
           toast.error(tr('Checkout mislukt'), {
             description: tr('Probeer het opnieuw.'),
           });
@@ -265,6 +271,7 @@ export const useCartStore = create<CartStore>()(
         } finally {
           setLoading(false);
         }
+
       },
     }),
     {

@@ -14,6 +14,7 @@ import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/
 import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
+import { trackViewCart, numericVariantId } from "@/lib/adsTracking";
 
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
   const key = getProductKeyFromHandle(item.product.node.handle);
@@ -55,6 +56,23 @@ export function CartDrawer() {
   React.useEffect(() => {
     if (lastAddedAt > 0) setIsOpen(true);
   }, [lastAddedAt]);
+
+  // Meet het openen van de winkelwagen.
+  React.useEffect(() => {
+    if (!isOpen || items.length === 0) return;
+    trackViewCart(
+      items.map((i) => ({
+        item_id: numericVariantId(i.variantId),
+        item_name: i.product.node.title,
+        item_variant: i.variantTitle,
+        price: parseFloat(i.price.amount),
+        quantity: i.quantity,
+      }))
+    );
+    // alleen bij openen meten
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
 
 
 

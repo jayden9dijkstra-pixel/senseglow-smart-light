@@ -200,10 +200,12 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
     const productNode = responseData?.data?.productByHandle;
     if (!productNode) return null;
     return { node: productNode };
-  } catch {
+  } catch (error) {
+    console.error("fetchProductByHandle failed:", handle, error);
     return null;
   }
 }
+
 
 interface CheckoutItem {
   variantId: string;

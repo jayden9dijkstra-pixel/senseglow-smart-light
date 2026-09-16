@@ -6,6 +6,7 @@ import { ShoppingCart } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { trackSelectItem, numericVariantId } from "@/lib/adsTracking";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -33,10 +34,27 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const imageUrl = product.node.images?.edges?.[0]?.node?.url;
   const price = product.node.priceRange.minVariantPrice;
 
+  const handleSelect = () => {
+    trackSelectItem(
+      [
+        {
+          item_id: selectedVariant ? numericVariantId(selectedVariant.id) : product.node.handle,
+          item_name: product.node.title,
+          item_variant: selectedVariant?.title,
+          price: parseFloat(price.amount),
+          quantity: 1,
+        },
+      ],
+      "Productoverzicht"
+    );
+  };
+
+
+
 
   return (
     <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-500 hover:-translate-y-1 group">
-      <Link to={`/product/${product.node.handle}`}>
+      <Link to={`/product/${product.node.handle}`} onClick={handleSelect}>
         <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
         {imageUrl ? (
           <img
@@ -53,7 +71,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </div>
       </Link>
       <CardContent className="p-5">
-        <Link to={`/product/${product.node.handle}`}>
+        <Link to={`/product/${product.node.handle}`} onClick={handleSelect}>
           <h3 className="font-bold text-base mb-2 hover:text-glow transition-colors duration-300 uppercase tracking-[0.15em]">
             {product.node.title}
           </h3>
