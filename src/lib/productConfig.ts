@@ -123,14 +123,18 @@ export interface BundleQuote {
   save: number;
 }
 
-export function buildBundleQuote(packSize: PackSize, unitPrice: number): BundleQuote {
-  const rate = PACK_RATE[packSize];
+export function buildBundleQuote(
+  packSize: PackSize,
+  unitPrice: number,
+  options?: { rate?: number; label?: string }
+): BundleQuote {
+  const rate = options?.rate ?? PACK_RATE[packSize];
   const originalTotal = +(unitPrice * packSize).toFixed(2);
   const total = +(originalTotal * (1 - rate)).toFixed(2);
   return {
     packSize,
     rate,
-    label: PACK_LABEL[packSize],
+    label: options?.label ?? PACK_LABEL[packSize],
     subtitle: PACK_SUBTITLE[packSize],
     discountLabel: `-${Math.round(rate * 100)}%`,
     unitPrice,
