@@ -112,6 +112,10 @@ export const useCartStore = create<CartStore>()(
           currency: 'EUR',
           items: toAdsItems(newItems),
         });
+        void trackSiteEvent('add_to_cart', {
+          itemName: newItems[0]?.product.node.title,
+          value: adsValue(newItems),
+        });
         toast.success(message);
       },
 
