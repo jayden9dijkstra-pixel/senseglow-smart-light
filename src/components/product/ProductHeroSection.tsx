@@ -6,7 +6,7 @@ import { useCartStore } from "@/stores/cartStore";
 
 
 import { ProductImageGallery } from "./ProductImageGallery";
-import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
+
 import { VariantPicker } from "./VariantPicker";
 import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
