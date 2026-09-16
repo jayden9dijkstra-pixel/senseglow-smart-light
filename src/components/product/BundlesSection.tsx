@@ -36,10 +36,14 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const config = getBundleConfig(productKey);
 
   // Single (non-bundle) variants available for picking inside a bundle
-  const singleVariants: SingleVariant[] = useMemo(
-    () => (product ? product.node.variants.edges.map((e) => e.node).filter((v) => !isBundleVariant(v)) : []),
-    [product]
-  );
+  const singleVariants: SingleVariant[] = useMemo(() => {
+    if (!product) return [];
+    const base = product.node.variants.edges.map((e) => e.node).filter((v) => !isBundleVariant(v));
+    if (!config.requiredOptionValue) return base;
+    return base.filter((v) =>
+      v.selectedOptions.some((o) => o.value === config.requiredOptionValue)
+    );
+  }, [product, config.requiredOptionValue]);
 
   // Track which single variant is currently selected for the bundle picker
   const [pickedVariantId, setPickedVariantId] = useState<string | null>(null);
@@ -67,8 +71,14 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const variantKey = buildVariantKey(productKey, pickedVariant.selectedOptions);
   const variantLabel = parseVariantLabel(productKey, pickedVariant.selectedOptions).label;
 
+  const quoteFor = (pack: PackSize) =>
+    buildBundleQuote(pack, unitPrice, {
+      rate: config.rateOverride?.[pack],
+      label: config.labelOverride?.[pack],
+    });
+
   const handleAdd = (pack: PackSize) => {
-    const quote = buildBundleQuote(pack, unitPrice);
+    const quote = quoteFor(pack);
     const code = getBundleDiscountCode(productKey, pack, variantKey);
     addItem({
       product,
@@ -109,11 +119,11 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
             <VariantPicker
               product={product}
               selectedVariant={pickedVariant}
-              onVariantChange={(v) => setPickedVariantId(v.id)}
+              onVariantChange={(v) => {
+                if (singleVariants.some((sv) => sv.id === v.id)) setPickedVariantId(v.id);
+              }}
             />
           </div>
-
-
 
           <div
             className={`grid gap-6 ${
@@ -121,13 +131,23 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                 ? "max-w-md mx-auto"
                 : config.packSizes.length === 2
                 ? "md:grid-cols-2 max-w-3xl mx-auto"
+                : config.packSizes.length === 4
+                ? "md:grid-cols-2 lg:grid-cols-4"
                 : "md:grid-cols-3"
             }`}
           >
             {config.packSizes.map((pack) => {
-              const quote = buildBundleQuote(pack, unitPrice);
+              const quote = quoteFor(pack);
+              const largestPack = config.packSizes[config.packSizes.length - 1];
               const isHighlighted = highlightedPack === pack;
-              const badge = pack === 3 ? "⭐ Meest gekozen" : pack === 4 ? "Maximaal voordeel" : null;
+              const badge =
+                config.packSizes.length === 1
+                  ? "Beste prijs per set"
+                  : pack === 3
+                  ? "⭐ Meest gekozen"
+                  : pack === largestPack
+                  ? "Maximaal voordeel"
+                  : null;
 
               return (
                 <Card
@@ -181,6 +201,14 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                           {pack}× {product.node.title}
                           {variantLabel ? `, ${variantLabel}` : ""}
                         </span>
+                      </li>
+                      <li className="flex items-start gap-2 text-sm text-foreground/70">
+                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
+                        <span>€{(quote.total / pack).toFixed(2)} per stuk in plaats van €{unitPrice.toFixed(2)}</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-sm text-foreground/70">
+                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
+                        <span>Gratis bezorging, alles in één zending</span>
                       </li>
                       <li className="flex items-start gap-2 text-sm text-green-700 dark:text-green-400">
                         <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />

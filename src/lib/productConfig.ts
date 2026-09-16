@@ -40,35 +40,52 @@ export const HANDLE_TO_KEY: Record<string, ProductKey> = {
   [SCONCE_PRODUCT_HANDLE]: "sconce",
 };
 
-// ─── Standardized bundle tiers (same for every product) ──
-export type PackSize = 2 | 3 | 4;
+// ─── Standardized bundle tiers ──────────────────────────
+export type PackSize = 2 | 3 | 4 | 5;
 export const PACK_RATE: Record<PackSize, number> = {
   2: 0.10,
   3: 0.15,
   4: 0.20,
+  5: 0.25,
 };
 export const PACK_LABEL: Record<PackSize, string> = {
   2: "Duopak",
   3: "Familiepak",
   4: "Voordeelpak",
+  5: "Compleetpak",
 };
 export const PACK_SUBTITLE: Record<PackSize, string> = {
   2: "Ideaal om te starten",
   3: "Voor het hele huis",
-  4: "Maximale besparing",
+  4: "Voor elke ruimte",
+  5: "Maximale besparing",
 };
 
 // ─── Per-product configuration ─────────────────────────
 export interface ProductBundleConfig {
   packSizes: PackSize[];
+  /** Afwijkend kortingspercentage per pack, bv. Wall Lamp 2x = 25% */
+  rateOverride?: Partial<Record<PackSize, number>>;
+  /** Alleen varianten met deze optiewaarde mogen in de bundel (bv. "8-delige set") */
+  requiredOptionValue?: string;
+  /** Vaste kortingscode voor dit product in plaats van SG-PACK-<n> */
+  discountCode?: string;
+  /** Afwijkende bundelnaam per pack */
+  labelOverride?: Partial<Record<PackSize, string>>;
 }
 
 export const BUNDLE_CONFIG: Record<ProductKey, ProductBundleConfig> = {
-  ambient: { packSizes: [2, 3, 4] },
-  wave: { packSizes: [2, 3, 4] },
-  lantern: { packSizes: [2, 3] },
-  sconce: { packSizes: [2, 3, 4] },
-  flex: { packSizes: [2, 3] },
+  ambient: { packSizes: [2, 3, 4, 5] },
+  wave: { packSizes: [2, 3, 4, 5] },
+  lantern: { packSizes: [2, 3, 4] },
+  flex: { packSizes: [2] },
+  sconce: {
+    packSizes: [2],
+    rateOverride: { 2: 0.25 },
+    requiredOptionValue: "8-delige set",
+    discountCode: "SG-WALL-2X8",
+    labelOverride: { 2: "Dubbele set (2x 8)" },
+  },
   arc: { packSizes: [] },
 };
 
@@ -76,17 +93,20 @@ export function getBundleConfig(productKey: ProductKey | null): ProductBundleCon
   return productKey ? BUNDLE_CONFIG[productKey] : { packSizes: [] };
 }
 
+export function getPackRate(productKey: ProductKey | null, packSize: PackSize): number {
+  const config = getBundleConfig(productKey);
+  return config.rateOverride?.[packSize] ?? PACK_RATE[packSize];
+}
+
 // ─── Discount-code mapping ─────────────────────────────
-// Codes already exist in Shopify and are standardized at 8/12/15%.
-// variantKey comes from productRegistry.buildVariantKey(productKey, opts).
 export function getBundleDiscountCode(
   productKey: ProductKey,
   packSize: PackSize,
   variantKey: string
 ): string | null {
-  // Universal pack-size discount codes - work on total cart quantity.
-  // 2+ items → 10%, 3+ items → 20%, 4+ items → 30%.
-  // Cross-product bundles (e.g. Ambient + Wave + Flex) automatically qualify.
+  const config = getBundleConfig(productKey);
+  if (config.discountCode) return config.discountCode;
+  // Universele pack-kortingscodes: 2 → 10%, 3 → 15%, 4 → 20%, 5 → 25%.
   return `SG-PACK-${packSize}`;
 }
 
@@ -103,14 +123,18 @@ export interface BundleQuote {
   save: number;
 }
 
-export function buildBundleQuote(packSize: PackSize, unitPrice: number): BundleQuote {
-  const rate = PACK_RATE[packSize];
+export function buildBundleQuote(
+  packSize: PackSize,
+  unitPrice: number,
+  options?: { rate?: number; label?: string }
+): BundleQuote {
+  const rate = options?.rate ?? PACK_RATE[packSize];
   const originalTotal = +(unitPrice * packSize).toFixed(2);
   const total = +(originalTotal * (1 - rate)).toFixed(2);
   return {
     packSize,
     rate,
-    label: PACK_LABEL[packSize],
+    label: options?.label ?? PACK_LABEL[packSize],
     subtitle: PACK_SUBTITLE[packSize],
     discountLabel: `-${Math.round(rate * 100)}%`,
     unitPrice,

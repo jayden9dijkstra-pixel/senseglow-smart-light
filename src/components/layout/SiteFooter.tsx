@@ -95,7 +95,7 @@ export const SiteFooter = () => {
             <div>
               <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Over ons</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link to={localizePath("/stel-je-bundel-samen")} className={linkClass}>Stel je bundel samen</Link></li>
+                
                 <li><Link to={localizePath("/over")} className={linkClass}>Over SenseGlow</Link></li>
                 <li><Link to={localizePath("/duurzaamheid")} className={linkClass}>Duurzaamheid</Link></li>
               </ul>

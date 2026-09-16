@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
       { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
     ],
   },
-  { label: "Bundels", href: "/stel-je-bundel-samen" },
+  
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   {
     label: "Service",
@@ -62,7 +62,7 @@ const navItems: NavItem[] = [
 const mobileLinks: NavChild[] = [
   { label: "Alle producten", href: "/producten" },
   ...navItems.flatMap((i) => i.children ?? []),
-  { label: "Stel je bundel samen", href: "/stel-je-bundel-samen" },
+  
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   { label: "Bestelling volgen", href: "/volg-je-bestelling" },
   { label: "Contact", href: "/contact" },
