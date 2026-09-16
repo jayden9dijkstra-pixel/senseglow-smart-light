@@ -117,6 +117,16 @@ const App = () => (
               <Route key={`${locale}-terms`} path={`/${locale}/voorwaarden`} element={<Terms />} />,
               <Route key={`${locale}-login`} path={`/${locale}/login`} element={<Login />} />,
             ])}
+            {/* Shopify-adressen uit de advertenties en de feed opvangen */}
+            <Route path="/products/:handle" element={<LegacyRedirect />} />
+            <Route path="/collections/*" element={<LegacyRedirect />} />
+            <Route path="/pages/*" element={<LegacyRedirect />} />
+            {(["en", "fr"] as const).flatMap((locale) => [
+              <Route key={`${locale}-legacy-product`} path={`/${locale}/products/:handle`} element={<LegacyRedirect />} />,
+              <Route key={`${locale}-legacy-collections`} path={`/${locale}/collections/*`} element={<LegacyRedirect />} />,
+              <Route key={`${locale}-legacy-pages`} path={`/${locale}/pages/*`} element={<LegacyRedirect />} />,
+            ])}
+            <Route path="/nl/*" element={<DutchPrefixRedirect />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
