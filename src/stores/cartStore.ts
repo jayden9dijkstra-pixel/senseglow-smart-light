@@ -111,6 +111,7 @@ export const useCartStore = create<CartStore>()(
           }
         }
         set({ items: merged });
+        set({ lastAddedAt: Date.now() });
         trackAdsEvent('add_to_cart', {
           value: adsValue(newItems),
           currency: 'EUR',
@@ -120,8 +121,9 @@ export const useCartStore = create<CartStore>()(
           itemName: newItems[0]?.product.node.title,
           value: adsValue(newItems),
         });
-        toast.success(message);
+        toast.success(tr(message));
       },
+
 
       addItem: (item) => {
         const { items } = get();
