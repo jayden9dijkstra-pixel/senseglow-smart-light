@@ -7,7 +7,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { HeroSection } from "@/components/homepage/HeroSection";
 import { TrustBar } from "@/components/homepage/TrustBar";
 import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
-import { HomeBundlesSection } from "@/components/homepage/HomeBundlesSection";
+
 import { WhatTheyShare } from "@/components/homepage/WhatTheyShare";
 import { StorytellingSection } from "@/components/homepage/StorytellingSection";
 import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
@@ -56,7 +56,7 @@ const Index = () => {
         <UseCaseGrid products={products} />
       </div>
 
-      <HomeBundlesSection />
+      
 
       {/* 3. WhatTheyShare */}
       <WhatTheyShare />
