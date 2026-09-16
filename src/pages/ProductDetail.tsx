@@ -26,12 +26,16 @@ import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const variantParam = searchParams.get("variant");
+  const viewedRef = useRef<string | null>(null);
 
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<
     ShopifyProduct["node"]["variants"]["edges"][0]["node"] | null
   >(null);
+
 
   const content = getProductContent(handle);
   const fallback = product ? buildPlaceholderContent(product.node.title) : undefined;
