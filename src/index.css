@@ -4,7 +4,14 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
+  /* Houd sectiekoppen vrij onder de sticky header (5rem mobiel / 6rem desktop) */
+  scroll-padding-top: 6.5rem;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 7.5rem;
+  }
 }
 
 /* SenseGlow Design System
