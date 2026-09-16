@@ -71,8 +71,14 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const variantKey = buildVariantKey(productKey, pickedVariant.selectedOptions);
   const variantLabel = parseVariantLabel(productKey, pickedVariant.selectedOptions).label;
 
+  const quoteFor = (pack: PackSize) =>
+    buildBundleQuote(pack, unitPrice, {
+      rate: config.rateOverride?.[pack],
+      label: config.labelOverride?.[pack],
+    });
+
   const handleAdd = (pack: PackSize) => {
-    const quote = buildBundleQuote(pack, unitPrice);
+    const quote = quoteFor(pack);
     const code = getBundleDiscountCode(productKey, pack, variantKey);
     addItem({
       product,
