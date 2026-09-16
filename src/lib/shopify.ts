@@ -273,6 +273,7 @@ export async function createStorefrontCheckout(
       }
     }
   `;
+  const buyerCountry = await getBuyerCountry(locale);
   const data = await storefrontApiRequest(mutation, {
     input: {
       lines: validatedItems.map((item) => ({
@@ -282,6 +283,7 @@ export async function createStorefrontCheckout(
         quantity: item.quantity,
       })),
       discountCodes,
+      ...(buyerCountry ? { buyerIdentity: { countryCode: buyerCountry } } : {}),
     },
   });
   const result = data as {
