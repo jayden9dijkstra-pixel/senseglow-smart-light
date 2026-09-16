@@ -78,19 +78,30 @@ export function CartDrawer() {
   }, [items]);
 
   const handleCheckout = async () => {
+    // Open het tabblad meteen bij de klik, zolang de browser de klik nog als
+    // handeling van de bezoeker ziet. De afrekenpagina wordt er daarna in geladen.
+    const checkoutWindow = window.open('', '_blank');
+    try {
+      if (checkoutWindow) checkoutWindow.opener = null;
+    } catch {
+      // sommige browsers staan dit niet toe
+    }
     try {
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
-      if (checkoutUrl) {
-        setIsOpen(false);
-        const checkoutWindow = window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
-        if (!checkoutWindow) {
-          toast.error('Checkout kon niet openen', {
-            description: 'Sta pop-ups toe en probeer het opnieuw.',
-          });
-        }
+      if (!checkoutUrl) {
+        checkoutWindow?.close();
+        return;
       }
+      setIsOpen(false);
+      if (checkoutWindow && !checkoutWindow.closed) {
+        checkoutWindow.location.href = checkoutUrl;
+        return;
+      }
+      // Pop-up geblokkeerd: ga in dit tabblad verder zodat afrekenen altijd lukt.
+      window.location.assign(checkoutUrl);
     } catch {
+      checkoutWindow?.close();
       // handled by store
     }
   };

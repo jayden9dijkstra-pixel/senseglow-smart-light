@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import en from "./en.json";
 import fr from "./fr.json";
@@ -47,9 +47,29 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     navigate(`${addLocale(location.pathname, next)}${location.search}${location.hash}`);
   }, [location.hash, location.pathname, location.search, navigate]);
 
+  // Terugkerende bezoekers die eerder Engels of Frans kozen komen daar weer uit,
+  // ook als ze op een link zonder taal in het adres binnenkomen.
+  const redirected = useRef(false);
+  useEffect(() => {
+    if (redirected.current) return;
+    redirected.current = true;
+    if (locale !== "nl") return;
+    let stored: string | null = null;
+    try {
+      if (localStorage.getItem(LANGUAGE_CHOICE_KEY) !== "true") return;
+      stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    } catch {
+      return;
+    }
+    if (stored !== "en" && stored !== "fr") return;
+    navigate(`${addLocale(location.pathname, stored)}${location.search}${location.hash}`, { replace: true });
+    // Alleen bij binnenkomst; daarna bepaalt de URL de taal.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     document.documentElement.lang = locale;
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
+    // De keuze zelf wordt in setLocale bewaard; de URL mag die niet overschrijven.
   }, [locale]);
 
   const value = useMemo(() => ({ locale, t, localizePath, setLocale }), [locale, localizePath, setLocale, t]);
