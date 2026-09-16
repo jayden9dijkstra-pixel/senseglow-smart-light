@@ -49,8 +49,32 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
+    // Alleen een bewuste keuze onthouden; de URL mag die keuze niet overschrijven.
+    try {
+      if (locale !== "nl" || localStorage.getItem(LANGUAGE_CHOICE_KEY) === "true") {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
+      }
+    } catch {
+      // opslag kan geblokkeerd zijn
+    }
   }, [locale]);
+
+  // Terugkerende bezoekers die eerder Engels of Frans kozen komen daar weer uit,
+  // ook als ze op een link zonder taal in het adres binnenkomen.
+  useEffect(() => {
+    if (locale !== "nl") return;
+    let stored: string | null = null;
+    try {
+      if (localStorage.getItem(LANGUAGE_CHOICE_KEY) !== "true") return;
+      stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    } catch {
+      return;
+    }
+    if (stored !== "en" && stored !== "fr") return;
+    navigate(`${addLocale(location.pathname, stored)}${location.search}${location.hash}`, { replace: true });
+    // Alleen bij binnenkomst; daarna bepaalt de URL de taal.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const value = useMemo(() => ({ locale, t, localizePath, setLocale }), [locale, localizePath, setLocale, t]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
