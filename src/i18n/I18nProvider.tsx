@@ -47,21 +47,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     navigate(`${addLocale(location.pathname, next)}${location.search}${location.hash}`);
   }, [location.hash, location.pathname, location.search, navigate]);
 
-  useEffect(() => {
-    document.documentElement.lang = locale;
-    // Alleen een bewuste keuze onthouden; de URL mag die keuze niet overschrijven.
-    try {
-      if (locale !== "nl" || localStorage.getItem(LANGUAGE_CHOICE_KEY) === "true") {
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
-      }
-    } catch {
-      // opslag kan geblokkeerd zijn
-    }
-  }, [locale]);
-
   // Terugkerende bezoekers die eerder Engels of Frans kozen komen daar weer uit,
   // ook als ze op een link zonder taal in het adres binnenkomen.
+  const redirected = useRef(false);
   useEffect(() => {
+    if (redirected.current) return;
+    redirected.current = true;
     if (locale !== "nl") return;
     let stored: string | null = null;
     try {
@@ -75,6 +66,20 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     // Alleen bij binnenkomst; daarna bepaalt de URL de taal.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    // Alleen een bewuste keuze onthouden; de URL mag die keuze niet overschrijven.
+    try {
+      if (locale !== "nl" || localStorage.getItem(LANGUAGE_CHOICE_KEY) === "true") {
+        if (!(locale === "nl" && !redirected.current)) {
+          localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
+        }
+      }
+    } catch {
+      // opslag kan geblokkeerd zijn
+    }
+  }, [locale]);
 
   const value = useMemo(() => ({ locale, t, localizePath, setLocale }), [locale, localizePath, setLocale, t]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
