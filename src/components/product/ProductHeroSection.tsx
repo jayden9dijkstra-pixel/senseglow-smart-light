@@ -112,16 +112,11 @@ export const ProductHeroSection = ({
     });
   };
 
-  const beforeAfterPair = getBeforeAfterPair(product.node.handle);
-  const productImages = [
-    ...(product.node.images?.edges?.map((edge) => ({
+  const productImages =
+    product.node.images?.edges?.map((edge) => ({
       url: edge.node.url,
       altText: edge.node.altText,
-    })) || []),
-    ...(beforeAfterPair
-      ? [{ url: beforeAfterPair.on, altText: beforeAfterPair.alt }]
-      : []),
-  ];
+    })) || [];
 
   const displayPrice = selectedVariant
     ? parseFloat(selectedVariant.price.amount).toFixed(2)
