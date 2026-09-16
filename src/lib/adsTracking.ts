@@ -7,11 +7,26 @@
  */
 
 export const ADS_CONVERSION_ID = "AW-18351813640";
+const ANALYTICS_MEASUREMENT_ID = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined;
 
 const ADS_EVENT_LABELS: Partial<Record<string, string>> = {
   add_to_cart: "OR-lCMDbmvMcEIjo6a5E",
   begin_checkout: "WiOLCL3bmvMcEIjo6a5E",
 };
+
+/** Activeer GA4 via dezelfde Google-tag die al voor Ads geladen is. */
+export function initializeAnalytics(): void {
+  try {
+    const gtag = typeof window !== "undefined" ? window.gtag : undefined;
+    if (typeof gtag !== "function" || !ANALYTICS_MEASUREMENT_ID) return;
+    gtag("config", ANALYTICS_MEASUREMENT_ID, {
+      send_page_view: true,
+      linker: { domains: ["senseglow.shop", "www.senseglow.shop", "checkout.senseglow.shop"] },
+    });
+  } catch {
+    // Analytics mag de winkel nooit blokkeren.
+  }
+}
 
 const CLICK_ID_KEYS = ["gclid", "gbraid", "wbraid"] as const;
 type ClickIdKey = (typeof CLICK_ID_KEYS)[number];
@@ -161,8 +176,9 @@ export function trackPageView(path: string): void {
   try {
     const gtag = typeof window !== "undefined" ? window.gtag : undefined;
     if (typeof gtag !== "function") return;
+    const destinations = [ADS_CONVERSION_ID, ANALYTICS_MEASUREMENT_ID].filter(Boolean);
     gtag("event", "page_view", {
-      send_to: ADS_CONVERSION_ID,
+      send_to: destinations,
       page_path: path,
       page_location: window.location.href,
       page_title: document.title,
