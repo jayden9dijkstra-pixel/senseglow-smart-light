@@ -214,19 +214,21 @@ export const VariantPicker = ({
   const [selectedWattage, setSelectedWattage] = useState(initial.wattage);
   const [selectedLightColor, setSelectedLightColor] = useState(initial.lightColor);
   const [selectedType, setSelectedType] = useState(initial.variantType);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const syncedVariantRef = useRef<string | null>(null);
 
+  // Blijf gelijk lopen met de variant die van buitenaf gekozen is
+  // (bijvoorbeeld uit ?variant= in een advertentielink).
   useEffect(() => {
-    if (!isInitialized && selectedVariant) {
-      const d = parseDimensions(selectedVariant.selectedOptions, productType);
-      if (d.size) setSelectedSize(d.size);
-      if (d.color) setSelectedColor(d.color);
-      if (d.wattage) setSelectedWattage(d.wattage);
-      if (d.lightColor) setSelectedLightColor(d.lightColor);
-      if (d.variantType) setSelectedType(d.variantType);
-      setIsInitialized(true);
-    }
-  }, [selectedVariant, isInitialized, productType]);
+    if (!selectedVariant) return;
+    if (syncedVariantRef.current === selectedVariant.id) return;
+    syncedVariantRef.current = selectedVariant.id;
+    const d = parseDimensions(selectedVariant.selectedOptions, productType);
+    if (d.size) setSelectedSize(d.size);
+    if (d.color) setSelectedColor(d.color);
+    if (d.wattage) setSelectedWattage(d.wattage);
+    if (d.lightColor) setSelectedLightColor(d.lightColor);
+    if (d.variantType) setSelectedType(d.variantType);
+  }, [selectedVariant, productType]);
 
   const findVariant = (dims: Partial<ParsedDimensions>) => {
     const d: ParsedDimensions = {
