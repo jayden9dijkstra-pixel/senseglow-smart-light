@@ -119,11 +119,11 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
             <VariantPicker
               product={product}
               selectedVariant={pickedVariant}
-              onVariantChange={(v) => setPickedVariantId(v.id)}
+              onVariantChange={(v) => {
+                if (singleVariants.some((sv) => sv.id === v.id)) setPickedVariantId(v.id);
+              }}
             />
           </div>
-
-
 
           <div
             className={`grid gap-6 ${
@@ -131,13 +131,23 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                 ? "max-w-md mx-auto"
                 : config.packSizes.length === 2
                 ? "md:grid-cols-2 max-w-3xl mx-auto"
+                : config.packSizes.length === 4
+                ? "md:grid-cols-2 lg:grid-cols-4"
                 : "md:grid-cols-3"
             }`}
           >
             {config.packSizes.map((pack) => {
-              const quote = buildBundleQuote(pack, unitPrice);
+              const quote = quoteFor(pack);
+              const largestPack = config.packSizes[config.packSizes.length - 1];
               const isHighlighted = highlightedPack === pack;
-              const badge = pack === 3 ? "⭐ Meest gekozen" : pack === 4 ? "Maximaal voordeel" : null;
+              const badge =
+                config.packSizes.length === 1
+                  ? "Beste prijs per set"
+                  : pack === 3
+                  ? "⭐ Meest gekozen"
+                  : pack === largestPack
+                  ? "Maximaal voordeel"
+                  : null;
 
               return (
                 <Card
