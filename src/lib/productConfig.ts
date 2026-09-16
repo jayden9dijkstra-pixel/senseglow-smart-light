@@ -75,8 +75,8 @@ export interface ProductBundleConfig {
 }
 
 export const BUNDLE_CONFIG: Record<ProductKey, ProductBundleConfig> = {
-  ambient: { packSizes: [2, 3, 4, 5] },
-  wave: { packSizes: [2, 3, 4, 5] },
+  ambient: { packSizes: [2, 3, 4] },
+  wave: { packSizes: [2, 3, 4] },
   lantern: { packSizes: [2, 3, 4] },
   flex: { packSizes: [2] },
   sconce: {
