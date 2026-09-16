@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import wordmark from "@/assets/senseglow-wordmark.png.asset.json";
+import wordmark from "@/assets/logo-wordmark.png";
 import {
   PRODUCT_HANDLE,
   WAVE_PRODUCT_HANDLE,
@@ -120,7 +120,7 @@ export const SiteHeader = () => {
             aria-label={t("Ga naar homepage")}
           >
             <img
-              src={wordmark.url}
+              src={wordmark}
               alt="SenseGlow logo"
               loading="eager"
               {...{ fetchpriority: "high" }}
