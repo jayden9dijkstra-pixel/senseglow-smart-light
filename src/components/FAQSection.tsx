@@ -49,15 +49,15 @@ export const FAQSection = () => {
   return (
     <section className="w-full bg-background-secondary py-16 md:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
-        <div className="max-w-4xl mx-auto animate-fade-in-slow">
-          <div className="text-center mb-16">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-5">
+        <div className="max-w-5xl mx-auto animate-fade-in-slow">
+          <div className="text-center mb-14 md:mb-16">
+            <p className="text-xs uppercase tracking-[0.3em] text-foreground/55 font-medium mb-5">
               FAQ
             </p>
-            <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
               Veelgestelde vragen
             </h2>
-            <p className="text-base text-foreground/60">
+            <p className="text-base md:text-lg text-foreground/65">
               Alles wat je moet weten over SenseGlow
             </p>
           </div>
@@ -67,12 +67,12 @@ export const FAQSection = () => {
               <AccordionItem
                 key={idx}
                 value={`item-${idx}`}
-                className="border-b border-foreground/6"
+                className="border-b border-foreground/10"
               >
-                <AccordionTrigger className="text-left text-base font-medium py-6 hover:text-glow hover:no-underline transition-colors duration-500">
+                <AccordionTrigger className="text-left text-lg md:text-xl font-medium py-6 md:py-7 hover:text-glow hover:no-underline transition-colors duration-500">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-sm text-foreground/60 leading-relaxed pb-6">
+                <AccordionContent className="text-base md:text-lg text-foreground/65 leading-relaxed pb-7 pr-8">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -84,8 +84,8 @@ export const FAQSection = () => {
               const Icon = item.icon;
               return (
                 <div key={idx} className="flex items-center gap-3">
-                  <Icon className="w-4 h-4 text-glow/60" />
-                  <span className="text-sm text-foreground/50">{item.text}</span>
+                   <Icon className="w-5 h-5 text-glow/75" />
+                   <span className="text-base text-foreground/60">{item.text}</span>
                 </div>
               );
             })}
