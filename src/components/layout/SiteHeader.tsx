@@ -105,6 +105,12 @@ export const SiteHeader = () => {
 
   return (
     <header className="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md">
+      <div className="bg-primary text-primary-foreground">
+        <div className="container flex h-7 md:h-8 items-center justify-center gap-2 text-[9px] md:text-[10px] tracking-[0.12em]">
+          <span className="h-1 w-1 rounded-full bg-accent" aria-hidden="true" />
+          {t("Gratis verzending in Nederland en België")}
+        </div>
+      </div>
       <div className="container">
         <div className="flex h-[4.5rem] md:h-20 items-center justify-between gap-4">
           {/* Links: logo */}
