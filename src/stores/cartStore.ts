@@ -203,7 +203,7 @@ export const useCartStore = create<CartStore>()(
             return !(item.variantId === variantId && !item.isBundle);
           }),
         });
-        toast.info('Verwijderd uit winkelwagen');
+        toast.info(tr('Verwijderd uit winkelwagen'));
       },
 
       clearCart: () => {
