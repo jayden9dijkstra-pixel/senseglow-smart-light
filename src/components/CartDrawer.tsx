@@ -144,7 +144,7 @@ export function CartDrawer() {
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full glass-strong">
+      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full bg-background">
         <SheetHeader className="flex-shrink-0">
           <SheetTitle>Winkelwagen</SheetTitle>
           <SheetDescription>
