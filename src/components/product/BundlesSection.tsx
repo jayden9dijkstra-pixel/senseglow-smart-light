@@ -168,9 +168,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                     </Badge>
                   )}
 
-                  <div className="space-y-5">
-                    <div className="space-y-1.5">
-                      <h3 className="text-2xl font-bold text-foreground">{quote.label}</h3>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-bold text-foreground">{quote.label}</h3>
                       <p className="text-xs uppercase tracking-[0.2em] text-foreground/40">
                         {pack}× {variantLabel || pickedVariant.title}
                       </p>
