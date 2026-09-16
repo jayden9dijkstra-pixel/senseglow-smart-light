@@ -86,5 +86,5 @@
 - [x] Alle vijf producten in één compacte collage op de homepage
 - [x] Kaartbeelden en eerste beeldsectie compacter op mobiel en desktop
 - [x] Scherper SenseGlow-woordmerk in de navigatie
-- [x] Lagere gratis-verzendingsbalk
+- [x] Gratis-verzendingsbalk volledig verwijderd
 - [x] Mobiel en desktop visueel controleren
