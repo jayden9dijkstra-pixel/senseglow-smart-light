@@ -141,7 +141,6 @@ const ProductDetail = () => {
           headlineOverride={bundleHeadline}
         />
 
-        <ProductReviewsSection />
         <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
         <HowItWorksSection headline={stepsHeadline} steps={steps} />
         <BeforeAfterSection
