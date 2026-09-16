@@ -1,8 +1,22 @@
 # Trechter en meting: wat er echt stuk is
 
-Ik heb de vijf punten live nagelopen in de browser (op senseglow.shop zelf en op de werkversie). Drie punten blijken al opgelost te zijn, twee zijn echt.
+Ik heb alles live nagelopen in de browser. De belangrijkste oorzaak van "ik klik op mijn eigen advertentie en kom op de homepage" heb ik gevonden.
 
-## Wat ik heb gemeten
+## Waarom je advertentie op de homepage uitkomt
+
+Je Shopping-advertenties sturen bezoekers naar de Shopify-winkel, bijvoorbeeld `checkout.senseglow.shop/products/senseglow_wave`. Die pagina stuurt de bezoeker automatisch door naar de winkel op Lovable, maar hij gebruikt daarvoor het oude tijdelijke adres `go.to.lovable.app`. Dat adres gooit het stukje `/products/senseglow_wave` weg en zet iedereen op de voorpagina. Getest: die link eindigt op `https://www.senseglow.shop/`.
+
+Dit zit niet in de code van je site, maar in de instelling van de winkelverbinding in Shopify. Daar moet het doorstuuradres `www.senseglow.shop` worden in plaats van `go.to.lovable.app`. Zodra dat klopt, komt elke advertentieklik op de juiste productpagina uit, want `/products/<handle>` vangen we op de site al goed op (getest: `www.senseglow.shop/products/senseglow_wave` opent de Wave-pagina).
+
+Twee dingen die je zelf moet doen in Shopify Beheer:
+
+1. Bij de Lovable-winkelkoppeling het doorstuuradres op `www.senseglow.shop` zetten.
+2. Daarna één advertentielink aanklikken en controleren dat je op de productpagina landt.
+
+Let op: beide campagnes (SG #1.0 en SG #1.5) staan nu op pauze. Zet ze pas weer aan als het doorsturen klopt.
+
+## Wat ik verder heb gemeten
+
 
 - **In winkelwagen werkt.** Op de live site `www.senseglow.shop/product/senseglow_wall_lamp` klikte ik op "In winkelwagen": het artikel (4-delige set, wit) komt in de winkelwagen terecht en blijft daar na herladen staan. Geen fouten in de console. Hetzelfde op de werkversie. Het rapport is waarschijnlijk van vóór de laatste publicatie.
 - **`/products/<handle>` komt goed aan.** `www.senseglow.shop/products/senseglow_wave` landt op de Wave-productpagina, niet op de homepage. Dit is een doorverwijzing in de browser, geen 301 van de server; voor bezoekers is dat gelijk, voor Google is een echte 301 netter.
