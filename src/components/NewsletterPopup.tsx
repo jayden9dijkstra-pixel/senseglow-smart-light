@@ -4,8 +4,23 @@ import { Link } from "react-router-dom";
 import { subscribeToNewsletter } from "@/lib/klaviyo";
 
 const STORAGE_KEY = "senseglow_popup_dismissed";
-const SHOW_AFTER_MS = 8000;
+const SHOW_AFTER_MS = 45000;
 const SUCCESS_CLOSE_MS = 3000;
+
+/** Nooit tonen waar iemand aan het kopen is. */
+function blocksBuying(): boolean {
+  if (typeof window === "undefined") return true;
+  const path = window.location.pathname;
+  if (/\/product\//.test(path)) return true;
+  if (/(bundels|stel-je-bundel-samen|volg-je-bestelling|track|login)/.test(path)) return true;
+  try {
+    const cart = localStorage.getItem("shopify-cart");
+    if (cart && JSON.parse(cart)?.state?.items?.length > 0) return true;
+  } catch {
+    // stil
+  }
+  return false;
+}
 
 export const NewsletterPopup = () => {
   const [open, setOpen] = useState(false);
@@ -21,10 +36,12 @@ export const NewsletterPopup = () => {
     if (typeof window === "undefined") return;
     if (localStorage.getItem(STORAGE_KEY) === "true") return;
 
-    const timer = window.setTimeout(() => setOpen(true), SHOW_AFTER_MS);
+    const timer = window.setTimeout(() => {
+      if (!blocksBuying()) setOpen(true);
+    }, SHOW_AFTER_MS);
 
     const onExit = (e: MouseEvent) => {
-      if (e.clientY <= 0 && localStorage.getItem(STORAGE_KEY) !== "true") {
+      if (e.clientY <= 0 && localStorage.getItem(STORAGE_KEY) !== "true" && !blocksBuying()) {
         setOpen(true);
       }
     };

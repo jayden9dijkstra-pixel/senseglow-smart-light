@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 import { trackAdsEvent } from '@/lib/adsTracking';
+import { trackSiteEvent } from '@/lib/siteAnalytics';
 
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
@@ -111,6 +112,10 @@ export const useCartStore = create<CartStore>()(
           currency: 'EUR',
           items: toAdsItems(newItems),
         });
+        void trackSiteEvent('add_to_cart', {
+          itemName: newItems[0]?.product.node.title,
+          value: adsValue(newItems),
+        });
         toast.success(message);
       },
 
@@ -121,6 +126,11 @@ export const useCartStore = create<CartStore>()(
           currency: 'EUR',
           items: toAdsItems([item]),
         });
+        void trackSiteEvent('add_to_cart', {
+          itemName: item.product.node.title,
+          value: adsValue([item]),
+        });
+
 
         if (item.isBundle && item.bundlePackSize) {
           // Bundles: stack identical (variant + pack size) lines
@@ -206,6 +216,8 @@ export const useCartStore = create<CartStore>()(
           currency: 'EUR',
           items: toAdsItems(items),
         });
+        void trackSiteEvent('begin_checkout', { value: adsValue(items) });
+
 
         setLoading(true);
         try {
