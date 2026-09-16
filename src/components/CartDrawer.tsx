@@ -56,6 +56,23 @@ export function CartDrawer() {
     if (lastAddedAt > 0) setIsOpen(true);
   }, [lastAddedAt]);
 
+  // Meet het openen van de winkelwagen.
+  React.useEffect(() => {
+    if (!isOpen || items.length === 0) return;
+    trackViewCart(
+      items.map((i) => ({
+        item_id: numericVariantId(i.variantId),
+        item_name: i.product.node.title,
+        item_variant: i.variantTitle,
+        price: parseFloat(i.price.amount),
+        quantity: i.quantity,
+      }))
+    );
+    // alleen bij openen meten
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+
 
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
