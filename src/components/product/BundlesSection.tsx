@@ -99,8 +99,8 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const headline = headlineOverride || "Meer kiezen, meer besparen";
 
   return (
-    <section id="bundels" className="w-full scroll-mt-24 overflow-hidden py-16 md:py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 md:px-8">
+    <section id="bundels" className="w-full scroll-mt-24 overflow-hidden py-10 md:py-14 lg:py-16">
+      <div className="mx-auto max-w-5xl px-6 md:px-8">
         <div>
           <div className="text-center mb-10 space-y-4">
             <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
