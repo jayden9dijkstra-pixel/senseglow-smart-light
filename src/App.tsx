@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { useEffect, useRef } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { captureClickIds, trackPageView } from "@/lib/adsTracking";
+import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
@@ -43,6 +43,7 @@ const AdsTracking = () => {
 
   useEffect(() => {
     captureClickIds();
+    initializeAnalytics();
   }, []);
 
   useEffect(() => {
