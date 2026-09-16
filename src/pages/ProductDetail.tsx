@@ -141,8 +141,6 @@ const ProductDetail = () => {
           headlineOverride={bundleHeadline}
         />
 
-        <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
-        <HowItWorksSection headline={stepsHeadline} steps={steps} />
         <BeforeAfterSection
           headline={beforeAfterHeadline}
           beforeLabel={beforeLabel}
@@ -150,6 +148,9 @@ const ProductDetail = () => {
           rows={beforeAfter}
           imagePair={handle ? getBeforeAfterPair(handle) : undefined}
         />
+
+        <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
+        <HowItWorksSection headline={stepsHeadline} steps={steps} />
         <FinalProductCTA
           headline={finalCta?.headline}
           subtext={finalCta?.subtext}

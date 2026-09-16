@@ -99,23 +99,23 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const headline = headlineOverride || "Meer kiezen, meer besparen";
 
   return (
-    <section id="bundels" className="w-full scroll-mt-24 overflow-hidden py-16 md:py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 md:px-8">
+    <section id="bundels" className="w-full scroll-mt-24 overflow-hidden py-10 md:py-14 lg:py-16">
+      <div className="mx-auto max-w-5xl px-6 md:px-8">
         <div>
-          <div className="text-center mb-10 space-y-4">
+          <div className="text-center mb-6 md:mb-8 space-y-2">
             <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
               Bundels
             </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
               {headline}
             </h2>
-            <p className="text-sm md:text-base text-foreground/60 max-w-2xl mx-auto">
+            <p className="text-sm text-foreground/60 max-w-2xl mx-auto">
               90% van onze klanten kiest voor meer dan één lamp.
             </p>
           </div>
 
           {/* Same variant picker as the single product page */}
-          <div className="max-w-2xl mx-auto mb-12">
+          <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <VariantPicker
               product={product}
               selectedVariant={pickedVariant}
@@ -154,10 +154,10 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                   key={pack}
                   onClick={() => setHighlightedPack(pack)}
                   className={`
-                    relative p-7 cursor-pointer transition-all duration-500 ease-out
+                    relative p-5 cursor-pointer transition-all duration-500 ease-out
                     ${
                       isHighlighted
-                        ? "border-glow shadow-[0_18px_40px_-30px_hsl(var(--foreground)/0.55)] -translate-y-1 bg-card"
+                        ? "border-glow shadow-[0_14px_30px_-24px_hsl(var(--foreground)/0.55)] -translate-y-1 bg-card"
                         : "border-foreground/10 hover:border-foreground/25 hover:-translate-y-0.5"
                     }
                   `}
@@ -168,9 +168,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                     </Badge>
                   )}
 
-                  <div className="space-y-5">
-                    <div className="space-y-1.5">
-                      <h3 className="text-2xl font-bold text-foreground">{quote.label}</h3>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-bold text-foreground">{quote.label}</h3>
                       <p className="text-xs uppercase tracking-[0.2em] text-foreground/40">
                         {pack}× {variantLabel || pickedVariant.title}
                       </p>
@@ -194,7 +194,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                       </p>
                     </div>
 
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-1.5">
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
                         <span>
@@ -210,17 +210,9 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
                         <span>Gratis bezorging, alles in één zending</span>
                       </li>
-                      <li className="flex items-start gap-2 text-sm text-green-700 dark:text-green-400">
+                      <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                        <span>Bij je thuis binnen 7-14 werkdagen na verwerking</span>
-                      </li>
-                      <li className="flex items-start gap-2 text-sm text-foreground/70">
-                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>1 jaar garantie</span>
-                      </li>
-                      <li className="flex items-start gap-2 text-sm text-foreground/70">
-                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>30 dagen gratis retour</span>
+                        <span>1 jaar garantie · 30 dagen retour</span>
                       </li>
                     </ul>
 
