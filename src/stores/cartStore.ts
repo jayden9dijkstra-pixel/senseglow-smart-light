@@ -176,7 +176,7 @@ export const useCartStore = create<CartStore>()(
           });
         } else {
           set({ items: [...items, item] });
-          toast.success('Toegevoegd aan winkelwagen', {
+          toast.success(tr('Toegevoegd aan winkelwagen'), {
             description: item.product.node.title,
           });
         }
