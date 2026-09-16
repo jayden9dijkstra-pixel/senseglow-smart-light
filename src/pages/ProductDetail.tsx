@@ -59,7 +59,15 @@ const ProductDetail = () => {
         const found = await fetchProductByHandle(handle);
         setProduct(found);
         if (found) {
-          if (handle === ARC_PRODUCT_HANDLE) {
+          // Advertentie- of feedlink met een specifieke variant gaat voor.
+          const wanted = variantParam ? numericVariantId(variantParam) : null;
+          const fromUrl = wanted
+            ? found.node.variants.edges.find((v) => numericVariantId(v.node.id) === wanted)
+            : undefined;
+
+          if (fromUrl) {
+            setSelectedVariant(fromUrl.node);
+          } else if (handle === ARC_PRODUCT_HANDLE) {
             const def = found.node.variants.edges.find((v) =>
               v.node.selectedOptions.some((o) => o.value.includes("6W") && o.value.includes("Black")) &&
               v.node.selectedOptions.some((o) => o.value.toLowerCase().includes("warm"))
@@ -73,10 +81,32 @@ const ProductDetail = () => {
           }
         }
         setLoading(false);
-      } catch { setLoading(false); }
+      } catch (error) {
+        console.error("Product laden mislukt:", handle, error);
+        setLoading(false);
+      }
     };
     loadProduct();
-  }, [handle]);
+  }, [handle, variantParam]);
+
+  // Meet de productweergave één keer per product/variant-combinatie.
+  useEffect(() => {
+    if (!product || !selectedVariant) return;
+    const key = `${product.node.handle}::${selectedVariant.id}`;
+    if (viewedRef.current === key) return;
+    viewedRef.current = key;
+    trackViewItem([
+      {
+        item_id: numericVariantId(selectedVariant.id),
+        item_name: product.node.title,
+        item_variant: selectedVariant.title,
+        price: parseFloat(selectedVariant.price.amount),
+        quantity: 1,
+      },
+    ]);
+  }, [product, selectedVariant]);
+
+
 
   const path = `/product/${handle ?? ""}`;
   const seoEntry = getProductSeo(handle);
