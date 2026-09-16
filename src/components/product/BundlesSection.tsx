@@ -202,6 +202,14 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                           {variantLabel ? `, ${variantLabel}` : ""}
                         </span>
                       </li>
+                      <li className="flex items-start gap-2 text-sm text-foreground/70">
+                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
+                        <span>€{(quote.total / pack).toFixed(2)} per stuk in plaats van €{unitPrice.toFixed(2)}</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-sm text-foreground/70">
+                        <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
+                        <span>Gratis bezorging, alles in één zending</span>
+                      </li>
                       <li className="flex items-start gap-2 text-sm text-green-700 dark:text-green-400">
                         <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
                         <span>Bij je thuis binnen 7-14 werkdagen na verwerking</span>
