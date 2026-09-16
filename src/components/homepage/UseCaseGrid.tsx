@@ -138,7 +138,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                       </div>
                     )}
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/10 to-transparent transition-colors duration-500 group-hover:from-primary" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/5 to-transparent transition-colors duration-500 group-hover:from-primary/90" />
                   <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-5 text-primary-foreground">
                     <div className="mb-1.5 flex items-center gap-2 text-accent">
                       <Icon className="h-4 w-4" aria-hidden="true" />
