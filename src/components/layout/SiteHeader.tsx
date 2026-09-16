@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
       { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
     ],
   },
-  { label: "Bundels", href: "/stel-je-bundel-samen" },
+  
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   {
     label: "Service",
