@@ -154,10 +154,10 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                   key={pack}
                   onClick={() => setHighlightedPack(pack)}
                   className={`
-                    relative p-7 cursor-pointer transition-all duration-500 ease-out
+                    relative p-5 cursor-pointer transition-all duration-500 ease-out
                     ${
                       isHighlighted
-                        ? "border-glow shadow-[0_18px_40px_-30px_hsl(var(--foreground)/0.55)] -translate-y-1 bg-card"
+                        ? "border-glow shadow-[0_14px_30px_-24px_hsl(var(--foreground)/0.55)] -translate-y-1 bg-card"
                         : "border-foreground/10 hover:border-foreground/25 hover:-translate-y-0.5"
                     }
                   `}
