@@ -258,8 +258,8 @@ export const useCartStore = create<CartStore>()(
           );
           setCheckoutUrl(checkoutUrl);
         } catch {
-          toast.error('Checkout mislukt', {
-            description: 'Probeer het opnieuw.',
+          toast.error(tr('Checkout mislukt'), {
+            description: tr('Probeer het opnieuw.'),
           });
           throw new Error('Checkout failed');
         } finally {
