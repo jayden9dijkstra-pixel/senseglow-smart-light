@@ -43,7 +43,7 @@ export interface CartItem {
   isBundle?: boolean;
   bundleName?: string;        // "Duopak"
   bundleVariantLabel?: string; // "30cm • Zwart"
-  bundlePackSize?: 2 | 3 | 4;
+  bundlePackSize?: 2 | 3 | 4 | 5;
   bundleRate?: number;         // 0.08 | 0.12 | 0.15
   bundleDiscountCode?: string; // Shopify code applied at checkout
 }
