@@ -152,12 +152,17 @@ function getLinkerParam(): Promise<string | null> {
   });
 }
 
+/** Alle meetbestemmingen: Google Ads plus Analytics (indien ingesteld). */
+function destinations(): string[] {
+  return [ADS_CONVERSION_ID, ANALYTICS_MEASUREMENT_ID].filter(Boolean) as string[];
+}
+
 /** Stuur een gtag-event; stil no-op als gtag ontbreekt. */
 export function trackAdsEvent(name: string, params: Record<string, unknown> = {}): void {
   try {
     const gtag = typeof window !== "undefined" ? window.gtag : undefined;
     if (typeof gtag !== "function") return;
-    gtag("event", name, { send_to: ADS_CONVERSION_ID, ...params });
+    gtag("event", name, { send_to: destinations(), ...params });
 
     const label = ADS_EVENT_LABELS[name];
     if (label) {
@@ -170,6 +175,45 @@ export function trackAdsEvent(name: string, params: Record<string, unknown> = {}
     // tracking mag nooit de flow blokkeren
   }
 }
+
+export interface EcommerceItem {
+  item_id: string;
+  item_name: string;
+  item_variant?: string;
+  price: number;
+  quantity: number;
+}
+
+/** Haal het numerieke Shopify-variant-id uit een gid. */
+export function numericVariantId(variantId: string): string {
+  const match = variantId.match(/\/(\d+)$/);
+  return match ? match[1] : variantId;
+}
+
+function ecommerce(items: EcommerceItem[], value?: number) {
+  const total =
+    value ?? Math.round(items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100) / 100;
+  return { currency: "EUR", value: total, items };
+}
+
+/** Productpagina bekeken. */
+export function trackViewItem(items: EcommerceItem[]): void {
+  trackAdsEvent("view_item", ecommerce(items));
+}
+
+/** Productkaart aangeklikt in een overzicht. */
+export function trackSelectItem(items: EcommerceItem[], listName?: string): void {
+  trackAdsEvent("select_item", {
+    ...ecommerce(items),
+    ...(listName ? { item_list_name: listName } : {}),
+  });
+}
+
+/** Winkelwagen geopend. */
+export function trackViewCart(items: EcommerceItem[], value?: number): void {
+  trackAdsEvent("view_cart", ecommerce(items, value));
+}
+
 
 /** Meld een paginaweergave bij een routewissel (SPA). */
 export function trackPageView(path: string): void {
