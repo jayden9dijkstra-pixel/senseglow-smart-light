@@ -57,7 +57,7 @@ const Terms = () => {
           </Article>
 
           <Article n={6} title="Levering">
-            <p>De totale levertijd, inclusief het verwerken van de bestelling, bedraagt 7 tot 14 dagen. SenseGlow levert aan adressen in Nederland en België; verzending naar beide landen is gratis. Levering buiten Nederland en België is op dit moment niet beschikbaar.</p>
+            <p>Je bestelling wordt binnen 1 tot 3 werkdagen verwerkt. De verzending duurt daarna 7 tot 14 dagen. SenseGlow levert aan adressen in Nederland en België; verzending naar beide landen is gratis. Levering buiten Nederland en België is op dit moment niet beschikbaar.</p>
             <p>Het risico van beschadiging of vermissing van producten berust bij SenseGlow tot het moment van bezorging aan de consument.</p>
           </Article>
 
