@@ -54,7 +54,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-500 hover:-translate-y-1 group">
-      <Link to={`/product/${product.node.handle}`}>
+      <Link to={`/product/${product.node.handle}`} onClick={handleSelect}>
         <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
         {imageUrl ? (
           <img
@@ -71,7 +71,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </div>
       </Link>
       <CardContent className="p-5">
-        <Link to={`/product/${product.node.handle}`}>
+        <Link to={`/product/${product.node.handle}`} onClick={handleSelect}>
           <h3 className="font-bold text-base mb-2 hover:text-glow transition-colors duration-300 uppercase tracking-[0.15em]">
             {product.node.title}
           </h3>
