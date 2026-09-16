@@ -36,10 +36,14 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
   const config = getBundleConfig(productKey);
 
   // Single (non-bundle) variants available for picking inside a bundle
-  const singleVariants: SingleVariant[] = useMemo(
-    () => (product ? product.node.variants.edges.map((e) => e.node).filter((v) => !isBundleVariant(v)) : []),
-    [product]
-  );
+  const singleVariants: SingleVariant[] = useMemo(() => {
+    if (!product) return [];
+    const base = product.node.variants.edges.map((e) => e.node).filter((v) => !isBundleVariant(v));
+    if (!config.requiredOptionValue) return base;
+    return base.filter((v) =>
+      v.selectedOptions.some((o) => o.value === config.requiredOptionValue)
+    );
+  }, [product, config.requiredOptionValue]);
 
   // Track which single variant is currently selected for the bundle picker
   const [pickedVariantId, setPickedVariantId] = useState<string | null>(null);
