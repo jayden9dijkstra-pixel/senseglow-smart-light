@@ -124,7 +124,8 @@ export const SiteHeader = () => {
               alt="SenseGlow logo"
               loading="eager"
               {...{ fetchpriority: "high" }}
-              className="h-9 md:h-11 w-auto object-contain"
+              className="h-11 md:h-14 w-auto object-contain"
+              style={{ imageRendering: "auto" }}
             />
           </button>
 
