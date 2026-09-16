@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { trackViewItem, numericVariantId } from "@/lib/adsTracking";
+
 
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
