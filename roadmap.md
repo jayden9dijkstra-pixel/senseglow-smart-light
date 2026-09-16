@@ -81,3 +81,10 @@
 - [x] Advertentielinks gecontroleerd: alle 10 advertentiegroepen wijzen naar /product/<handle>
 - [ ] Levertijd gelijktrekken met Shopify (wacht op juiste levertijd van gebruiker)
 - [ ] Publiceren
+
+## Homepage collectie en schermgebruik
+- [x] Alle vijf producten in één compacte collage op de homepage
+- [x] Kaartbeelden en eerste beeldsectie compacter op mobiel en desktop
+- [x] Scherper SenseGlow-woordmerk in de navigatie
+- [x] Lagere gratis-verzendingsbalk
+- [ ] Mobiel en desktop visueel controleren
