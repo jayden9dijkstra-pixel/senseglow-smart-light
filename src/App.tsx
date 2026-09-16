@@ -7,6 +7,8 @@ import { ThemeProvider } from "next-themes";
 import { useEffect, useRef } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
+import { trackSiteEvent } from "@/lib/siteAnalytics";
+import Statistieken from "./pages/Statistieken";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
@@ -47,6 +49,8 @@ const AdsTracking = () => {
   }, []);
 
   useEffect(() => {
+    // Eigen meting telt elke weergave, ook de eerste.
+    void trackSiteEvent("page_view", { path: pathname });
     if (isFirst.current) {
       // De eerste weergave stuurt gtag zelf al vanuit de <head>.
       isFirst.current = false;
@@ -90,6 +94,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/voorwaarden" element={<Terms />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/statistieken" element={<Statistieken />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             {(["en", "fr"] as const).flatMap((locale) => [
               <Route key={`${locale}-home`} path={`/${locale}`} element={<Index />} />,

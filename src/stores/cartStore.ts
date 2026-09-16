@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, fetchVariantPrices, ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 import { trackAdsEvent } from '@/lib/adsTracking';
+import { trackSiteEvent } from '@/lib/siteAnalytics';
 
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
