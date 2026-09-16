@@ -87,4 +87,4 @@
 - [x] Kaartbeelden en eerste beeldsectie compacter op mobiel en desktop
 - [x] Scherper SenseGlow-woordmerk in de navigatie
 - [x] Lagere gratis-verzendingsbalk
-- [ ] Mobiel en desktop visueel controleren
+- [x] Mobiel en desktop visueel controleren
