@@ -74,7 +74,7 @@ export default function Login() {
     <main className="min-h-screen flex items-center justify-center px-4 bg-background">
       <Seo title="Inloggen | SenseGlow" description="Log in op je SenseGlow account." path="/login" noindex />
 
-      <div className="w-full max-w-md rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm">
+      <div className="w-full max-w-md rounded-sm border border-border/50 bg-card/60 backdrop-blur-xl p-8 shadow-sm">
         <h1 className="text-2xl font-semibold mb-1">
           {mode === "signin" ? "Inloggen" : "Account aanmaken"}
         </h1>

@@ -83,7 +83,7 @@ const Catalog = () => {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/6 overflow-hidden rounded-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/6 overflow-hidden rounded-sm">
                 {products.map((p) => {
                   const img = p.node.images?.edges?.[0]?.node;
                   const price = p.node.priceRange.minVariantPrice;
@@ -93,7 +93,7 @@ const Catalog = () => {
                       to={`/product/${p.node.handle}`}
                       className="group bg-background p-8 flex flex-col gap-6 transition-all duration-500 hover:bg-foreground/[0.02]"
                     >
-                      <div className="aspect-square overflow-hidden rounded-xl bg-muted/10 glass">
+                      <div className="aspect-square overflow-hidden rounded-sm bg-muted/10 glass">
                         {img?.url ? (
                           <img
                             src={img.url}

@@ -153,7 +153,7 @@ export default function Statistieken() {
           </div>
         </header>
 
-        <section className="rounded-2xl border border-primary/20 bg-card/60 p-6">
+        <section className="rounded-sm border border-primary/20 bg-card/60 p-6">
           <div className="flex items-center gap-3">
             <span className="relative flex h-3 w-3">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
@@ -182,7 +182,7 @@ export default function Statistieken() {
             { label: "In winkelwagen", value: stats.carts, Icon: ShoppingCart },
             { label: "Naar afrekenen", value: stats.checkouts, Icon: CreditCard },
           ].map(({ label, value, Icon }) => (
-            <div key={label} className="rounded-xl border border-border/60 bg-card/50 p-5">
+            <div key={label} className="rounded-sm border border-border/60 bg-card/50 p-5">
               <Icon className="mb-3 h-4 w-4 text-primary" />
               <p className="text-2xl font-semibold">{value}</p>
               <p className="text-xs text-muted-foreground">{label}</p>
@@ -190,7 +190,7 @@ export default function Statistieken() {
           ))}
         </section>
 
-        <section className="rounded-xl border border-border/60 bg-card/50 p-5">
+        <section className="rounded-sm border border-border/60 bg-card/50 p-5">
           <h2 className="mb-3 text-sm font-medium">Van bezoek tot afrekenen</h2>
           <div className="space-y-2 text-sm">
             {[
@@ -223,7 +223,7 @@ export default function Statistieken() {
             { title: "Apparaat", rows: stats.devices },
             { title: "Land", rows: stats.countries },
           ].map((block) => (
-            <div key={block.title} className="rounded-xl border border-border/60 bg-card/50 p-5">
+            <div key={block.title} className="rounded-sm border border-border/60 bg-card/50 p-5">
               <h2 className="mb-3 text-sm font-medium">{block.title}</h2>
               <ul className="space-y-1.5 text-sm">
                 {block.rows.map(([label, count]) => (

@@ -7,120 +7,67 @@ html {
 }
 
 /* SenseGlow Design System
-   Editorial, strak, architecturaal - Shopify-stijl
+   Elegant, open, editorial. Mokka bruin met oranje accent op warm wit.
    All colors in HSL format
 */
 
 @layer base {
   :root {
-    /* DAG MODUS - Apple-inspired glasachtig wit */
-    --background: 0 0% 99%; /* #FCFCFC puur wit */
-    --background-secondary: 0 0% 96%; /* #F5F5F7 Apple grijs */
-    --foreground: 0 0% 17%; /* #2B2B2B Charcoal */
-    --foreground-muted: 0 0% 29%; /* #4A4A4A Dark Grey */
+    /* Warm open wit */
+    --background: 36 40% 98%; /* #FCFAF6 */
+    --background-secondary: 34 32% 95%; /* #F6F1EA */
+    --foreground: 20 30% 21%; /* #46332A mokka */
+    --foreground-muted: 22 14% 42%; /* #7A6A5E */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 17%;
+    --card-foreground: 20 30% 21%;
 
-    --popover: 0 0% 99%;
-    --popover-foreground: 0 0% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 30% 21%;
 
-    /* Soft Amber - enige accentkleur #C58A3D */
-    --primary: 33 52% 50%;
-    --primary-foreground: 0 0% 100%; /* Wit text op amber */
+    /* Mokka als hoofdkleur voor knoppen en vlakken */
+    --primary: 20 31% 31%; /* #67483A */
+    --primary-foreground: 36 40% 98%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 17%;
+    --secondary: 34 32% 95%;
+    --secondary-foreground: 20 30% 21%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 29%;
+    --muted: 34 26% 94%;
+    --muted-foreground: 22 14% 42%;
 
-    --accent: 33 52% 50%; /* Amber */
-    --accent-foreground: 0 0% 100%;
+    /* Oranje accent */
+    --accent: 33 62% 54%; /* #D4913F */
+    --accent-foreground: 20 30% 21%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 36 40% 98%;
 
-    /* Apple-stijl subtiele borders */
-    --border: 0 0% 0% / 0.06;
-    --border-strong: 0 0% 0% / 0.12;
-    --input: 0 0% 92%;
-    --ring: 33 52% 50%;
-    
-    /* Amber glow voor subtiele effecten */
-    --hero-foreground: 38 40% 96%;
-    --glow: 33 52% 50%;
-    --glow-light: 33 52% 70%;
-    
-    /* Brand amber */
-    --brand-amber: 33 52% 50%;
-    --brand-amber-light: 33 52% 85%;
+    /* Rustige warme lijnen */
+    --border: 28 22% 88%;
+    --border-strong: 26 20% 78%;
+    --input: 28 22% 88%;
+    --ring: 33 62% 54%;
 
-    --radius: 0.5rem;
-    
-    /* Section transition curves */
-    --section-curve: 40px;
+    --hero-foreground: 36 40% 98%;
 
-    --sidebar-background: 0 0% 96%;
-    --sidebar-foreground: 0 0% 17%;
-    --sidebar-primary: 33 52% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 92%;
-    --sidebar-accent-foreground: 0 0% 17%;
-    --sidebar-border: 0 0% 0% / 0.06;
-    --sidebar-ring: 33 52% 50%;
-  }
+    /* Accent-aliassen zodat bestaande klassen mee veranderen */
+    --glow: 33 62% 54%;
+    --glow-light: 33 62% 72%;
+    --brand-amber: 33 62% 54%;
+    --brand-amber-light: 33 62% 88%;
 
-  .dark {
-    /* NACHT MODUS - Lichter grijs zodat amber gloed opvalt */
-    --background: 0 0% 14%; /* #242424 */
-    --background-secondary: 0 0% 17%; /* #2C2C2C */
-    --foreground: 40 5% 95%; /* #F2F1ED Warm Off-White */
-    --foreground-muted: 40 3% 81%; /* #CFCFC9 Muted Off-White */
+    --radius: 0.25rem;
 
-    --card: 0 0% 16%;
-    --card-foreground: 40 5% 95%;
+    --section-curve: 0px;
 
-    --popover: 0 0% 17%;
-    --popover-foreground: 40 5% 95%;
-
-    /* Soft Amber blijft hetzelfde */
-    --primary: 33 52% 50%;
-    --primary-foreground: 0 0% 9%;
-
-    --secondary: 0 0% 19%;
-    --secondary-foreground: 40 5% 95%;
-
-    --muted: 0 0% 21%;
-    --muted-foreground: 40 3% 81%;
-
-    --accent: 33 52% 50%;
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 98%;
-
-    /* Editorial borders */
-    --border: 40 5% 95% / 0.08;
-    --border-strong: 40 5% 95% / 0.15;
-    --input: 0 0% 24%;
-    --ring: 33 52% 50%;
-    
-    --hero-foreground: 38 40% 96%;
-    --glow: 33 52% 50%;
-    --glow-light: 33 60% 75%;
-    
-    --brand-amber: 33 52% 50%;
-    --brand-amber-light: 33 52% 30%;
-    
-    --sidebar-background: 0 0% 17%;
-    --sidebar-foreground: 40 5% 95%;
-    --sidebar-primary: 33 52% 50%;
-    --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 22%;
-    --sidebar-accent-foreground: 40 5% 95%;
-    --sidebar-border: 40 5% 95% / 0.08;
-    --sidebar-ring: 33 52% 50%;
+    --sidebar-background: 34 32% 95%;
+    --sidebar-foreground: 20 30% 21%;
+    --sidebar-primary: 20 31% 31%;
+    --sidebar-primary-foreground: 36 40% 98%;
+    --sidebar-accent: 34 26% 92%;
+    --sidebar-accent-foreground: 20 30% 21%;
+    --sidebar-border: 28 22% 88%;
+    --sidebar-ring: 33 62% 54%;
   }
 }
 
@@ -129,56 +76,53 @@ html {
     @apply border-border;
   }
 
-  /* Vloeiende theme transitie zonder haperingen */
   :root {
     color-scheme: light;
-  }
-  
-  .dark {
-    color-scheme: dark;
   }
 
   body {
     @apply bg-background text-foreground antialiased overflow-x-hidden;
+    font-family: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "kern" 1;
   }
 
-  /* GPU-accelerated smooth theme transition */
-  html {
-    transition: none;
-  }
-  
-  html.transitioning *,
-  html.transitioning *::before,
-  html.transitioning *::after {
-    transition: background-color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                fill 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                stroke 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 1200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.08;
   }
 
-  /* Interactieve elementen behouden snelle feedback */
-  html.transitioning button,
-  html.transitioning a {
-    transition: background-color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                color 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 200ms ease-out,
-                transform 200ms ease-out !important;
+  h1 {
+    font-weight: 500;
   }
 }
 
-/* Animaties - alleen fade-in, rustig zichtbaar worden */
 @layer utilities {
-  /* Hero: donkerbruin naar warm amber */
+  /* Rustige dwarsstreep onder kleine kopjes */
+  .eyebrow {
+    @apply text-[11px] uppercase tracking-[0.28em] text-foreground/45;
+  }
+
+  /* Zacht vlak in plaats van glas */
+  .glass,
+  .glass-strong {
+    background: hsl(var(--background) / 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
   .hero-gradient {
-    background: linear-gradient(135deg, hsl(24 13% 9%) 0%, hsl(24 18% 14%) 45%, hsl(33 45% 28%) 100%);
+    background: linear-gradient(135deg, hsl(20 30% 21%) 0%, hsl(20 31% 31%) 60%, hsl(33 52% 38%) 100%);
   }
 
   .hero-gradient-overlay {
-    background: linear-gradient(120deg, hsl(24 13% 9% / 0.92) 0%, hsl(24 13% 9% / 0.72) 50%, hsl(33 52% 30% / 0.55) 100%);
+    background: linear-gradient(120deg, hsl(20 30% 15% / 0.72) 0%, hsl(20 30% 18% / 0.45) 55%, hsl(33 52% 30% / 0.3) 100%);
   }
-
 
   .animate-fade-in {
     animation: fadeIn 800ms ease-out forwards;
@@ -220,7 +164,6 @@ html {
     }
   }
 
-  /* Scroll animatie voor USP banner */
   @keyframes scroll {
     0% {
       transform: translateX(0);
@@ -230,79 +173,23 @@ html {
     }
   }
 
-  /* Prijs glow pulse animatie */
-  @keyframes glow-pulse {
-    0% {
-      text-shadow: 0 0 0 hsl(var(--glow) / 0);
-    }
-    50% {
-      text-shadow: 0 0 25px hsl(var(--glow) / 0.5);
-    }
-    100% {
-      text-shadow: 0 0 10px hsl(var(--glow) / 0.2);
-    }
-  }
-
   .animate-scroll {
     animation: scroll 40s linear infinite;
   }
 
-  /* Nachtmodus heeft tragere animaties */
-  .dark .animate-scroll {
-    animation-duration: 50s;
-  }
-
-  .dark .animate-fade-in {
-    animation-duration: 1000ms;
-  }
-
-  .dark .animate-fade-in-slow {
-    animation-duration: 1400ms;
-  }
-
-  /* Bundle highlight animation */
   @keyframes bundle-glow {
     0% {
-      box-shadow: inset 0 0 0 0 hsl(var(--glow) / 0);
+      box-shadow: inset 0 0 0 0 hsl(var(--accent) / 0);
     }
     30% {
-      box-shadow: inset 0 0 0 2px hsl(var(--glow) / 0.4);
+      box-shadow: inset 0 0 0 2px hsl(var(--accent) / 0.4);
     }
     100% {
-      box-shadow: inset 0 0 0 0 hsl(var(--glow) / 0);
+      box-shadow: inset 0 0 0 0 hsl(var(--accent) / 0);
     }
   }
 
   .bundle-highlight {
     animation: bundle-glow 1s ease-out forwards;
-  }
-
-  /* Apple-inspired glassmorphism */
-  .glass {
-    background: hsl(0 0% 100% / 0.6);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid hsl(0 0% 0% / 0.04);
-  }
-
-  .dark .glass {
-    background: hsl(0 0% 100% / 0.04);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid hsl(0 0% 100% / 0.06);
-  }
-
-  .glass-strong {
-    background: hsl(0 0% 100% / 0.85);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border: 1px solid hsl(0 0% 100% / 0.3);
-  }
-
-  .dark .glass-strong {
-    background: hsl(0 0% 100% / 0.06);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border: 1px solid hsl(0 0% 100% / 0.08);
   }
 }

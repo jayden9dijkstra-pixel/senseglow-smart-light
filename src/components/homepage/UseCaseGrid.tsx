@@ -86,7 +86,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                 <Link
                   key={href}
                   to={href}
-                  className="group text-left overflow-hidden rounded-2xl border border-foreground/8 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow"
+                  className="group text-left overflow-hidden rounded-sm border border-foreground/8 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow"
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
                    <div className="relative aspect-square overflow-hidden bg-muted/10">
@@ -102,7 +102,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                         <Icon className="h-8 w-8 text-glow/60" aria-hidden="true" />
                       </div>
                     )}
-                    <div className="absolute top-4 left-4 p-3 rounded-xl bg-background/80 text-glow backdrop-blur-sm">
+                    <div className="absolute top-4 left-4 p-3 rounded-sm bg-background/80 text-glow backdrop-blur-sm">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                   </div>

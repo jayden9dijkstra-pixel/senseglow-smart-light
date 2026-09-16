@@ -203,7 +203,7 @@ const Quiz = () => {
                 <Button
                   onClick={() => navigate(r.url)}
                   size="lg"
-                  className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_30px_-5px_hsl(var(--glow)/0.4)] transition-all duration-500"
+                  className="w-full rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
                 >
                   Bekijk dit product
                 </Button>
@@ -211,7 +211,7 @@ const Quiz = () => {
                   onClick={reset}
                   variant="outline"
                   size="lg"
-                  className="w-full rounded-full"
+                  className="w-full rounded-sm"
                 >
                   Opnieuw beginnen
                 </Button>

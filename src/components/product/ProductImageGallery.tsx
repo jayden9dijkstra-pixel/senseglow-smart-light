@@ -167,7 +167,7 @@ export const ProductImageGallery = ({ images, productTitle, videoUrl = "" }: Pro
                   event.stopPropagation();
                   setIsVideoOpen(true);
                 }}
-                className="absolute bottom-4 left-4 h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
+                className="absolute bottom-4 left-4 h-12 w-12 rounded-sm bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
                 aria-label="Bekijk productvideo"
               >
                 <Play className="h-5 w-5 fill-current" />
@@ -362,7 +362,7 @@ export const ProductImageGallery = ({ images, productTitle, videoUrl = "" }: Pro
                 size="icon"
                 variant="secondary"
                 onClick={() => setIsVideoOpen(false)}
-                className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] h-11 w-11 rounded-full"
+                className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] h-11 w-11 rounded-sm"
                 aria-label="Video sluiten"
               >
                 <X className="h-5 w-5" />
@@ -371,7 +371,7 @@ export const ProductImageGallery = ({ images, productTitle, videoUrl = "" }: Pro
                 type="button"
                 variant="secondary"
                 onClick={() => setIsMuted((value) => !value)}
-                className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 min-h-11 -translate-x-1/2 rounded-full px-5"
+                className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 min-h-11 -translate-x-1/2 rounded-sm px-5"
               >
                 {isMuted ? <VolumeX className="mr-2 h-4 w-4" /> : <Volume2 className="mr-2 h-4 w-4" />}
                 {isMuted ? "Geluid aan" : "Geluid uit"}

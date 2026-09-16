@@ -149,7 +149,7 @@ export const NewsletterPopup = () => {
       {/* Card */}
       <div
         ref={dialogRef}
-        className="relative w-full max-w-[420px] rounded-xl shadow-2xl p-8 md:p-10 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+        className="relative w-full max-w-[420px] rounded-sm shadow-2xl p-8 md:p-10 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
         style={{ backgroundColor: "#1a1613", color: "#f5efe6" }}
       >
         <button
@@ -207,7 +207,7 @@ export const NewsletterPopup = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 rounded-full text-sm font-semibold tracking-wide transition-colors disabled:opacity-60"
+                className="w-full h-12 rounded-sm text-sm font-semibold tracking-wide transition-colors disabled:opacity-60"
                 style={{ backgroundColor: "#f2b955", color: "#1a1613" }}
               >
                 {loading ? "Bezig..." : "Ik wil 10% korting"}
@@ -251,7 +251,7 @@ export const NewsletterPopup = () => {
             <button
               type="button"
               onClick={close}
-              className="w-full h-12 rounded-full text-sm font-semibold tracking-wide transition-colors"
+              className="w-full h-12 rounded-sm text-sm font-semibold tracking-wide transition-colors"
               style={{ backgroundColor: "#f2b955", color: "#1a1613" }}
             >
               Sluiten

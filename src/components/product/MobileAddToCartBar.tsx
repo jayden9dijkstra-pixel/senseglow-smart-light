@@ -65,7 +65,7 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
           onClick={handleAdd}
           disabled={!selectedVariant.availableForSale}
           size="icon"
-          className="h-12 w-12 flex-none rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+          className="h-12 w-12 flex-none rounded-sm bg-primary text-primary-foreground hover:bg-primary/90"
           aria-label="In winkelwagen"
         >
           <ShoppingCart className="h-5 w-5" />

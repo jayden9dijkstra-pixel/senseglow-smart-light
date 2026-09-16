@@ -71,7 +71,7 @@ const About = () => {
               {criteria.map((c) => (
                 <div
                   key={c.title}
-                  className="p-6 md:p-8 rounded-2xl border border-foreground/10 bg-background-secondary"
+                  className="p-6 md:p-8 rounded-sm border border-foreground/10 bg-background-secondary"
                 >
                   <h3 className="text-lg font-semibold text-foreground mb-3">
                     {c.title}
@@ -98,14 +98,14 @@ const About = () => {
           </section>
 
           {/* Contact CTA */}
-          <section className="space-y-6 p-8 md:p-12 rounded-3xl bg-background-secondary border border-foreground/10">
+          <section className="space-y-6 p-8 md:p-12 rounded-sm bg-background-secondary border border-foreground/10">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground">
               Vragen vóór je iets bestelt?
             </h2>
             <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-2xl">
               Of advies welke lamp bij jouw situatie past? Stuur een mail of een bericht via de contactpagina. We reageren meestal binnen één werkdag.
             </p>
-            <Button onClick={() => navigate("/contact")} className="rounded-full">
+            <Button onClick={() => navigate("/contact")} className="rounded-sm">
               Naar contact
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
