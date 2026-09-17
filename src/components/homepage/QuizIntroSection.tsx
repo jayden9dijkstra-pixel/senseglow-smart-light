@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import quizSmartphone from "@/assets/quiz-smartphone.png?w=1024&format=webp";
-import quizSmartphoneSrcSet from "@/assets/quiz-smartphone.png?w=600;1024&format=webp&as=srcset";
+import quizAsset from "@/assets/ambient-quiz.jpg.asset.json";
 
 export const QuizIntroSection = () => {
   const navigate = useNavigate();
@@ -11,19 +10,16 @@ export const QuizIntroSection = () => {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div>
           <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
-            {/* Smartphone Image - Left */}
+            {/* Image - Left */}
             <div className="relative flex justify-center md:justify-start order-1 animate-fade-in-slow">
-              <div className="max-w-xs overflow-hidden">
+              <div className="w-full aspect-[16/9] overflow-hidden rounded-sm">
                 <img
-                  src={quizSmartphone}
-                  srcSet={quizSmartphoneSrcSet}
-                  sizes="(max-width: 768px) 80vw, 320px"
-                  alt="Smartphone met SenseGlow quiz interface"
-                  className="w-full h-auto"
+                  src={quizAsset.url}
+                  alt="SenseGlow lichtbalk onder spiegelkast in badkamer"
                   loading="lazy"
                   decoding="async"
+                  className="w-full h-full object-cover"
                 />
-
               </div>
             </div>
 
