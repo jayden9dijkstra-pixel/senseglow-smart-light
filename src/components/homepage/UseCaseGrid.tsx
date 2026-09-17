@@ -3,7 +3,7 @@ import { MoonStar, ChefHat, Footprints, DoorOpen, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import wallLampHomepageAsset from "@/assets/wall-lamp-homepage-square.png.asset.json";
 import waveHomepageAsset from "@/assets/wave-homepage-square.png.asset.json";
-import ambientHomepageAsset from "@/assets/ambient-wardrobe-homepage.png.asset.json";
+import ambientHomepageAsset from "@/assets/ambient-homepage-square.png.asset.json";
 
 const homepageImages: Record<string, { url: string; altText: string }> = {
   senseglow_wall_lamp: {
@@ -16,7 +16,7 @@ const homepageImages: Record<string, { url: string; altText: string }> = {
   },
   senseglow_ambient_motion_bar: {
     url: ambientHomepageAsset.url,
-    altText: "SenseGlow Ambient Bar in een kledingkast",
+    altText: "SenseGlow Ambient Bar boven een wastafel",
   },
 };
 
