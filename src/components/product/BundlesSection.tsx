@@ -45,6 +45,22 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     );
   }, [product, config.requiredOptionValue]);
 
+  // Picker mag alleen varianten tonen die echt in de bundel kunnen
+  const bundleProduct = useMemo(() => {
+    if (!product) return product;
+    const allowed = new Set(singleVariants.map((v) => v.id));
+    return {
+      ...product,
+      node: {
+        ...product.node,
+        variants: {
+          ...product.node.variants,
+          edges: product.node.variants.edges.filter((e) => allowed.has(e.node.id)),
+        },
+      },
+    } as ShopifyProduct;
+  }, [product, singleVariants]);
+
   // Track which single variant is currently selected for the bundle picker
   const [pickedVariantId, setPickedVariantId] = useState<string | null>(null);
   const [highlightedPack, setHighlightedPack] = useState<PackSize | null>(null);
@@ -117,7 +133,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
           {/* Same variant picker as the single product page */}
           <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <VariantPicker
-              product={product}
+              product={bundleProduct!}
               selectedVariant={pickedVariant}
               onVariantChange={(v) => {
                 if (singleVariants.some((sv) => sv.id === v.id)) setPickedVariantId(v.id);
