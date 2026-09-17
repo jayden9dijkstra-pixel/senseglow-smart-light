@@ -1,5 +1,5 @@
 
-import storytellingImage from "@/assets/storytelling-glow.png";
+import storytellingAsset from "@/assets/ambient-storytelling.jpg.asset.json";
 
 export const StorytellingSection = () => {
   return (
@@ -11,8 +11,8 @@ export const StorytellingSection = () => {
             <div className="relative animate-fade-in-slow">
               <div className="aspect-square overflow-hidden rounded-sm">
                 <img
-                  src={storytellingImage}
-                  alt="SenseGlow LED licht in een warme woonruimte"
+                  src={storytellingAsset.url}
+                  alt="SenseGlow lichtbalk onder keukenkasten"
                   loading="lazy"
                   className="w-full h-full object-cover"
                 />
