@@ -145,7 +145,7 @@ export const ProductImageGallery = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
         >
-          <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-background border border-foreground/8 shadow-[0_24px_48px_-12px_rgba(93,64,55,0.08)]">
+          <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-background border-2 border-primary/40 shadow-[0_24px_48px_-12px_rgba(93,64,55,0.08)]">
             {/* Sliding track for smooth horizontal scroll */}
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
