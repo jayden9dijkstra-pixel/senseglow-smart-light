@@ -45,6 +45,22 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
     );
   }, [product, config.requiredOptionValue]);
 
+  // Picker mag alleen varianten tonen die echt in de bundel kunnen
+  const bundleProduct = useMemo(() => {
+    if (!product) return product;
+    const allowed = new Set(singleVariants.map((v) => v.id));
+    return {
+      ...product,
+      node: {
+        ...product.node,
+        variants: {
+          ...product.node.variants,
+          edges: product.node.variants.edges.filter((e) => allowed.has(e.node.id)),
+        },
+      },
+    } as ShopifyProduct;
+  }, [product, singleVariants]);
+
   // Track which single variant is currently selected for the bundle picker
   const [pickedVariantId, setPickedVariantId] = useState<string | null>(null);
   const [highlightedPack, setHighlightedPack] = useState<PackSize | null>(null);
