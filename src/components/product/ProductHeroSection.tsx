@@ -118,10 +118,7 @@ export const ProductHeroSection = ({
       url: edge.node.url,
       altText: edge.node.altText,
     })) || [];
-  const productImageClassName =
-    product.node.handle === PRODUCT_HANDLE
-      ? "w-full h-full object-contain p-3 md:p-4"
-      : "w-full h-full object-contain";
+  const productImageClassName = "w-full h-full object-contain";
 
   const displayPrice = selectedVariant
     ? parseFloat(selectedVariant.price.amount).toFixed(2)
