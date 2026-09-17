@@ -207,6 +207,20 @@ export const ProductImageGallery = ({
                 </button>
               </>
             )}
+
+            {/* "View all images" button — floating pill inside the frame */}
+            {images.length > 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); openLightbox(0); }}
+                className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 
+                  bg-background/95 backdrop-blur-md text-foreground px-5 py-2.5 
+                  rounded-full text-xs font-semibold border border-foreground/10 
+                  shadow-sm hover:bg-background transition-all duration-300 whitespace-nowrap z-10"
+              >
+                <Grid2X2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+                <span>Bekijk alle beelden</span>
+              </button>
+            )}
           </div>
 
         </div>
