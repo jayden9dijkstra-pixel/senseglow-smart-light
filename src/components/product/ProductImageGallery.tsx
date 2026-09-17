@@ -13,9 +13,15 @@ interface ProductImageGalleryProps {
   images: ProductImage[];
   productTitle: string;
   videoUrl?: string;
+  imageClassName?: string;
 }
 
-export const ProductImageGallery = ({ images, productTitle, videoUrl = "" }: ProductImageGalleryProps) => {
+export const ProductImageGallery = ({
+  images,
+  productTitle,
+  videoUrl = "",
+  imageClassName = "w-full h-full object-contain",
+}: ProductImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -151,7 +157,7 @@ export const ProductImageGallery = ({ images, productTitle, videoUrl = "" }: Pro
                   <img
                     src={image.url}
                     alt={image.altText || productTitle}
-                    className="w-full h-full object-contain"
+                    className={imageClassName}
                     draggable={false}
                     loading={idx === 0 ? "eager" : "lazy"}
                   />
