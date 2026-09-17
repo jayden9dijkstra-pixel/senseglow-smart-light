@@ -8,7 +8,7 @@ export const HeroSection = () => {
   const heroVideoUrl = HOMEPAGE_HERO_VIDEO_URL.trim();
 
   const scrollToProducts = () => {
-    const el = document.getElementById("products");
+    const el = document.getElementById("first-product") || document.getElementById("products");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     else navigate("/producten");
   };

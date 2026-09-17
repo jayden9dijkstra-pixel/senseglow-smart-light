@@ -10,6 +10,7 @@ import { ProductImageGallery } from "./ProductImageGallery";
 import { VariantPicker } from "./VariantPicker";
 import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
+import { PRODUCT_HANDLE } from "@/lib/productConfig";
 
 interface HeroContent {
   h1: string;
@@ -117,6 +118,10 @@ export const ProductHeroSection = ({
       url: edge.node.url,
       altText: edge.node.altText,
     })) || [];
+  const productImageClassName =
+    product.node.handle === PRODUCT_HANDLE
+      ? "w-full h-full object-contain p-8 md:p-12"
+      : "w-full h-full object-contain";
 
   const displayPrice = selectedVariant
     ? parseFloat(selectedVariant.price.amount).toFixed(2)
@@ -133,6 +138,7 @@ export const ProductHeroSection = ({
                 images={productImages}
                 productTitle={product.node.title}
                 videoUrl={getProductVideoUrl(product.node.handle)}
+                imageClassName={productImageClassName}
               />
             </div>
 
