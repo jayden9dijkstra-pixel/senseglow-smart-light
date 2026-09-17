@@ -133,7 +133,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
           {/* Same variant picker as the single product page */}
           <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <VariantPicker
-              product={product}
+              product={bundleProduct!}
               selectedVariant={pickedVariant}
               onVariantChange={(v) => {
                 if (singleVariants.some((sv) => sv.id === v.id)) setPickedVariantId(v.id);
