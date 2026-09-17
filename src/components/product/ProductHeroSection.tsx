@@ -120,7 +120,7 @@ export const ProductHeroSection = ({
     })) || [];
   const productImageClassName =
     product.node.handle === PRODUCT_HANDLE
-      ? "w-full h-full object-contain p-8 md:p-12"
+      ? "w-full h-full object-contain p-3 md:p-4"
       : "w-full h-full object-contain";
 
   const displayPrice = selectedVariant
