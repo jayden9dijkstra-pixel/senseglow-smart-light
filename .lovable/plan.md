@@ -23,13 +23,19 @@ Verder getest en in orde bevonden, zodat je weet dat daar geen tweede lek zit:
 
 ## Stap 1: het doorstuuradres in Shopify (dit moet jij doen, ik kan er niet bij)
 
-De instelling zit in het doorstuurthema van je winkel ("Hydrogen Redirect Theme"). Daar staat nu
-`go.to.lovable.app/?t=OTk2ZmU1...` als bestemming. Dat moet `www.senseglow.shop` worden.
+Niet verwijderen: het thema "Lovable Redirect" is precies wat je Shopify-adressen naar je eigen
+winkel brengt. Weghalen betekent dat elke oude link, elke Google-link en elke feedlink doodloopt.
+Alleen de bestemming moet anders.
 
-In Shopify Beheer: Verkoopkanalen → Headless (of Winkel → Thema's → Hydrogen Redirect Theme →
-Aanpassen → Thema-instellingen), en zet het storefront-adres op `https://www.senseglow.shop`.
-Lukt dat niet, dan is de snelste route de winkelkoppeling opnieuw leggen zodat hij je eigen
-domein oppakt in plaats van het tijdelijke adres.
+Nu staat er `go.to.lovable.app/?t=OTk2ZmU1...`. Dat moet `www.senseglow.shop` worden.
+
+Twee manieren, de bovenste is de veilige:
+
+1. Shopify Beheer → Winkel → Thema's → Lovable Redirect → Aanpassen → Thema-instellingen, en zet
+   het storefront-adres op `www.senseglow.shop`.
+2. Lukt dat niet, dan in dezelfde code-editor waar je nu zit: open `config/settings_data.json` en
+   vervang daar de waarde `go.to.lovable.app/?t=OTk2ZmU1...` door `www.senseglow.shop`. Laat de
+   rest van het bestand ongemoeid en sla op. Raak `main-redirect.liquid` niet aan.
 
 Zodra je dat gedaan hebt, controleer ik het direct: ik open dezelfde advertentielink opnieuw en
 meld je of hij nu op de productpagina uitkomt. Pas daarna zetten we de campagne weer aan.
