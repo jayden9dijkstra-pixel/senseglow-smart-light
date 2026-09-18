@@ -120,16 +120,14 @@ export const SiteHeader = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-64 bg-background border-border rounded-sm">
-                {productLinks.map((product, index) => (
-                  <DropdownMenuItem key={product.href} asChild>
-                    <Link
-                      to={localizePath(product.href)}
-                      className={`cursor-pointer text-sm text-foreground/70 hover:text-foreground transition-colors py-2 ${index === 0 ? "font-medium text-foreground" : ""}`}
-                    >
-                      {index === 0 ? t("Bekijk alle producten") : t(product.label)}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
+                <DropdownMenuItem asChild>
+                  <Link
+                    to={localizePath("/producten")}
+                    className="cursor-pointer text-sm font-medium text-foreground hover:text-foreground transition-colors py-2"
+                  >
+                    {t("Bekijk alle producten")}
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             {navItems.map((item) =>
