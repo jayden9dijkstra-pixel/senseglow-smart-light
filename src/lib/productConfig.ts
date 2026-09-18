@@ -99,6 +99,18 @@ export function getPackRate(productKey: ProductKey | null, packSize: PackSize): 
 }
 
 // ─── Discount-code mapping ─────────────────────────────
+/**
+ * Universele pack-kortingscodes: 2 → 10%, 3 → 15%, 4 → 20%, 5 → 25%.
+ * SG-PACK-3 en SG-PACK-4 gaven in Shopify 20% en 30% in plaats van 15% en 20%,
+ * daarom gebruiken die staffels de nieuwe, nagemeten codes.
+ */
+const PACK_DISCOUNT_CODE: Record<PackSize, string> = {
+  2: "SG-PACK-2",
+  3: "SG-BUNDLE-3",
+  4: "SG-BUNDLE-4",
+  5: "SG-PACK-5",
+};
+
 export function getBundleDiscountCode(
   productKey: ProductKey,
   packSize: PackSize,
@@ -106,8 +118,7 @@ export function getBundleDiscountCode(
 ): string | null {
   const config = getBundleConfig(productKey);
   if (config.discountCode) return config.discountCode;
-  // Universele pack-kortingscodes: 2 → 10%, 3 → 15%, 4 → 20%, 5 → 25%.
-  return `SG-PACK-${packSize}`;
+  return PACK_DISCOUNT_CODE[packSize];
 }
 
 // ─── Bundle quote helper ───────────────────────────────
