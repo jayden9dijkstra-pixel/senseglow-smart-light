@@ -149,7 +149,14 @@ export function CartDrawer() {
         <SheetHeader className="flex-shrink-0">
           <SheetTitle>Winkelwagen</SheetTitle>
           <SheetDescription>
-            {totalItems === 0 ? "Je winkelwagen is leeg" : `${totalItems} artikel${totalItems !== 1 ? 'en' : ''} in je winkelwagen`}
+            {totalItems === 0 ? (
+              <span>Je winkelwagen is leeg</span>
+            ) : (
+              <>
+                {totalItems}{" "}
+                <span>{totalItems === 1 ? "artikel in je winkelwagen" : "artikelen in je winkelwagen"}</span>
+              </>
+            )}
           </SheetDescription>
         </SheetHeader>
 
