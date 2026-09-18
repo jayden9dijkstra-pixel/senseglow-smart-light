@@ -15,10 +15,10 @@
 - Publiceren: wijzigingen staan nog niet op het openbare domein.
 
 ## Navigatie en winkelwagen (2026-09-18)
-- [ ] Winkelwagen alleen eenmalig openen na toevoegen
-- [ ] Desktopproducten vervangen door driepuntjesmenu met productoverzicht
-- [ ] Ambient Bar even groot tonen in het productoverzicht
-- [ ] Desktop en mobiel controleren
+- [x] Winkelwagen alleen eenmalig openen na toevoegen
+- [x] Desktopproducten vervangen door driepuntjesmenu met productoverzicht
+- [x] Ambient Bar even groot tonen in het productoverzicht
+- [x] Desktop en mobiel controleren
 
 ## Laatste fixes voor publicatie
 - [x] Bezorgtekst overal gelijkgezet op 7-14 werkdagen
