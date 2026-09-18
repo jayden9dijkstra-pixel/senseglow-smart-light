@@ -15,6 +15,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
 import { trackViewCart, numericVariantId } from "@/lib/adsTracking";
+import { formatPrice } from "@/lib/price";
 
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
   const key = getProductKeyFromHandle(item.product.node.handle);
@@ -197,8 +198,8 @@ export function CartDrawer() {
                                 {item.product.node.title} · {item.quantity}×
                               </p>
                               <div className="flex items-baseline gap-2">
-                                <p className="font-semibold text-foreground">€{lineNet.toFixed(2)}</p>
-                                <p className="text-xs text-muted-foreground line-through">€{lineGross.toFixed(2)}</p>
+                                <p className="font-semibold text-foreground">{formatPrice(lineNet)}</p>
+                                <p className="text-xs text-muted-foreground line-through">{formatPrice(lineGross)}</p>
                               </div>
                             </>
                           ) : (
@@ -208,7 +209,7 @@ export function CartDrawer() {
                                 {formatVariantLabel(item)}
                               </p>
                               <p className="font-semibold">
-                                €{lineGross.toFixed(2)}
+                                {formatPrice(lineGross)}
                               </p>
                             </>
                           )}
@@ -260,7 +261,7 @@ export function CartDrawer() {
                 {totalSavings > 0 && (
                   <div className="flex justify-between items-center text-sm text-glow">
                     <span>Bundelkorting</span>
-                    <span>−€{totalSavings.toFixed(2)}</span>
+                    <span>−{formatPrice(totalSavings)}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center text-sm text-muted-foreground">
@@ -270,7 +271,7 @@ export function CartDrawer() {
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Totaal</span>
                   <span className="text-xl font-bold">
-                    €{totalPrice.toFixed(2)}
+                    {formatPrice(totalPrice)}
                   </span>
                 </div>
 
