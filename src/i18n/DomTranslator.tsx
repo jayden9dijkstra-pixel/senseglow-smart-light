@@ -34,9 +34,11 @@ export function DomTranslator() {
         if (!current || !/[A-Za-zÀ-ÿ]/.test(current)) continue;
         let originals = attrOriginals.get(element);
         if (!originals) { originals = new Map(); attrOriginals.set(element, originals); }
-        const original = originals.get(attr) || current;
-        originals.set(attr, original);
-        element.setAttribute(attr, locale === "nl" ? original : t(original));
+        const previous = originals.get(attr);
+        const source = previous && previous.output === current ? previous.source : current;
+        const translated = locale === "nl" ? source : t(source);
+        originals.set(attr, { source, output: translated });
+        if (translated !== current) element.setAttribute(attr, translated);
       }
     };
 
