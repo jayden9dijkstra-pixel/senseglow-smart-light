@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { getRouteSeo } from "@/lib/seoContent";
-import { PRODUCT_HANDLE } from "@/lib/productConfig";
 
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { formatPrice } from "@/lib/price";
@@ -90,7 +89,6 @@ const Catalog = () => {
                 {products.map((p) => {
                   const img = p.node.images?.edges?.[0]?.node;
                   const price = p.node.priceRange.minVariantPrice;
-                  const isAmbientBar = p.node.handle === PRODUCT_HANDLE;
                   return (
                     <Link
                       key={p.node.id}
@@ -117,9 +115,7 @@ const Catalog = () => {
                           <img
                             src={img.url}
                             alt={img.altText || p.node.title}
-                            className={`w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
-                              isAmbientBar ? "object-contain p-8 md:p-10" : "object-cover"
-                            }`}
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                             loading="lazy"
                           />
                         ) : (

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Search, User, ChevronDown } from "lucide-react";
+import { Menu, Search, User, ChevronDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -23,30 +23,6 @@ type NavChild = { label: string; hint?: string; href: string };
 type NavItem = { label: string; href: string; children?: NavChild[] };
 
 const navItems: NavItem[] = [
-  {
-    label: "Voor thuis",
-    href: "/producten",
-    children: [
-      { label: "SenseGlow Wave", hint: "Kast en keuken", href: `/product/${WAVE_PRODUCT_HANDLE}` },
-      { label: "Ambient Motion Bar", hint: "Hal en wand", href: `/product/${PRODUCT_HANDLE}` },
-      { label: "SenseGlow Wall Lamp", hint: "Woonkamer", href: `/product/${STEP_PRODUCT_HANDLE}` },
-    ],
-  },
-  {
-    label: "Voor buiten",
-    href: "/producten",
-    children: [
-      { label: "SenseGlow Solar Lantern", hint: "Tuin en pad", href: `/product/${LANTERN_PRODUCT_HANDLE}` },
-    ],
-  },
-  {
-    label: "Voor werk",
-    href: "/producten",
-    children: [
-      { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
-    ],
-  },
-  
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   {
     label: "Service",
@@ -60,8 +36,11 @@ const navItems: NavItem[] = [
 
 const mobileLinks: NavChild[] = [
   { label: "Alle producten", href: "/producten" },
-  ...navItems.flatMap((i) => i.children ?? []),
-  
+  { label: "SenseGlow Wave", hint: "Kast en keuken", href: `/product/${WAVE_PRODUCT_HANDLE}` },
+  { label: "Ambient Motion Bar", hint: "Hal en wand", href: `/product/${PRODUCT_HANDLE}` },
+  { label: "SenseGlow Wall Lamp", hint: "Woonkamer", href: `/product/${STEP_PRODUCT_HANDLE}` },
+  { label: "SenseGlow Solar Lantern", hint: "Tuin en pad", href: `/product/${LANTERN_PRODUCT_HANDLE}` },
+  { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   { label: "Bestelling volgen", href: "/volg-je-bestelling" },
   { label: "Contact", href: "/contact" },
@@ -124,6 +103,29 @@ export const SiteHeader = () => {
 
           {/* Midden: navigatie */}
           <nav className="hidden lg:flex items-center gap-2" aria-label={t("Hoofdmenu")}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 text-foreground/70 hover:text-foreground hover:bg-secondary"
+                  aria-label={t("Bekijk alle producten")}
+                  title={t("Bekijk alle producten")}
+                >
+                  <MoreHorizontal className="h-5 w-5" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56 bg-background border-border rounded-sm">
+                <DropdownMenuItem asChild>
+                  <Link
+                    to={localizePath("/producten")}
+                    className="cursor-pointer text-sm text-foreground/70 hover:text-foreground transition-colors py-2"
+                  >
+                    {t("Bekijk alle producten")}
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             {navItems.map((item) =>
               item.children ? (
                 <NavDropdown key={item.label} item={item} />
