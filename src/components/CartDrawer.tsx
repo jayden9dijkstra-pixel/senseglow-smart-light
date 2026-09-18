@@ -43,7 +43,8 @@ export function CartDrawer() {
     updateQuantity,
     removeItem,
     createCheckout,
-    refreshPrices
+    refreshPrices,
+    consumeCartOpenRequest
   } = useCartStore();
   const lastAddedAt = useCartStore(state => state.lastAddedAt);
 
@@ -55,8 +56,10 @@ export function CartDrawer() {
 
   // Zichtbare bevestiging: de winkelwagen schuift open zodra er iets bij komt.
   React.useEffect(() => {
-    if (lastAddedAt > 0) setIsOpen(true);
-  }, [lastAddedAt]);
+    if (lastAddedAt <= 0) return;
+    setIsOpen(true);
+    consumeCartOpenRequest();
+  }, [lastAddedAt, consumeCartOpenRequest]);
 
   // Meet het openen van de winkelwagen.
   React.useEffect(() => {

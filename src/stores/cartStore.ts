@@ -67,6 +67,7 @@ interface CartStore {
   setCartId: (cartId: string) => void;
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
+  consumeCartOpenRequest: () => void;
   createCheckout: () => Promise<void>;
   /** Re-sync every line's unit price with the live Shopify variant price. */
   refreshPrices: () => Promise<void>;
@@ -215,6 +216,7 @@ export const useCartStore = create<CartStore>()(
       setCartId: (cartId) => set({ cartId }),
       setCheckoutUrl: (checkoutUrl) => set({ checkoutUrl }),
       setLoading: (isLoading) => set({ isLoading }),
+      consumeCartOpenRequest: () => set({ lastAddedAt: 0 }),
 
       createCheckout: async () => {
         const { items, setLoading, setCheckoutUrl } = get();
