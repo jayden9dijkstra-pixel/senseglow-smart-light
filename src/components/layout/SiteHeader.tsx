@@ -34,13 +34,17 @@ const navItems: NavItem[] = [
   },
 ];
 
-const mobileLinks: NavChild[] = [
+const productLinks: NavChild[] = [
   { label: "Alle producten", href: "/producten" },
   { label: "SenseGlow Wave", hint: "Kast en keuken", href: `/product/${WAVE_PRODUCT_HANDLE}` },
   { label: "Ambient Motion Bar", hint: "Hal en wand", href: `/product/${PRODUCT_HANDLE}` },
   { label: "SenseGlow Wall Lamp", hint: "Woonkamer", href: `/product/${STEP_PRODUCT_HANDLE}` },
   { label: "SenseGlow Solar Lantern", hint: "Tuin en pad", href: `/product/${LANTERN_PRODUCT_HANDLE}` },
   { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
+];
+
+const mobileLinks: NavChild[] = [
+  ...productLinks,
   { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
   { label: "Bestelling volgen", href: "/volg-je-bestelling" },
   { label: "Contact", href: "/contact" },
@@ -115,15 +119,17 @@ export const SiteHeader = () => {
                   <MoreHorizontal className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56 bg-background border-border rounded-sm">
-                <DropdownMenuItem asChild>
-                  <Link
-                    to={localizePath("/producten")}
-                    className="cursor-pointer text-sm text-foreground/70 hover:text-foreground transition-colors py-2"
-                  >
-                    {t("Bekijk alle producten")}
-                  </Link>
-                </DropdownMenuItem>
+              <DropdownMenuContent align="start" className="w-64 bg-background border-border rounded-sm">
+                {productLinks.map((product, index) => (
+                  <DropdownMenuItem key={product.href} asChild>
+                    <Link
+                      to={localizePath(product.href)}
+                      className={`cursor-pointer text-sm text-foreground/70 hover:text-foreground transition-colors py-2 ${index === 0 ? "font-medium text-foreground" : ""}`}
+                    >
+                      {index === 0 ? t("Bekijk alle producten") : t(product.label)}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
             {navItems.map((item) =>
