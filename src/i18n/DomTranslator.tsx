@@ -8,8 +8,11 @@ export function DomTranslator() {
   const { locale, t } = useI18n();
 
   useEffect(() => {
-    const textOriginals = new WeakMap<Text, string>();
-    const attrOriginals = new WeakMap<Element, Map<string, string>>();
+    // Per tekstnode bewaren we de bron en wat wij er zelf van maakten.
+    // Zo herkennen we een nieuwe tekst van React (prijs, aantal, status)
+    // en schrijven we nooit een verouderde waarde terug.
+    const textOriginals = new WeakMap<Text, { source: string; output: string }>();
+    const attrOriginals = new WeakMap<Element, Map<string, { source: string; output: string }>>();
 
     const translateText = (node: Text) => {
       const parent = node.parentElement;
@@ -17,9 +20,10 @@ export function DomTranslator() {
       const current = node.nodeValue || "";
       const trimmed = current.trim();
       if (!trimmed || !/[A-Za-zÀ-ÿ]/.test(trimmed)) return;
-      const original = textOriginals.get(node) || trimmed;
-      textOriginals.set(node, original);
-      const translated = locale === "nl" ? original : t(original);
+      const previous = textOriginals.get(node);
+      const source = previous && previous.output === trimmed ? previous.source : trimmed;
+      const translated = locale === "nl" ? source : t(source);
+      textOriginals.set(node, { source, output: translated });
       if (translated !== trimmed) node.nodeValue = current.replace(trimmed, translated);
     };
 
