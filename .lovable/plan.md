@@ -21,30 +21,17 @@ Verder getest en in orde bevonden, zodat je weet dat daar geen tweede lek zit:
   geldig geaccepteerd, dus het verwijderen van de oude bundelvarianten heeft niets stukgemaakt.
 - `www.senseglow.shop/products/senseglow_wave` komt gewoon op de Wave-pagina uit.
 
-## Stap 1: het doorstuuradres in Shopify (dit moet jij doen, ik kan er niet bij)
+## Stap 1: het doorstuuradres, opgelost en nagemeten
 
-Niet verwijderen: het thema "Lovable Redirect" is precies wat je Shopify-adressen naar je eigen
-winkel brengt. Weghalen betekent dat elke oude link, elke Google-link en elke feedlink doodloopt.
-Alleen de bestemming moet anders.
+Je hebt het adres in het thema op `senseglow.shop` gezet. Ik heb het net voor alle vijf producten
+nagemeten en het klopt nu: `checkout.senseglow.shop/products/senseglow_wave` komt uit op
+`www.senseglow.shop/products/senseglow_wave`, met het product erin, en die pagina opent de
+Wave-productpagina. Het pad verdwijnt niet meer. Dit hoeft dus niets meer.
 
-Nu staat er `go.to.lovable.app/?t=OTk2ZmU1...`. Dat moet `www.senseglow.shop` worden.
+## Stap 2: campagne weer aanzetten
 
-Twee manieren, de bovenste is de veilige:
-
-1. Shopify Beheer → Winkel → Thema's → Lovable Redirect → Aanpassen → Thema-instellingen, en zet
-   het storefront-adres op `www.senseglow.shop`.
-2. Lukt dat niet, dan in dezelfde code-editor waar je nu zit: open `config/settings_data.json` en
-   vervang daar de waarde `go.to.lovable.app/?t=OTk2ZmU1...` door `www.senseglow.shop`. Laat de
-   rest van het bestand ongemoeid en sla op. Raak `main-redirect.liquid` niet aan.
-
-Zodra je dat gedaan hebt, controleer ik het direct: ik open dezelfde advertentielink opnieuw en
-meld je of hij nu op de productpagina uitkomt. Pas daarna zetten we de campagne weer aan.
-
-## Stap 2: campagne stoppen tot de link klopt
-
-SG #1.0 staat op dit moment gewoon aan en stuurt betaald verkeer naar de voorpagina. Dat is
-weggegooid geld. Ik pauzeer die campagne, met jouw akkoord op het bevestigingsscherm, en zet hem
-weer aan zodra stap 1 gecontroleerd is. SG #1.5 staat al op pauze.
+SG #1.0 loopt al. SG #1.5 staat op pauze. Zeg je dat ik hem weer aan mag zetten, dan doe ik dat
+met een bevestigingsscherm; anders laat ik hem staan.
 
 ## Stap 3: alle bundelkortingen nameten
 
