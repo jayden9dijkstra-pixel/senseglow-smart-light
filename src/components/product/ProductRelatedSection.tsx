@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
+import { formatPrice } from "@/lib/price";
 
 interface ProductRelatedSectionProps {
   currentHandle: string;
@@ -50,7 +51,7 @@ export function ProductRelatedSection({ currentHandle }: ProductRelatedSectionPr
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => {
               const image = product.node.images.edges[0]?.node;
-              const price = parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2);
+              const price = formatPrice(product.node.priceRange.minVariantPrice.amount);
               return (
                 <Link
                   key={product.node.id}
@@ -70,7 +71,7 @@ export function ProductRelatedSection({ currentHandle }: ProductRelatedSectionPr
                   <div className="flex items-center justify-between gap-4 p-5">
                     <div className="min-w-0">
                       <h3 className="truncate font-semibold text-foreground">{product.node.title}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">Vanaf €{price}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Vanaf {price}</p>
                     </div>
                     <ArrowRight className="h-5 w-5 flex-none text-primary transition-transform group-hover:translate-x-1" />
                   </div>

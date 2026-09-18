@@ -14,6 +14,7 @@ import {
   PackSize,
 } from "@/lib/productConfig";
 import { buildVariantKey, getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
+import { formatPrice } from "@/lib/price";
 
 
 interface BundlesSectionProps {
@@ -196,17 +197,17 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                     <div className="space-y-1">
                       <div className="flex items-baseline gap-3">
                         <span className="text-3xl font-bold text-foreground">
-                          €{quote.total.toFixed(2)}
+                          {formatPrice(quote.total)}
                         </span>
                         <span className="px-2 py-0.5 rounded-full bg-glow/10 text-glow text-xs font-semibold">
                           {quote.discountLabel}
                         </span>
                       </div>
                       <p className="text-sm text-foreground/40 line-through">
-                        Was €{quote.originalTotal.toFixed(2)}
+                        Was {formatPrice(quote.originalTotal)}
                       </p>
                       <p className="text-sm text-glow font-medium">
-                        Je bespaart €{quote.save.toFixed(2)}
+                        Je bespaart {formatPrice(quote.save)}
                       </p>
                     </div>
 
@@ -220,7 +221,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />
-                        <span>€{(quote.total / pack).toFixed(2)} per stuk in plaats van €{unitPrice.toFixed(2)}</span>
+                        <span>{formatPrice(quote.total / pack)} <span>per stuk in plaats van</span> {formatPrice(unitPrice)}</span>
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 text-glow mt-0.5 flex-shrink-0" />

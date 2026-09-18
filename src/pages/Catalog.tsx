@@ -8,6 +8,7 @@ import { getRouteSeo } from "@/lib/seoContent";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
 
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { formatPrice } from "@/lib/price";
 
 const Catalog = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -132,7 +133,7 @@ const Catalog = () => {
                           {p.node.title}
                         </h2>
                         <p className="text-sm text-foreground/50">
-                          Vanaf €{parseFloat(price.amount).toFixed(2)}
+                          Vanaf {formatPrice(price.amount)}
                         </p>
                       </div>
                       <span className="text-[11px] uppercase tracking-[0.2em] text-glow mt-auto">

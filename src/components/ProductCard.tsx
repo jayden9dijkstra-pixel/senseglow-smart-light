@@ -7,6 +7,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { trackSelectItem, numericVariantId } from "@/lib/adsTracking";
+import { formatPrice } from "@/lib/price";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -77,7 +78,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           </h3>
         </Link>
         <p className="text-xl font-bold text-foreground mb-4">
-          Vanaf €{parseFloat(price.amount).toFixed(2)}
+          Vanaf {formatPrice(price.amount)}
         </p>
         
         {product.node.variants.edges.length > 1 && (
@@ -92,7 +93,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             >
               {product.node.variants.edges.map(({ node: variant }) => (
                 <option key={variant.id} value={variant.id}>
-                  {variant.title} - €{parseFloat(variant.price.amount).toFixed(2)}
+                  {variant.title} - {formatPrice(variant.price.amount)}
                 </option>
               ))}
             </select>

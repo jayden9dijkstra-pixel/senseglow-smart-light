@@ -11,6 +11,7 @@ import { VariantPicker } from "./VariantPicker";
 import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
+import { formatPrice } from "@/lib/price";
 
 interface HeroContent {
   h1: string;
@@ -121,8 +122,8 @@ export const ProductHeroSection = ({
   const productImageClassName = "w-full h-full object-contain";
 
   const displayPrice = selectedVariant
-    ? parseFloat(selectedVariant.price.amount).toFixed(2)
-    : "0.00";
+    ? formatPrice(selectedVariant.price.amount)
+    : formatPrice(0);
 
   return (
     <section id="product-hero" className="w-full overflow-hidden bg-background py-16 md:py-24 lg:py-32 animate-fade-in-slow">
@@ -164,7 +165,7 @@ export const ProductHeroSection = ({
                     className="text-3xl font-bold text-primary animate-fade-in"
                     style={{ animation: "fade-in 0.4s ease-out" }}
                   >
-                    €{displayPrice}
+                    {displayPrice}
                   </span>
                 </div>
                 <div className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
