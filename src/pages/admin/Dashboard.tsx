@@ -219,7 +219,7 @@ export default function AdminDashboard() {
         beginCheckout: periodEvents.filter((e) => e.event_type === "begin_checkout").length,
       };
     },
-    [orders, ads, events],
+    [orders, ads, events, adSpendInclVat],
   );
 
   const today = useMemo(() => period(1), [period]);
