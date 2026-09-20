@@ -391,6 +391,7 @@ export default function AdminDashboard() {
               <p className="mt-3 text-xs text-muted-foreground">
                 Advertentiekosten per product zijn alleen beschikbaar als Google Ads de cijfers per
                 product levert. Staat er n.b., dan is dat getal niet opgehaald.
+                {adProductPeriod && ` Opgehaalde periode per product: ${adProductPeriod}.`}
               </p>
             </div>
           )}
