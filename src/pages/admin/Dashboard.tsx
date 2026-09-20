@@ -64,6 +64,13 @@ function isTestOrder(orderNumber: string): boolean {
   return TEST_ORDER_NUMBERS.has(orderNumber.trim());
 }
 
+const AD_VAT_KEY = "sg_ad_spend_incl_vat";
+
+/** Advertentiekosten zonder btw. De btw krijg je terug, dus die telt niet als kosten. */
+function netAdSpend(amount: number, inclVat: boolean): number {
+  return inclVat ? amount / VAT_DIVISOR : amount;
+}
+
 function sinceDate(days: number): Date {
   if (days === 1) {
     const d = new Date();
