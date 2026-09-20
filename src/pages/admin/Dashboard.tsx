@@ -534,6 +534,11 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {testOrderCount > 0
+                  ? `${testOrderCount} bestelling${testOrderCount === 1 ? "" : "en"} is gemarkeerd als test en telt niet mee in de cijfers.`
+                  : "Alle bestellingen tellen mee in de cijfers."}
+              </p>
             </div>
           )}
         </PanelBox>
