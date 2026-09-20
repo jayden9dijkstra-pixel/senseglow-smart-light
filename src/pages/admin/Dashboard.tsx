@@ -369,7 +369,8 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {perProduct.map((row) => {
-                    const spend = productAdSpend.get(row.title);
+                    const key = productKey(row.title);
+                    const spend = key ? productAdSpend.get(key) : undefined;
                     const afterAds =
                       row.margin === null || spend === undefined ? null : row.margin - spend;
                     return (
