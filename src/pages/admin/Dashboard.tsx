@@ -57,6 +57,13 @@ type Summary = {
 
 const INTERNAL_COOKIE = "sg_internal=1; path=/; max-age=31536000; SameSite=Lax";
 
+/** Eigen testbestellingen. Deze tellen nergens mee in de cijfers. */
+const TEST_ORDER_NUMBERS = new Set(["#1003", "#1004", "#1006"]);
+
+function isTestOrder(orderNumber: string): boolean {
+  return TEST_ORDER_NUMBERS.has(orderNumber.trim());
+}
+
 function sinceDate(days: number): Date {
   if (days === 1) {
     const d = new Date();
@@ -153,7 +160,12 @@ export default function AdminDashboard() {
     await load();
   }, [load]);
 
-  const orders = summary?.orders.data ?? [];
+  const allOrders = summary?.orders.data ?? [];
+  // Alleen echte klantbestellingen tellen mee in alle cijfers.
+  const orders = useMemo(
+    () => allOrders.filter((o) => !isTestOrder(o.order_number)),
+    [allOrders],
+  );
   const ads = summary?.ads.data ?? [];
   const events = summary?.analytics.data ?? [];
 
@@ -168,6 +180,15 @@ export default function AdminDashboard() {
       const periodEvents = events.filter((e) => new Date(e.created_at) >= from);
 
       const revenue = periodOrders.reduce((s, o) => s + o.total, 0);
+      let marginKnown = true;
+      let margin = 0;
+      for (const order of periodOrders) {
+        for (const line of order.line_items) {
+          const perUnit = contributionMargin(line.price, line.title, line.variant_title);
+          if (perUnit === null) marginKnown = false;
+          else margin += perUnit * line.quantity;
+        }
+      }
       const spend = periodAds.reduce((s, a) => s + a.cost, 0);
       const clicks = periodAds.reduce((s, a) => s + a.clicks, 0);
       const impressions = periodAds.reduce((s, a) => s + a.impressions, 0);
@@ -190,6 +211,9 @@ export default function AdminDashboard() {
         conversionRate: clicks ? (periodOrders.length / clicks) * 100 : null,
         costPerOrder: periodOrders.length ? spend / periodOrders.length : null,
         roas: spend ? revenue / spend : null,
+        margin: marginKnown ? margin : null,
+        marginAfterAds: marginKnown ? margin - spend : null,
+        breakEvenRoas: marginKnown && revenue > 0 && margin > 0 ? revenue / margin : null,
         addToCart: periodEvents.filter((e) => e.event_type === "add_to_cart").length,
         beginCheckout: periodEvents.filter((e) => e.event_type === "begin_checkout").length,
       };
@@ -199,6 +223,8 @@ export default function AdminDashboard() {
 
   const today = useMemo(() => period(1), [period]);
   const week = useMemo(() => period(7), [period]);
+  const month = useMemo(() => period(30), [period]);
+  const testOrderCount = allOrders.length - orders.length;
 
   const perProduct = useMemo(() => {
     const map = new Map<
@@ -356,6 +382,59 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {/* 1b. ROAS */}
+        <PanelBox
+          title="ROAS"
+          source="Shopify en Google Ads"
+          fetchedAt={summary?.generatedAt ?? null}
+          note="ROAS is omzet gedeeld door advertentiekosten. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen, op basis van je marge. Testbestellingen tellen niet mee."
+        >
+          {summary?.ads.error ? (
+            <Unavailable reason={summary.ads.error} />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="text-left text-xs text-muted-foreground">
+                  <tr>
+                    <th className="py-2">Periode</th>
+                    <th>Advertentiekosten</th>
+                    <th>Omzet</th>
+                    <th>ROAS</th>
+                    <th>Break-even ROAS</th>
+                    <th>Marge na advertenties</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: "Vandaag", stats: today },
+                    { label: "Laatste 7 dagen", stats: week },
+                    { label: "Laatste 30 dagen", stats: month },
+                  ].map(({ label, stats }) => (
+                    <tr key={label} className="border-t border-border/60">
+                      <td className="py-2 pr-4">{label}</td>
+                      <td>{formatEuro(stats.spend)}</td>
+                      <td>{formatEuro(stats.revenue)}</td>
+                      <td
+                        className={
+                          stats.roas !== null && stats.breakEvenRoas !== null && stats.roas < stats.breakEvenRoas
+                            ? "text-destructive font-semibold"
+                            : "font-semibold"
+                        }
+                      >
+                        {stats.roas === null ? "n.b." : stats.roas.toFixed(2)}
+                      </td>
+                      <td>{stats.breakEvenRoas === null ? "n.b." : stats.breakEvenRoas.toFixed(2)}</td>
+                      <td className={stats.marginAfterAds !== null && stats.marginAfterAds < 0 ? "text-destructive" : ""}>
+                        {stats.marginAfterAds === null ? "n.b." : formatEuro(stats.marginAfterAds)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </PanelBox>
+
         {/* 2. Per product */}
         <PanelBox
           title="Per product"
@@ -413,7 +492,7 @@ export default function AdminDashboard() {
           source={summary?.orders.source ?? "Shopify"}
           fetchedAt={summary?.orders.fetchedAt ?? null}
         >
-          {orders.length === 0 ? (
+          {allOrders.length === 0 ? (
             <Unavailable reason={summary?.orders.error ?? "nog geen bestellingen"} />
           ) : (
             <div className="overflow-x-auto">
@@ -430,9 +509,17 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.slice(0, 25).map((order) => (
-                    <tr key={order.order_number} className="border-t border-border/60 align-top">
-                      <td className="py-2 pr-4">{order.order_number}</td>
+                  {allOrders.slice(0, 25).map((order) => (
+                    <tr
+                      key={order.order_number}
+                      className={`border-t border-border/60 align-top ${isTestOrder(order.order_number) ? "text-muted-foreground" : ""}`}
+                    >
+                      <td className="py-2 pr-4">
+                        {order.order_number}
+                        {isTestOrder(order.order_number) && (
+                          <span className="ml-2 rounded border border-border px-1 text-[10px] uppercase">test</span>
+                        )}
+                      </td>
                       <td>{formatDateNl(order.ordered_at)}</td>
                       <td>{formatEuro(order.total)}</td>
                       <td className="pr-4">
@@ -447,6 +534,11 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {testOrderCount > 0
+                  ? `${testOrderCount} bestelling${testOrderCount === 1 ? "" : "en"} is gemarkeerd als test en telt niet mee in de cijfers.`
+                  : "Alle bestellingen tellen mee in de cijfers."}
+              </p>
             </div>
           )}
         </PanelBox>
