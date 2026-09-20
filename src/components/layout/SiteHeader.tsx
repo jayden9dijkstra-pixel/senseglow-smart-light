@@ -181,7 +181,7 @@ export const SiteHeader = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-72 max-h-[calc(100vh-6rem)] overflow-y-auto bg-background border-border rounded-sm p-2">
                 <DropdownMenuLabel className="px-3 py-2 text-xs uppercase tracking-widest text-foreground/45">
-                  {t("Alle producten")}
+                  {t("Onze producten")}
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
                   <Link
