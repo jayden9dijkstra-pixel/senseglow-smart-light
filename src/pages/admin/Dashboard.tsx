@@ -127,6 +127,13 @@ export default function AdminDashboard() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [adSpendInclVat, setAdSpendInclVat] = useState(
+    () => localStorage.getItem(AD_VAT_KEY) !== "0",
+  );
+
+  useEffect(() => {
+    localStorage.setItem(AD_VAT_KEY, adSpendInclVat ? "1" : "0");
+  }, [adSpendInclVat]);
 
   useEffect(() => {
     document.cookie = INTERNAL_COOKIE;
