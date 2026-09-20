@@ -10,6 +10,7 @@
 - Getest op mobiel en desktop: 5 producten, 5 werkende productpagina's, 0 consolefouten.
 
 ## Openstaand (heeft input of externe toegang nodig)
+- [ ] Intern dashboard gepauzeerd: eerst vaststellen of de bestaande Lovable-Shopify-koppeling bestellingen veilig kan lezen zonder nieuwe handmatige sleutel.
 - Contactformulier met echte aflevering: nu opent de knop de mailapp (geen valse succesmelding). Voor verzending vanaf de site is een e-maildienst-sleutel nodig.
 - Merchant Center: 32 artikelen = 32 varianten van 5 producten (5+5+6+7+9). Feedinstellingen, domeinclaim en afkeuringsdetails niet gecontroleerd — geen toegang.
 - Publiceren: wijzigingen staan nog niet op het openbare domein.
