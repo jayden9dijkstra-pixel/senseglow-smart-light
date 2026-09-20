@@ -16,9 +16,15 @@
 
 ## Navigatie en winkelwagen (2026-09-18)
 - [x] Winkelwagen alleen eenmalig openen na toevoegen
-- [x] Desktopproducten vervangen door driepuntjesmenu met productoverzicht
+- [x] Desktopmenu teruggezet naar Voor thuis, Voor buiten en Voor werk
+- [x] Mobiel menu gegroepeerd onder het menu-icoon
 - [x] Ambient Bar even groot tonen in het productoverzicht
 - [x] Desktop en mobiel controleren
+
+## Productkeuzes (2026-09-20)
+- [x] Gecombineerde Shopify-optie Kleur en maat correct uitlezen
+- [x] Nederlandse Flex-kleuren correct uitlezen
+- [x] Alle varianten en winkelwagenregels op desktop en mobiel controleren
 
 ## Laatste fixes voor publicatie
 - [x] Bezorgtekst overal gelijkgezet op 7-14 werkdagen

@@ -73,9 +73,9 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
       const sizeMatch = lower.match(/(\d{2})\s?cm/);
       const size = sizeMatch ? `${sizeMatch[1]}cm` : "";
       let color = "";
-      if (lower.includes("silver")) color = "Zilver";
-      else if (lower.includes("white")) color = "Wit";
-      else if (lower.includes("black")) color = "Zwart";
+      if (lower.includes("silver") || lower.includes("zilver")) color = "Zilver";
+      else if (lower.includes("white") || lower.includes("wit")) color = "Wit";
+      else if (lower.includes("black") || lower.includes("zwart")) color = "Zwart";
       return { label: [size, color].filter(Boolean).join(" • "), size, color };
     }
     case "arc": {
@@ -87,8 +87,8 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
     }
     case "lantern": {
       let color = "";
-      if (lower.includes("white")) color = "Wit";
-      else if (lower.includes("black")) color = "Zwart";
+      if (lower.includes("white") || lower.includes("wit")) color = "Wit";
+      else if (lower.includes("black") || lower.includes("zwart")) color = "Zwart";
       return { label: color, color };
     }
     case "sconce": {
@@ -100,8 +100,8 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
     }
     case "flex": {
       let color = "";
-      if (lower.includes("white")) color = "Wit";
-      else if (lower.includes("black")) color = "Zwart";
+      if (lower.includes("white") || lower.includes("wit")) color = "Wit";
+      else if (lower.includes("black") || lower.includes("zwart")) color = "Zwart";
       return { label: color, color };
     }
     default:
