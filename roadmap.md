@@ -24,7 +24,7 @@
 ## Productkeuzes (2026-09-20)
 - [x] Gecombineerde Shopify-optie Kleur en maat correct uitlezen
 - [x] Nederlandse Flex-kleuren correct uitlezen
-- [ ] Alle varianten en winkelwagenregels op desktop en mobiel controleren
+- [x] Alle varianten en winkelwagenregels op desktop en mobiel controleren
 
 ## Laatste fixes voor publicatie
 - [x] Bezorgtekst overal gelijkgezet op 7-14 werkdagen
