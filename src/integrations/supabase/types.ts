@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      checkout_attribution: {
+        Row: {
+          cart_token: string
+          created_at: string
+          gbraid: string | null
+          gclid: string | null
+          id: string
+          landing_path: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          wbraid: string | null
+        }
+        Insert: {
+          cart_token: string
+          created_at?: string
+          gbraid?: string | null
+          gclid?: string | null
+          id?: string
+          landing_path?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          wbraid?: string | null
+        }
+        Update: {
+          cart_token?: string
+          created_at?: string
+          gbraid?: string | null
+          gclid?: string | null
+          id?: string
+          landing_path?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          wbraid?: string | null
+        }
+        Relationships: []
+      }
       order_lookups: {
         Row: {
           created_at: string
@@ -38,6 +83,66 @@ export type Database = {
         }
         Relationships: []
       }
+      shop_orders: {
+        Row: {
+          cart_token: string | null
+          currency: string
+          financial_status: string | null
+          gclid: string | null
+          id: string
+          landing_path: string | null
+          line_items: Json
+          order_number: string
+          ordered_at: string
+          shopify_order_id: number
+          synced_at: string
+          total: number
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          cart_token?: string | null
+          currency?: string
+          financial_status?: string | null
+          gclid?: string | null
+          id?: string
+          landing_path?: string | null
+          line_items?: Json
+          order_number: string
+          ordered_at: string
+          shopify_order_id: number
+          synced_at?: string
+          total?: number
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          cart_token?: string | null
+          currency?: string
+          financial_status?: string | null
+          gclid?: string | null
+          id?: string
+          landing_path?: string | null
+          line_items?: Json
+          order_number?: string
+          ordered_at?: string
+          shopify_order_id?: number
+          synced_at?: string
+          total?: number
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: []
+      }
       site_events: {
         Row: {
           country: string | null
@@ -45,6 +150,7 @@ export type Database = {
           device: string | null
           event_type: string
           id: string
+          internal: boolean
           item_name: string | null
           locale: string | null
           path: string | null
@@ -58,6 +164,7 @@ export type Database = {
           device?: string | null
           event_type: string
           id?: string
+          internal?: boolean
           item_name?: string | null
           locale?: string | null
           path?: string | null
@@ -71,6 +178,7 @@ export type Database = {
           device?: string | null
           event_type?: string
           id?: string
+          internal?: boolean
           item_name?: string | null
           locale?: string | null
           path?: string | null
