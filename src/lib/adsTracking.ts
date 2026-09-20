@@ -29,7 +29,18 @@ export function initializeAnalytics(): void {
 }
 
 const CLICK_ID_KEYS = ["gclid", "gbraid", "wbraid"] as const;
-type ClickIdKey = (typeof CLICK_ID_KEYS)[number];
+
+/** Alles wat de herkomst van een bezoek beschrijft en mee moet naar checkout. */
+const ATTRIBUTION_KEYS = [
+  ...CLICK_ID_KEYS,
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+] as const;
+
+type ClickIdKey = (typeof ATTRIBUTION_KEYS)[number];
 
 const STORAGE_PREFIX = "sg_";
 const MAX_AGE_DAYS = 90;
