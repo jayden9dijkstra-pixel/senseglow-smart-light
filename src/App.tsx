@@ -9,6 +9,7 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
 import { trackSiteEvent } from "@/lib/siteAnalytics";
 import Statistieken from "./pages/Statistieken";
+import AdminDashboard from "./pages/admin/Dashboard";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
@@ -96,6 +97,7 @@ const App = () => (
             <Route path="/voorwaarden" element={<Terms />} />
             <Route path="/login" element={<Login />} />
             <Route path="/statistieken" element={<Statistieken />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             {(["en", "fr"] as const).flatMap((locale) => [
               <Route key={`${locale}-home`} path={`/${locale}`} element={<Index />} />,
