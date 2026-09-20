@@ -382,6 +382,59 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {/* 1b. ROAS */}
+        <PanelBox
+          title="ROAS"
+          source="Shopify en Google Ads"
+          fetchedAt={summary?.generatedAt ?? null}
+          note="ROAS is omzet gedeeld door advertentiekosten. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen, op basis van je marge. Testbestellingen tellen niet mee."
+        >
+          {summary?.ads.error ? (
+            <Unavailable reason={summary.ads.error} />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="text-left text-xs text-muted-foreground">
+                  <tr>
+                    <th className="py-2">Periode</th>
+                    <th>Advertentiekosten</th>
+                    <th>Omzet</th>
+                    <th>ROAS</th>
+                    <th>Break-even ROAS</th>
+                    <th>Marge na advertenties</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: "Vandaag", stats: today },
+                    { label: "Laatste 7 dagen", stats: week },
+                    { label: "Laatste 30 dagen", stats: month },
+                  ].map(({ label, stats }) => (
+                    <tr key={label} className="border-t border-border/60">
+                      <td className="py-2 pr-4">{label}</td>
+                      <td>{formatEuro(stats.spend)}</td>
+                      <td>{formatEuro(stats.revenue)}</td>
+                      <td
+                        className={
+                          stats.roas !== null && stats.breakEvenRoas !== null && stats.roas < stats.breakEvenRoas
+                            ? "text-destructive font-semibold"
+                            : "font-semibold"
+                        }
+                      >
+                        {stats.roas === null ? "n.b." : stats.roas.toFixed(2)}
+                      </td>
+                      <td>{stats.breakEvenRoas === null ? "n.b." : stats.breakEvenRoas.toFixed(2)}</td>
+                      <td className={stats.marginAfterAds !== null && stats.marginAfterAds < 0 ? "text-destructive" : ""}>
+                        {stats.marginAfterAds === null ? "n.b." : formatEuro(stats.marginAfterAds)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </PanelBox>
+
         {/* 2. Per product */}
         <PanelBox
           title="Per product"
