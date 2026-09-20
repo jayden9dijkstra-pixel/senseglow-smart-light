@@ -104,3 +104,9 @@
 - gclid/gbraid/wbraid en utm_source/medium/campaign/term/content 90 dagen bewaard en meegestuurd naar checkout.senseglow.shop
 - checkoutUrl niet langer bewaard in localStorage (stale link zonder herkomst)
 - begin_checkout met bedrag en artikelen bevestigd in dataLayer
+
+## Intern dashboard (2026-09-20)
+- /admin/dashboard alleen voor de eigenaar, noindex, niet in menu of sitemap.
+- Herkomst wordt bij het bouwen van de afrekenlink server-side bewaard op cartnummer.
+- Bestellingen komen live uit Shopify, advertentiecijfers uit Google Ads, bezoeken uit eigen meting.
+- Oude pagina /statistieken verwijderd; alles staat nu in het dashboard.
