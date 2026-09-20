@@ -492,7 +492,7 @@ export default function AdminDashboard() {
           source={summary?.orders.source ?? "Shopify"}
           fetchedAt={summary?.orders.fetchedAt ?? null}
         >
-          {orders.length === 0 ? (
+          {allOrders.length === 0 ? (
             <Unavailable reason={summary?.orders.error ?? "nog geen bestellingen"} />
           ) : (
             <div className="overflow-x-auto">
