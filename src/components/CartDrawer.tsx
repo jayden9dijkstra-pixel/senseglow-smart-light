@@ -117,11 +117,13 @@ export function CartDrawer() {
     }
     try {
       await createCheckout();
-      const checkoutUrl = useCartStore.getState().checkoutUrl;
-      if (!checkoutUrl) {
+      const created = useCartStore.getState().checkoutUrl;
+      if (!created) {
         checkoutWindow?.close();
         return;
       }
+      // Laatste zekerheid: herkomstgegevens staan altijd in de afrekenlink.
+      const checkoutUrl = await appendClickIdsToUrl(created);
       setIsOpen(false);
       if (checkoutWindow && !checkoutWindow.closed) {
         checkoutWindow.location.href = checkoutUrl;
