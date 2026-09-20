@@ -42,9 +42,14 @@ niet kan maken.
 
 ## Marge
 
-Inkoopprijzen zoals opgegeven: Ambient Motion Bar 8,63, Wave 8,25, Wall Lamp 4-delig 9,76,
-Solar Lantern 12,07, Flex 20,49. Berekening per verkoop:
-(verkoopprijs ÷ 1,21) × (1 − 0,025 − 0,07) − inkoopprijs. Geen andere bedragen verzonnen.
+Actuele inkoopprijzen per variant (eerste bedrag uit je lijst, inclusief verzending):
+Ambient Motion Bar 20cm 8,05, 30cm 8,80, 40cm 9,78; Wave 30cm 7,65, 50cm 8,25;
+Wall Lamp per 4 9,50; Solar Lantern 10,40; Flex 18,00.
+De drie volgende bedragen per regel lees ik als de inkoop van 2, 3 en 4 stuks; die gebruik ik
+voor de marge op bundelbestellingen. Klopt dat niet, dan zeg je het en pas ik het aan.
+Berekening per verkoop: (verkoopprijs ÷ 1,21) × (1 − 0,025 − 0,07) − inkoopprijs.
+Per product wordt de marge opgeteld over de varianten die daadwerkelijk verkocht zijn.
+Geen andere bedragen verzonnen.
 
 ## Eerlijke cijfers
 
