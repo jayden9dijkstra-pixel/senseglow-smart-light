@@ -189,7 +189,8 @@ export default function AdminDashboard() {
           else margin += perUnit * line.quantity;
         }
       }
-      const spend = periodAds.reduce((s, a) => s + a.cost, 0);
+      // Advertentiekosten zonder btw: de btw krijg je terug, dus die drukt niet op de marge.
+      const spend = netAdSpend(periodAds.reduce((s, a) => s + a.cost, 0), adSpendInclVat);
       const clicks = periodAds.reduce((s, a) => s + a.clicks, 0);
       const impressions = periodAds.reduce((s, a) => s + a.impressions, 0);
       const sessions = new Set(
