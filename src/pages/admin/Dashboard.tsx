@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2, RefreshCw } from "lucide-react";
-import { contributionMargin, formatDateNl, formatEuro } from "@/lib/margins";
+import { VAT_DIVISOR, contributionMargin, formatDateNl, formatEuro } from "@/lib/margins";
 
 type Panel<T> = {
   data: T | null;
