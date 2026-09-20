@@ -211,6 +211,9 @@ export default function AdminDashboard() {
         conversionRate: clicks ? (periodOrders.length / clicks) * 100 : null,
         costPerOrder: periodOrders.length ? spend / periodOrders.length : null,
         roas: spend ? revenue / spend : null,
+        margin: marginKnown ? margin : null,
+        marginAfterAds: marginKnown ? margin - spend : null,
+        breakEvenRoas: marginKnown && revenue > 0 && margin > 0 ? revenue / margin : null,
         addToCart: periodEvents.filter((e) => e.event_type === "add_to_cart").length,
         beginCheckout: periodEvents.filter((e) => e.event_type === "begin_checkout").length,
       };
