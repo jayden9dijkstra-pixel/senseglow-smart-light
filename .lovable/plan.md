@@ -27,6 +27,10 @@ Doel: elke bezoeker die via een advertentie of campagnelink binnenkomt, neemt di
 - Bezoek zonder herkomst: afrekenen werkt gewoon, geen lege parameters, geen foutmeldingen.
 - Het afreken-signaal staat met bedrag en artikelen in de meting.
 
+## Daarna (jouw stap)
+
+Plaats een testbestelling via een link met `?gclid=...` en kijk in Shopify bij die bestelling of de klantreis nu gevuld is. Pas als dat klopt heeft het zin om de conversieactie in Google Ads opnieuw te beoordelen. Bestelling #1005 is niet met terugwerkende kracht toe te wijzen.
+
 ## Technische details
 
 - `src/lib/adsTracking.ts`: `CLICK_ID_KEYS` uitbreiden met de vijf UTM-sleutels (aparte lijst `ATTRIBUTION_KEYS`); `captureClickIds()` slaat lege waarden niet op en overschrijft bestaande niet met leeg; `appendClickIdsToUrl()` loopt over `ATTRIBUTION_KEYS` via `URLSearchParams.set`, met behoud van de bestaande `_gl` linkerparameter en de 300ms-timeout.
