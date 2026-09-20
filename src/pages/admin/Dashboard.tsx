@@ -180,6 +180,15 @@ export default function AdminDashboard() {
       const periodEvents = events.filter((e) => new Date(e.created_at) >= from);
 
       const revenue = periodOrders.reduce((s, o) => s + o.total, 0);
+      let marginKnown = true;
+      let margin = 0;
+      for (const order of periodOrders) {
+        for (const line of order.line_items) {
+          const perUnit = contributionMargin(line.price, line.title, line.variant_title);
+          if (perUnit === null) marginKnown = false;
+          else margin += perUnit * line.quantity;
+        }
+      }
       const spend = periodAds.reduce((s, a) => s + a.cost, 0);
       const clicks = periodAds.reduce((s, a) => s + a.clicks, 0);
       const impressions = periodAds.reduce((s, a) => s + a.impressions, 0);
