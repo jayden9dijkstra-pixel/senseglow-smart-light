@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { trackViewItem, numericVariantId } from "@/lib/adsTracking";
+import { trackSiteEvent } from "@/lib/siteAnalytics";
 
 
 import { Button } from "@/components/ui/button";
@@ -106,6 +107,11 @@ const ProductDetail = () => {
         quantity: 1,
       },
     ]);
+    void trackSiteEvent("view_item", {
+      path: `/product/${product.node.handle}`,
+      itemName: product.node.title,
+      value: parseFloat(selectedVariant.price.amount),
+    });
   }, [product, selectedVariant]);
 
 

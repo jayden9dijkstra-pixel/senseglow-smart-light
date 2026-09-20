@@ -226,14 +226,38 @@ export default function AdminDashboard() {
     return [...map.values()].sort((a, b) => b.revenue - a.revenue);
   }, [orders]);
 
+  // Titels uit Google Ads en Shopify verschillen per taal en variant.
+  // We brengen ze terug tot één productnaam zodat de kosten bij het juiste product komen.
+  const productKey = useCallback((title: string): string | null => {
+    const t = title.toLowerCase();
+    if (t.includes("ambient") || t.includes("mouvement ambiante")) return "ambient";
+    if (t.includes("wave")) return "wave";
+    if (t.includes("wall lamp") || t.includes("applique")) return "wall";
+    if (t.includes("solar") || t.includes("lanterne")) return "solar";
+    if (t.includes("flex")) return "flex";
+    return null;
+  }, []);
+
+  // Welke dagen zitten er in de opgehaalde kosten per product?
+  const adProductPeriod = useMemo(() => {
+    const dates = ads.filter((a) => a.product_title).map((a) => a.stat_date).sort();
+    if (dates.length === 0) return null;
+    const fmt = (d: string) => new Date(`${d}T00:00:00`).toLocaleDateString("nl-NL");
+    const first = fmt(dates[0]);
+    const last = fmt(dates[dates.length - 1]);
+    return first === last ? first : `${first} tot ${last}`;
+  }, [ads]);
+
   const productAdSpend = useMemo(() => {
     const map = new Map<string, number>();
     for (const row of ads) {
       if (!row.product_title) continue;
-      map.set(row.product_title, (map.get(row.product_title) ?? 0) + row.cost);
+      const key = productKey(row.product_title);
+      if (!key) continue;
+      map.set(key, (map.get(key) ?? 0) + row.cost);
     }
     return map;
-  }, [ads]);
+  }, [ads, productKey]);
 
   if (checking) {
     return (
@@ -355,7 +379,8 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {perProduct.map((row) => {
-                    const spend = productAdSpend.get(row.title);
+                    const key = productKey(row.title);
+                    const spend = key ? productAdSpend.get(key) : undefined;
                     const afterAds =
                       row.margin === null || spend === undefined ? null : row.margin - spend;
                     return (
@@ -376,6 +401,7 @@ export default function AdminDashboard() {
               <p className="mt-3 text-xs text-muted-foreground">
                 Advertentiekosten per product zijn alleen beschikbaar als Google Ads de cijfers per
                 product levert. Staat er n.b., dan is dat getal niet opgehaald.
+                {adProductPeriod && ` Opgehaalde periode per product: ${adProductPeriod}.`}
               </p>
             </div>
           )}
