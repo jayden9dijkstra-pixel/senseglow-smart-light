@@ -117,6 +117,16 @@ export function getStoredClickId(key: ClickIdKey): string | null {
   return readCookie(storageKey(key));
 }
 
+/** Alle bewaarde herkomstgegevens als platte lijst. */
+export function getStoredAttribution(): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = getStoredClickId(key);
+    if (value) result[key] = value;
+  }
+  return result;
+}
+
 /**
  * Plak de bewaarde klik-ids aan een checkout-URL, plus Google's eigen
  * linker-parameter (_gl) als die beschikbaar is.
