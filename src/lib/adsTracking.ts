@@ -79,12 +79,12 @@ function readCookie(name: string): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-/** Lees klik-ids uit de URL en bewaar ze 90 dagen. */
+/** Lees klik-ids en campagnegegevens uit de URL en bewaar ze 90 dagen. */
 export function captureClickIds(): void {
   if (typeof window === "undefined") return;
   try {
     const params = new URLSearchParams(window.location.search);
-    for (const key of CLICK_ID_KEYS) {
+    for (const key of ATTRIBUTION_KEYS) {
       const value = params.get(key);
       if (!value) continue;
       const record: StoredClickId = { value, ts: Date.now() };
