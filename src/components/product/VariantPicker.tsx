@@ -83,8 +83,8 @@ function parseDimensions(
         d.variantType = "Standaard";
       }
       // Detect color
-      if (val.includes("black")) d.color = "Zwart";
-      else if (val.includes("white")) d.color = "Wit";
+      if (val.includes("black") || val.includes("zwart")) d.color = "Zwart";
+      else if (val.includes("white") || val.includes("wit")) d.color = "Wit";
       else if (val.includes("pink")) d.color = "Roze";
       else if (val.includes("green")) d.color = "Groen";
     }
@@ -96,6 +96,17 @@ function parseDimensions(
     const name = opt.name.toLowerCase();
     const value = opt.value;
     const lower = value.toLowerCase();
+
+    // Shopify kan maat en kleur als één optie leveren, bijvoorbeeld
+    // "Zilver 20 cm" onder "Kleur en maat". Lees de waarde zelf uit,
+    // zodat een gewijzigde optienaam de bestelkeuzes niet kan verbergen.
+    const combined = value.match(/(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)\s*-?\s*(\d+)\s*cm/i);
+    if (combined) {
+      d.color = normalizeColor(combined[1]);
+      d.size = `${combined[2]}cm`;
+      continue;
+    }
+
     if (name === "maat" || name === "size" || name === "lengte") {
       d.size = value;
     } else if (
@@ -103,7 +114,7 @@ function parseDimensions(
       name.includes("emitting")
     ) {
       // Try combined "Color Size" pattern first (e.g. "Black 50cm")
-      const combo = value.match(/^(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)[\s\-]+(\d+)\s?cm/i);
+      const combo = value.match(/^(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)[\s\-]+(\d+)\s*cm/i);
       if (combo) {
         if (!d.color) d.color = normalizeColor(combo[1]);
         if (!d.size) d.size = `${combo[2]}cm`;
@@ -114,7 +125,7 @@ function parseDimensions(
         d.color = normalizeColor(value);
       }
     } else {
-      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)[\s\-]+(\d+)cm/i);
+      const colorSizeMatch = value.match(/^(Silver|Black|Zwart|Zilver|Wit|White|Goud|Gold)[\s\-]+(\d+)\s*cm/i);
       if (colorSizeMatch) {
         if (!d.color) d.color = normalizeColor(colorSizeMatch[1]);
         if (!d.size) d.size = `${colorSizeMatch[2]}cm`;
