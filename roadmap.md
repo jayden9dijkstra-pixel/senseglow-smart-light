@@ -93,3 +93,8 @@
 - [x] Advertentielinks gecontroleerd: alle 10 advertentiegroepen wijzen naar /product/<handle>
 - [ ] Levertijd gelijktrekken met Shopify (wacht op juiste levertijd van gebruiker)
 - [ ] Publiceren
+
+## Favicon / Google-icoon (2026-09-20)
+- [x] SG-icoon op mokka achtergrond in 48/96/144/180 + favicon.ico (512 werd genegeerd door Google)
+- [x] index.html: sizes-vermeldingen + apple-touch-icon; bereikbaar op NL/EN/FR (HTTP 200)
+- [ ] Na publicatie in Google Search Console indexering aanvragen voor senseglow.shop (gebruiker)
