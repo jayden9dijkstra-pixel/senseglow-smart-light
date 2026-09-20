@@ -282,7 +282,7 @@ export const useCartStore = create<CartStore>()(
       partialize: (state) => ({
         items: state.items,
         cartId: state.cartId,
-        checkoutUrl: state.checkoutUrl,
+        // checkoutUrl bewust niet bewaren: een oude link mist de herkomstgegevens.
       }),
     }
   )
