@@ -238,6 +238,16 @@ export default function AdminDashboard() {
     return null;
   }, []);
 
+  // Welke dagen zitten er in de opgehaalde kosten per product?
+  const adProductPeriod = useMemo(() => {
+    const dates = ads.filter((a) => a.product_title).map((a) => a.stat_date).sort();
+    if (dates.length === 0) return null;
+    const fmt = (d: string) => new Date(`${d}T00:00:00`).toLocaleDateString("nl-NL");
+    const first = fmt(dates[0]);
+    const last = fmt(dates[dates.length - 1]);
+    return first === last ? first : `${first} tot ${last}`;
+  }, [ads]);
+
   const productAdSpend = useMemo(() => {
     const map = new Map<string, number>();
     for (const row of ads) {
