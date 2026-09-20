@@ -14,7 +14,7 @@ import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/
 import { useCartStore } from "@/stores/cartStore";
 import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
-import { trackViewCart, numericVariantId } from "@/lib/adsTracking";
+import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
 
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
@@ -117,11 +117,13 @@ export function CartDrawer() {
     }
     try {
       await createCheckout();
-      const checkoutUrl = useCartStore.getState().checkoutUrl;
-      if (!checkoutUrl) {
+      const created = useCartStore.getState().checkoutUrl;
+      if (!created) {
         checkoutWindow?.close();
         return;
       }
+      // Laatste zekerheid: herkomstgegevens staan altijd in de afrekenlink.
+      const checkoutUrl = await appendClickIdsToUrl(created);
       setIsOpen(false);
       if (checkoutWindow && !checkoutWindow.closed) {
         checkoutWindow.location.href = checkoutUrl;

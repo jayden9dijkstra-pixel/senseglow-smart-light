@@ -98,3 +98,8 @@
 - [x] SG-icoon op mokka achtergrond in 48/96/144/180 + favicon.ico (512 werd genegeerd door Google)
 - [x] index.html: sizes-vermeldingen + apple-touch-icon; bereikbaar op NL/EN/FR (HTTP 200)
 - [ ] Na publicatie in Google Search Console indexering aanvragen voor senseglow.shop (gebruiker)
+
+## Klikherkomst naar checkout (2026-09-20)
+- gclid/gbraid/wbraid en utm_source/medium/campaign/term/content 90 dagen bewaard en meegestuurd naar checkout.senseglow.shop
+- checkoutUrl niet langer bewaard in localStorage (stale link zonder herkomst)
+- begin_checkout met bedrag en artikelen bevestigd in dataLayer

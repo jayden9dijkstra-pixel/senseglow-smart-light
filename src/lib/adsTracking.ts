@@ -29,7 +29,18 @@ export function initializeAnalytics(): void {
 }
 
 const CLICK_ID_KEYS = ["gclid", "gbraid", "wbraid"] as const;
-type ClickIdKey = (typeof CLICK_ID_KEYS)[number];
+
+/** Alles wat de herkomst van een bezoek beschrijft en mee moet naar checkout. */
+const ATTRIBUTION_KEYS = [
+  ...CLICK_ID_KEYS,
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+] as const;
+
+type ClickIdKey = (typeof ATTRIBUTION_KEYS)[number];
 
 const STORAGE_PREFIX = "sg_";
 const MAX_AGE_DAYS = 90;
@@ -68,12 +79,12 @@ function readCookie(name: string): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-/** Lees klik-ids uit de URL en bewaar ze 90 dagen. */
+/** Lees klik-ids en campagnegegevens uit de URL en bewaar ze 90 dagen. */
 export function captureClickIds(): void {
   if (typeof window === "undefined") return;
   try {
     const params = new URLSearchParams(window.location.search);
-    for (const key of CLICK_ID_KEYS) {
+    for (const key of ATTRIBUTION_KEYS) {
       const value = params.get(key);
       if (!value) continue;
       const record: StoredClickId = { value, ts: Date.now() };
@@ -113,7 +124,7 @@ export function getStoredClickId(key: ClickIdKey): string | null {
 export async function appendClickIdsToUrl(rawUrl: string): Promise<string> {
   try {
     const url = new URL(rawUrl);
-    for (const key of CLICK_ID_KEYS) {
+    for (const key of ATTRIBUTION_KEYS) {
       const value = getStoredClickId(key);
       if (value && !url.searchParams.has(key)) url.searchParams.set(key, value);
     }
