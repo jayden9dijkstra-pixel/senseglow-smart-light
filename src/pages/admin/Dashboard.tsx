@@ -161,7 +161,10 @@ export default function AdminDashboard() {
     (days: number) => {
       const from = sinceDate(days);
       const periodOrders = orders.filter((o) => new Date(o.ordered_at) >= from);
-      const periodAds = ads.filter((a) => new Date(`${a.stat_date}T00:00:00`) >= from);
+      // Alleen campagnetotalen tellen mee; productregels zijn een uitsplitsing daarvan.
+      const periodAds = ads.filter(
+        (a) => !a.product_title && new Date(`${a.stat_date}T00:00:00`) >= from,
+      );
       const periodEvents = events.filter((e) => new Date(e.created_at) >= from);
 
       const revenue = periodOrders.reduce((s, o) => s + o.total, 0);
