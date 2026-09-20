@@ -226,14 +226,28 @@ export default function AdminDashboard() {
     return [...map.values()].sort((a, b) => b.revenue - a.revenue);
   }, [orders]);
 
+  // Titels uit Google Ads en Shopify verschillen per taal en variant.
+  // We brengen ze terug tot één productnaam zodat de kosten bij het juiste product komen.
+  const productKey = useCallback((title: string): string | null => {
+    const t = title.toLowerCase();
+    if (t.includes("ambient") || t.includes("mouvement ambiante")) return "ambient";
+    if (t.includes("wave")) return "wave";
+    if (t.includes("wall lamp") || t.includes("applique")) return "wall";
+    if (t.includes("solar") || t.includes("lanterne")) return "solar";
+    if (t.includes("flex")) return "flex";
+    return null;
+  }, []);
+
   const productAdSpend = useMemo(() => {
     const map = new Map<string, number>();
     for (const row of ads) {
       if (!row.product_title) continue;
-      map.set(row.product_title, (map.get(row.product_title) ?? 0) + row.cost);
+      const key = productKey(row.product_title);
+      if (!key) continue;
+      map.set(key, (map.get(key) ?? 0) + row.cost);
     }
     return map;
-  }, [ads]);
+  }, [ads, productKey]);
 
   if (checking) {
     return (
