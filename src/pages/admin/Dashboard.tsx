@@ -223,6 +223,8 @@ export default function AdminDashboard() {
 
   const today = useMemo(() => period(1), [period]);
   const week = useMemo(() => period(7), [period]);
+  const month = useMemo(() => period(30), [period]);
+  const testOrderCount = allOrders.length - orders.length;
 
   const perProduct = useMemo(() => {
     const map = new Map<
