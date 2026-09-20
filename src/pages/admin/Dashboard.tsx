@@ -339,6 +339,16 @@ export default function AdminDashboard() {
 
       {loadError && <p className="mb-6 text-sm text-destructive">{loadError}</p>}
 
+      <label className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
+          className="h-4 w-4"
+          checked={adSpendInclVat}
+          onChange={(e) => setAdSpendInclVat(e.target.checked)}
+        />
+        Advertentiebedrag is inclusief btw, reken met het bedrag zonder btw (÷ 1,21)
+      </label>
+
       <div className="space-y-6">
         {/* 1. Vandaag en 7 dagen */}
         <div className="grid gap-6 md:grid-cols-2">
