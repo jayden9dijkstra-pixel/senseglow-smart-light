@@ -509,9 +509,17 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.slice(0, 25).map((order) => (
-                    <tr key={order.order_number} className="border-t border-border/60 align-top">
-                      <td className="py-2 pr-4">{order.order_number}</td>
+                  {allOrders.slice(0, 25).map((order) => (
+                    <tr
+                      key={order.order_number}
+                      className={`border-t border-border/60 align-top ${isTestOrder(order.order_number) ? "text-muted-foreground" : ""}`}
+                    >
+                      <td className="py-2 pr-4">
+                        {order.order_number}
+                        {isTestOrder(order.order_number) && (
+                          <span className="ml-2 rounded border border-border px-1 text-[10px] uppercase">test</span>
+                        )}
+                      </td>
                       <td>{formatDateNl(order.ordered_at)}</td>
                       <td>{formatEuro(order.total)}</td>
                       <td className="pr-4">
