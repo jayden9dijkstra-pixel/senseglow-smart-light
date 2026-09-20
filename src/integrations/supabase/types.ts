@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      ads_daily_stats: {
+        Row: {
+          campaign_id: string | null
+          campaign_name: string | null
+          clicks: number
+          conversions: number
+          cost: number
+          id: string
+          impressions: number
+          product_handle: string | null
+          product_title: string | null
+          stat_date: string
+          synced_at: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          campaign_name?: string | null
+          clicks?: number
+          conversions?: number
+          cost?: number
+          id?: string
+          impressions?: number
+          product_handle?: string | null
+          product_title?: string | null
+          stat_date: string
+          synced_at?: string
+        }
+        Update: {
+          campaign_id?: string | null
+          campaign_name?: string | null
+          clicks?: number
+          conversions?: number
+          cost?: number
+          id?: string
+          impressions?: number
+          product_handle?: string | null
+          product_title?: string | null
+          stat_date?: string
+          synced_at?: string
+        }
+        Relationships: []
+      }
       checkout_attribution: {
         Row: {
           cart_token: string

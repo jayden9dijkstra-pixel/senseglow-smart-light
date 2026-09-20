@@ -1,7 +1,8 @@
 import { toast } from "sonner";
 import { z } from "zod";
 import { ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
-import { appendClickIdsToUrl } from "@/lib/adsTracking";
+import { appendClickIdsToUrl, getStoredAttribution } from "@/lib/adsTracking";
+import { supabase } from "@/integrations/supabase/client";
 
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
@@ -311,8 +312,27 @@ export async function createStorefrontCheckout(
     ? document.documentElement.lang
     : undefined);
   if (checkoutLocale) url.searchParams.set('locale', checkoutLocale);
+  // Leg vast waar deze winkelwagen vandaan komt, zodat de bestelling later
+  // alsnog aan de advertentieklik gekoppeld kan worden.
+  void storeCheckoutAttribution(url.pathname);
   // Neem de Google Ads klik-informatie mee zodat attributie blijft werken.
   return appendClickIdsToUrl(url.toString());
+}
+
+/** Bewaar cart-kenmerk plus herkomst in de eigen backend. Faalt stil. */
+async function storeCheckoutAttribution(checkoutPath: string): Promise<void> {
+  try {
+    const token = checkoutPath.match(/\/cart\/c\/([^/?#]+)/)?.[1];
+    if (!token) return;
+    const attribution = getStoredAttribution();
+    const landingPath = typeof window !== 'undefined' ? window.location.pathname : undefined;
+    if (Object.keys(attribution).length === 0 && !landingPath) return;
+    await supabase.functions.invoke('attribution-capture', {
+      body: { cart_token: token, landing_path: landingPath, ...attribution },
+    });
+  } catch {
+    // meting mag het afrekenen nooit blokkeren
+  }
 }
 
 /**

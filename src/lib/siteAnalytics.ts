@@ -47,6 +47,12 @@ function country(): Promise<string | null> {
   })());
 }
 
+/** Eigen bezoeken worden gemarkeerd zodat ze niet in de cijfers meetellen. */
+export function isInternalVisitor(): boolean {
+  if (typeof document === "undefined") return false;
+  return /(?:^|;\s*)sg_internal=1/.test(document.cookie);
+}
+
 export async function trackSiteEvent(
   eventType: SiteEventType,
   extra: { path?: string; itemName?: string; value?: number } = {}
@@ -64,6 +70,7 @@ export async function trackSiteEvent(
       locale: document.documentElement.lang || "nl",
       item_name: extra.itemName ?? null,
       value: extra.value ?? null,
+      internal: isInternalVisitor(),
     });
   } catch {
     // meting mag de winkel nooit blokkeren
