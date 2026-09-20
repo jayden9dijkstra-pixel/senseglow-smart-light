@@ -361,7 +361,7 @@ export default function AdminDashboard() {
               title={label}
               source="Shopify, Google Ads en eigen bezoekmeting"
               fetchedAt={summary?.generatedAt ?? null}
-              note="Google Ads-cijfers lopen enkele uren achter."
+              note={`Google Ads-cijfers lopen enkele uren achter. Advertentiekosten ${adSpendInclVat ? "zonder btw (bedrag ÷ 1,21)" : "zoals Google ze toont"}.`}
             >
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {summary?.ads.error ? (
