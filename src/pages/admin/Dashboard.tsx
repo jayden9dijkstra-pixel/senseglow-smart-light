@@ -295,10 +295,10 @@ export default function AdminDashboard() {
       if (!row.product_title) continue;
       const key = productKey(row.product_title);
       if (!key) continue;
-      map.set(key, (map.get(key) ?? 0) + row.cost);
+      map.set(key, (map.get(key) ?? 0) + netAdSpend(row.cost, adSpendInclVat));
     }
     return map;
-  }, [ads, productKey]);
+  }, [ads, productKey, adSpendInclVat]);
 
   if (checking) {
     return (
