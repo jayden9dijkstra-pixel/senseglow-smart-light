@@ -412,7 +412,7 @@ export default function AdminDashboard() {
           title="ROAS"
           source="Shopify en Google Ads"
           fetchedAt={summary?.generatedAt ?? null}
-          note="ROAS is omzet gedeeld door advertentiekosten. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen, op basis van je marge. Testbestellingen tellen niet mee."
+          note={`ROAS is omzet gedeeld door advertentiekosten. Omzet is inclusief 21% btw, de marge rekent met het bedrag zonder btw. Advertentiekosten ${adSpendInclVat ? "zijn gedeeld door 1,21, omdat je die btw terugkrijgt" : "staan zoals Google ze toont"}. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen. Testbestellingen tellen niet mee.`}
         >
           {summary?.ads.error ? (
             <Unavailable reason={summary.ads.error} />
