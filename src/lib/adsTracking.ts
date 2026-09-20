@@ -124,7 +124,7 @@ export function getStoredClickId(key: ClickIdKey): string | null {
 export async function appendClickIdsToUrl(rawUrl: string): Promise<string> {
   try {
     const url = new URL(rawUrl);
-    for (const key of CLICK_ID_KEYS) {
+    for (const key of ATTRIBUTION_KEYS) {
       const value = getStoredClickId(key);
       if (value && !url.searchParams.has(key)) url.searchParams.set(key, value);
     }
