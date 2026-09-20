@@ -160,7 +160,12 @@ export default function AdminDashboard() {
     await load();
   }, [load]);
 
-  const orders = summary?.orders.data ?? [];
+  const allOrders = summary?.orders.data ?? [];
+  // Alleen echte klantbestellingen tellen mee in alle cijfers.
+  const orders = useMemo(
+    () => allOrders.filter((o) => !isTestOrder(o.order_number)),
+    [allOrders],
+  );
   const ads = summary?.ads.data ?? [];
   const events = summary?.analytics.data ?? [];
 
