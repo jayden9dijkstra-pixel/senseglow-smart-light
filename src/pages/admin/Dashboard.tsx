@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2, RefreshCw } from "lucide-react";
-import { contributionMargin, formatDateNl, formatEuro } from "@/lib/margins";
+import { VAT_DIVISOR, contributionMargin, formatDateNl, formatEuro } from "@/lib/margins";
 
 type Panel<T> = {
   data: T | null;
@@ -62,6 +62,13 @@ const TEST_ORDER_NUMBERS = new Set(["#1003", "#1004", "#1006"]);
 
 function isTestOrder(orderNumber: string): boolean {
   return TEST_ORDER_NUMBERS.has(orderNumber.trim());
+}
+
+const AD_VAT_KEY = "sg_ad_spend_incl_vat";
+
+/** Advertentiekosten zonder btw. De btw krijg je terug, dus die telt niet als kosten. */
+function netAdSpend(amount: number, inclVat: boolean): number {
+  return inclVat ? amount / VAT_DIVISOR : amount;
 }
 
 function sinceDate(days: number): Date {
@@ -120,6 +127,13 @@ export default function AdminDashboard() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [adSpendInclVat, setAdSpendInclVat] = useState(
+    () => localStorage.getItem(AD_VAT_KEY) !== "0",
+  );
+
+  useEffect(() => {
+    localStorage.setItem(AD_VAT_KEY, adSpendInclVat ? "1" : "0");
+  }, [adSpendInclVat]);
 
   useEffect(() => {
     document.cookie = INTERNAL_COOKIE;
@@ -189,7 +203,8 @@ export default function AdminDashboard() {
           else margin += perUnit * line.quantity;
         }
       }
-      const spend = periodAds.reduce((s, a) => s + a.cost, 0);
+      // Advertentiekosten zonder btw: de btw krijg je terug, dus die drukt niet op de marge.
+      const spend = netAdSpend(periodAds.reduce((s, a) => s + a.cost, 0), adSpendInclVat);
       const clicks = periodAds.reduce((s, a) => s + a.clicks, 0);
       const impressions = periodAds.reduce((s, a) => s + a.impressions, 0);
       const sessions = new Set(
@@ -218,7 +233,7 @@ export default function AdminDashboard() {
         beginCheckout: periodEvents.filter((e) => e.event_type === "begin_checkout").length,
       };
     },
-    [orders, ads, events],
+    [orders, ads, events, adSpendInclVat],
   );
 
   const today = useMemo(() => period(1), [period]);
@@ -280,10 +295,10 @@ export default function AdminDashboard() {
       if (!row.product_title) continue;
       const key = productKey(row.product_title);
       if (!key) continue;
-      map.set(key, (map.get(key) ?? 0) + row.cost);
+      map.set(key, (map.get(key) ?? 0) + netAdSpend(row.cost, adSpendInclVat));
     }
     return map;
-  }, [ads, productKey]);
+  }, [ads, productKey, adSpendInclVat]);
 
   if (checking) {
     return (
@@ -324,6 +339,16 @@ export default function AdminDashboard() {
 
       {loadError && <p className="mb-6 text-sm text-destructive">{loadError}</p>}
 
+      <label className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
+          className="h-4 w-4"
+          checked={adSpendInclVat}
+          onChange={(e) => setAdSpendInclVat(e.target.checked)}
+        />
+        Advertentiebedrag is inclusief btw, reken met het bedrag zonder btw (÷ 1,21)
+      </label>
+
       <div className="space-y-6">
         {/* 1. Vandaag en 7 dagen */}
         <div className="grid gap-6 md:grid-cols-2">
@@ -336,7 +361,7 @@ export default function AdminDashboard() {
               title={label}
               source="Shopify, Google Ads en eigen bezoekmeting"
               fetchedAt={summary?.generatedAt ?? null}
-              note="Google Ads-cijfers lopen enkele uren achter."
+              note={`Google Ads-cijfers lopen enkele uren achter. Advertentiekosten ${adSpendInclVat ? "zonder btw (bedrag ÷ 1,21)" : "zoals Google ze toont"}.`}
             >
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {summary?.ads.error ? (
@@ -387,7 +412,7 @@ export default function AdminDashboard() {
           title="ROAS"
           source="Shopify en Google Ads"
           fetchedAt={summary?.generatedAt ?? null}
-          note="ROAS is omzet gedeeld door advertentiekosten. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen, op basis van je marge. Testbestellingen tellen niet mee."
+          note={`ROAS is omzet gedeeld door advertentiekosten. Omzet is inclusief 21% btw, de marge rekent met het bedrag zonder btw. Advertentiekosten ${adSpendInclVat ? "zijn gedeeld door 1,21, omdat je die btw terugkrijgt" : "staan zoals Google ze toont"}. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen. Testbestellingen tellen niet mee.`}
         >
           {summary?.ads.error ? (
             <Unavailable reason={summary.ads.error} />
