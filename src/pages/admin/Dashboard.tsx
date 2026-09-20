@@ -57,6 +57,13 @@ type Summary = {
 
 const INTERNAL_COOKIE = "sg_internal=1; path=/; max-age=31536000; SameSite=Lax";
 
+/** Eigen testbestellingen. Deze tellen nergens mee in de cijfers. */
+const TEST_ORDER_NUMBERS = new Set(["#1003", "#1004", "#1006"]);
+
+function isTestOrder(orderNumber: string): boolean {
+  return TEST_ORDER_NUMBERS.has(orderNumber.trim());
+}
+
 function sinceDate(days: number): Date {
   if (days === 1) {
     const d = new Date();
