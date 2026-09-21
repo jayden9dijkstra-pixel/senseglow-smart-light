@@ -22,12 +22,16 @@ import { formatPrice } from "@/lib/price";
  * bezoeker naar een leeg tabblad terwijl de afrekenlink wordt opgehaald, en zou een
  * foutmelding onzichtbaar achterblijven in het tabblad erachter.
  */
-function writeInterstitial(win: Window | null, state: "wachten" | "fout"): void {
+type InterstitialState = "wachten" | "wachten-lang" | "fout";
+
+function writeInterstitial(win: Window | null, state: InterstitialState): void {
   if (!win || win.closed) return;
   const isError = state === "fout";
   const title = isError ? "Afrekenen lukte niet" : "Even geduld";
   const body = isError
     ? "Er ging iets mis bij het klaarzetten van je bestelling. Sluit dit tabblad en probeer het opnieuw vanuit je winkelwagen."
+    : state === "wachten-lang"
+    ? "Dit duurt iets langer dan gewoonlijk. Even geduld nog, we proberen het opnieuw…"
     : "We zetten je bestelling klaar…";
   try {
     win.document.open();
@@ -150,8 +154,18 @@ export function CartDrawer() {
     }
     // Laat meteen zien dat er iets gebeurt; een leeg tabblad wordt weggeklikt.
     writeInterstitial(checkoutWindow, "wachten");
+    // Bij een trage of haperende verbinding (retries in createCheckout kunnen
+    // samen bijna een minuut duren) laat "Even geduld" alleen zien dat er niets
+    // gebeurt. Na 5s tonen we dat het langer duurt, zodat het geen kapotte
+    // pagina lijkt.
+    let settled = false;
+    const slowTimer = window.setTimeout(() => {
+      if (!settled) writeInterstitial(checkoutWindow, "wachten-lang");
+    }, 5000);
     try {
       await createCheckout();
+      settled = true;
+      window.clearTimeout(slowTimer);
       const created = useCartStore.getState().checkoutUrl;
       if (!created) {
         writeInterstitial(checkoutWindow, "fout");
@@ -167,6 +181,8 @@ export function CartDrawer() {
       // Pop-up geblokkeerd: ga in dit tabblad verder zodat afrekenen altijd lukt.
       window.location.assign(checkoutUrl);
     } catch {
+      settled = true;
+      window.clearTimeout(slowTimer);
       // Niet sluiten: de bezoeker kijkt naar dit tabblad, niet naar het vorige.
       writeInterstitial(checkoutWindow, "fout");
       // de winkelwagen toont zelf ook een foutmelding
