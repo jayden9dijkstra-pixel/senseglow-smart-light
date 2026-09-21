@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ChevronLeft, ChevronRight, X, Grid2X2, Play, Volume2, VolumeX } from "lucide-react";
 import { Dialog, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
@@ -27,7 +27,13 @@ export const ProductImageGallery = ({
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  
+  // Bijhouden welke afbeeldings-URL's niet laden, zodat een kapotte CDN-link
+  // een nette placeholder toont in plaats van het browsereigen broken-image-icoon.
+  const [brokenImages, setBrokenImages] = useState<Set<number>>(new Set());
+  const markImageBroken = useCallback((idx: number) => {
+    setBrokenImages((prev) => (prev.has(idx) ? prev : new Set(prev).add(idx)));
+  }, []);
+
   // Touch/swipe handling
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -35,18 +41,7 @@ export const ProductImageGallery = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const minSwipeDistance = 50;
 
-  if (!images || images.length === 0) {
-    return (
-      <div className="relative aspect-square bg-background flex items-center justify-center">
-        <div className="text-center space-y-2 p-8">
-          <div className="text-4xl">💡</div>
-          <p className="text-xs text-muted-foreground">Product foto</p>
-        </div>
-      </div>
-    );
-  }
-
-  const currentImage = images[selectedIndex];
+  const hasImages = images && images.length > 0;
 
   const handlePrevious = useCallback(() => {
     setSelectedIndex((prev) => Math.max(0, prev - 1));
@@ -129,6 +124,29 @@ export const ProductImageGallery = ({
     setIsLightboxOpen(true);
   };
 
+  // Pijltjestoetsen door de lightbox; Escape sluit al via Radix' eigen Dialog.
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") lightboxPrevious();
+      if (e.key === "ArrowRight") lightboxNext();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLightboxOpen, lightboxIndex, images.length]);
+
+  if (!hasImages) {
+    return (
+      <div className="relative aspect-square bg-background flex items-center justify-center">
+        <div className="text-center space-y-2 p-8">
+          <div className="text-4xl">💡</div>
+          <p className="text-xs text-muted-foreground">Product foto</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Main Gallery Container */}
@@ -154,13 +172,20 @@ export const ProductImageGallery = ({
             >
               {images.map((image, idx) => (
                 <div key={idx} className="relative flex-shrink-0 w-full h-full">
-                  <img
-                    src={image.url}
-                    alt={image.altText || productTitle}
-                    className={imageClassName}
-                    draggable={false}
-                    loading={idx === 0 ? "eager" : "lazy"}
-                  />
+                  {brokenImages.has(idx) ? (
+                    <div className="flex h-full w-full items-center justify-center bg-foreground/[0.03] text-4xl">
+                      💡
+                    </div>
+                  ) : (
+                    <img
+                      src={image.url}
+                      alt={image.altText || productTitle}
+                      className={imageClassName}
+                      draggable={false}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      onError={() => markImageBroken(idx)}
+                    />
+                  )}
                 </div>
               ))}
             </div>
@@ -307,13 +332,18 @@ export const ProductImageGallery = ({
                 >
                   {images.map((image, idx) => (
                     <div key={idx} className="flex-shrink-0 w-full h-full flex items-center justify-center px-2">
-                      <img
-                        src={image.url}
-                        alt={image.altText || productTitle}
-                        className="max-h-full max-w-full object-contain"
-                        draggable={false}
-                        loading="lazy"
-                      />
+                      {brokenImages.has(idx) ? (
+                        <div className="flex h-1/2 w-1/2 items-center justify-center text-5xl">💡</div>
+                      ) : (
+                        <img
+                          src={image.url}
+                          alt={image.altText || productTitle}
+                          className="max-h-full max-w-full object-contain"
+                          draggable={false}
+                          loading="lazy"
+                          onError={() => markImageBroken(idx)}
+                        />
+                      )}
                     </div>
                   ))}
                 </div>
@@ -333,12 +363,19 @@ export const ProductImageGallery = ({
                         }`}
                         aria-label={`Bekijk afbeelding ${index + 1}`}
                       >
-                        <img
-                          src={image.url}
-                          alt={image.altText || `${productTitle} ${index + 1}`}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
+                        {brokenImages.has(index) ? (
+                          <div className="flex h-full w-full items-center justify-center bg-foreground/[0.03] text-lg">
+                            💡
+                          </div>
+                        ) : (
+                          <img
+                            src={image.url}
+                            alt={image.altText || `${productTitle} ${index + 1}`}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                            onError={() => markImageBroken(index)}
+                          />
+                        )}
                       </button>
                     ))}
                   </div>
