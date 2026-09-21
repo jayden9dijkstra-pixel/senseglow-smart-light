@@ -4,28 +4,33 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, lazy, Suspense } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
 import { trackSiteEvent } from "@/lib/siteAnalytics";
-import AdminDashboard from "./pages/admin/Dashboard";
+// Kernpad blijft direct geladen: dit zijn de pagina's waar advertentieverkeer
+// op landt en waar geconverteerd wordt. Alles daarbuiten wordt pas opgehaald
+// zodra iemand er echt naartoe navigeert — dat houdt de eerste download klein
+// op mobiel, zonder de prerender-headscripts te raken (die lezen alleen
+// routepaden en metadata, niet de componenten zelf).
 import Index from "./pages/Index";
-import Quiz from "./pages/Quiz";
 import ProductDetail from "./pages/ProductDetail";
 import Catalog from "./pages/Catalog";
-import Contact from "./pages/Contact";
-import Shipping from "./pages/Shipping";
-import OrderTracking from "./pages/OrderTracking";
-import Returns from "./pages/Returns";
-import About from "./pages/About";
-import Sustainability from "./pages/Sustainability";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Login from "./pages/Login";
-import OAuthConsent from "./pages/OAuthConsent";
-import BundleBuilder from "./pages/BundleBuilder";
-import WhySenseGlow from "./pages/WhySenseGlow";
 import NotFound from "./pages/NotFound";
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Shipping = lazy(() => import("./pages/Shipping"));
+const OrderTracking = lazy(() => import("./pages/OrderTracking"));
+const Returns = lazy(() => import("./pages/Returns"));
+const About = lazy(() => import("./pages/About"));
+const Sustainability = lazy(() => import("./pages/Sustainability"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Login = lazy(() => import("./pages/Login"));
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
+const BundleBuilder = lazy(() => import("./pages/BundleBuilder"));
+const WhySenseGlow = lazy(() => import("./pages/WhySenseGlow"));
 import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
@@ -75,6 +80,7 @@ const App = () => (
           <AdsTracking />
           <DomTranslator />
           <LanguageChooser />
+          <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/quiz" element={<Quiz />} />
@@ -131,6 +137,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
           </I18nProvider>
         </BrowserRouter>
       </TooltipProvider>
