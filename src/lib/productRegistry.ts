@@ -8,6 +8,33 @@ export function getProductKeyFromHandle(handle: string): ProductKey | null {
   return HANDLE_TO_KEY[handle] || null;
 }
 
+/**
+ * Nette, Nederlandse variantlabel voor weergave (dropdowns, winkelwagenregels).
+ * Valt terug op een opgeschoonde versie van de ruwe Shopify-optiewaarden als het
+ * product niet in de registry staat, zodat er nooit rauwe Engelse tekst zoals
+ * "3 colors in one Lamp" of "Type-C" in de UI verschijnt.
+ */
+export function formatVariantLabel(
+  productHandle: string,
+  selectedOptions: Array<{ name: string; value: string }>
+): string {
+  const key = getProductKeyFromHandle(productHandle);
+  if (key) {
+    const parsed = parseVariantLabel(key, selectedOptions);
+    if (parsed.label) return parsed.label;
+  }
+  return selectedOptions
+    .map((o) => o.value)
+    .filter((v) => {
+      const lv = v.toLowerCase();
+      return !lv.includes("colors in one") && !lv.includes("lamp") &&
+             !lv.includes("type-c") && !lv.includes("waterproof");
+    })
+    .map((v) => v.replace(/\s*type-c\s*/i, "").trim())
+    .filter(Boolean)
+    .join(" • ");
+}
+
 interface SelectedOption { name: string; value: string }
 
 /**

@@ -8,6 +8,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { trackSelectItem, numericVariantId } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
+import { formatVariantLabel } from "@/lib/productRegistry";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -91,11 +92,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 if (variant) setSelectedVariant(variant);
               }}
             >
-              {product.node.variants.edges.map(({ node: variant }) => (
-                <option key={variant.id} value={variant.id}>
-                  {variant.title} - {formatPrice(variant.price.amount)}
-                </option>
-              ))}
+              {product.node.variants.edges.map(({ node: variant }) => {
+                const label = formatVariantLabel(product.node.handle, variant.selectedOptions) || variant.title;
+                return (
+                  <option key={variant.id} value={variant.id}>
+                    {label} - {formatPrice(variant.price.amount)}
+                  </option>
+                );
+              })}
             </select>
           </div>
         )}

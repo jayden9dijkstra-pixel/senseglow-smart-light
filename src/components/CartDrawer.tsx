@@ -12,7 +12,7 @@ import {
 import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Package, Check, RotateCcw, Shield, Truck } from "lucide-react";
 import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/layout/PaymentIcons";
 import { useCartStore } from "@/stores/cartStore";
-import { getProductKeyFromHandle, parseVariantLabel } from "@/lib/productRegistry";
+import { formatVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
 import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
@@ -52,24 +52,6 @@ function writeInterstitial(win: Window | null, state: InterstitialState): void {
     // Sommige browsers staan schrijven naar een ander venster niet toe; dan blijft
     // het tabblad leeg, precies zoals het voorheen altijd was.
   }
-}
-
-function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
-  const key = getProductKeyFromHandle(item.product.node.handle);
-  if (key) {
-    const parsed = parseVariantLabel(key, item.selectedOptions);
-    if (parsed.label) return parsed.label;
-  }
-  return item.selectedOptions
-    .map(o => o.value)
-    .filter(v => {
-      const lv = v.toLowerCase();
-      return !lv.includes("colors in one") && !lv.includes("lamp") &&
-             !lv.includes("type-c") && !lv.includes("waterproof");
-    })
-    .map(v => v.replace(/\s*type-c\s*/i, "").trim())
-    .filter(Boolean)
-    .join(" • ");
 }
 
 export function CartDrawer() {
@@ -270,7 +252,7 @@ export function CartDrawer() {
                             <>
                               <h4 className="font-medium truncate">{item.product.node.title}</h4>
                               <p className="text-sm text-muted-foreground">
-                                {formatVariantLabel(item)}
+                                {formatVariantLabel(item.product.node.handle, item.selectedOptions)}
                               </p>
                               <p className="font-semibold">
                                 {formatPrice(lineGross)}
