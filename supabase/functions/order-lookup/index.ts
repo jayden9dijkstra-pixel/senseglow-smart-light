@@ -106,9 +106,20 @@ Deno.serve(async (req) => {
       headers: { ...cors, "Content-Type": "application/json" },
     });
 
+  // cf-connecting-ip wordt door Cloudflare zelf gezet en is niet door de
+  // bezoeker te overschrijven. x-forwarded-for kan een bezoeker wél zelf
+  // meesturen; de eerste waarde in die lijst is dus zijn eigen claim, niet
+  // een geverifieerd adres. Als er geen Cloudflare-header is, pak je daarom
+  // het laatste segment (dichtst bij onze eigen infrastructuur) in plaats
+  // van het eerste.
   const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     req.headers.get("cf-connecting-ip") ??
+    req.headers
+      .get("x-forwarded-for")
+      ?.split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .pop() ??
     "unknown";
 
   if (rateLimited(ip)) {
