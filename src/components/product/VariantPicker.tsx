@@ -268,6 +268,17 @@ export const VariantPicker = ({
     return false;
   };
 
+  // Loggen zonder de UI te blokkeren: als geen van de matchpogingen een
+  // variant oplevert, blijft de vorige variant stilzwijgend geselecteerd
+  // staan. Dat is beter dan niets tonen, maar moet wél zichtbaar zijn zodra
+  // Shopify-optienamen wijzigen en deze stringmatching erop stukloopt.
+  const warnNoVariant = (attempted: Partial<ParsedDimensions>) => {
+    console.warn(
+      `[VariantPicker] Geen variant gevonden voor ${product.node.handle}`,
+      { productType, attempted }
+    );
+  };
+
   const handleSizeChange = (size: string) => {
     setSelectedSize(size);
     if (!trySelect({ size })) {
@@ -276,6 +287,8 @@ export const VariantPicker = ({
         const d = parseDimensions(fallback[1].selectedOptions, productType);
         setSelectedColor(d.color);
         onVariantChange(fallback[1]);
+      } else {
+        warnNoVariant({ size });
       }
     }
   };
@@ -293,6 +306,7 @@ export const VariantPicker = ({
           return;
         }
       }
+      warnNoVariant({ color });
     }
   };
 
@@ -302,17 +316,18 @@ export const VariantPicker = ({
       for (const c of colors) {
         if (trySelect({ wattage, color: c })) { setSelectedColor(c); return; }
       }
+      warnNoVariant({ wattage });
     }
   };
 
   const handleLightColorChange = (lc: string) => {
     setSelectedLightColor(lc);
-    trySelect({ lightColor: lc });
+    if (!trySelect({ lightColor: lc })) warnNoVariant({ lightColor: lc });
   };
 
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
-    trySelect({ variantType: type });
+    if (!trySelect({ variantType: type })) warnNoVariant({ variantType: type });
   };
 
   // ─── Render helpers ────────────────────────────────────
