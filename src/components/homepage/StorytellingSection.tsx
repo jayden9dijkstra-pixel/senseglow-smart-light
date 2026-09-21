@@ -37,7 +37,7 @@ export const StorytellingSection = () => {
                   Onze rol is niet uitvinden. Onze rol is selecteren. We kiezen lampen die in een Nederlands huis werken: zonder elektricien, zonder app-instellingen, zonder gedoe. Vijf producten, elk voor een ander probleem of moment. Geen catalogus van tweehonderd verschillende modellen waar je in verdwaalt.
                 </p>
                 <p className="text-foreground font-medium">
-                  Vanuit Friesland brengen we ze naar jou, met Nederlandse klantenservice en 14 dagen bedenktijd. Veiligheid en sfeer in één lamp. Dat is alles wat we doen.
+                  Vanuit Friesland brengen we ze naar jou, met Nederlandse klantenservice en 30 dagen bedenktijd. Veiligheid en sfeer in één lamp. Dat is alles wat we doen.
                 </p>
                 <p className="text-sm text-foreground/50 italic pt-2">
                   J. Dijkstra, Jayden Ecom

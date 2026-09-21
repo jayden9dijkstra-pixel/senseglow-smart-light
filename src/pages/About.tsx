@@ -17,8 +17,8 @@ const criteria = [
     body: "We selecteren bewust binnen een prijsklasse die toegankelijk blijft. Geen premium-tax, geen €200 wandlamp die hetzelfde doet als een €40 alternatief.",
   },
   {
-    title: "14 dagen retour, zonder vragen",
-    body: "Past hij niet bij je gang? Geeft het licht een andere kleur dan verwacht? Stuur terug binnen 14 dagen, dan krijg je je geld retour. Geen rare procedures.",
+    title: "30 dagen retour, zonder vragen",
+    body: "Past hij niet bij je gang? Geeft het licht een andere kleur dan verwacht? Stuur terug binnen 30 dagen, dan krijg je je geld retour. Geen rare procedures.",
   },
 ];
 
