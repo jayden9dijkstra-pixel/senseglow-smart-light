@@ -17,6 +17,39 @@ import { toast } from "sonner";
 import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
 
+/**
+ * Schrijft een tussenscherm in het zojuist geopende tabblad. Zonder dit staart de
+ * bezoeker naar een leeg tabblad terwijl de afrekenlink wordt opgehaald, en zou een
+ * foutmelding onzichtbaar achterblijven in het tabblad erachter.
+ */
+function writeInterstitial(win: Window | null, state: "wachten" | "fout"): void {
+  if (!win || win.closed) return;
+  const isError = state === "fout";
+  const title = isError ? "Afrekenen lukte niet" : "Even geduld";
+  const body = isError
+    ? "Er ging iets mis bij het klaarzetten van je bestelling. Sluit dit tabblad en probeer het opnieuw vanuit je winkelwagen."
+    : "We zetten je bestelling klaar…";
+  try {
+    win.document.open();
+    win.document.write(
+      '<!doctype html><html lang="nl"><head><meta charset="utf-8">' +
+        '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+        "<title>" + title + " · SenseGlow</title></head>" +
+        '<body style="margin:0;min-height:100vh;display:flex;align-items:center;' +
+        "justify-content:center;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;" +
+        'background:#faf9f7;color:#1a1a1a">' +
+        '<div style="text-align:center;padding:24px;max-width:24rem">' +
+        '<p style="font-size:1.125rem;font-weight:600;margin:0 0 8px">' + title + "</p>" +
+        '<p style="margin:0;color:#555;line-height:1.5">' + body + "</p>" +
+        "</div></body></html>"
+    );
+    win.document.close();
+  } catch {
+    // Sommige browsers staan schrijven naar een ander venster niet toe; dan blijft
+    // het tabblad leeg, precies zoals het voorheen altijd was.
+  }
+}
+
 function formatVariantLabel(item: { product: { node: { handle: string } }; selectedOptions: Array<{ name: string; value: string }> }): string {
   const key = getProductKeyFromHandle(item.product.node.handle);
   if (key) {
@@ -115,11 +148,13 @@ export function CartDrawer() {
     } catch {
       // sommige browsers staan dit niet toe
     }
+    // Laat meteen zien dat er iets gebeurt; een leeg tabblad wordt weggeklikt.
+    writeInterstitial(checkoutWindow, "wachten");
     try {
       await createCheckout();
       const created = useCartStore.getState().checkoutUrl;
       if (!created) {
-        checkoutWindow?.close();
+        writeInterstitial(checkoutWindow, "fout");
         return;
       }
       // Laatste zekerheid: herkomstgegevens staan altijd in de afrekenlink.
@@ -132,8 +167,9 @@ export function CartDrawer() {
       // Pop-up geblokkeerd: ga in dit tabblad verder zodat afrekenen altijd lukt.
       window.location.assign(checkoutUrl);
     } catch {
-      checkoutWindow?.close();
-      // handled by store
+      // Niet sluiten: de bezoeker kijkt naar dit tabblad, niet naar het vorige.
+      writeInterstitial(checkoutWindow, "fout");
+      // de winkelwagen toont zelf ook een foutmelding
     }
   };
 

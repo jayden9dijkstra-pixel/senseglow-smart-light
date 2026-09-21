@@ -261,6 +261,16 @@ export const useCartStore = create<CartStore>()(
             bestCode ? [bestCode] : []
           );
           setCheckoutUrl(checkoutUrl);
+
+          // Succes-event: pas hier staat vast dat Shopify een afrekenlink gaf.
+          // 'begin_checkout' hierboven blijft de intentie meten (de klik zelf).
+          // Het verschil tussen beide events is het aantal mislukte pogingen.
+          trackAdsEvent('checkout_reached', {
+            value: adsValue(items),
+            currency: 'EUR',
+            items: toAdsItems(items),
+          });
+          void trackSiteEvent('checkout_reached', { value: adsValue(items) });
         } catch (error) {
           console.error('Checkout failed', {
             variantIds: items.map((i) => i.variantId),
