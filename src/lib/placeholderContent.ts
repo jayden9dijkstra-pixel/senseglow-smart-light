@@ -26,6 +26,9 @@ export interface PlaceholderContent {
   useCases: Array<{ icon: string; title: string; description: string }>;
   techHeadline: string;
   techBenefits: Array<{ icon: string; tech: string; benefit: string }>;
+  stepsHeadline: string;
+  steps: Array<{ title: string; description: string }>;
+  beforeAfter: Array<{ before: string; after: string }>;
   faqSubtitle: string;
   faqs: Array<{ question: string; answer: string }>;
   bundleHeadline: string;
@@ -58,6 +61,17 @@ export function buildPlaceholderContent(productTitle: string): PlaceholderConten
       { icon: "▢", tech: PH, benefit: PH },
       { icon: "▢", tech: PH, benefit: PH },
       { icon: "▢", tech: PH, benefit: PH },
+    ],
+    stepsHeadline: PH,
+    steps: [
+      { title: PH, description: PH },
+      { title: PH, description: PH },
+      { title: PH, description: PH },
+    ],
+    beforeAfter: [
+      { before: PH, after: PH },
+      { before: PH, after: PH },
+      { before: PH, after: PH },
     ],
     faqSubtitle: PH,
     faqs: [
