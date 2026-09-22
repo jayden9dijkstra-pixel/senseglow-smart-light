@@ -30,24 +30,46 @@ declare global {
   }
 }
 
+/**
+ * Shopify's consent-API laadt asynchroon en meldt zich pas klaar via een
+ * document-event nadat het script zelf al binnen is (niet via het gewone
+ * <script>-load-event). We luisteren op beide bekende eventnamen en pollen
+ * daarnaast even als vangnet, zodat een verkeerde/undocumented eventnaam de
+ * banner nooit stilzwijgend laat verdwijnen.
+ */
 function loadConsentScript(): Promise<void> {
   return new Promise((resolve) => {
     if (typeof window === "undefined") return resolve();
     if (window.Shopify?.customerPrivacy) return resolve();
-    const existing = document.querySelector(
-      `script[src="${CONSENT_SCRIPT_SRC}"]`,
-    );
-    if (existing) {
-      existing.addEventListener("load", () => resolve());
-      existing.addEventListener("error", () => resolve());
-      return;
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearInterval(pollId);
+      clearTimeout(timeoutId);
+      resolve();
+    };
+
+    document.addEventListener("shopifyCustomerPrivacyApiLoaded", finish, {
+      once: true,
+    });
+    document.addEventListener("consentTrackingApiLoaded", finish, {
+      once: true,
+    });
+
+    const pollId = window.setInterval(() => {
+      if (window.Shopify?.customerPrivacy) finish();
+    }, 200);
+    const timeoutId = window.setTimeout(finish, 8000);
+
+    if (!document.querySelector(`script[src="${CONSENT_SCRIPT_SRC}"]`)) {
+      const script = document.createElement("script");
+      script.src = CONSENT_SCRIPT_SRC;
+      script.async = true;
+      script.onerror = finish;
+      document.head.appendChild(script);
     }
-    const script = document.createElement("script");
-    script.src = CONSENT_SCRIPT_SRC;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => resolve();
-    document.head.appendChild(script);
   });
 }
 
