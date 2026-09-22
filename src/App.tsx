@@ -35,6 +35,7 @@ import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
 import { LanguageChooser } from "@/components/LanguageChooser";
+import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +81,7 @@ const App = () => (
           <AdsTracking />
           <DomTranslator />
           <LanguageChooser />
+          <CookieConsentBanner />
           <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Index />} />

@@ -8,9 +8,12 @@ const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'senseglow-smart-light-5jjoq.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 // Shopify Storefront Access Tokens are designed for client-side use (read-only public access)
-const SHOPIFY_STOREFRONT_TOKEN = 'd888e2f5ee17de858e6626f4c34cf9b7';
+export const SHOPIFY_STOREFRONT_TOKEN = 'd888e2f5ee17de858e6626f4c34cf9b7';
 // Branded checkout domain connected to the Shopify store.
-const SHOPIFY_CHECKOUT_DOMAIN = 'checkout.senseglow.shop';
+export const SHOPIFY_CHECKOUT_DOMAIN = 'checkout.senseglow.shop';
+// Shared top-level domain across storefront + checkout, required by Shopify's
+// headless Customer Privacy API to link consent across subdomains.
+export const SHOPIFY_STOREFRONT_ROOT_DOMAIN = 'senseglow.shop';
 
 // Input validation schemas
 const limitSchema = z.number().int().min(1).max(250);
