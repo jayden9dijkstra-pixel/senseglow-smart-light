@@ -206,8 +206,8 @@ export function CookieConsentBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[95] px-4 pb-4">
-      <div className="mx-auto max-w-2xl rounded-sm border border-foreground/10 bg-card/95 p-4 shadow-lg backdrop-blur-md sm:p-5">
+    <div className="fixed inset-0 z-[95] flex items-center justify-center px-4">
+      <div className="mx-auto w-full max-w-lg rounded-2xl border border-foreground/10 bg-card/95 p-6 shadow-xl backdrop-blur-md sm:p-8">
         <p className="text-sm text-foreground/70 leading-relaxed">
           Deze site gebruikt cookies om een betere browsingervaring aan u te
           geven. Voor meer informatie lees ons{" "}
@@ -219,13 +219,13 @@ export function CookieConsentBanner() {
           </a>
           .
         </p>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-wrap gap-2">
           <Button
             type="button"
             size="sm"
             disabled={busy}
             onClick={() => respond("all")}
-            className="rounded-sm"
+            className="rounded-full"
           >
             Alles accepteren
           </Button>
@@ -235,7 +235,7 @@ export function CookieConsentBanner() {
             size="sm"
             disabled={busy}
             onClick={() => respond("necessary")}
-            className="rounded-sm border-foreground/20"
+            className="rounded-full border-foreground/20"
           >
             Alleen noodzakelijke
           </Button>
