@@ -93,7 +93,7 @@ const Privacy = () => {
               <li>Klantenservice-correspondentie: 2 jaar na laatste contact</li>
               <li>Nieuwsbrief-data: tot je je uitschrijft</li>
               <li>Website-analytics: maximaal 26 maanden</li>
-              <li>Cookies: zie ons cookie-statement</li>
+              <li>Cookies: zie punt 7 (Cookies)</li>
             </ul>
           </section>
 
@@ -106,6 +106,7 @@ const Privacy = () => {
               <li><strong>17TRACK</strong> (China), pakkettracking. Ontvangt alleen track-code, geen persoonsgegevens.</li>
               <li><strong>Betaalprovider</strong> (Mollie, Stripe, of vergelijkbaar, EU), verwerkt betalingen.</li>
               <li><strong>E-mailprovider</strong>, ontvangt e-mailadres + naam voor transactionele en marketing-mails.</li>
+              <li><strong>Google</strong> (VS), advertentiemeting en website-analyse. Alleen na cookie-toestemming. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
               <li><strong>Meta (Facebook/Instagram)</strong>, alleen na cookie-toestemming.</li>
               <li><strong>TikTok</strong>, alleen na cookie-toestemming.</li>
             </ul>
@@ -122,7 +123,34 @@ const Privacy = () => {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold">7. Cookies</h2>
             <p className="text-foreground/70 leading-relaxed">
-              Onze website gebruikt cookies. Bij je eerste bezoek vragen we expliciete toestemming voor niet-functionele cookies (analytics, marketing). Functionele cookies (winkelwagen, sessie) zijn altijd actief.
+              Onze website gebruikt cookies en vergelijkbare opslag in je browser. Bij je eerste bezoek vragen we expliciete toestemming voor niet-functionele cookies. Je keuze bewaren we 12 maanden; daarna vragen we opnieuw. Je kunt je keuze altijd wijzigen door de cookies van senseglow.shop in je browser te wissen.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-foreground/10">
+                <thead className="bg-background-secondary">
+                  <tr>
+                    <th className="text-left p-3 border-b border-foreground/10">Soort</th>
+                    <th className="text-left p-3 border-b border-foreground/10">Waarvoor</th>
+                    <th className="text-left p-3 border-b border-foreground/10">Bewaartermijn</th>
+                  </tr>
+                </thead>
+                <tbody className="text-foreground/70">
+                  {[
+                    ["Functioneel", "Winkelwagen, sessie, gekozen taal en je cookiekeuze. Altijd actief, de site werkt niet zonder.", "Sessie tot 12 maanden"],
+                    ["Analytisch", "Eigen bezoekmeting en Google Analytics. Alleen actief na toestemming.", "Maximaal 26 maanden"],
+                    ["Marketing", "Google Ads meet welke advertentie tot een aankoop leidde (klik-id, 90 dagen). Meta en TikTok alleen na toestemming.", "90 dagen"],
+                  ].map(([a, b, c]) => (
+                    <tr key={a} className="border-b border-foreground/10">
+                      <td className="p-3">{a}</td>
+                      <td className="p-3">{b}</td>
+                      <td className="p-3">{c}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-foreground/70 leading-relaxed">
+              Kies je "Alleen noodzakelijke", dan blijven analytische en marketingcookies uit en meet ook de afrekenpagina geen advertentieresultaten.
             </p>
           </section>
 
