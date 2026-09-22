@@ -9,6 +9,9 @@ import {
 const CONSENT_SCRIPT_SRC =
   "https://cdn.shopify.com/shopifycloud/consent-tracking-api/v0.1/consent-tracking-api.js";
 
+const CONSENT_KEY = "sg_consent";
+const CONSENT_MAX_AGE = 60 * 60 * 24 * 365; // 12 maanden
+
 type ConsentChoice = {
   analytics: boolean;
   marketing: boolean;
@@ -27,6 +30,63 @@ declare global {
         ) => void;
       };
     };
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+const ACCEPT_ALL: ConsentChoice = {
+  analytics: true,
+  marketing: true,
+  preferences: true,
+  sale_of_data: true,
+};
+
+const NECESSARY_ONLY: ConsentChoice = {
+  analytics: false,
+  marketing: false,
+  preferences: false,
+  sale_of_data: false,
+};
+
+/** Leest de eerder gemaakte keuze: localStorage eerst, daarna de cookie. */
+function readStoredConsent(): "all" | "necessary" | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const local = window.localStorage.getItem(CONSENT_KEY);
+    if (local === "all" || local === "necessary") return local;
+  } catch {
+    // opslag kan geblokkeerd zijn; val terug op de cookie
+  }
+  const match = document.cookie.match(/(?:^|;\s*)sg_consent=(all|necessary)/);
+  return (match?.[1] as "all" | "necessary" | undefined) ?? null;
+}
+
+/** Bewaart de keuze lokaal én in een cookie op het hoofddomein, zodat ook
+ *  checkout.senseglow.shop hem ziet. */
+function storeConsent(kind: "all" | "necessary") {
+  try {
+    window.localStorage.setItem(CONSENT_KEY, kind);
+  } catch {
+    // niet kritiek
+  }
+  try {
+    const host = window.location.hostname;
+    const domain = host.endsWith("senseglow.shop") ? "; domain=.senseglow.shop" : "";
+    document.cookie = `${CONSENT_KEY}=${kind}; max-age=${CONSENT_MAX_AGE}; path=/; SameSite=Lax${domain}`;
+  } catch {
+    // niet kritiek
+  }
+}
+
+/** Geeft de keuze door aan de Google-tag (Consent Mode). */
+function applyGoogleConsent(choice: ConsentChoice) {
+  try {
+    window.gtag?.("consent", "update", {
+      analytics_storage: choice.analytics ? "granted" : "denied",
+      ad_storage: choice.marketing ? "granted" : "denied",
+    });
+  } catch {
+    // meten mag de winkel nooit blokkeren
   }
 }
 
@@ -73,7 +133,7 @@ function loadConsentScript(): Promise<void> {
   });
 }
 
-function submitConsent(choice: ConsentChoice): Promise<void> {
+function submitConsentToShopify(choice: ConsentChoice): Promise<void> {
   return new Promise((resolve) => {
     const api = window.Shopify?.customerPrivacy;
     if (!api) return resolve();
@@ -95,10 +155,13 @@ function submitConsent(choice: ConsentChoice): Promise<void> {
 }
 
 /**
- * Eigen cookiebalk die Shopify's headless Customer Privacy API aanroept.
- * Zonder dit blijft checkout.senseglow.shop ervan uitgaan dat niemand
- * toestemming heeft gegeven, waardoor de Google Ads-conversiepixel daar
- * nooit mag afvuren — ook niet als de koppeling zelf correct staat.
+ * Eigen cookiebalk die de keuze zelf beheert in plaats van te wachten op
+ * Shopify's shouldShowBanner() — die geeft op deze headless storefront vaak
+ * false, waardoor de balk nooit verscheen en er nooit toestemming naar
+ * Shopify (en daarmee naar de conversiepixel op de afrekenpagina) ging.
+ *
+ * Nu: geen opgeslagen keuze = balk tonen. Keuze gevonden = balk overslaan en
+ * de keuze alsnog aan Shopify en Google doorgeven.
  */
 export function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
@@ -106,24 +169,36 @@ export function CookieConsentBanner() {
 
   useEffect(() => {
     let cancelled = false;
+    const stored = readStoredConsent();
+
+    if (!stored) {
+      // Geen keuze bekend: balk meteen tonen, niet wachten op Shopify.
+      setVisible(true);
+      // Laad het Shopify-script alvast op de achtergrond, zodat de keuze
+      // direct doorgestuurd kan worden zodra de bezoeker klikt.
+      void loadConsentScript();
+      return;
+    }
+
+    // Keuze bekend: balk overslaan, keuze opnieuw doorgeven (idempotent).
+    const choice = stored === "all" ? ACCEPT_ALL : NECESSARY_ONLY;
+    applyGoogleConsent(choice);
     loadConsentScript().then(() => {
       if (cancelled) return;
-      try {
-        if (window.Shopify?.customerPrivacy?.shouldShowBanner()) {
-          setVisible(true);
-        }
-      } catch {
-        // liever geen balk tonen dan de pagina breken
-      }
+      void submitConsentToShopify(choice);
     });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const respond = async (choice: ConsentChoice) => {
+  const respond = async (kind: "all" | "necessary") => {
+    const choice = kind === "all" ? ACCEPT_ALL : NECESSARY_ONLY;
     setBusy(true);
-    await submitConsent(choice);
+    storeConsent(kind);
+    applyGoogleConsent(choice);
+    await loadConsentScript();
+    await submitConsentToShopify(choice);
     setBusy(false);
     setVisible(false);
   };
@@ -149,14 +224,7 @@ export function CookieConsentBanner() {
             type="button"
             size="sm"
             disabled={busy}
-            onClick={() =>
-              respond({
-                analytics: true,
-                marketing: true,
-                preferences: true,
-                sale_of_data: true,
-              })
-            }
+            onClick={() => respond("all")}
             className="rounded-sm"
           >
             Alles accepteren
@@ -166,14 +234,7 @@ export function CookieConsentBanner() {
             variant="outline"
             size="sm"
             disabled={busy}
-            onClick={() =>
-              respond({
-                analytics: false,
-                marketing: false,
-                preferences: false,
-                sale_of_data: false,
-              })
-            }
+            onClick={() => respond("necessary")}
             className="rounded-sm border-foreground/20"
           >
             Alleen noodzakelijke
