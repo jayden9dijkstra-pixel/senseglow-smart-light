@@ -129,7 +129,10 @@ export function parseVariantLabel(productKey: ProductKey, opts: SelectedOption[]
       let color = "";
       if (lower.includes("white") || lower.includes("wit")) color = "Wit";
       else if (lower.includes("black") || lower.includes("zwart")) color = "Zwart";
-      return { label: color, color };
+      else if (lower.includes("pink") || lower.includes("roze")) color = "Roze";
+      else if (lower.includes("green") || lower.includes("groen")) color = "Groen";
+      const type = lower.includes("remote") ? "Met afstandsbediening" : "";
+      return { label: [color, type].filter(Boolean).join(" • "), color, type };
     }
     default:
       return { label: "" };

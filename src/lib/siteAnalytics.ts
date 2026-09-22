@@ -11,7 +11,8 @@ export type SiteEventType =
   | "page_view"
   | "view_item"
   | "add_to_cart"
-  | "begin_checkout";
+  | "begin_checkout"
+  | "checkout_reached";
 
 function sessionId(): string {
   try {
