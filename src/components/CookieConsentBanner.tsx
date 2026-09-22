@@ -209,8 +209,8 @@ export function CookieConsentBanner() {
     <div className="fixed inset-x-0 bottom-0 z-[95] px-4 pb-4">
       <div className="mx-auto max-w-2xl rounded-sm border border-foreground/10 bg-card/95 p-4 shadow-lg backdrop-blur-md sm:p-5">
         <p className="text-sm text-foreground/70 leading-relaxed">
-          We gebruiken cookies om de site goed te laten werken en om te meten
-          welke advertenties resultaat opleveren. Lees ons{" "}
+          Deze site gebruikt cookies om een betere browsingervaring aan u te
+          geven. Voor meer informatie lees ons{" "}
           <a
             href="/privacy"
             className="underline underline-offset-2 hover:text-foreground"
