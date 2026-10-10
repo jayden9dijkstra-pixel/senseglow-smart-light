@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      ads_daily: {
+        Row: {
+          campaign: string
+          clicks: number
+          conversion_value: number
+          conversions: number
+          date: string
+          id: string
+          impressions: number
+          spend: number
+          synced_at: string
+        }
+        Insert: {
+          campaign: string
+          clicks?: number
+          conversion_value?: number
+          conversions?: number
+          date: string
+          id?: string
+          impressions?: number
+          spend?: number
+          synced_at?: string
+        }
+        Update: {
+          campaign?: string
+          clicks?: number
+          conversion_value?: number
+          conversions?: number
+          date?: string
+          id?: string
+          impressions?: number
+          spend?: number
+          synced_at?: string
+        }
+        Relationships: []
+      }
       ads_daily_stats: {
         Row: {
           campaign_id: string | null

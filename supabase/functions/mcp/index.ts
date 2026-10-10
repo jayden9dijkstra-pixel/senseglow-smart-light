@@ -247,6 +247,7 @@ async function rest(token, path) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     headers: { apikey: ANON_KEY, Authorization: `Bearer ${token}`, Accept: "application/json" }
   });
+  if (res.status === 401 || res.status === 403) throw new UserError("Niet ingelogd of sessie verlopen.");
   if (!res.ok) throw new Error(`query failed ${res.status}`);
   return await res.json();
 }
