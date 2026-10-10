@@ -12,7 +12,7 @@
   "mcp": {
     "server": {
       "name": "senseglow-mcp",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "title": "SenseGlow Shop"
     },
     "tools": [
@@ -85,6 +85,167 @@
           },
           "required": [
             "query"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_orders",
+        "title": "Get orders (admin)",
+        "description": "Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "date_from": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Startdatum YYYY-MM-DD"
+            },
+            "date_to": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Einddatum YYYY-MM-DD (inclusief), max 90 dagen na start"
+            },
+            "limit": {
+              "default": 50,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 250
+            }
+          },
+          "required": [
+            "date_from",
+            "date_to"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_sales_summary",
+        "title": "Sales summary (admin)",
+        "description": "Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "date_from": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Startdatum YYYY-MM-DD"
+            },
+            "date_to": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Einddatum YYYY-MM-DD (inclusief), max 90 dagen na start"
+            }
+          },
+          "required": [
+            "date_from",
+            "date_to"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_funnel",
+        "title": "Funnel (admin)",
+        "description": "Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "date_from": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Startdatum YYYY-MM-DD"
+            },
+            "date_to": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Einddatum YYYY-MM-DD (inclusief), max 90 dagen na start"
+            }
+          },
+          "required": [
+            "date_from",
+            "date_to"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_attribution",
+        "title": "Attribution (admin)",
+        "description": "Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "date_from": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Startdatum YYYY-MM-DD"
+            },
+            "date_to": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Einddatum YYYY-MM-DD (inclusief), max 90 dagen na start"
+            }
+          },
+          "required": [
+            "date_from",
+            "date_to"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_ads_daily",
+        "title": "Google Ads daily (admin)",
+        "description": "Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "date_from": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Startdatum YYYY-MM-DD"
+            },
+            "date_to": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Einddatum YYYY-MM-DD (inclusief), max 90 dagen na start"
+            }
+          },
+          "required": [
+            "date_from",
+            "date_to"
           ]
         },
         "outputSchema": null
