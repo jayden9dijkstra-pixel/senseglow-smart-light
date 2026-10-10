@@ -134,7 +134,7 @@ export const getAdsDaily = defineTool({
       const read = await requireAdmin(ctx);
       const r = parseRange(date_from, date_to);
       const rows = await read(
-        `ads_daily?select=date,campaign,spend,clicks,impressions,conversions,conversion_value&date=gte.${r.fromDate}&date=lte.${r.toDate}&order=date.asc&limit=${MAX_ROWS * 4}`,
+        `ads_daily?select=date,campaign_id,campaign,status,spend,clicks,impressions,conversions,conversion_value&date=gte.${r.fromDate}&date=lte.${r.toDate}&order=date.asc&limit=${MAX_ROWS * 4}`,
       );
       return ok({ range: r, rows, note: rows.length ? undefined : "No rows yet: ads_daily is empty until the Google Ads Script writes to it." });
     } catch (e) { return fail(e); }

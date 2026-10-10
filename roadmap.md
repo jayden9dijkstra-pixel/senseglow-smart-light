@@ -110,3 +110,9 @@
 - Herkomst wordt bij het bouwen van de afrekenlink server-side bewaard op cartnummer.
 - Bestellingen komen live uit Shopify, advertentiecijfers uit Google Ads, bezoeken uit eigen meting.
 - Oude pagina /statistieken verwijderd; alles staat nu in het dashboard.
+
+## Dashboard v2 (2026-10-10)
+- [x] Periodekiezer, vergelijken, filters, eigen verkeer
+- [x] Tabbladen Overzicht, Ads, Orders, Producten, Tracking, Trechter, Instellingen
+- [x] Bestellingen elke 5 min uit Shopify, ingest-ads met ADS_INGEST_TOKEN
+- [ ] Google Ads Script plakken en inplannen (gebruiker)
