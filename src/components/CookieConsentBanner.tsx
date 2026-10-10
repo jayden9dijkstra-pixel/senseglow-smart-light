@@ -206,8 +206,8 @@ export function CookieConsentBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[95] flex items-center justify-center px-4">
-      <div className="mx-auto w-full max-w-lg rounded-2xl border border-foreground/10 bg-card/95 p-6 shadow-xl backdrop-blur-md sm:p-8">
+    <div className="pointer-events-none fixed inset-0 z-[95] flex items-center justify-center px-4">
+      <div className="pointer-events-auto mx-auto w-full max-w-lg rounded-2xl border border-foreground/10 bg-card/95 p-6 shadow-xl backdrop-blur-md sm:p-8">
         <p className="text-sm text-foreground/70 leading-relaxed">
           Deze site gebruikt cookies om een betere browsingervaring aan u te
           geven. Voor meer informatie lees ons{" "}
