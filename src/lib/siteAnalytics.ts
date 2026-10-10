@@ -48,9 +48,20 @@ function country(): Promise<string | null> {
   })());
 }
 
-/** Eigen bezoeken worden gemarkeerd zodat ze niet in de cijfers meetellen. */
+/**
+ * Eigen bezoeken worden gemarkeerd zodat ze niet in de cijfers meetellen.
+ * ?intern=1 zet de markering op dit apparaat, ?intern=0 wist hem.
+ * Het dashboard zet hem ook zodra de beheerder het opent.
+ */
 export function isInternalVisitor(): boolean {
   if (typeof document === "undefined") return false;
+  try {
+    const flag = new URLSearchParams(window.location.search).get("intern");
+    if (flag === "1") document.cookie = "sg_internal=1; path=/; max-age=31536000; SameSite=Lax";
+    if (flag === "0") document.cookie = "sg_internal=; path=/; max-age=0; SameSite=Lax";
+  } catch {
+    // nooit de meting blokkeren
+  }
   return /(?:^|;\s*)sg_internal=1/.test(document.cookie);
 }
 

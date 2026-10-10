@@ -37,9 +37,28 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
     const { data } = await admin.from("checkout_attribution").select("*").in("cart_token", tokens.slice(i, i + 200));
     for (const a of data ?? []) attr.set(a.cart_token, a);
   }
+  // Bestaande herkomst nooit overschrijven met leeg.
+  const existing = new Map<number, any>();
+  const ids = orders.map((o) => o.id);
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data } = await admin.from("shop_orders")
+      .select("shopify_order_id,gclid,utm_source,utm_medium,utm_campaign,utm_term,utm_content,landing_path")
+      .in("shopify_order_id", ids.slice(i, i + 200));
+    for (const e of data ?? []) existing.set(Number(e.shopify_order_id), e);
+  }
   const rows = orders.map((o) => {
     const token = o.cart_token || o.checkout_token || null;
-    const a = token ? attr.get(token) : undefined;
+    const found = token ? attr.get(token) : undefined;
+    const prev = existing.get(Number(o.id)) ?? {};
+    const a = {
+      gclid: found?.gclid ?? found?.gbraid ?? found?.wbraid ?? prev.gclid ?? null,
+      utm_source: found?.utm_source ?? prev.utm_source ?? null,
+      utm_medium: found?.utm_medium ?? prev.utm_medium ?? null,
+      utm_campaign: found?.utm_campaign ?? prev.utm_campaign ?? null,
+      utm_term: found?.utm_term ?? prev.utm_term ?? null,
+      utm_content: found?.utm_content ?? prev.utm_content ?? null,
+      landing_path: found?.landing_path ?? prev.landing_path ?? null,
+    };
     return {
       shopify_order_id: o.id,
       order_number: o.name,
@@ -52,7 +71,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
         title: li.title, variant_title: li.variant_title, quantity: li.quantity, price: Number(li.price) || 0, sku: li.sku,
       })),
       cart_token: token,
-      gclid: a?.gclid ?? a?.gbraid ?? a?.wbraid ?? null,
+      gclid: a.gclid,
       utm_source: a?.utm_source ?? null,
       utm_medium: a?.utm_medium ?? null,
       utm_campaign: a?.utm_campaign ?? null,

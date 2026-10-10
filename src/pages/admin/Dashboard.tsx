@@ -1,607 +1,579 @@
 /**
- * Intern dashboard: uitgaven, omzet, herkomst en marge.
- * Alleen bereikbaar voor een ingelogde beheerder en uitgesloten van Google.
+ * Intern dashboard. Alleen voor een ingelogde beheerder, uitgesloten van Google.
+ * Alle externe data komt via de backend; er wordt nooit iets geschat.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { AlertTriangle, CheckCircle2, CircleDot, Download, Loader2, RefreshCw, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw } from "lucide-react";
-import { VAT_DIVISOR, contributionMargin, formatDateNl, formatEuro } from "@/lib/margins";
-
-type Panel<T> = {
-  data: T | null;
-  source: string;
-  fetchedAt: string | null;
-  error: string | null;
-};
-
-type OrderLine = {
-  title: string;
-  variant_title: string | null;
-  quantity: number;
-  price: number;
-};
-
-type OrderRow = {
-  order_number: string;
-  ordered_at: string;
-  total: number;
-  currency: string;
-  line_items: OrderLine[];
-  gclid: string | null;
-  utm_source: string | null;
-  utm_campaign: string | null;
-};
-
-type AdsRow = {
-  stat_date: string;
-  campaign_name: string | null;
-  product_title: string | null;
-  cost: number;
-  impressions: number;
-  clicks: number;
-};
-
-type EventRow = {
-  created_at: string;
-  session_id: string;
-  event_type: string;
-};
-
-type Summary = {
-  orders: Panel<OrderRow[]>;
-  ads: Panel<AdsRow[]>;
-  analytics: Panel<EventRow[]>;
-  generatedAt: string;
-};
-
-const INTERNAL_COOKIE = "sg_internal=1; path=/; max-age=31536000; SameSite=Lax";
-
-/** Eigen testbestellingen. Deze tellen nergens mee in de cijfers. */
-const TEST_ORDER_NUMBERS = new Set(["#1003", "#1004", "#1006"]);
-
-function isTestOrder(orderNumber: string): boolean {
-  return TEST_ORDER_NUMBERS.has(orderNumber.trim());
-}
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { amsDate, pctChange, round2, type Settings } from "@/lib/dashboardMetrics";
+import { adsByCampaign, computeStats, perDaySeries, perVariant, type AdRow, type Filters, type Summary } from "./dashboard/compute";
 
 const AD_VAT_KEY = "sg_ad_spend_incl_vat";
+const INTERNAL_COOKIE = "sg_internal=1; path=/; max-age=31536000; SameSite=Lax";
 
-/** Advertentiekosten zonder btw. De btw krijg je terug, dus die telt niet als kosten. */
-function netAdSpend(amount: number, inclVat: boolean): number {
-  return inclVat ? amount / VAT_DIVISOR : amount;
-}
+/* ------------------------------------------------------------ notatie */
+const eur = (v: number | null | undefined) =>
+  v === null || v === undefined ? "Geen data" : new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" }).format(v);
+const num = (v: number | null | undefined, d = 0) =>
+  v === null || v === undefined ? "Geen data" : new Intl.NumberFormat("nl-NL", { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+const pct = (v: number | null | undefined) => (v === null || v === undefined ? "Geen data" : `${num(v, 2)}%`);
+const dmy = (iso: string) => {
+  const [y, m, d] = iso.slice(0, 10).split("-");
+  return `${d}-${m}-${y}`;
+};
+const hhmm = (iso: string | null) =>
+  iso ? new Intl.DateTimeFormat("nl-NL", { timeZone: "Europe/Amsterdam", hour: "2-digit", minute: "2-digit" }).format(new Date(iso)) : "nooit";
+const dateTime = (iso: string) =>
+  `${dmy(amsDate(iso))} ${new Intl.DateTimeFormat("nl-NL", { timeZone: "Europe/Amsterdam", hour: "2-digit", minute: "2-digit" }).format(new Date(iso))}`;
 
-function sinceDate(days: number): Date {
-  if (days === 1) {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
+/* ------------------------------------------------------------ periode */
+const PRESETS = [
+  ["today", "Vandaag"], ["yesterday", "Gisteren"], ["7d", "7 dagen"], ["30d", "30 dagen"], ["month", "Deze maand"], ["custom", "Eigen periode"],
+] as const;
+const addDays = (d: string, n: number) => new Date(Date.parse(d) + n * 86_400_000).toISOString().slice(0, 10);
+function rangeFor(preset: string, from?: string | null, to?: string | null) {
+  const today = amsDate(new Date());
+  switch (preset) {
+    case "today": return { from: today, to: today };
+    case "yesterday": return { from: addDays(today, -1), to: addDays(today, -1) };
+    case "30d": return { from: addDays(today, -29), to: today };
+    case "month": return { from: `${today.slice(0, 8)}01`, to: today };
+    case "custom": {
+      const ok = (s?: string | null) => !!s && /^\d{4}-\d{2}-\d{2}$/.test(s);
+      if (ok(from) && ok(to) && from! <= to!) {
+        const days = (Date.parse(to!) - Date.parse(from!)) / 86_400_000 + 1;
+        if (days <= 365) return { from: from!, to: to! };
+      }
+      return { from: addDays(today, -6), to: today };
+    }
+    default: return { from: addDays(today, -6), to: today };
   }
-  return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 }
 
-function Unavailable({ reason }: { reason: string }) {
-  return <p className="text-sm text-muted-foreground">Niet beschikbaar: {reason}</p>;
+/* ------------------------------------------------------------ bouwstenen */
+function Delta({ cur, prev, invert }: { cur: number | null; prev: number | null | undefined; invert?: boolean }) {
+  if (prev === undefined) return null;
+  const c = pctChange(cur, prev);
+  if (c === null) return <span className="text-xs text-muted-foreground">vs vorige: geen data</span>;
+  const good = invert ? c <= 0 : c >= 0;
+  return <span className={`text-xs ${good ? "text-[hsl(var(--success,160_60%_35%))]" : "text-destructive"}`}>{c >= 0 ? "+" : ""}{num(c, 1)}% vs vorige</span>;
 }
-
-function PanelBox({
-  title,
-  source,
-  fetchedAt,
-  note,
-  children,
-}: {
-  title: string;
-  source: string;
-  fetchedAt: string | null;
-  note?: string;
-  children: React.ReactNode;
-}) {
+function Card({ label, value, sub, danger, children }: { label: string; value: string; sub?: string; danger?: boolean; children?: React.ReactNode }) {
   return (
-    <section className="rounded-lg border border-border bg-card p-5">
-      <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-lg font-semibold">{title}</h2>
-        <p className="text-xs text-muted-foreground">
-          Bron: {source}
-          {fetchedAt ? ` • bijgewerkt ${new Date(fetchedAt).toLocaleString("nl-NL")}` : ""}
-        </p>
-      </div>
-      {note && <p className="mb-3 text-xs text-muted-foreground">{note}</p>}
+    <div className="rounded-lg border border-border bg-card p-4">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className={`mt-1 text-xl font-semibold ${danger ? "text-destructive" : ""}`}>{value}</p>
+      {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
       {children}
+    </div>
+  );
+}
+function Section({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
+  return (
+    <section className="rounded-lg border border-border bg-card p-4 md:p-5">
+      <h2 className="text-lg font-semibold">{title}</h2>
+      {note && <p className="mt-1 text-xs text-muted-foreground">{note}</p>}
+      <div className="mt-4">{children}</div>
     </section>
   );
 }
-
-function Stat({ label, value }: { label: string; value: string }) {
+function Empty({ reason }: { reason: string }) {
+  return <p className="text-sm text-muted-foreground">Geen data: {reason}</p>;
+}
+type Light = "green" | "amber" | "red";
+function Lamp({ state, title, text }: { state: Light; title: string; text: string }) {
+  const Icon = state === "green" ? CheckCircle2 : state === "amber" ? AlertTriangle : XCircle;
+  const cls = state === "green" ? "text-[hsl(160_60%_35%)]" : state === "amber" ? "text-accent" : "text-destructive";
   return (
-    <div className="rounded-md border border-border/60 p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="text-lg font-semibold">{value}</p>
+    <div className="flex gap-3 rounded-md border border-border/60 p-3">
+      <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${cls}`} aria-label={state} />
+      <div><p className="text-sm font-medium">{title}</p><p className="text-xs text-muted-foreground">{text}</p></div>
+    </div>
+  );
+}
+function SortTable<T extends Record<string, unknown>>({ rows, cols, total, csvName }: {
+  rows: T[]; cols: { key: keyof T & string; label: string; fmt?: (v: any, r: T) => string; danger?: (r: T) => boolean }[];
+  total?: Partial<Record<keyof T, string>>; csvName?: string;
+}) {
+  const [sort, setSort] = useState<{ k: string; asc: boolean } | null>(null);
+  const sorted = useMemo(() => {
+    if (!sort) return rows;
+    return [...rows].sort((a, b) => {
+      const x = a[sort.k] as any, y = b[sort.k] as any;
+      const r = x === null ? -1 : y === null ? 1 : x < y ? -1 : x > y ? 1 : 0;
+      return sort.asc ? r : -r;
+    });
+  }, [rows, sort]);
+  const exportCsv = () => {
+    const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const lines = [cols.map((c) => esc(c.label)).join(";"), ...sorted.map((r) => cols.map((c) => esc(typeof r[c.key] === "number" ? String(r[c.key]).replace(".", ",") : r[c.key])).join(";"))];
+    const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = `${csvName}.csv`; a.click();
+  };
+  return (
+    <div>
+      {csvName && (
+        <div className="mb-2 flex justify-end">
+          <Button size="sm" variant="outline" onClick={exportCsv}><Download className="mr-2 h-4 w-4" />CSV</Button>
+        </div>
+      )}
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[640px] text-sm">
+          <thead className="text-left text-xs text-muted-foreground">
+            <tr>{cols.map((c) => (
+              <th key={c.key} className="cursor-pointer select-none py-2 pr-3" onClick={() => setSort((s) => ({ k: c.key, asc: s?.k === c.key ? !s.asc : false }))}>
+                {c.label}{sort?.k === c.key ? (sort.asc ? " ↑" : " ↓") : ""}
+              </th>))}</tr>
+          </thead>
+          <tbody>
+            {sorted.map((r, i) => (
+              <tr key={i} className="border-t border-border/60">
+                {cols.map((c) => <td key={c.key} className={`py-2 pr-3 ${c.danger?.(r) ? "text-destructive font-medium" : ""}`}>{c.fmt ? c.fmt(r[c.key], r) : String(r[c.key] ?? "")}</td>)}
+              </tr>
+            ))}
+            {total && (
+              <tr className="border-t-2 border-border font-semibold">{cols.map((c) => <td key={c.key} className="py-2 pr-3">{total[c.key] ?? ""}</td>)}</tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
+/* ------------------------------------------------------------ pagina */
 export default function AdminDashboard() {
+  const [params, setParams] = useSearchParams();
+  const preset = params.get("p") ?? "7d";
+  const { from, to } = rangeFor(preset, params.get("from"), params.get("to"));
+  const compare = params.get("cmp") === "1";
+  const excludeInternal = params.get("intern") !== "0";
+  const campaign = params.get("campagne") ?? "";
+  const variant = params.get("variant") ?? "";
+  const tab = params.get("tab") ?? "overzicht";
+  const setParam = (k: string, v: string | null) => setParams((p) => { const n = new URLSearchParams(p); if (v === null || v === "") n.delete(k); else n.set(k, v); return n; }, { replace: true });
+
   const [checking, setChecking] = useState(true);
   const [allowed, setAllowed] = useState(false);
-  const [summary, setSummary] = useState<Summary | null>(null);
+  const [data, setData] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [adSpendInclVat, setAdSpendInclVat] = useState(
-    () => localStorage.getItem(AD_VAT_KEY) !== "0",
-  );
-
-  useEffect(() => {
-    localStorage.setItem(AD_VAT_KEY, adSpendInclVat ? "1" : "0");
-  }, [adSpendInclVat]);
+  const [error, setError] = useState<string | null>(null);
+  const [adInclVat, setAdInclVat] = useState(() => localStorage.getItem(AD_VAT_KEY) !== "0");
+  useEffect(() => { localStorage.setItem(AD_VAT_KEY, adInclVat ? "1" : "0"); }, [adInclVat]);
 
   useEffect(() => {
     document.cookie = INTERNAL_COOKIE;
     (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        window.location.replace("/login?next=/admin/dashboard");
-        return;
-      }
-      const { data: roles } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", data.session.user.id);
+      const { data: s } = await supabase.auth.getSession();
+      if (!s.session) { window.location.replace("/login?next=/admin/dashboard"); return; }
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", s.session.user.id);
       setAllowed(Boolean(roles?.some((r) => r.role === "admin")));
       setChecking(false);
     })();
   }, []);
 
-  const load = useCallback(async () => {
+  const reqId = useRef(0);
+  const load = useCallback(async (force = false) => {
+    const id = ++reqId.current;
     setLoading(true);
-    setLoadError(null);
-    const { data, error } = await supabase.functions.invoke("dashboard-summary");
-    if (error) {
-      setLoadError("De gegevens konden niet geladen worden.");
-    } else {
-      setSummary(data as Summary);
-    }
+    const { data: d, error: e } = await supabase.functions.invoke("dashboard-summary", {
+      body: { from, to, compare, exclude_internal: excludeInternal, force },
+    });
+    if (id !== reqId.current) return;
+    if (e || (d as any)?.error) setError((d as any)?.error ?? "De gegevens konden niet geladen worden.");
+    else { setError(null); setData(d as Summary); }
     setLoading(false);
-  }, []);
+  }, [from, to, compare, excludeInternal]);
 
+  useEffect(() => { if (allowed) void load(); }, [allowed, load]);
   useEffect(() => {
-    if (allowed) void load();
+    if (!allowed) return;
+    const t = setInterval(() => { if (document.visibilityState === "visible") void load(); }, 60_000);
+    return () => clearInterval(t);
   }, [allowed, load]);
 
-  const refreshAds = useCallback(async () => {
-    setLoading(true);
-    await supabase.functions.invoke("google-ads-report");
-    await load();
-  }, [load]);
+  const f: Filters = { campaign, variant, adInclVat };
+  const cur = useMemo(() => (data ? computeStats(data.current, data.costs, data.settings, f) : null), [data, campaign, variant, adInclVat]); // eslint-disable-line react-hooks/exhaustive-deps
+  const prev = useMemo(() => (data?.previous ? computeStats(data.previous, data.costs, data.settings, f) : null), [data, campaign, variant, adInclVat]); // eslint-disable-line react-hooks/exhaustive-deps
+  const series = useMemo(() => (data ? perDaySeries(data.current, data.range.from, data.range.to, f) : []), [data, campaign, variant, adInclVat]); // eslint-disable-line react-hooks/exhaustive-deps
+  const campaigns = useMemo(() => [...new Set(data?.current.ads.map((a) => a.campaign) ?? [])].sort(), [data]);
+  const variants = useMemo(() => [...new Set(data?.costs.map((c) => c.product) ?? [])], [data]);
 
-  const allOrders = summary?.orders.data ?? [];
-  // Alleen echte klantbestellingen tellen mee in alle cijfers.
-  const orders = useMemo(
-    () => allOrders.filter((o) => !isTestOrder(o.order_number)),
-    [allOrders],
-  );
-  const ads = summary?.ads.data ?? [];
-  const events = summary?.analytics.data ?? [];
+  if (checking) return <div className="flex min-h-screen items-center justify-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+  if (!allowed) return <div className="flex min-h-screen items-center justify-center p-8 text-center"><p>Je hebt geen toegang tot deze pagina.</p></div>;
 
-  const period = useCallback(
-    (days: number) => {
-      const from = sinceDate(days);
-      const periodOrders = orders.filter((o) => new Date(o.ordered_at) >= from);
-      // Alleen campagnetotalen tellen mee; productregels zijn een uitsplitsing daarvan.
-      const periodAds = ads.filter(
-        (a) => !a.product_title && new Date(`${a.stat_date}T00:00:00`) >= from,
-      );
-      const periodEvents = events.filter((e) => new Date(e.created_at) >= from);
-
-      const revenue = periodOrders.reduce((s, o) => s + o.total, 0);
-      let marginKnown = true;
-      let margin = 0;
-      for (const order of periodOrders) {
-        for (const line of order.line_items) {
-          const perUnit = contributionMargin(line.price, line.title, line.variant_title);
-          if (perUnit === null) marginKnown = false;
-          else margin += perUnit * line.quantity;
-        }
-      }
-      // Advertentiekosten zonder btw: de btw krijg je terug, dus die drukt niet op de marge.
-      const spend = netAdSpend(periodAds.reduce((s, a) => s + a.cost, 0), adSpendInclVat);
-      const clicks = periodAds.reduce((s, a) => s + a.clicks, 0);
-      const impressions = periodAds.reduce((s, a) => s + a.impressions, 0);
-      const sessions = new Set(
-        periodEvents.filter((e) => e.event_type === "page_view").map((e) => e.session_id),
-      ).size;
-      const productViews = periodEvents.filter((e) => e.event_type === "view_item").length;
-
-      return {
-        orders: periodOrders.length,
-        revenue,
-        aov: periodOrders.length ? revenue / periodOrders.length : 0,
-        spend,
-        clicks,
-        impressions,
-        ctr: impressions ? (clicks / impressions) * 100 : 0,
-        cpc: clicks ? spend / clicks : 0,
-        sessions,
-        productViews,
-        conversionRate: clicks ? (periodOrders.length / clicks) * 100 : null,
-        costPerOrder: periodOrders.length ? spend / periodOrders.length : null,
-        roas: spend ? revenue / spend : null,
-        margin: marginKnown ? margin : null,
-        marginAfterAds: marginKnown ? margin - spend : null,
-        breakEvenRoas: marginKnown && revenue > 0 && margin > 0 ? revenue / margin : null,
-        addToCart: periodEvents.filter((e) => e.event_type === "add_to_cart").length,
-        beginCheckout: periodEvents.filter((e) => e.event_type === "begin_checkout").length,
-      };
-    },
-    [orders, ads, events, adSpendInclVat],
-  );
-
-  const today = useMemo(() => period(1), [period]);
-  const week = useMemo(() => period(7), [period]);
-  const month = useMemo(() => period(30), [period]);
-  const testOrderCount = allOrders.length - orders.length;
-
-  const perProduct = useMemo(() => {
-    const map = new Map<
-      string,
-      { title: string; units: number; revenue: number; margin: number | null; orders: Set<string> }
-    >();
-    for (const order of orders) {
-      for (const line of order.line_items) {
-        const entry = map.get(line.title) ?? {
-          title: line.title,
-          units: 0,
-          revenue: 0,
-          margin: 0 as number | null,
-          orders: new Set<string>(),
-        };
-        entry.units += line.quantity;
-        entry.revenue += line.price * line.quantity;
-        const perUnit = contributionMargin(line.price, line.title, line.variant_title);
-        entry.margin =
-          entry.margin === null || perUnit === null ? null : entry.margin + perUnit * line.quantity;
-        entry.orders.add(order.order_number);
-        map.set(line.title, entry);
-      }
-    }
-    return [...map.values()].sort((a, b) => b.revenue - a.revenue);
-  }, [orders]);
-
-  // Titels uit Google Ads en Shopify verschillen per taal en variant.
-  // We brengen ze terug tot één productnaam zodat de kosten bij het juiste product komen.
-  const productKey = useCallback((title: string): string | null => {
-    const t = title.toLowerCase();
-    if (t.includes("ambient") || t.includes("mouvement ambiante")) return "ambient";
-    if (t.includes("wave")) return "wave";
-    if (t.includes("wall lamp") || t.includes("applique")) return "wall";
-    if (t.includes("solar") || t.includes("lanterne")) return "solar";
-    if (t.includes("flex")) return "flex";
-    return null;
-  }, []);
-
-  // Welke dagen zitten er in de opgehaalde kosten per product?
-  const adProductPeriod = useMemo(() => {
-    const dates = ads.filter((a) => a.product_title).map((a) => a.stat_date).sort();
-    if (dates.length === 0) return null;
-    const fmt = (d: string) => new Date(`${d}T00:00:00`).toLocaleDateString("nl-NL");
-    const first = fmt(dates[0]);
-    const last = fmt(dates[dates.length - 1]);
-    return first === last ? first : `${first} tot ${last}`;
-  }, [ads]);
-
-  const productAdSpend = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const row of ads) {
-      if (!row.product_title) continue;
-      const key = productKey(row.product_title);
-      if (!key) continue;
-      map.set(key, (map.get(key) ?? 0) + netAdSpend(row.cost, adSpendInclVat));
-    }
-    return map;
-  }, [ads, productKey, adSpendInclVat]);
-
-  if (checking) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </div>
-    );
-  }
-
-  if (!allowed) {
-    return (
-      <div className="flex min-h-screen items-center justify-center p-8 text-center">
-        <p>Je hebt geen toegang tot deze pagina.</p>
-      </div>
-    );
-  }
+  const adsUpdated = data?.sources.adsScript.updatedAt ?? data?.sources.adsLegacy.updatedAt ?? null;
+  const adsStale = !data?.sources.adsScript.updatedAt || Date.now() - Date.parse(data.sources.adsScript.updatedAt) > 3 * 3_600_000;
+  const P = (k: keyof NonNullable<typeof cur>) => (prev ? (prev[k] as number | null) : undefined);
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-10">
+    <main className="mx-auto w-full max-w-7xl overflow-x-hidden px-3 py-6 md:px-6 md:py-10">
       <meta name="robots" content="noindex, nofollow" />
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+      <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Dashboard</h1>
-          <p className="text-sm text-muted-foreground">
-            Uitgaven, omzet, herkomst en marge op één plek.
+          <p className="text-xs text-muted-foreground">
+            Bestellingen: {hhmm(data?.sources.orders.updatedAt ?? null)} · Advertenties: {hhmm(adsUpdated)} · Bezoeken: {hhmm(data?.sources.events.updatedAt ?? null)}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => void load()} disabled={loading}>
-            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-            Verversen
-          </Button>
-          <Button variant="outline" onClick={() => void refreshAds()} disabled={loading}>
-            Advertentiecijfers ophalen
-          </Button>
+        <Button variant="outline" onClick={() => void load(true)} disabled={loading}>
+          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}Verversen
+        </Button>
+      </header>
+
+      {/* Periodekiezer */}
+      <div className="mb-5 space-y-3 rounded-lg border border-border bg-card p-3 md:p-4">
+        <div className="flex flex-wrap gap-2">
+          {PRESETS.map(([k, label]) => (
+            <Button key={k} size="sm" variant={preset === k ? "default" : "outline"} onClick={() => {
+              setParams((p) => { const n = new URLSearchParams(p); n.set("p", k); if (k === "custom") { n.set("from", from); n.set("to", to); } else { n.delete("from"); n.delete("to"); } return n; }, { replace: true });
+            }}>{label}</Button>
+          ))}
+        </div>
+        {preset === "custom" && (
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <Input type="date" className="w-auto" value={from} max={to} onChange={(e) => setParam("from", e.target.value)} />
+            <span>t/m</span>
+            <Input type="date" className="w-auto" value={to} min={from} onChange={(e) => setParam("to", e.target.value)} />
+            <span className="text-xs text-muted-foreground">max. 365 dagen</span>
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          <span className="text-muted-foreground">{dmy(from)} t/m {dmy(to)}</span>
+          <label className="flex items-center gap-2"><Switch checked={compare} onCheckedChange={(v) => setParam("cmp", v ? "1" : null)} />Vergelijk met vorige periode</label>
+          <label className="flex items-center gap-2"><Switch checked={excludeInternal} onCheckedChange={(v) => setParam("intern", v ? null : "0")} />Eigen verkeer uitsluiten</label>
+          <label className="flex items-center gap-2"><Switch checked={adInclVat} onCheckedChange={setAdInclVat} />Advertentiebedrag is incl. btw (÷ 1,21)</label>
+          <select className="h-9 rounded-md border border-input bg-background px-2" value={campaign} onChange={(e) => setParam("campagne", e.target.value)}>
+            <option value="">Alle campagnes</option>{campaigns.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <select className="h-9 rounded-md border border-input bg-background px-2" value={variant} onChange={(e) => setParam("variant", e.target.value)}>
+            <option value="">Alle producten</option>{variants.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
         </div>
       </div>
 
-      {loadError && <p className="mb-6 text-sm text-destructive">{loadError}</p>}
-
-      <label className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-        <input
-          type="checkbox"
-          className="h-4 w-4"
-          checked={adSpendInclVat}
-          onChange={(e) => setAdSpendInclVat(e.target.checked)}
-        />
-        Advertentiebedrag is inclusief btw, reken met het bedrag zonder btw (÷ 1,21)
-      </label>
-
-      <div className="space-y-6">
-        {/* 1. Vandaag en 7 dagen */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {[
-            { label: "Vandaag", stats: today },
-            { label: "Laatste 7 dagen", stats: week },
-          ].map(({ label, stats }) => (
-            <PanelBox
-              key={label}
-              title={label}
-              source="Shopify, Google Ads en eigen bezoekmeting"
-              fetchedAt={summary?.generatedAt ?? null}
-              note={`Google Ads-cijfers lopen enkele uren achter. Advertentiekosten ${adSpendInclVat ? "zonder btw (bedrag ÷ 1,21)" : "zoals Google ze toont"}.`}
-            >
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {summary?.ads.error ? (
-                  <div className="col-span-full">
-                    <Unavailable reason={summary.ads.error} />
-                  </div>
-                ) : (
-                  <>
-                    <Stat label="Advertentiekosten" value={formatEuro(stats.spend)} />
-                    <Stat label="Vertoningen" value={String(stats.impressions)} />
-                    <Stat label="Klikken" value={String(stats.clicks)} />
-                    <Stat label="CTR" value={`${stats.ctr.toFixed(2)}%`} />
-                    <Stat label="Gem. klikprijs" value={formatEuro(stats.cpc)} />
-                  </>
-                )}
-                {summary?.orders.error && !summary.orders.data ? (
-                  <div className="col-span-full">
-                    <Unavailable reason={summary.orders.error} />
-                  </div>
-                ) : (
-                  <>
-                    <Stat label="Bestellingen" value={String(stats.orders)} />
-                    <Stat label="Omzet" value={formatEuro(stats.revenue)} />
-                    <Stat label="Gem. orderwaarde" value={formatEuro(stats.aov)} />
-                  </>
-                )}
-                <Stat label="Sessies" value={String(stats.sessions)} />
-                <Stat label="Productpagina's bekeken" value={String(stats.productViews)} />
-                <Stat
-                  label="Bestellingen per klik"
-                  value={stats.conversionRate === null ? "n.b." : `${stats.conversionRate.toFixed(2)}%`}
-                />
-                <Stat
-                  label="Kosten per bestelling"
-                  value={stats.costPerOrder === null ? "n.b." : formatEuro(stats.costPerOrder)}
-                />
-                <Stat
-                  label="Omzet per euro advertentie"
-                  value={stats.roas === null ? "n.b." : stats.roas.toFixed(2)}
-                />
-              </div>
-            </PanelBox>
-          ))}
+      {error && <p className="mb-4 text-sm text-destructive">{error}</p>}
+      {data?.sources.orders.error && <p className="mb-4 text-sm text-destructive">Shopify: {data.sources.orders.error} (opgeslagen bestellingen worden getoond)</p>}
+      {data && adsStale && (
+        <div className="mb-4 flex items-start gap-2 rounded-md border border-accent/50 bg-accent/10 p-3 text-sm">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+          <span>Advertentiecijfers van het Google Ads Script {data.sources.adsScript.updatedAt ? `zijn sinds ${dateTime(data.sources.adsScript.updatedAt)} niet bijgewerkt (langer dan 3 uur)` : "zijn nog nooit ontvangen"}. Bron nu: {data.current.adsSource}.</span>
         </div>
+      )}
 
-        {/* 1b. ROAS */}
-        <PanelBox
-          title="ROAS"
-          source="Shopify en Google Ads"
-          fetchedAt={summary?.generatedAt ?? null}
-          note={`ROAS is omzet gedeeld door advertentiekosten. Omzet is inclusief 21% btw, de marge rekent met het bedrag zonder btw. Advertentiekosten ${adSpendInclVat ? "zijn gedeeld door 1,21, omdat je die btw terugkrijgt" : "staan zoals Google ze toont"}. Break-even is de ROAS die je minimaal nodig hebt om uit de kosten te komen. Testbestellingen tellen niet mee.`}
-        >
-          {summary?.ads.error ? (
-            <Unavailable reason={summary.ads.error} />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="text-left text-xs text-muted-foreground">
-                  <tr>
-                    <th className="py-2">Periode</th>
-                    <th>Advertentiekosten</th>
-                    <th>Omzet</th>
-                    <th>ROAS</th>
-                    <th>Break-even ROAS</th>
-                    <th>Marge na advertenties</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { label: "Vandaag", stats: today },
-                    { label: "Laatste 7 dagen", stats: week },
-                    { label: "Laatste 30 dagen", stats: month },
-                  ].map(({ label, stats }) => (
-                    <tr key={label} className="border-t border-border/60">
-                      <td className="py-2 pr-4">{label}</td>
-                      <td>{formatEuro(stats.spend)}</td>
-                      <td>{formatEuro(stats.revenue)}</td>
-                      <td
-                        className={
-                          stats.roas !== null && stats.breakEvenRoas !== null && stats.roas < stats.breakEvenRoas
-                            ? "text-destructive font-semibold"
-                            : "font-semibold"
-                        }
-                      >
-                        {stats.roas === null ? "n.b." : stats.roas.toFixed(2)}
-                      </td>
-                      <td>{stats.breakEvenRoas === null ? "n.b." : stats.breakEvenRoas.toFixed(2)}</td>
-                      <td className={stats.marginAfterAds !== null && stats.marginAfterAds < 0 ? "text-destructive" : ""}>
-                        {stats.marginAfterAds === null ? "n.b." : formatEuro(stats.marginAfterAds)}
-                      </td>
-                    </tr>
+      {!data || !cur ? (
+        <div className="flex justify-center py-20"><Loader2 className="h-6 w-6 animate-spin" /></div>
+      ) : (
+        <Tabs value={tab} onValueChange={(v) => setParam("tab", v === "overzicht" ? null : v)}>
+          <TabsList className="mb-4 flex h-auto flex-wrap justify-start">
+            {[["overzicht", "Overzicht"], ["ads", "Ads"], ["orders", "Orders"], ["producten", "Producten en marges"], ["tracking", "Tracking"], ["trechter", "Trechter"], ["instellingen", "Instellingen"]].map(([k, l]) => (
+              <TabsTrigger key={k} value={k}>{l}</TabsTrigger>
+            ))}
+          </TabsList>
+
+          {/* A. Overzicht */}
+          <TabsContent value="overzicht" className="space-y-5">
+            {cur.missingCost.length > 0 && <p className="text-sm text-destructive">Inkoop ontbreekt voor: {cur.missingCost.join(", ")}. Winst is onvolledig.</p>}
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+              <Card label="Omzet (incl. btw)" value={eur(cur.revenueIncl)} sub={`excl. btw ${eur(cur.revenueExcl)}`}><Delta cur={cur.revenueIncl} prev={P("revenueIncl")} /></Card>
+              <Card label="Bestellingen" value={num(cur.orders)}><Delta cur={cur.orders} prev={P("orders")} /></Card>
+              <Card label="Gem. orderwaarde" value={eur(cur.aov)}><Delta cur={cur.aov} prev={P("aov")} /></Card>
+              <Card label="Advertentiekosten" value={eur(cur.spend)}><Delta cur={cur.spend} prev={P("spend")} invert /></Card>
+              <Card label="Nettowinst" value={cur.missingCost.length ? "Onvolledig" : eur(cur.netProfit)} danger={(cur.netProfit ?? 0) < 0}
+                sub={cur.profitMargin !== null ? `marge ${pct(cur.profitMargin)} · per order ${eur(cur.profitPerOrder)}` : undefined}><Delta cur={cur.netProfit} prev={P("netProfit")} /></Card>
+              <Card label="ROAS" value={num(cur.roas, 2)} danger={cur.roas !== null && cur.breakEvenRoas !== null && cur.roas < cur.breakEvenRoas} sub={`break-even ${num(cur.breakEvenRoas, 2)}`}><Delta cur={cur.roas} prev={P("roas")} /></Card>
+              <Card label="CPA" value={eur(cur.cpa)} danger={cur.cpa !== null && cur.breakEvenCpa !== null && cur.cpa > cur.breakEvenCpa} sub={`break-even ${eur(cur.breakEvenCpa)}`}><Delta cur={cur.cpa} prev={P("cpa")} invert /></Card>
+              <Card label="Conversiepercentage" value={pct(cur.conversionRate)} sub="bestellingen ÷ sessies"><Delta cur={cur.conversionRate} prev={P("conversionRate")} /></Card>
+              <Card label="Bezoekers (sessies)" value={num(cur.visitors)}><Delta cur={cur.visitors} prev={P("visitors")} /></Card>
+              <Card label="Af te dragen btw (indicatie)" value={eur(cur.vat)} sub={data.settings?.tax_reserve_enabled ? `belastingreservering ${eur(cur.taxReserve)}` : "geen fiscaal advies"} />
+            </div>
+            <Section title="Omzet en advertentiekosten per dag" note="Omzet incl. btw. Dagen zonder advertentiecijfers hebben geen kostenpunt.">
+              <div className="h-64 w-full">
+                <ResponsiveContainer>
+                  <LineChart data={series.map((s) => ({ ...s, label: dmy(s.day).slice(0, 5) }))}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="label" fontSize={11} />
+                    <YAxis fontSize={11} />
+                    <Tooltip formatter={(v: number) => eur(v)} />
+                    <Legend />
+                    <Line type="monotone" dataKey="revenue" name="Omzet" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="spend" name="Advertentiekosten" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} connectNulls={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Section>
+            <div className="grid gap-5 md:grid-cols-2">
+              <Section title="Top 5 producten">
+                {perVariant(cur.ordersList, data.costs, data.settings).length === 0 ? <Empty reason="geen bestellingen in deze periode" /> : (
+                  <ol className="space-y-2 text-sm">{perVariant(cur.ordersList, data.costs, data.settings).slice(0, 5).map((v) => (
+                    <li key={v.label} className="flex justify-between gap-3"><span className="truncate">{v.label}</span><span className="shrink-0">{v.units}× · {eur(v.revenue)}</span></li>
+                  ))}</ol>
+                )}
+              </Section>
+              <Section title="Trackingstatus"><TrackingLamps data={data} cur={cur} adsStale={adsStale} /></Section>
+            </div>
+          </TabsContent>
+
+          {/* B. Ads */}
+          <TabsContent value="ads" className="space-y-5">
+            <AdsTab ads={cur.ads} adInclVat={adInclVat} source={data.current.adsSource} />
+          </TabsContent>
+
+          {/* C. Orders */}
+          <TabsContent value="orders">
+            <Section title="Bestellingen" note="Zonder persoonsgegevens. Testbestellingen en terugbetaalde orders staan er niet in.">
+              {cur.ordersList.length === 0 ? <Empty reason="geen bestellingen in deze periode" /> : (
+                <SortTable csvName="orders" rows={cur.ordersList.map((o) => ({
+                  order: o.order_number, tijd: o.ordered_at, bedrag: o.total,
+                  producten: o.line_items.map((l) => `${l.quantity}× ${l.title}${l.variant_title ? ` (${l.variant_title})` : ""}`).join(", "),
+                  land: o.country_code ?? "Geen data", status: o.financial_status ?? "", klik: o.has_gclid ? "ja" : "nee",
+                  source: o.utm_source ?? "", medium: o.utm_medium ?? "", campaign: o.utm_campaign ?? "",
+                }))} cols={[
+                  { key: "order", label: "Order" }, { key: "tijd", label: "Tijd", fmt: dateTime }, { key: "bedrag", label: "Bedrag", fmt: eur },
+                  { key: "producten", label: "Producten" }, { key: "land", label: "Land" }, { key: "status", label: "Status" },
+                  { key: "klik", label: "Klik-ID" }, { key: "source", label: "utm_source" }, { key: "medium", label: "utm_medium" }, { key: "campaign", label: "utm_campaign" },
+                ]} />
+              )}
+            </Section>
+          </TabsContent>
+
+          {/* D. Producten */}
+          <TabsContent value="producten" className="space-y-5">
+            <Section title="Per variant" note="Marge per stuk = prijs excl. btw × (1 − transactie − overig) − inkoop − heffing bij een losse bestelling. Break-even CPA = marge per stuk; break-even conversieratio = CPC ÷ break-even CPA.">
+              {(() => {
+                const rows = perVariant(cur.ordersList, data.costs, data.settings);
+                if (!rows.length) return <Empty reason="geen verkochte producten in deze periode" />;
+                return <SortTable csvName="producten" rows={rows.map((r) => ({
+                  ...r, cost: r.cost, beCr: r.breakEvenCpa && cur.cpc !== null && r.breakEvenCpa > 0 ? (cur.cpc / r.breakEvenCpa) * 100 : null,
+                }))} cols={[
+                  { key: "label", label: "Variant" }, { key: "units", label: "Verkocht" }, { key: "revenue", label: "Omzet", fmt: eur },
+                  { key: "cost", label: "Inkoop/stuk", fmt: (v) => (v === null ? "inkoop ontbreekt" : eur(v)) },
+                  { key: "marginPerUnit", label: "Marge/stuk", fmt: eur, danger: (r) => (r.marginPerUnit ?? 0) < 0 },
+                  { key: "totalMargin", label: "Totale marge", fmt: eur, danger: (r) => (r.totalMargin ?? 0) < 0 },
+                  { key: "breakEvenCpa", label: "Break-even CPA", fmt: eur, danger: (r) => cur.cpa !== null && r.breakEvenCpa !== null && cur.cpa > r.breakEvenCpa },
+                  { key: "beCr", label: "Break-even conv.ratio", fmt: pct },
+                ]} />;
+              })()}
+            </Section>
+            <Section title="Financieel overzicht" note="Indicatie, geen fiscaal advies.">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+                <Card label="Omzet incl. btw" value={eur(cur.revenueIncl)} /><Card label="Btw (21%)" value={eur(cur.vat)} />
+                <Card label="Omzet excl. btw" value={eur(cur.revenueExcl)} /><Card label="Inkoop" value={eur(cur.purchase)} />
+                <Card label="Importheffing" value={eur(cur.levy)} /><Card label="Dekkingsbijdrage" value={eur(cur.contribution)} />
+                <Card label="Advertentiekosten" value={eur(cur.spend)} /><Card label="Nettowinst" value={eur(cur.netProfit)} danger={(cur.netProfit ?? 0) < 0} />
+              </div>
+            </Section>
+          </TabsContent>
+
+          {/* E. Tracking */}
+          <TabsContent value="tracking" className="space-y-5">
+            <Section title="Status"><TrackingLamps data={data} cur={cur} adsStale={adsStale} /></Section>
+            <Section title="Klik-ID's">
+              <p className="text-sm">{num(cur.ordersList.filter((o) => o.has_gclid).length)} van {num(cur.orders)} bestellingen hebben een klik-ID ({pct(cur.orders ? (cur.ordersList.filter((o) => o.has_gclid).length / cur.orders) * 100 : null)}).</p>
+              <div className="mt-3 grid gap-5 md:grid-cols-2">
+                <div>
+                  <p className="mb-2 text-xs text-muted-foreground">Per utm_campaign</p>
+                  {Object.entries(cur.ordersList.reduce<Record<string, number>>((a, o) => { const k = o.utm_campaign ?? "(geen)"; a[k] = (a[k] ?? 0) + 1; return a; }, {})).map(([k, v]) => (
+                    <p key={k} className="text-sm">{k}: {v}</p>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </PanelBox>
-
-        {/* 2. Per product */}
-        <PanelBox
-          title="Per product"
-          source={summary?.orders.source ?? "Shopify"}
-          fetchedAt={summary?.orders.fetchedAt ?? null}
-        >
-          {perProduct.length === 0 ? (
-            <Unavailable reason={summary?.orders.error ?? "nog geen verkochte producten"} />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="text-left text-xs text-muted-foreground">
-                  <tr>
-                    <th className="py-2">Product</th>
-                    <th>Verkocht</th>
-                    <th>Omzet</th>
-                    <th>Dekkingsbijdrage</th>
-                    <th>Advertentiekosten</th>
-                    <th>Marge na advertenties</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {perProduct.map((row) => {
-                    const key = productKey(row.title);
-                    const spend = key ? productAdSpend.get(key) : undefined;
-                    const afterAds =
-                      row.margin === null || spend === undefined ? null : row.margin - spend;
-                    return (
-                      <tr key={row.title} className="border-t border-border/60">
-                        <td className="py-2 pr-4">{row.title}</td>
-                        <td>{row.units}</td>
-                        <td>{formatEuro(row.revenue)}</td>
-                        <td>{row.margin === null ? "n.b." : formatEuro(row.margin)}</td>
-                        <td>{spend === undefined ? "n.b." : formatEuro(spend)}</td>
-                        <td className={afterAds !== null && afterAds < 0 ? "text-destructive" : ""}>
-                          {afterAds === null ? "n.b." : formatEuro(afterAds)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Advertentiekosten per product zijn alleen beschikbaar als Google Ads de cijfers per
-                product levert. Staat er n.b., dan is dat getal niet opgehaald.
-                {adProductPeriod && ` Opgehaalde periode per product: ${adProductPeriod}.`}
-              </p>
-            </div>
-          )}
-        </PanelBox>
-
-        {/* 3. Bestellingen */}
-        <PanelBox
-          title="Laatste bestellingen"
-          source={summary?.orders.source ?? "Shopify"}
-          fetchedAt={summary?.orders.fetchedAt ?? null}
-        >
-          {allOrders.length === 0 ? (
-            <Unavailable reason={summary?.orders.error ?? "nog geen bestellingen"} />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="text-left text-xs text-muted-foreground">
-                  <tr>
-                    <th className="py-2">Bestelling</th>
-                    <th>Datum</th>
-                    <th>Bedrag</th>
-                    <th>Artikelen</th>
-                    <th>Klik-id</th>
-                    <th>Bron</th>
-                    <th>Campagne</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {allOrders.slice(0, 25).map((order) => (
-                    <tr
-                      key={order.order_number}
-                      className={`border-t border-border/60 align-top ${isTestOrder(order.order_number) ? "text-muted-foreground" : ""}`}
-                    >
-                      <td className="py-2 pr-4">
-                        {order.order_number}
-                        {isTestOrder(order.order_number) && (
-                          <span className="ml-2 rounded border border-border px-1 text-[10px] uppercase">test</span>
-                        )}
-                      </td>
-                      <td>{formatDateNl(order.ordered_at)}</td>
-                      <td>{formatEuro(order.total)}</td>
-                      <td className="pr-4">
-                        {order.line_items
-                          .map((l) => `${l.quantity}x ${l.title}${l.variant_title ? ` (${l.variant_title})` : ""}`)
-                          .join(", ")}
-                      </td>
-                      <td>{order.gclid ? "ja" : "nee"}</td>
-                      <td>{order.utm_source ?? "-"}</td>
-                      <td>{order.utm_campaign ?? "-"}</td>
-                    </tr>
+                  {cur.orders === 0 && <Empty reason="geen bestellingen" />}
+                </div>
+                <div>
+                  <p className="mb-2 text-xs text-muted-foreground">Recente klik-ID's bij afrekenen (gemaskeerd)</p>
+                  {data.recentClickIds.length === 0 ? <Empty reason="nog geen klik-ID opgeslagen" /> : data.recentClickIds.map((c, i) => (
+                    <p key={i} className="font-mono text-xs">{c.masked} · {c.utm_campaign ?? "-"} · {dateTime(c.at)}</p>
                   ))}
-                </tbody>
-              </table>
-              <p className="mt-3 text-xs text-muted-foreground">
-                {testOrderCount > 0
-                  ? `${testOrderCount} bestelling${testOrderCount === 1 ? "" : "en"} is gemarkeerd als test en telt niet mee in de cijfers.`
-                  : "Alle bestellingen tellen mee in de cijfers."}
-              </p>
-            </div>
-          )}
-        </PanelBox>
+                </div>
+              </div>
+            </Section>
+            <Section title="Google Ads-conversies tegenover echte orders met klik-ID" note="Tracking-gat = orders met klik-ID − conversies volgens Google. Google Ads loopt enkele uren achter.">
+              <SortTable rows={series.map((s) => ({ dag: s.day, google: s.adConversions, echt: s.gclidOrders, gat: s.adConversions === null ? null : round2(s.gclidOrders - s.adConversions) }))}
+                cols={[{ key: "dag", label: "Dag", fmt: dmy }, { key: "google", label: "Conversies Google", fmt: (v) => num(v, 1) }, { key: "echt", label: "Orders met klik-ID" },
+                  { key: "gat", label: "Tracking-gat", fmt: (v) => num(v, 1), danger: (r) => (r.gat ?? 0) !== 0 }]} />
+            </Section>
+            <Section title="Events per dag" note="Aankopen komen uit Shopify; de site slaat zelf geen aankoopmoment op.">
+              <SortTable csvName="events" rows={series.map((s) => ({ dag: s.day, view_item: s.events.view_item ?? 0, add_to_cart: s.events.add_to_cart ?? 0, begin_checkout: s.events.begin_checkout ?? 0, purchase: s.orders }))}
+                cols={[{ key: "dag", label: "Dag", fmt: dmy }, { key: "view_item", label: "view_item" }, { key: "add_to_cart", label: "add_to_cart" }, { key: "begin_checkout", label: "begin_checkout" }, { key: "purchase", label: "purchase (Shopify)" }]} />
+            </Section>
+          </TabsContent>
 
-        {/* 4. Trechter */}
-        <PanelBox
-          title="Trechter, laatste 7 dagen"
-          source="Eigen bezoekmeting en Shopify"
-          fetchedAt={summary?.analytics.fetchedAt ?? null}
-          note="Eigen bezoeken zijn uit deze cijfers gefilterd."
-        >
-          {summary?.analytics.error ? (
-            <Unavailable reason={summary.analytics.error} />
-          ) : (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                { label: "Productpagina bekeken", value: week.productViews },
-                { label: "In winkelwagen", value: week.addToCart },
-                { label: "Afrekenen gestart", value: week.beginCheckout },
-                { label: "Bestellingen", value: week.orders },
-              ].map((step, index, all) => {
-                const previous = index > 0 ? all[index - 1].value : null;
-                const drop =
-                  previous && previous > 0 ? (1 - step.value / previous) * 100 : null;
+          {/* F. Trechter */}
+          <TabsContent value="trechter"><FunnelTab data={data} orders={cur.orders} /></TabsContent>
+
+          {/* G. Instellingen */}
+          <TabsContent value="instellingen"><SettingsTab data={data} onSaved={() => void load(true)} /></TabsContent>
+        </Tabs>
+      )}
+    </main>
+  );
+}
+
+function TrackingLamps({ data, cur, adsStale }: { data: Summary; cur: ReturnType<typeof computeStats>; adsStale: boolean }) {
+  const checkouts = Object.values(data.current.events.perDay).reduce((a, d) => a + (d.begin_checkout ?? 0), 0);
+  const withG = cur.ordersList.filter((o) => o.has_gclid).length;
+  const convValue = cur.ads.reduce<number | null>((a, r) => (r.conversion_value === null ? a : (a ?? 0) + r.conversion_value), null);
+  return (
+    <div className="space-y-2">
+      <Lamp state={data.recentClickIds.length ? "green" : "amber"} title="Klik-ID blijft bewaard tot afrekenen"
+        text={data.recentClickIds.length ? `Laatste opgeslagen: ${dateTime(data.recentClickIds[0].at)}. ${withG} van ${cur.orders} orders in deze periode hebben er een.` : "Nog geen klik-ID bij een afrekening opgeslagen."} />
+      <Lamp state={cur.orders === 0 ? "amber" : checkouts >= cur.orders ? "green" : "red"} title="Aankopen kloppen met gestarte afrekeningen"
+        text={`${checkouts} afrekeningen gestart, ${cur.orders} Shopify-orders. Minder afrekeningen dan orders wijst op een meetlek.`} />
+      <Lamp state={adsStale ? "red" : "green"} title="Advertentiecijfers zijn actueel" text={data.sources.adsScript.updatedAt ? `Laatst ontvangen ${dateTime(data.sources.adsScript.updatedAt)}.` : "Het Google Ads Script heeft nog niets gestuurd."} />
+      <Lamp state={convValue === null ? "amber" : convValue > 0 ? "green" : "red"} title="Conversiewaarde is niet 0"
+        text={convValue === null ? "Geen conversiewaarde beschikbaar (alleen via het Google Ads Script)." : `Conversiewaarde in deze periode: ${eur(convValue)}.`} />
+    </div>
+  );
+}
+
+function AdsTab({ ads, adInclVat, source }: { ads: AdRow[]; adInclVat: boolean; source: string }) {
+  if (!ads.length) return <Section title="Campagnes"><Empty reason="geen advertentiecijfers in deze periode" /></Section>;
+  const vatF = adInclVat ? 1.21 : 1;
+  const enrich = (r: AdRow, spend: number) => ({
+    ...r, spend, ctr: r.impressions ? (r.clicks / r.impressions) * 100 : null, cpc: r.clicks ? spend / r.clicks : null,
+    roas: spend && r.conversion_value !== null ? r.conversion_value / spend : null, cpa: r.conversions ? spend / r.conversions : null,
+  });
+  const camp = adsByCampaign(ads, adInclVat).map((r) => enrich(r, r.spend));
+  const daily = ads.map((r) => enrich(r, r.spend / vatF)).sort((a, b) => (a.date < b.date ? 1 : -1));
+  const t = camp.reduce((a, r) => ({ spend: a.spend + r.spend, clicks: a.clicks + r.clicks, impressions: a.impressions + r.impressions, conversions: a.conversions + r.conversions }), { spend: 0, clicks: 0, impressions: 0, conversions: 0 });
+  const cols = [
+    { key: "spend", label: "Uitgaven", fmt: eur }, { key: "clicks", label: "Klikken", fmt: (v: number) => num(v) }, { key: "impressions", label: "Vertoningen", fmt: (v: number) => num(v) },
+    { key: "ctr", label: "CTR", fmt: pct }, { key: "cpc", label: "CPC", fmt: eur }, { key: "conversions", label: "Conversies", fmt: (v: number) => num(v, 1) },
+    { key: "conversion_value", label: "Conv.waarde", fmt: eur }, { key: "roas", label: "ROAS", fmt: (v: number | null) => num(v, 2) }, { key: "cpa", label: "CPA", fmt: eur },
+    { key: "status", label: "Status", fmt: (v: string | null) => (v ? (v === "ENABLED" ? "actief" : v === "PAUSED" ? "gepauzeerd" : v.toLowerCase()) : "Geen data") },
+  ] as const;
+  return (
+    <>
+      <Section title="Per campagne" note={`Bron: ${source}. Kosten ${adInclVat ? "zonder btw (÷ 1,21)" : "zoals Google ze toont"}.`}>
+        <SortTable csvName="ads-campagnes" rows={camp as any} cols={[{ key: "campaign", label: "Campagne" }, ...cols] as any}
+          total={{ campaign: "Totaal", spend: eur(t.spend), clicks: num(t.clicks), impressions: num(t.impressions), ctr: pct(t.impressions ? (t.clicks / t.impressions) * 100 : null), cpc: eur(t.clicks ? t.spend / t.clicks : null), conversions: num(t.conversions, 1), cpa: eur(t.conversions ? t.spend / t.conversions : null) } as any} />
+      </Section>
+      <Section title="Per dag">
+        <SortTable csvName="ads-per-dag" rows={daily as any} cols={[{ key: "date", label: "Dag", fmt: dmy }, { key: "campaign", label: "Campagne" }, ...cols] as any} />
+      </Section>
+    </>
+  );
+}
+
+function FunnelTab({ data, orders }: { data: Summary; orders: number }) {
+  const devices = Object.keys(data.current.events.funnel).sort((a, b) => (a === "all" ? -1 : b === "all" ? 1 : a.localeCompare(b)));
+  if (!devices.length) return <Section title="Trechter"><Empty reason="geen bezoeken gemeten in deze periode" /></Section>;
+  const names: Record<string, string> = { all: "Alle apparaten", mobile: "Mobiel", desktop: "Desktop", tablet: "Tablet", unknown: "Onbekend" };
+  return (
+    <div className="space-y-5">
+      {devices.map((d) => {
+        const f = data.current.events.funnel[d];
+        const steps: [string, number | null][] = [
+          ["Sessies", f.session ?? 0], ["Productweergaven", f.view_item ?? 0], ["In winkelwagen", f.add_to_cart ?? 0],
+          ["Checkout gestart", f.begin_checkout ?? 0], ["Gekocht (Shopify)", d === "all" ? orders : null],
+        ];
+        return (
+          <Section key={d} title={names[d] ?? d} note={d === "all" ? `Verlaten winkelwagens: ${f.abandoned_carts ?? 0} (wel toegevoegd, nooit afrekenen gestart).` : `Aankopen per apparaat zijn niet beschikbaar: Shopify-orders zijn niet aan een apparaat gekoppeld. Verlaten winkelwagens: ${f.abandoned_carts ?? 0}.`}>
+            <div className="space-y-2">
+              {steps.map(([label, v], i) => {
+                const prevV = i ? steps[i - 1][1] : null;
+                const drop = v !== null && prevV ? (1 - v / prevV) * 100 : null;
+                const width = v !== null && steps[0][1] ? Math.max(2, (v / (steps[0][1] as number)) * 100) : 0;
                 return (
-                  <div key={step.label} className="rounded-md border border-border/60 p-3">
-                    <p className="text-xs text-muted-foreground">{step.label}</p>
-                    <p className="text-lg font-semibold">{step.value}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {drop === null ? "" : `${drop.toFixed(0)}% uitval`}
-                    </p>
+                  <div key={label} className="text-sm">
+                    <div className="flex justify-between"><span>{label}</span><span>{v === null ? "Geen data" : num(v)}{drop !== null ? ` · uitval ${num(drop, 1)}%` : ""}</span></div>
+                    <div className="mt-1 h-2 rounded bg-muted"><div className="h-2 rounded bg-primary" style={{ width: `${width}%` }} /></div>
                   </div>
                 );
               })}
             </div>
-          )}
-        </PanelBox>
+          </Section>
+        );
+      })}
+    </div>
+  );
+}
+
+function SettingsTab({ data, onSaved }: { data: Summary; onSaved: () => void }) {
+  const [costs, setCosts] = useState(() => data.costs.map((c) => ({ ...c, val: String(c.cost_excl_vat).replace(".", ",") })));
+  const s: Settings = data.settings ?? { levy_tiers: [], transaction_rate: 0.025, other_rate: 0.07, tax_reserve_pct: 0, tax_reserve_enabled: false };
+  const [tiers, setTiers] = useState(() => s.levy_tiers.map((t) => ({ min: String(t.min).replace(".", ","), levy: String(t.levy).replace(".", ",") })));
+  const [tx, setTx] = useState(String(s.transaction_rate * 100).replace(".", ","));
+  const [other, setOther] = useState(String(s.other_rate * 100).replace(".", ","));
+  const [taxPct, setTaxPct] = useState(String(s.tax_reserve_pct).replace(".", ","));
+  const [taxOn, setTaxOn] = useState(s.tax_reserve_enabled);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [newRow, setNewRow] = useState({ product: "", variant: "", match_pattern: "", val: "" });
+  const n = (v: string) => { const x = Number(v.replace(",", ".")); return Number.isFinite(x) && x >= 0 ? x : NaN; };
+
+  const save = async () => {
+    setMsg(null);
+    const bad = [...costs.map((c) => n(c.val)), ...tiers.flatMap((t) => [n(t.min), n(t.levy)]), n(tx), n(other), n(taxPct)].some((x) => Number.isNaN(x));
+    if (bad || n(tx) > 50 || n(other) > 50 || n(taxPct) > 100) { setMsg("Controleer de bedragen: alleen positieve getallen, percentages tot 50% (belasting tot 100%)."); return; }
+    for (const c of costs) {
+      if (n(c.val) !== c.cost_excl_vat) {
+        const { error } = await supabase.from("product_costs").update({ cost_excl_vat: n(c.val), updated_at: new Date().toISOString() }).eq("variant_key", c.variant_key);
+        if (error) { setMsg("Opslaan van inkoopprijzen mislukte."); return; }
+      }
+    }
+    if (newRow.product && newRow.match_pattern && newRow.val) {
+      try { new RegExp(newRow.match_pattern, "i"); } catch { setMsg("Het zoekpatroon is ongeldig."); return; }
+      const key = `${newRow.product}-${newRow.variant}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 60);
+      const { error } = await supabase.from("product_costs").insert({ variant_key: key, product: newRow.product.slice(0, 100), variant: newRow.variant.slice(0, 100), match_pattern: newRow.match_pattern.slice(0, 200), cost_excl_vat: n(newRow.val) });
+      if (error) { setMsg("Nieuwe variant opslaan mislukte (bestaat hij al?)."); return; }
+    }
+    const { error } = await supabase.from("dashboard_settings").upsert({
+      id: 1, levy_tiers: tiers.map((t) => ({ min: n(t.min), levy: n(t.levy) })).sort((a, b) => a.min - b.min),
+      transaction_rate: n(tx) / 100, other_rate: n(other) / 100, tax_reserve_pct: n(taxPct), tax_reserve_enabled: taxOn, updated_at: new Date().toISOString(),
+    });
+    if (error) { setMsg("Opslaan van instellingen mislukte."); return; }
+    setMsg("Opgeslagen.");
+    onSaved();
+  };
+
+  return (
+    <div className="space-y-5">
+      <Section title="Inkoopprijzen per variant" note="Inkoop excl. btw. Het zoekpatroon koppelt Shopify-producttitel + variant aan deze prijs (specifiekste patroon wint).">
+        <div className="space-y-2">
+          {costs.map((c, i) => (
+            <div key={c.variant_key} className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="min-w-[220px] flex-1">{c.product} · {c.variant}</span>
+              <span className="text-xs text-muted-foreground">bijgewerkt {dmy(amsDate(c.updated_at))}</span>
+              <Input className="w-28" inputMode="decimal" value={c.val} onChange={(e) => setCosts((cs) => cs.map((x, j) => (j === i ? { ...x, val: e.target.value } : x)))} aria-label={`Inkoop ${c.product} ${c.variant}`} />
+            </div>
+          ))}
+          <div className="flex flex-wrap gap-2 border-t border-border pt-3">
+            <Input className="w-40" placeholder="Product" value={newRow.product} onChange={(e) => setNewRow({ ...newRow, product: e.target.value })} />
+            <Input className="w-36" placeholder="Variant" value={newRow.variant} onChange={(e) => setNewRow({ ...newRow, variant: e.target.value })} />
+            <Input className="w-48" placeholder="Zoekpatroon, bijv. wave.*30" value={newRow.match_pattern} onChange={(e) => setNewRow({ ...newRow, match_pattern: e.target.value })} />
+            <Input className="w-28" placeholder="Inkoop" inputMode="decimal" value={newRow.val} onChange={(e) => setNewRow({ ...newRow, val: e.target.value })} />
+          </div>
+        </div>
+      </Section>
+      <Section title="Importheffing per zending" note="Eén keer per bestelling, op basis van de totale inkoop van die bestelling (staffel Nova).">
+        {tiers.map((t, i) => (
+          <div key={i} className="mb-2 flex items-center gap-2 text-sm">
+            <span>vanaf €</span><Input className="w-24" inputMode="decimal" value={t.min} onChange={(e) => setTiers((ts) => ts.map((x, j) => (j === i ? { ...x, min: e.target.value } : x)))} />
+            <span>inkoop: heffing €</span><Input className="w-24" inputMode="decimal" value={t.levy} onChange={(e) => setTiers((ts) => ts.map((x, j) => (j === i ? { ...x, levy: e.target.value } : x)))} />
+          </div>
+        ))}
+      </Section>
+      <Section title="Kosten en belasting" note="Belastingreservering is een indicatie, geen fiscaal advies.">
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <label className="flex items-center gap-2">Transactiekosten %<Input className="w-20" inputMode="decimal" value={tx} onChange={(e) => setTx(e.target.value)} /></label>
+          <label className="flex items-center gap-2">Overige kosten %<Input className="w-20" inputMode="decimal" value={other} onChange={(e) => setOther(e.target.value)} /></label>
+          <label className="flex items-center gap-2"><Switch checked={taxOn} onCheckedChange={setTaxOn} />Belastingreservering</label>
+          <label className="flex items-center gap-2">% over winst<Input className="w-20" inputMode="decimal" value={taxPct} onChange={(e) => setTaxPct(e.target.value)} /></label>
+        </div>
+      </Section>
+      <Section title="Eigen verkeer" note="Dit apparaat is gemarkeerd als eigen verkeer zodra je het dashboard opent. Op een ander apparaat: open de site één keer met ?intern=1 (en ?intern=0 om het weer te wissen).">
+        <p className="flex items-center gap-2 text-sm"><CircleDot className="h-4 w-4 text-primary" />Dit apparaat: {/(?:^|;\s*)sg_internal=1/.test(document.cookie) ? "gemarkeerd als eigen verkeer" : "niet gemarkeerd"}</p>
+      </Section>
+      <div className="flex items-center gap-3">
+        <Button onClick={() => void save()}>Opslaan</Button>
+        {msg && <span className="text-sm text-muted-foreground">{msg}</span>}
       </div>
-    </main>
+    </div>
   );
 }

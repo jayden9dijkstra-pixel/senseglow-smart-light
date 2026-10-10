@@ -37,7 +37,7 @@ export function LanguageChooser() {
     }
   };
 
-  if (!open) return null;
+  if (!open || window.location.pathname.startsWith("/admin")) return null;
 
   const choose = (locale: Locale) => {
     setOpen(false);
