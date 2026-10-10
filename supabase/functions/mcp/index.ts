@@ -217,18 +217,260 @@ var search_products_default = defineTool3({
   }
 });
 
+// src/lib/mcp/tools/private-tools.ts
+import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.24.0";
+import { z as z4 } from "npm:zod@^4.4.3";
+
+// src/lib/mcp/private-data.ts
+import { z as z3 } from "npm:zod@^4.4.3";
+var SUPABASE_URL = "https://bepcnohdxsoxhdjlviqu.supabase.co";
+var ANON_KEY = "sb_publishable_QI0uxB61jB3uzWSvX9ogmA_7DIvx3ts";
+var MAX_DAYS = 90;
+var MAX_ROWS = 250;
+var rangeSchema = {
+  date_from: z3.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe("Startdatum YYYY-MM-DD"),
+  date_to: z3.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe("Einddatum YYYY-MM-DD (inclusief), max 90 dagen na start")
+};
+function parseRange(from, to) {
+  const start = /* @__PURE__ */ new Date(`${from}T00:00:00Z`);
+  const end = /* @__PURE__ */ new Date(`${to}T00:00:00Z`);
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) throw new UserError("Ongeldige datum.");
+  if (end < start) throw new UserError("date_to ligt voor date_from.");
+  const days = (end.getTime() - start.getTime()) / 864e5 + 1;
+  if (days > MAX_DAYS) throw new UserError(`Maximaal ${MAX_DAYS} dagen per verzoek.`);
+  const endExclusive = new Date(end.getTime() + 864e5);
+  return { fromIso: start.toISOString(), toIso: endExclusive.toISOString(), fromDate: from, toDate: to };
+}
+var UserError = class extends Error {
+};
+async function rest(token, path) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: { apikey: ANON_KEY, Authorization: `Bearer ${token}`, Accept: "application/json" }
+  });
+  if (!res.ok) throw new Error(`query failed ${res.status}`);
+  return await res.json();
+}
+async function requireAdmin(ctx) {
+  const token = ctx.getToken();
+  const uid = ctx.getUserId();
+  if (!ctx.isAuthenticated() || !token || !uid) throw new UserError("Niet ingelogd.");
+  const roles = await rest(token, `user_roles?select=role&user_id=eq.${encodeURIComponent(uid)}`);
+  if (!roles.some((r) => r.role === "admin")) throw new UserError("Geen toegang: alleen de beheerder.");
+  return (path) => rest(token, path);
+}
+function ok(data) {
+  return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }], structuredContent: data };
+}
+function fail(err) {
+  const msg = err instanceof UserError ? err.message : "Gegevens konden niet worden opgehaald.";
+  return { content: [{ type: "text", text: msg }], isError: true };
+}
+var TEST_ORDERS = ["#1003", "#1004", "#1006"];
+async function loadOrders(read, fromIso, toIso, limit = MAX_ROWS) {
+  const rows = await read(
+    `shop_orders?select=order_number,ordered_at,total,currency,financial_status,line_items,cart_token,gclid,utm_source,utm_medium,utm_campaign&ordered_at=gte.${encodeURIComponent(fromIso)}&ordered_at=lt.${encodeURIComponent(toIso)}&order=ordered_at.desc&limit=${limit}`
+  );
+  const tokens = rows.map((r) => r.cart_token).filter(Boolean);
+  const attr = /* @__PURE__ */ new Map();
+  if (tokens.length) {
+    const list = tokens.map((t) => `"${t.replace(/"/g, "")}"`).join(",");
+    for (const a of await read(`checkout_attribution?select=cart_token,gclid,gbraid,wbraid,utm_source,utm_medium,utm_campaign&cart_token=in.(${encodeURIComponent(list)})`)) {
+      attr.set(a.cart_token, a);
+    }
+  }
+  return rows.map((r) => {
+    const a = attr.get(r.cart_token) ?? {};
+    return {
+      order_number: r.order_number,
+      ordered_at: r.ordered_at,
+      total: Number(r.total),
+      currency: r.currency,
+      status: r.financial_status,
+      is_test: TEST_ORDERS.includes(r.order_number),
+      country: null,
+      // niet opgeslagen
+      line_items: (r.line_items ?? []).map((li) => ({
+        product: li.title,
+        variant: li.variant_title,
+        quantity: li.quantity,
+        price: Number(li.price)
+      })),
+      attribution: {
+        has_gclid: Boolean(r.gclid || a.gclid || a.gbraid || a.wbraid),
+        utm_source: r.utm_source ?? a.utm_source ?? null,
+        utm_medium: r.utm_medium ?? a.utm_medium ?? null,
+        utm_campaign: r.utm_campaign ?? a.utm_campaign ?? null
+      }
+    };
+  });
+}
+
+// src/lib/mcp/tools/private-tools.ts
+var RO = { readOnlyHint: true, idempotentHint: true, openWorldHint: false };
+var getOrders = defineTool4({
+  name: "get_orders",
+  title: "Get orders (admin)",
+  description: "Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
+  inputSchema: { ...rangeSchema, limit: z4.number().int().min(1).max(MAX_ROWS).default(50) },
+  annotations: RO,
+  handler: async ({ date_from, date_to, limit }, ctx) => {
+    try {
+      const read = await requireAdmin(ctx);
+      const r = parseRange(date_from, date_to);
+      const orders = await loadOrders(read, r.fromIso, r.toIso, limit);
+      return ok({ range: r, count: orders.length, orders });
+    } catch (e) {
+      return fail(e);
+    }
+  }
+});
+var getSalesSummary = defineTool4({
+  name: "get_sales_summary",
+  title: "Sales summary (admin)",
+  description: "Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
+  inputSchema: rangeSchema,
+  annotations: RO,
+  handler: async ({ date_from, date_to }, ctx) => {
+    try {
+      const read = await requireAdmin(ctx);
+      const r = parseRange(date_from, date_to);
+      const orders = (await loadOrders(read, r.fromIso, r.toIso)).filter((o) => !o.is_test && o.status !== "refunded");
+      const revenue = orders.reduce((s, o) => s + o.total, 0);
+      const perDay = {};
+      const perProduct = {};
+      for (const o of orders) {
+        const d = o.ordered_at.slice(0, 10);
+        perDay[d] ??= { orders: 0, revenue: 0 };
+        perDay[d].orders++;
+        perDay[d].revenue += o.total;
+        for (const li of o.line_items) {
+          perProduct[li.product] ??= { quantity: 0, revenue: 0 };
+          perProduct[li.product].quantity += li.quantity;
+          perProduct[li.product].revenue += li.price * li.quantity;
+        }
+      }
+      return ok({
+        range: r,
+        currency: "EUR",
+        orders: orders.length,
+        revenue: Math.round(revenue * 100) / 100,
+        average_order_value: orders.length ? Math.round(revenue / orders.length * 100) / 100 : null,
+        per_day: perDay,
+        per_product_gross_line_value: perProduct
+      });
+    } catch (e) {
+      return fail(e);
+    }
+  }
+});
+var getFunnel = defineTool4({
+  name: "get_funnel",
+  title: "Funnel (admin)",
+  description: "Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+  inputSchema: rangeSchema,
+  annotations: RO,
+  handler: async ({ date_from, date_to }, ctx) => {
+    try {
+      const read = await requireAdmin(ctx);
+      const r = parseRange(date_from, date_to);
+      const events = [];
+      for (let offset = 0; offset < 5e4; offset += 1e3) {
+        const page = await read(
+          `site_events?select=session_id,event_type&internal=eq.false&created_at=gte.${encodeURIComponent(r.fromIso)}&created_at=lt.${encodeURIComponent(r.toIso)}&order=created_at.asc&limit=1000&offset=${offset}`
+        );
+        events.push(...page);
+        if (page.length < 1e3) break;
+      }
+      const sessions = /* @__PURE__ */ new Set();
+      const by = { view_item: /* @__PURE__ */ new Set(), add_to_cart: /* @__PURE__ */ new Set(), begin_checkout: /* @__PURE__ */ new Set() };
+      const counts = { view_item: 0, add_to_cart: 0, begin_checkout: 0 };
+      for (const ev of events) {
+        sessions.add(ev.session_id);
+        if (ev.event_type in by) {
+          by[ev.event_type].add(ev.session_id);
+          counts[ev.event_type]++;
+        }
+      }
+      const abandoned = [...by.add_to_cart].filter((s) => !by.begin_checkout.has(s)).length;
+      const purchases = (await loadOrders(read, r.fromIso, r.toIso)).filter((o) => !o.is_test).length;
+      return ok({
+        range: r,
+        internal_traffic_excluded: true,
+        sessions: sessions.size,
+        events: counts,
+        sessions_with: { view_item: by.view_item.size, add_to_cart: by.add_to_cart.size, begin_checkout: by.begin_checkout.size },
+        purchases,
+        abandoned_carts: abandoned,
+        note: "Abandoned carts are sessions that added to cart but never started checkout. Checkout abandonment inside Shopify is not stored."
+      });
+    } catch (e) {
+      return fail(e);
+    }
+  }
+});
+var getAttribution = defineTool4({
+  name: "get_attribution",
+  title: "Attribution (admin)",
+  description: "Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
+  inputSchema: rangeSchema,
+  annotations: RO,
+  handler: async ({ date_from, date_to }, ctx) => {
+    try {
+      const read = await requireAdmin(ctx);
+      const r = parseRange(date_from, date_to);
+      const orders = (await loadOrders(read, r.fromIso, r.toIso)).filter((o) => !o.is_test && o.status !== "refunded");
+      const group = (key) => {
+        const out = {};
+        for (const o of orders) {
+          const k = key(o);
+          out[k] ??= { orders: 0, revenue: 0 };
+          out[k].orders++;
+          out[k].revenue = Math.round((out[k].revenue + o.total) * 100) / 100;
+        }
+        return out;
+      };
+      return ok({
+        range: r,
+        per_campaign: group((o) => o.attribution.utm_campaign ?? "(none)"),
+        per_source: group((o) => o.attribution.has_gclid ? "google_ads (gclid)" : o.attribution.utm_source ?? "(unknown)")
+      });
+    } catch (e) {
+      return fail(e);
+    }
+  }
+});
+var getAdsDaily = defineTool4({
+  name: "get_ads_daily",
+  title: "Google Ads daily (admin)",
+  description: "Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
+  inputSchema: rangeSchema,
+  annotations: RO,
+  handler: async ({ date_from, date_to }, ctx) => {
+    try {
+      const read = await requireAdmin(ctx);
+      const r = parseRange(date_from, date_to);
+      const rows = await read(
+        `ads_daily?select=date,campaign,spend,clicks,impressions,conversions,conversion_value&date=gte.${r.fromDate}&date=lte.${r.toDate}&order=date.asc&limit=${MAX_ROWS * 4}`
+      );
+      return ok({ range: r, rows, note: rows.length ? void 0 : "No rows yet: ads_daily is empty until the Google Ads Script writes to it." });
+    } catch (e) {
+      return fail(e);
+    }
+  }
+});
+
 // src/lib/mcp/index.ts
 var projectRef = "bepcnohdxsoxhdjlviqu";
 var mcp_default = defineMcp({
   name: "senseglow-mcp",
   title: "SenseGlow Shop",
-  version: "0.2.0",
-  instructions: "Read-only access to SenseGlow's public product catalog (senseglow.shop). Sign in with your SenseGlow account. Use `list_products` to see all products, `search_products` to find products by keyword, and `get_product` to fetch full details (variants, images, prices) for a specific product by its handle.",
+  version: "0.3.0",
+  instructions: "Read-only access to SenseGlow. Catalog tools (`list_products`, `search_products`, `get_product`) work for any signed-in account. Business tools (`get_orders`, `get_sales_summary`, `get_funnel`, `get_attribution`, `get_ads_daily`) only work for the admin account, take date_from/date_to (YYYY-MM-DD, max 90 days) and never return personal data.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated"
   }),
-  tools: [list_products_default, get_product_default, search_products_default]
+  tools: [list_products_default, get_product_default, search_products_default, getOrders, getSalesSummary, getFunnel, getAttribution, getAdsDaily]
 });
 
 // lovable-mcp-supabase-entry.ts
