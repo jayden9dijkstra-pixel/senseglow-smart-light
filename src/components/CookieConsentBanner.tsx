@@ -203,7 +203,7 @@ export function CookieConsentBanner() {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  if (!visible || window.location.pathname.startsWith("/admin")) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[95] flex items-center justify-center px-4">
