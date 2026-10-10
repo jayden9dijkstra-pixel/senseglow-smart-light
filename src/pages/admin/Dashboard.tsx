@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2, RefreshCw } from "lucide-react";
-import { VAT_DIVISOR, contributionMargin, formatDateNl, formatEuro } from "@/lib/margins";
+import { VAT_DIVISOR, formatDateNl, formatEuro, orderLineMargins } from "@/lib/margins";
 
 type Panel<T> = {
   data: T | null;
@@ -197,10 +197,9 @@ export default function AdminDashboard() {
       let marginKnown = true;
       let margin = 0;
       for (const order of periodOrders) {
-        for (const line of order.line_items) {
-          const perUnit = contributionMargin(line.price, line.title, line.variant_title);
-          if (perUnit === null) marginKnown = false;
-          else margin += perUnit * line.quantity;
+        for (const lineMargin of orderLineMargins(order.line_items)) {
+          if (lineMargin === null) marginKnown = false;
+          else margin += lineMargin;
         }
       }
       // Advertentiekosten zonder btw: de btw krijg je terug, dus die drukt niet op de marge.
@@ -247,7 +246,8 @@ export default function AdminDashboard() {
       { title: string; units: number; revenue: number; margin: number | null; orders: Set<string> }
     >();
     for (const order of orders) {
-      for (const line of order.line_items) {
+      const lineMargins = orderLineMargins(order.line_items);
+      for (const [lineIndex, line] of order.line_items.entries()) {
         const entry = map.get(line.title) ?? {
           title: line.title,
           units: 0,
@@ -257,9 +257,9 @@ export default function AdminDashboard() {
         };
         entry.units += line.quantity;
         entry.revenue += line.price * line.quantity;
-        const perUnit = contributionMargin(line.price, line.title, line.variant_title);
+        const lineMargin = lineMargins[lineIndex];
         entry.margin =
-          entry.margin === null || perUnit === null ? null : entry.margin + perUnit * line.quantity;
+          entry.margin === null || lineMargin === null ? null : entry.margin + lineMargin;
         entry.orders.add(order.order_number);
         map.set(line.title, entry);
       }
