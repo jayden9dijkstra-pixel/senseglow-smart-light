@@ -17,6 +17,7 @@ export type Database = {
       ads_daily: {
         Row: {
           campaign: string
+          campaign_id: string
           clicks: number
           conversion_value: number
           conversions: number
@@ -24,10 +25,13 @@ export type Database = {
           id: string
           impressions: number
           spend: number
+          status: string | null
           synced_at: string
+          updated_at: string
         }
         Insert: {
           campaign: string
+          campaign_id?: string
           clicks?: number
           conversion_value?: number
           conversions?: number
@@ -35,10 +39,13 @@ export type Database = {
           id?: string
           impressions?: number
           spend?: number
+          status?: string | null
           synced_at?: string
+          updated_at?: string
         }
         Update: {
           campaign?: string
+          campaign_id?: string
           clicks?: number
           conversion_value?: number
           conversions?: number
@@ -46,7 +53,9 @@ export type Database = {
           id?: string
           impressions?: number
           spend?: number
+          status?: string | null
           synced_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -137,6 +146,36 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_settings: {
+        Row: {
+          id: number
+          levy_tiers: Json
+          other_rate: number
+          tax_reserve_enabled: boolean
+          tax_reserve_pct: number
+          transaction_rate: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          levy_tiers?: Json
+          other_rate?: number
+          tax_reserve_enabled?: boolean
+          tax_reserve_pct?: number
+          transaction_rate?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          levy_tiers?: Json
+          other_rate?: number
+          tax_reserve_enabled?: boolean
+          tax_reserve_pct?: number
+          transaction_rate?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_lookups: {
         Row: {
           created_at: string
@@ -161,9 +200,40 @@ export type Database = {
         }
         Relationships: []
       }
+      product_costs: {
+        Row: {
+          cost_excl_vat: number
+          id: string
+          match_pattern: string
+          product: string
+          updated_at: string
+          variant: string
+          variant_key: string
+        }
+        Insert: {
+          cost_excl_vat: number
+          id?: string
+          match_pattern: string
+          product: string
+          updated_at?: string
+          variant?: string
+          variant_key: string
+        }
+        Update: {
+          cost_excl_vat?: number
+          id?: string
+          match_pattern?: string
+          product?: string
+          updated_at?: string
+          variant?: string
+          variant_key?: string
+        }
+        Relationships: []
+      }
       shop_orders: {
         Row: {
           cart_token: string | null
+          country_code: string | null
           currency: string
           financial_status: string | null
           gclid: string | null
@@ -183,6 +253,7 @@ export type Database = {
         }
         Insert: {
           cart_token?: string | null
+          country_code?: string | null
           currency?: string
           financial_status?: string | null
           gclid?: string | null
@@ -202,6 +273,7 @@ export type Database = {
         }
         Update: {
           cart_token?: string | null
+          country_code?: string | null
           currency?: string
           financial_status?: string | null
           gclid?: string | null
