@@ -96,11 +96,13 @@ Deno.serve(async (req) => {
 
     const { error } = await supabase
       .from("checkout_attribution")
-      .upsert(record, { onConflict: "cart_token" });
+      // Alleen nieuw vastleggen: bestaande herkomst kan nooit door een
+      // anonieme aanroep overschreven worden.
+      .upsert(record, { onConflict: "cart_token", ignoreDuplicates: true });
 
     if (error) {
       console.error("attribution insert failed:", error.message);
-      return json({ error: error.message }, 500);
+      return json({ error: "store_failed" }, 500);
     }
 
     return json({ stored: true });

@@ -13,10 +13,13 @@ Deno.serve(async (req) => {
   const json = (b: unknown, s = 200) =>
     new Response(JSON.stringify(b), { status: s, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const token = req.headers.get("x-cron-token") ?? "";
+  const { data: ok } = await admin.rpc("verify_cron_token", { _name: "shopify-orders-sync", _token: token });
+  if (ok !== true) return json({ error: "unauthorized" }, 401);
   if (Date.now() - lastRun < 60_000) return json({ skipped: true });
   lastRun = Date.now();
   try {
-    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const synced = await syncOrders(admin, 90);
     return json({ synced });
   } catch (e) {
