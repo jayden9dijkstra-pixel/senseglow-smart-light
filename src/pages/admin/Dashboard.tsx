@@ -111,7 +111,11 @@ function SortTable<T extends Record<string, unknown>>({ rows, cols, total, csvNa
     });
   }, [rows, sort]);
   const exportCsv = () => {
-    const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const esc = (v: unknown) => {
+      let s = String(v ?? "");
+      if (typeof v !== "number" && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+      return `"${s.replace(/"/g, '""')}"`;
+    };
     const lines = [cols.map((c) => esc(c.label)).join(";"), ...sorted.map((r) => cols.map((c) => esc(typeof r[c.key] === "number" ? String(r[c.key]).replace(".", ",") : r[c.key])).join(";"))];
     const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
     const a = document.createElement("a");
