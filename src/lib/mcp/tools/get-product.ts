@@ -5,11 +5,11 @@ import { getProductByHandle } from "../shopify-client";
 export default defineTool({
   name: "get_product",
   title: "Get product",
-  description: "Get full details for a single SenseGlow product by its handle (e.g. 'senseglow_wave'): description, images, variants (color/size), prices, availability, and product page URL.",
+  description: "Read-only. Returns no personal data. Get full details for a single SenseGlow product by its handle (e.g. 'senseglow_wave'): description, images, variants (color/size), prices, availability, and product page URL.",
   inputSchema: {
     handle: z.string().min(1).describe("The product handle, e.g. 'senseglow_wave' or 'senseglow_ambient_motion_bar'."),
   },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   handler: async ({ handle }, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };

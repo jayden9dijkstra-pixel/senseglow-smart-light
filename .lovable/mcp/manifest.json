@@ -19,11 +19,12 @@
       {
         "name": "list_products",
         "title": "List products",
-        "description": "List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
+        "description": "Read-only. Returns no personal data. List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": false
         },
         "inputSchema": {
           "$schema": "http://json-schema.org/draft-07/schema#",
@@ -35,11 +36,12 @@
       {
         "name": "get_product",
         "title": "Get product",
-        "description": "Get full details for a single SenseGlow product by its handle (e.g. 'senseglow_wave'): description, images, variants (color/size), prices, availability, and product page URL.",
+        "description": "Read-only. Returns no personal data. Get full details for a single SenseGlow product by its handle (e.g. 'senseglow_wave'): description, images, variants (color/size), prices, availability, and product page URL.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": false
         },
         "inputSchema": {
           "$schema": "http://json-schema.org/draft-07/schema#",
@@ -60,11 +62,12 @@
       {
         "name": "search_products",
         "title": "Search products",
-        "description": "Search SenseGlow products by keyword (matches title, description, tags). Returns summaries with prices and product page URLs.",
+        "description": "Read-only. Returns no personal data. Search SenseGlow products by keyword (matches title, description, tags). Returns summaries with prices and product page URLs.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
-          "openWorldHint": true
+          "openWorldHint": false
         },
         "inputSchema": {
           "$schema": "http://json-schema.org/draft-07/schema#",
@@ -92,9 +95,10 @@
       {
         "name": "get_orders",
         "title": "Get orders (admin)",
-        "description": "Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
+        "description": "Read-only. Returns no personal data. Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
           "openWorldHint": false
         },
@@ -129,9 +133,10 @@
       {
         "name": "get_sales_summary",
         "title": "Sales summary (admin)",
-        "description": "Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
+        "description": "Read-only. Returns no personal data. Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
           "openWorldHint": false
         },
@@ -160,9 +165,10 @@
       {
         "name": "get_funnel",
         "title": "Funnel (admin)",
-        "description": "Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+        "description": "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
           "openWorldHint": false
         },
@@ -191,9 +197,10 @@
       {
         "name": "get_attribution",
         "title": "Attribution (admin)",
-        "description": "Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
+        "description": "Read-only. Returns no personal data. Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
           "openWorldHint": false
         },
@@ -222,9 +229,10 @@
       {
         "name": "get_ads_daily",
         "title": "Google Ads daily (admin)",
-        "description": "Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
+        "description": "Read-only. Returns no personal data. Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
         "annotations": {
           "readOnlyHint": true,
+          "destructiveHint": false,
           "idempotentHint": true,
           "openWorldHint": false
         },

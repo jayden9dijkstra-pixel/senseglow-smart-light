@@ -5,12 +5,12 @@ import { searchProducts } from "../shopify-client";
 export default defineTool({
   name: "search_products",
   title: "Search products",
-  description: "Search SenseGlow products by keyword (matches title, description, tags). Returns summaries with prices and product page URLs.",
+  description: "Read-only. Returns no personal data. Search SenseGlow products by keyword (matches title, description, tags). Returns summaries with prices and product page URLs.",
   inputSchema: {
     query: z.string().min(1).describe("Search keywords, e.g. 'wave', 'solar lantern', 'motion sensor'."),
     limit: z.number().int().min(1).max(20).default(10).describe("Maximum results to return (1-20)."),
   },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   handler: async ({ query, limit }, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };

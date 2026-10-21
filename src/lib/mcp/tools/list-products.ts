@@ -4,9 +4,9 @@ import { listEnabledProducts } from "../shopify-client";
 export default defineTool({
   name: "list_products",
   title: "List products",
-  description: "List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
+  description: "Read-only. Returns no personal data. List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   handler: async (_input, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };

@@ -2,12 +2,12 @@ import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { fail, loadOrders, MAX_ROWS, ok, parseRange, rangeSchema, requireAdmin } from "../private-data";
 
-const RO = { readOnlyHint: true, idempotentHint: true, openWorldHint: false } as const;
+const RO = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } as const;
 
 export const getOrders = defineTool({
   name: "get_orders",
   title: "Get orders (admin)",
-  description: "Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
+  description: "Read-only. Returns no personal data. Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
   inputSchema: { ...rangeSchema, limit: z.number().int().min(1).max(MAX_ROWS).default(50) },
   annotations: RO,
   handler: async ({ date_from, date_to, limit }, ctx) => {
@@ -23,7 +23,7 @@ export const getOrders = defineTool({
 export const getSalesSummary = defineTool({
   name: "get_sales_summary",
   title: "Sales summary (admin)",
-  description: "Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
+  description: "Read-only. Returns no personal data. Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -57,7 +57,7 @@ export const getSalesSummary = defineTool({
 export const getFunnel = defineTool({
   name: "get_funnel",
   title: "Funnel (admin)",
-  description: "Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -97,7 +97,7 @@ export const getFunnel = defineTool({
 export const getAttribution = defineTool({
   name: "get_attribution",
   title: "Attribution (admin)",
-  description: "Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
+  description: "Read-only. Returns no personal data. Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -126,7 +126,7 @@ export const getAttribution = defineTool({
 export const getAdsDaily = defineTool({
   name: "get_ads_daily",
   title: "Google Ads daily (admin)",
-  description: "Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
+  description: "Read-only. Returns no personal data. Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {

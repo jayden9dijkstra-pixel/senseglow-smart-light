@@ -149,9 +149,9 @@ async function getProductByHandle(handle) {
 var list_products_default = defineTool({
   name: "list_products",
   title: "List products",
-  description: "List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
+  description: "Read-only. Returns no personal data. List all SenseGlow products currently sold on senseglow.shop, with price range, description, and product page URL.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   handler: async (_input, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
@@ -170,11 +170,11 @@ import { z } from "npm:zod@^4.4.3";
 var get_product_default = defineTool2({
   name: "get_product",
   title: "Get product",
-  description: "Get full details for a single SenseGlow product by its handle (e.g. 'senseglow_wave'): description, images, variants (color/size), prices, availability, and product page URL.",
+  description: "Read-only. Returns no personal data. Get full details for a single SenseGlow product by its handle (e.g. 'senseglow_wave'): description, images, variants (color/size), prices, availability, and product page URL.",
   inputSchema: {
     handle: z.string().min(1).describe("The product handle, e.g. 'senseglow_wave' or 'senseglow_ambient_motion_bar'.")
   },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   handler: async ({ handle }, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
@@ -199,12 +199,12 @@ import { z as z2 } from "npm:zod@^4.4.3";
 var search_products_default = defineTool3({
   name: "search_products",
   title: "Search products",
-  description: "Search SenseGlow products by keyword (matches title, description, tags). Returns summaries with prices and product page URLs.",
+  description: "Read-only. Returns no personal data. Search SenseGlow products by keyword (matches title, description, tags). Returns summaries with prices and product page URLs.",
   inputSchema: {
     query: z2.string().min(1).describe("Search keywords, e.g. 'wave', 'solar lantern', 'motion sensor'."),
     limit: z2.number().int().min(1).max(20).default(10).describe("Maximum results to return (1-20).")
   },
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   handler: async ({ query, limit }, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
@@ -307,11 +307,11 @@ async function loadOrders(read, fromIso, toIso, limit = MAX_ROWS) {
 }
 
 // src/lib/mcp/tools/private-tools.ts
-var RO = { readOnlyHint: true, idempotentHint: true, openWorldHint: false };
+var RO = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 var getOrders = defineTool4({
   name: "get_orders",
   title: "Get orders (admin)",
-  description: "Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
+  description: "Read-only. Returns no personal data. Orders in a date range: number, time, total, line items, status, attribution (gclid yes/no, utm). No personal data. Country is not stored and returns null. Admin only.",
   inputSchema: { ...rangeSchema, limit: z4.number().int().min(1).max(MAX_ROWS).default(50) },
   annotations: RO,
   handler: async ({ date_from, date_to, limit }, ctx) => {
@@ -328,7 +328,7 @@ var getOrders = defineTool4({
 var getSalesSummary = defineTool4({
   name: "get_sales_summary",
   title: "Sales summary (admin)",
-  description: "Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
+  description: "Read-only. Returns no personal data. Revenue, order count, average order value, per product and per day. Test orders are excluded. Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -367,7 +367,7 @@ var getSalesSummary = defineTool4({
 var getFunnel = defineTool4({
   name: "get_funnel",
   title: "Funnel (admin)",
-  description: "Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -412,7 +412,7 @@ var getFunnel = defineTool4({
 var getAttribution = defineTool4({
   name: "get_attribution",
   title: "Attribution (admin)",
-  description: "Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
+  description: "Read-only. Returns no personal data. Orders and revenue per utm_campaign and per source, based on stored gclid/utm. Test orders excluded. Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -443,7 +443,7 @@ var getAttribution = defineTool4({
 var getAdsDaily = defineTool4({
   name: "get_ads_daily",
   title: "Google Ads daily (admin)",
-  description: "Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
+  description: "Read-only. Returns no personal data. Daily Google Ads cost per campaign from table ads_daily (filled by your Google Ads Script). Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
