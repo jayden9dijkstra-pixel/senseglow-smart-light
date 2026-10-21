@@ -371,6 +371,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      verify_cron_token: {
+        Args: { _name: string; _token: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "user"
