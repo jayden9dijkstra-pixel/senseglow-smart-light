@@ -154,7 +154,7 @@ export default function AdminDashboard() {
   const preset = params.get("p") ?? "7d";
   const { from, to } = rangeFor(preset, params.get("from"), params.get("to"));
   const compare = params.get("cmp") === "1";
-  const excludeInternal = params.get("intern") !== "0";
+  const excludeInternal = params.get("exclude_internal") !== "0";
   const campaign = params.get("campagne") ?? "";
   const variant = params.get("variant") ?? "";
   const tab = params.get("tab") ?? "overzicht";
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <span className="text-muted-foreground">{dmy(from)} t/m {dmy(to)}</span>
           <label className="flex items-center gap-2"><Switch checked={compare} onCheckedChange={(v) => setParam("cmp", v ? "1" : null)} />Vergelijk met vorige periode</label>
-          <label className="flex items-center gap-2"><Switch checked={excludeInternal} onCheckedChange={(v) => setParam("intern", v ? null : "0")} />Eigen verkeer uitsluiten</label>
+          <label className="flex items-center gap-2"><Switch checked={excludeInternal} onCheckedChange={(v) => setParam("exclude_internal", v ? null : "0")} />Eigen verkeer uitsluiten</label>
           <label className="flex items-center gap-2"><Switch checked={adInclVat} onCheckedChange={setAdInclVat} />Advertentiebedrag is incl. btw (÷ 1,21)</label>
           <select className="h-9 rounded-md border border-input bg-background px-2" value={campaign} onChange={(e) => setParam("campagne", e.target.value)}>
             <option value="">Alle campagnes</option>{campaigns.map((c) => <option key={c} value={c}>{c}</option>)}
