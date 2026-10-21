@@ -226,25 +226,11 @@ Deno.serve(async (req) => {
         createdAt: node.createdAt,
         fulfillmentStatus: node.displayFulfillmentStatus ?? null,
         financialStatus: node.displayFinancialStatus ?? null,
-        total: node.totalPriceSet?.shopMoney ?? null,
-        shippingAddress: node.shippingAddress
-          ? {
-              name: node.shippingAddress.name ?? null,
-              address1: node.shippingAddress.address1 ?? null,
-              address2: node.shippingAddress.address2 ?? null,
-              city: node.shippingAddress.city ?? null,
-              zip: node.shippingAddress.zip ?? null,
-              country: node.shippingAddress.country ?? null,
-            }
-          : null,
-        items: (node.lineItems?.edges ?? []).map((e: any) => ({
-          title: e.node.title,
-          variantTitle: e.node.variantTitle ?? null,
-          quantity: e.node.quantity,
-          image: e.node.image?.url ?? null,
-          imageAlt: e.node.image?.altText ?? null,
-          total: e.node.originalTotalSet?.shopMoney ?? null,
-        })),
+        // Bewust geen naam, adres, producten of bedrag: het e-mailadres is
+        // niet geverifieerd, dus alleen status en track & trace.
+        total: null,
+        shippingAddress: null,
+        items: [],
         fulfillment: fulfillment
           ? {
               status: fulfillment.status ?? null,
