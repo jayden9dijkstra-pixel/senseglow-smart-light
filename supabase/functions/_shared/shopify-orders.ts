@@ -6,7 +6,7 @@
 const DOMAIN = Deno.env.get("SHOPIFY_STORE_DOMAIN") ?? "senseglow-smart-light-5jjoq.myshopify.com";
 const TOKEN = Deno.env.get("SHOPIFY_ADMIN_TOKEN") ?? Deno.env.get("SHOPIFY_ACCESS_TOKEN") ?? "";
 const VERSION = "2025-07";
-const FIELDS = "id,name,created_at,total_price,currency,financial_status,cart_token,checkout_token,line_items,shipping_address,billing_address";
+const FIELDS = "id,name,test,source_name,current_subtotal_price,subtotal_price,created_at,total_price,currency,financial_status,cart_token,checkout_token,line_items,shipping_address,billing_address";
 
 export async function fetchShopifyOrders(sinceDays: number): Promise<any[]> {
   if (!TOKEN) throw new Error("Geen Shopify-toegang beschikbaar in de backend.");
@@ -29,6 +29,11 @@ export async function fetchShopifyOrders(sinceDays: number): Promise<any[]> {
   return out;
 }
 
+import { type OrderForExport, orderNumber, rowsToWrite } from "./conversion-row.ts";
+import { appendRows, existingOrderIds } from "./google-sheets.ts";
+
+let lastCandidates: OrderForExport[] = [];
+
 export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
   const orders = await fetchShopifyOrders(sinceDays);
   const tokens = orders.map((o) => o.cart_token || o.checkout_token).filter(Boolean);
@@ -42,7 +47,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
   const ids = orders.map((o) => o.id);
   for (let i = 0; i < ids.length; i += 200) {
     const { data } = await admin.from("shop_orders")
-      .select("shopify_order_id,gclid,utm_source,utm_medium,utm_campaign,utm_term,utm_content,landing_path")
+      .select("shopify_order_id,gclid,ad_consent,utm_source,utm_medium,utm_campaign,utm_term,utm_content,landing_path")
       .in("shopify_order_id", ids.slice(i, i + 200));
     for (const e of data ?? []) existing.set(Number(e.shopify_order_id), e);
   }
@@ -58,6 +63,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
       utm_term: found?.utm_term ?? prev.utm_term ?? null,
       utm_content: found?.utm_content ?? prev.utm_content ?? null,
       landing_path: found?.landing_path ?? prev.landing_path ?? null,
+      ad_consent: found?.ad_consent ?? prev.ad_consent ?? null,
     };
     return {
       shopify_order_id: o.id,
@@ -78,12 +84,46 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
       utm_term: a?.utm_term ?? null,
       utm_content: a?.utm_content ?? null,
       landing_path: a?.landing_path ?? null,
+      ad_consent: a.ad_consent,
       synced_at: new Date().toISOString(),
+    };
+  });
+  lastCandidates = orders.map((o) => {
+    const token = o.cart_token || o.checkout_token || null;
+    const found = token ? attr.get(token) : undefined;
+    const prev = existing.get(Number(o.id)) ?? {};
+    return {
+      order_number: o.name,
+      ordered_at: o.created_at,
+      subtotal: Number(o.current_subtotal_price ?? o.subtotal_price) || 0,
+      financial_status: o.financial_status,
+      // alleen echte gclid; gbraid/wbraid passen niet in deze import
+      gclid: found?.gclid ?? (found ? null : prev.gclid) ?? null,
+      ad_consent: found?.ad_consent ?? prev.ad_consent ?? null,
+      is_test: o.test === true,
+      is_draft: o.source_name === "shopify_draft_order",
     };
   });
   if (rows.length) {
     const { error } = await admin.from("shop_orders").upsert(rows, { onConflict: "shopify_order_id" });
     if (error) throw new Error("Opslaan van bestellingen mislukte.");
+  }
+  return rows.length;
+}
+
+/** Schrijft nieuwe betaalde orders met gclid naar de Google Ads-importsheet. */
+export async function exportConversions(admin: any): Promise<number> {
+  if (!Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON") || !Deno.env.get("ADS_IMPORT_SHEET_ID")) return 0;
+  const { data: done } = await admin.from("ads_conversion_exports").select("order_number");
+  const written = new Set<string>((done ?? []).map((d: any) => d.order_number));
+  const pending = lastCandidates.filter((o) => !written.has(orderNumber(o.order_number)));
+  if (!rowsToWrite(pending, new Set()).length) return 0;
+  const { ids, token } = await existingOrderIds();
+  for (const id of ids) written.add(id);
+  const rows = rowsToWrite(lastCandidates, written);
+  await appendRows(rows, token);
+  if (rows.length) {
+    await admin.from("ads_conversion_exports").upsert(rows.map((r) => ({ order_number: r[5], status: "written" })), { onConflict: "order_number" });
   }
   return rows.length;
 }
