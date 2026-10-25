@@ -14,6 +14,10 @@ function creds(): { client_email: string; private_key: string } {
   if (!raw) throw new Error("Service-account ontbreekt.");
   let t = raw.trim();
   if (!t.startsWith("{")) t = `{${t.replace(/,\s*$/, "")}}`; // geplakt zonder buitenste accolades
+  // Neem het eerste complete JSON-object (negeert extra geplakte tekst erachter).
+  for (let i = t.indexOf("}"); i !== -1; i = t.indexOf("}", i + 1)) {
+    try { return JSON.parse(t.slice(t.indexOf("{"), i + 1)); } catch { /* verder zoeken */ }
+  }
   return JSON.parse(t);
 }
 
