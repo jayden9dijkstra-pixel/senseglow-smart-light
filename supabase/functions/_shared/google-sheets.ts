@@ -48,7 +48,7 @@ export async function accessToken(): Promise<string> {
 
 /** Accepteert een kaal ID of een volledige Sheet-URL. */
 export const sheetId = () => {
-  const raw = (Deno.env.get("ADS_IMPORT_SHEET_ID") ?? "").trim();
+  const raw = (Deno.env.get("ADS_IMPORT_SHEET_URL") || Deno.env.get("ADS_IMPORT_SHEET_ID") || "").trim();
   return raw.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1] ?? raw.replace(/[^a-zA-Z0-9_-]/g, "");
 };
 const base = () => `https://sheets.googleapis.com/v4/spreadsheets/${sheetId()}`;
