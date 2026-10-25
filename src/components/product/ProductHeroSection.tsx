@@ -12,6 +12,8 @@ import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
 import { getProductVideoUrl } from "@/lib/videos";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { formatPrice } from "@/lib/price";
+import { AngleBlock, KitOffers } from "./AngleBlock";
+import { getAngle, getStoredAngle } from "@/lib/angles";
 
 interface HeroContent {
   h1: string;
@@ -53,6 +55,7 @@ export const ProductHeroSection = ({
   const selectedVariant = propVariant ?? localVariant;
   const addItem = useCartStore((state) => state.addItem);
   const [priceKey, setPriceKey] = useState(0);
+  const angle = getAngle(product.node.handle, searchParams.get("a") ?? getStoredAngle());
 
   // Handle URL params for variant selection (from quiz or bundle links)
   useEffect(() => {
@@ -146,10 +149,13 @@ export const ProductHeroSection = ({
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.08]">
                   {content.h1}
                 </h1>
-                <p className="text-base text-muted-foreground leading-relaxed">
-                  {content.subtitle}
-                </p>
               </div>
+              <AngleBlock
+                angle={angle}
+                neutral={content.subtitle}
+                product={product}
+                selectedVariant={selectedVariant}
+              />
 
               <span className="flex" aria-label="5 van 5 sterren">
                 {Array.from({ length: 5 }).map((_, index) => (
@@ -183,15 +189,15 @@ export const ProductHeroSection = ({
                 />
               )}
 
-              {/* 3 Bullets */}
-              <div className="space-y-1.5 py-3 border-y border-foreground/10">
+              {/* 3 Bullets (bij een invalshoek staan de voordelen al in het hoekblok) */}
+              {!angle && <div className="space-y-1.5 py-3 border-y border-foreground/10">
                 {content.bullets.map((bullet, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-glow flex-shrink-0" />
                     <span className="text-sm text-foreground/80">{bullet}</span>
                   </div>
                 ))}
-              </div>
+              </div>}
 
               {/* CTA */}
               <Button
@@ -202,6 +208,8 @@ export const ProductHeroSection = ({
               >
                 {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
               </Button>
+
+              <KitOffers product={product} selectedVariant={selectedVariant} excludeKitId={angle?.kit?.id} />
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-3">
                 <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
