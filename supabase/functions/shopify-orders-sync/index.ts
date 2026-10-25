@@ -5,7 +5,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { exportConversions, syncOrders } from "../_shared/shopify-orders.ts";
-import { serviceAccountEmail } from "../_shared/google-sheets.ts";
+import { accessToken, serviceAccountEmail } from "../_shared/google-sheets.ts";
 
 let lastRun = 0;
 
@@ -28,6 +28,29 @@ Deno.serve(async (req) => {
     if (!isAdmin) return json({ error: "unauthorized" }, 401);
   }
   const body = await req.json().catch(() => ({}));
+  if (isAdmin && body?.mode === "writetest") {
+    const steps: Record<string, unknown> = {};
+    try {
+      const t = await accessToken();
+      const base = `https://sheets.googleapis.com/v4/spreadsheets/${Deno.env.get("ADS_IMPORT_SHEET_ID")}`;
+      const h = { Authorization: `Bearer ${t}`, "Content-Type": "application/json" };
+      let r = await fetch(`${base}:batchUpdate`, { method: "POST", headers: h, body: JSON.stringify({ requests: [{ addSheet: { properties: { title: "Schrijftest" } } }] }) });
+      if (!r.ok) throw new Error(`tabblad maken [${r.status}]: ${await r.text()}`);
+      const sheetId = (await r.json()).replies[0].addSheet.properties.sheetId;
+      steps.tab_created = true;
+      const now = new Date().toISOString();
+      r = await fetch(`${base}/values/Schrijftest!A1:B1?valueInputOption=RAW`, { method: "PUT", headers: h, body: JSON.stringify({ values: [["test", now]] }) });
+      steps.written = r.ok; if (!r.ok) steps.write_error = `${r.status}: ${await r.text()}`;
+      r = await fetch(`${base}/values/Schrijftest!A1:B1`, { headers: h });
+      const read = r.ok ? (await r.json()).values : null;
+      steps.read_back = read; steps.read_matches = JSON.stringify(read) === JSON.stringify([["test", now]]);
+      r = await fetch(`${base}:batchUpdate`, { method: "POST", headers: h, body: JSON.stringify({ requests: [{ deleteSheet: { sheetId } }] }) });
+      steps.tab_deleted = r.ok; if (!r.ok) steps.delete_error = `${r.status}: ${await r.text()}`;
+      return json(steps);
+    } catch (e) {
+      return json({ ...steps, error: e instanceof Error ? e.message : String(e) }, 502);
+    }
+  }
   if (isAdmin && body?.mode === "backfill") {
     try {
       await syncOrders(admin, 90);
