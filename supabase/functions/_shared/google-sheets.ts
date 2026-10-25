@@ -12,7 +12,9 @@ function b64url(data: Uint8Array | string): string {
 function creds(): { client_email: string; private_key: string } {
   const raw = Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON");
   if (!raw) throw new Error("Service-account ontbreekt.");
-  return JSON.parse(raw);
+  let t = raw.trim();
+  if (!t.startsWith("{")) t = `{${t.replace(/,\s*$/, "")}}`; // geplakt zonder buitenste accolades
+  return JSON.parse(t);
 }
 
 export function serviceAccountEmail(): string {
