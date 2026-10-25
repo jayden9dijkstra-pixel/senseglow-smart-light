@@ -5,6 +5,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { exportConversions, syncOrders } from "../_shared/shopify-orders.ts";
+import { serviceAccountEmail } from "../_shared/google-sheets.ts";
 
 let lastRun = 0;
 
@@ -30,11 +31,11 @@ Deno.serve(async (req) => {
   if (isAdmin && body?.mode === "backfill") {
     try {
       await syncOrders(admin, 90);
-      return json({ written: await exportConversions(admin) });
+      return json({ written: await exportConversions(admin), service_account: serviceAccountEmail() });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error("backfill failed:", msg);
-      return json({ error: "backfill_failed", details: msg }, 502);
+      return json({ error: "backfill_failed", details: msg, service_account: (() => { try { return serviceAccountEmail(); } catch { return null; } })() }, 502);
     }
   }
   if (!isAdmin && Date.now() - lastRun < 60_000) return json({ skipped: true });
