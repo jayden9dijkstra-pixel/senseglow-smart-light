@@ -113,7 +113,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
 
 /** Schrijft nieuwe betaalde orders met gclid naar de Google Ads-importsheet. */
 export async function exportConversions(admin: any): Promise<number> {
-  if (!Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON") || !Deno.env.get("ADS_IMPORT_SHEET_ID")) return 0;
+  if (!Deno.env.get("GOOGLE_SERVICE_ACCOUNT_JSON") || !(Deno.env.get("ADS_IMPORT_SHEET_URL") || Deno.env.get("ADS_IMPORT_SHEET_ID"))) return 0;
   const { data: done } = await admin.from("ads_conversion_exports").select("order_number");
   const written = new Set<string>((done ?? []).map((d: any) => d.order_number));
   const pending = lastCandidates.filter((o) => !written.has(orderNumber(o.order_number)));
