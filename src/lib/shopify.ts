@@ -322,6 +322,16 @@ export async function createStorefrontCheckout(
   return appendClickIdsToUrl(url.toString());
 }
 
+/** Cookiekeuze van de bezoeker voor advertentiemeting. */
+function readAdConsent(): 'granted' | 'denied' | null {
+  try {
+    const v = window.localStorage.getItem('sg_consent') ?? document.cookie.match(/(?:^|;\s*)sg_consent=(all|necessary)/)?.[1];
+    return v === 'all' ? 'granted' : v === 'necessary' ? 'denied' : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Bewaar cart-kenmerk plus herkomst in de eigen backend. Faalt stil. */
 async function storeCheckoutAttribution(checkoutPath: string): Promise<void> {
   try {
@@ -331,7 +341,7 @@ async function storeCheckoutAttribution(checkoutPath: string): Promise<void> {
     const landingPath = typeof window !== 'undefined' ? window.location.pathname : undefined;
     if (Object.keys(attribution).length === 0 && !landingPath) return;
     await supabase.functions.invoke('attribution-capture', {
-      body: { cart_token: token, landing_path: landingPath, ...attribution },
+      body: { cart_token: token, landing_path: landingPath, ad_consent: readAdConsent(), ...attribution },
     });
   } catch {
     // meting mag het afrekenen nooit blokkeren

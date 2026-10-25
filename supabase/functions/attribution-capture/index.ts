@@ -84,6 +84,9 @@ Deno.serve(async (req) => {
 
     const record: Record<string, string | null> = { cart_token: cartToken };
     for (const field of FIELDS) record[field] = clean(body?.[field]);
+    const consent = body?.ad_consent;
+    record.ad_consent = consent === "granted" || consent === "denied" ? consent : null;
+    record.consent_at = record.ad_consent ? new Date().toISOString() : null;
 
     // Geen enkele herkomst? Dan valt er niets te bewaren.
     const hasValue = FIELDS.some((f) => f !== "landing_path" && record[f]);
