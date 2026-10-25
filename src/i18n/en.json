@@ -739,5 +739,10 @@
   "Trap: de lichtbalk gaat aan bij beweging, zodat je veilig de trap op en af gaat.": "Stairs: the light bar turns on with movement, so you go up and down the stairs safely.",
   "Gang: licht precies wanneer je erlangs loopt, en daarna weer uit.": "Hallway: light exactly when you walk past, then off again.",
   "Trap: een lampje per tree of om de paar treden, zodat elke stap zichtbaar is.": "Stairs: one light per step or every few steps, so every step is visible.",
-  "Gang: lampjes laag langs de muur die aangaan zodra je 's nachts opstaat.": "Hallway: lights low along the wall that turn on when you get up at night."
+  "Gang: lampjes laag langs de muur die aangaan zodra je 's nachts opstaat.": "Hallway: lights low along the wall that turn on when you get up at night.",
+  "Nee, een PIR-sensor werkt meestal niet betrouwbaar door glas. Plaats de lamp daarom aan dezelfde kant van het glas als de beweging die je wilt detecteren.": "No, a PIR sensor usually does not work reliably through glass. Place the lamp on the same side of the glass as the movement you want to detect.",
+  "De gebruiksduur hangt af van de gekozen stand en hoe vaak de lamp aangaat. Je laadt de lamp eenvoudig opnieuw op met de meegeleverde USB-kabel.": "Battery life depends on the chosen mode and how often the lamp turns on. You simply recharge it with the included USB cable.",
+  "De meeste SenseGlow-lampen bevestig je met een plakstrip of magnetische houder. Bij buitenmodellen kunnen schroeven nodig zijn voor een stevige en veilige montage.": "Most SenseGlow lamps attach with an adhesive strip or magnetic holder. Outdoor models may need screws for a firm and safe fit.",
+  "Je krijgt 1 jaar functionele garantie. Mail support@senseglow.shop met je bestelnummer en een korte uitleg, dan zoeken we een passende oplossing.": "You get a 1-year functional warranty. Email support@senseglow.shop with your order number and a short explanation, and we will find a suitable solution.",
+  "Je kunt je bestelling binnen 30 dagen aanmelden voor retour. Bekijk de retourpagina voor de voorwaarden en stuur ons eerst een bericht, zodat we je de juiste instructies geven.": "You can register your order for return within 30 days. See the returns page for the conditions and message us first, so we can give you the right instructions."
 }
