@@ -25,7 +25,7 @@ export function serviceAccountEmail(): string {
   return creds().client_email;
 }
 
-async function accessToken(): Promise<string> {
+export async function accessToken(): Promise<string> {
   const { client_email, private_key } = creds();
   const now = Math.floor(Date.now() / 1000);
   const header = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
