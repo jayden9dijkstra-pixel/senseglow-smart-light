@@ -24,6 +24,22 @@ import {
   breadcrumbSchema,
 } from "../src/lib/structuredData";
 import type { ShopifyProduct } from "../src/lib/shopify";
+import { getProductContent } from "../src/lib/productContent";
+import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
+import { purchaseFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
+import en from "../src/i18n/en.json";
+import fr from "../src/i18n/fr.json";
+
+type Locale = "nl" | "en" | "fr";
+const DICTS: Record<Exclude<Locale, "nl">, Record<string, string>> = { en, fr };
+const localeOf = (path: string): Locale =>
+  path === "/en" || path.startsWith("/en/") ? "en" : path === "/fr" || path.startsWith("/fr/") ? "fr" : "nl";
+const translate = (locale: Locale, text: string) => (locale === "nl" ? text : DICTS[locale][text] ?? text);
+const localizeSeo = (locale: Locale, seo: SeoEntry): SeoEntry => ({
+  ...seo,
+  title: translate(locale, seo.title),
+  description: translate(locale, seo.description),
+});
 
 const DIST = resolve("dist");
 const TEMPLATE_PATH = resolve(DIST, "index.html");
@@ -223,6 +239,31 @@ function catalogSchema(products: ShopifyProduct[], path: string): unknown {
   };
 }
 
+/**
+ * Leesbare productinhoud in de server-HTML. Zichtbaar zonder JavaScript;
+ * met JavaScript verbergt een klasse op <html> hem tot React de pagina toont.
+ */
+function productFallback(handle: string, product: ShopifyProduct | null, locale: Locale): string {
+  const t = (x: string) => escapeHtml(translate(locale, x));
+  const content = getProductContent(handle);
+  const title = content?.hero.h1 ?? product?.node.title ?? "";
+  const parts: string[] = [`<article id="prerendered-product" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
+  parts.push(`<h1>${t(title)}</h1>`);
+  if (content?.hero.subtitle) parts.push(`<p>${t(content.hero.subtitle)}</p>`);
+  const price = product?.node.priceRange?.minVariantPrice;
+  if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(parseFloat(price.amount).toFixed(2))}</p>`);
+  if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
+  if (product?.node.description) parts.push(`<p>${t(product.node.description)}</p>`);
+  const kits = PRODUCT_KITS[handle];
+  if (kits?.length) parts.push(`<h2>${t(KITS_HEADING)}</h2><ul>${kits.map((k) => `<li>${t(k.label)}</li>`).join("")}</ul>`);
+  const uses = USE_CASES[handle];
+  if (uses?.length) parts.push(`<h2>${t(USE_CASE_HEADING)}</h2><ul>${uses.map((u) => `<li>${t(u)}</li>`).join("")}</ul>`);
+  parts.push(`<h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
+  parts.push(`<h2>${t("Veelgestelde vragen")}</h2>${purchaseFaqs.map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
+  parts.push(`</article>`);
+  return parts.join("");
+}
+
 function writeRoute(path: string, html: string) {
   const outPath =
     path === "/" ? resolve(DIST, "index.html") : resolve(DIST, `.${path}/index.html`);
@@ -247,11 +288,15 @@ async function main() {
     return;
   }
 
-  const render = (input: HeadInput) =>
-    template.replace(
-      /<\/head>/i,
-      `${buildHead({ ogImage, ...input })}\n  </head>`,
-    );
+  const render = (input: HeadInput) => {
+    const locale = localeOf(input.path);
+    return template
+      .replace(/<html([^>]*)\blang="[^"]*"/i, `<html$1lang="${locale}"`)
+      .replace(
+        /<\/head>/i,
+        `${buildHead({ ogImage, ...input, seo: localizeSeo(locale, input.seo) })}\n  </head>`,
+      );
+  };
 
   let written = 0;
   let degraded = 0;
@@ -308,10 +353,12 @@ async function main() {
       const seo = getProductSeo(handle) ?? DEFAULT_SEO;
       const schemas: unknown[] = [];
       let productImage: string | undefined;
+      let fetchedProduct: ShopifyProduct | null = null;
 
       try {
         const product = await fetchProduct(handle);
         if (!product) throw new Error("product niet gevonden in Shopify");
+        fetchedProduct = product;
         schemas.push(productSchema(product, { path, description: seo.description }));
         const firstImage = product.node.images?.edges?.[0]?.node?.url;
         if (firstImage) {
@@ -342,10 +389,13 @@ async function main() {
         );
       }
 
-      writeRoute(
-        path,
-        render({ path, seo, schemas, ogType: "product", ogImage: productImage ?? ogImage }),
-      );
+      const html = render({ path, seo, schemas, ogType: "product", ogImage: productImage ?? ogImage })
+        .replace(
+          /<\/head>/i,
+          `    <style>.js-on #prerendered-product{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
+        )
+        .replace(/(<div id="root">)/i, `$1${productFallback(handle, fetchedProduct, locale as Locale)}`);
+      writeRoute(path, html);
       written++;
     })),
   );
