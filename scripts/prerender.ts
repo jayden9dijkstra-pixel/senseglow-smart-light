@@ -251,9 +251,9 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   parts.push(`<h1>${t(title)}</h1>`);
   if (content?.hero.subtitle) parts.push(`<p>${t(content.hero.subtitle)}</p>`);
   const price = product?.node.priceRange?.minVariantPrice;
-  if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(parseFloat(price.amount).toFixed(2))}</p>`);
+  if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(locale === "en" ? parseFloat(price.amount).toFixed(2) : parseFloat(price.amount).toFixed(2).replace(".", ","))}</p>`);
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
-  if (product?.node.description) parts.push(`<p>${t(product.node.description)}</p>`);
+  if (product?.node.description) parts.push(`<p${locale === "nl" ? "" : ' lang="nl"'}>${t(product.node.description)}</p>`);
   const kits = PRODUCT_KITS[handle];
   if (kits?.length) parts.push(`<h2>${t(KITS_HEADING)}</h2><ul>${kits.map((k) => `<li>${t(k.label)}</li>`).join("")}</ul>`);
   const uses = USE_CASES[handle];
