@@ -29,6 +29,13 @@
       "when": 1792609042367,
       "tag": "0003_cron_token_for_order_sync",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792967629479,
+      "tag": "0004_ads_conversion_exports",
+      "breakpoints": true
     }
   ]
 }

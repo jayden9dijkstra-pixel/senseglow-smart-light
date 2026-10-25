@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      ads_conversion_exports: {
+        Row: {
+          error: string | null
+          exported_at: string
+          order_number: string
+          status: string
+        }
+        Insert: {
+          error?: string | null
+          exported_at?: string
+          order_number: string
+          status?: string
+        }
+        Update: {
+          error?: string | null
+          exported_at?: string
+          order_number?: string
+          status?: string
+        }
+        Relationships: []
+      }
       ads_daily: {
         Row: {
           campaign: string
@@ -103,7 +124,9 @@ export type Database = {
       }
       checkout_attribution: {
         Row: {
+          ad_consent: string | null
           cart_token: string
+          consent_at: string | null
           created_at: string
           gbraid: string | null
           gclid: string | null
@@ -117,7 +140,9 @@ export type Database = {
           wbraid: string | null
         }
         Insert: {
+          ad_consent?: string | null
           cart_token: string
+          consent_at?: string | null
           created_at?: string
           gbraid?: string | null
           gclid?: string | null
@@ -131,7 +156,9 @@ export type Database = {
           wbraid?: string | null
         }
         Update: {
+          ad_consent?: string | null
           cart_token?: string
+          consent_at?: string | null
           created_at?: string
           gbraid?: string | null
           gclid?: string | null
@@ -232,6 +259,7 @@ export type Database = {
       }
       shop_orders: {
         Row: {
+          ad_consent: string | null
           cart_token: string | null
           country_code: string | null
           currency: string
@@ -252,6 +280,7 @@ export type Database = {
           utm_term: string | null
         }
         Insert: {
+          ad_consent?: string | null
           cart_token?: string | null
           country_code?: string | null
           currency?: string
@@ -272,6 +301,7 @@ export type Database = {
           utm_term?: string | null
         }
         Update: {
+          ad_consent?: string | null
           cart_token?: string | null
           country_code?: string | null
           currency?: string
