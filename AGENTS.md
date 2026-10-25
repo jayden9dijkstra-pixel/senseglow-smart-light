@@ -4,3 +4,4 @@
 - Shopify orders sync into shop_orders via supabase/functions/_shared/shopify-orders.ts (cron every 5 min + on dashboard load) and never overwrite stored attribution with empty values; why: attribution is irreplaceable once lost.
 - Google Ads daily stats arrive via the ingest-ads function (x-ingest-token = ADS_INGEST_TOKEN) from a Google Ads Script; why: the connector gateway cannot be called from edge functions.
 - Dashboard traffic filtering uses `exclude_internal`; reserve `intern` for explicit device marking commands so report filters never change visitor classification.
+- Google Ads server conversions are appended to a Google Sheet (service-account JWT, _shared/google-sheets.ts) from the order sync, deduped via ads_conversion_exports and only for orders with recorded ad consent; why: Google Ads imports the Sheet and the connector gateway cannot be used from edge functions.
