@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
       const h = { Authorization: `Bearer ${t}`, "Content-Type": "application/json" };
       let r = await fetch(`${base}:batchUpdate`, { method: "POST", headers: h, body: JSON.stringify({ requests: [{ addSheet: { properties: { title: "Schrijftest" } } }] }) });
       if (!r.ok) throw new Error(`tabblad maken [${r.status}]: ${await r.text()}`);
-      const sheetId = (await r.json()).replies[0].addSheet.properties.sheetId;
+      const tabId = (await r.json()).replies[0].addSheet.properties.tabId;
       steps.tab_created = true;
       const now = new Date().toISOString();
       r = await fetch(`${base}/values/Schrijftest!A1:B1?valueInputOption=RAW`, { method: "PUT", headers: h, body: JSON.stringify({ values: [["test", now]] }) });
