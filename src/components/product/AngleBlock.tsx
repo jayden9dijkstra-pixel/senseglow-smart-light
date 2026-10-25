@@ -56,7 +56,7 @@ export function AngleBlock({
             onClick={() => addKit(angle.kit!)}
             className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            {angle.kit.name} in winkelwagen
+            {`${angle.kit.name} in winkelwagen`}
           </Button>
         </div>
       )}
@@ -90,7 +90,7 @@ export function KitOffers({
               onClick={() => addKit(kit)}
               className="flex-shrink-0 rounded-full border-primary/40 text-primary hover:bg-primary/10"
             >
-              {kit.name} toevoegen
+              {`${kit.name} toevoegen`}
             </Button>
           </li>
         ))}
