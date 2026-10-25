@@ -56,6 +56,10 @@ const AdsTracking = () => {
   }, []);
 
   useEffect(() => {
+    captureAngle(search);
+  }, [search]);
+
+  useEffect(() => {
     // Eigen meting telt elke weergave, ook de eerste.
     void trackSiteEvent("page_view", { path: pathname });
     if (isFirst.current) {
