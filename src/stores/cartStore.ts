@@ -26,6 +26,29 @@ function adsValue(items: CartItem[]): number {
   return Math.round(total * 100) / 100;
 }
 
+/** Eén regel per variant, met opgetelde aantallen (zoals Shopify ze krijgt). */
+export function mergeCheckoutLines(items: CartItem[]) {
+  const variantQty = new Map<string, number>();
+  for (const i of items) variantQty.set(i.variantId, (variantQty.get(i.variantId) || 0) + i.quantity);
+  return Array.from(variantQty.entries()).map(([variantId, quantity]) => ({ variantId, quantity }));
+}
+
+/** Bundelcode met de grootste besparing, of null. */
+export function pickBundleCode(items: CartItem[]): string | null {
+  let bestCode: string | null = null;
+  let bestSaving = 0;
+  for (const i of items) {
+    if (i.isBundle && i.bundleDiscountCode && i.bundleRate) {
+      const saving = parseFloat(i.price.amount) * i.quantity * i.bundleRate;
+      if (saving > bestSaving) {
+        bestSaving = saving;
+        bestCode = i.bundleDiscountCode;
+      }
+    }
+  }
+  return bestCode;
+}
+
 export interface CartItem {
   product: ShopifyProduct;
   variantId: string;

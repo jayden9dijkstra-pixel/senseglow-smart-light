@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Package, Check, RotateCcw, Shield, Truck } from "lucide-react";
 import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/layout/PaymentIcons";
-import { useCartStore } from "@/stores/cartStore";
+import { useCartStore, mergeCheckoutLines, pickBundleCode } from "@/stores/cartStore";
+import { previewCart, type CartPreview } from "@/lib/shopify";
 import { formatVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
 import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
@@ -124,6 +125,22 @@ export function CartDrawer() {
     }
     return Math.round(s * 100) / 100;
   }, [items]);
+
+  // Shopify rekent automatische kortingen (zoals kitprijzen) zelf uit; toon die
+  // regels zodra de winkelwagen open staat.
+  const [preview, setPreview] = React.useState<CartPreview | null>(null);
+  React.useEffect(() => {
+    if (!isOpen || items.length === 0) { setPreview(null); return; }
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const code = pickBundleCode(items);
+      const result = await previewCart(mergeCheckoutLines(items), code ? [code] : []);
+      if (!cancelled) setPreview(result);
+    }, 400);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [isOpen, items]);
+  const shopifyDiscounts = preview?.discounts.length ? preview.discounts : null;
+  const shownTotal = shopifyDiscounts && preview ? preview.total : totalPrice;
 
   const handleCheckout = async () => {
     // Open het tabblad meteen bij de klik, zolang de browser de klik nog als
@@ -304,7 +321,13 @@ export function CartDrawer() {
                   <Check className="h-4 w-4" />
                   <span>Gratis bezorgd, binnen 7-14 werkdagen na verwerking</span>
                 </div>
-                {totalSavings > 0 && (
+                {shopifyDiscounts?.map((d) => (
+                  <div key={d.title} className="flex justify-between items-center text-sm text-glow">
+                    <span data-no-translate>{d.title}</span>
+                    <span>−{formatPrice(d.amount)}</span>
+                  </div>
+                ))}
+                {!shopifyDiscounts && totalSavings > 0 && (
                   <div className="flex justify-between items-center text-sm text-glow">
                     <span>Bundelkorting</span>
                     <span>−{formatPrice(totalSavings)}</span>
@@ -317,7 +340,7 @@ export function CartDrawer() {
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Totaal</span>
                   <span className="text-xl font-bold">
-                    {formatPrice(totalPrice)}
+                    {formatPrice(shownTotal)}
                   </span>
                 </div>
 
