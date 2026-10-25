@@ -1,3 +1,4 @@
+import { getStoredAngle } from "./angles";
 /**
  * Google Ads click-id capture and event helpers.
  *
@@ -124,6 +125,8 @@ export function getStoredAttribution(): Record<string, string> {
     const value = getStoredClickId(key);
     if (value) result[key] = value;
   }
+  const angle = getStoredAngle();
+  if (angle) result.utm_content = angle;
   return result;
 }
 
@@ -138,6 +141,9 @@ export async function appendClickIdsToUrl(rawUrl: string): Promise<string> {
       const value = getStoredClickId(key);
       if (value && !url.searchParams.has(key)) url.searchParams.set(key, value);
     }
+    // Advertentie-invalshoek (?a=) gaat mee als utm_content.
+    const angle = getStoredAngle();
+    if (angle) url.searchParams.set("utm_content", angle);
 
     const linker = await getLinkerParam();
     if (linker) url.searchParams.set("_gl", linker);

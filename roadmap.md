@@ -116,3 +116,10 @@
 - [x] Tabbladen Overzicht, Ads, Orders, Producten, Tracking, Trechter, Instellingen
 - [x] Bestellingen elke 5 min uit Shopify, ingest-ads met ADS_INGEST_TOKEN
 - [ ] Google Ads Script plakken en inplannen (gebruiker)
+
+## Advertentie-invalshoeken en kits (2026-10-25)
+- [x] Hoekblok onder de titel per ?a= (trap, gang, verhuur, buiten, student), ?a= mee als utm_content
+- [x] Kitknoppen en 'Voordeliger per set' op Ambient Motion Bar en Solar Lantern
+- [x] Shopify-kortingsregels in de winkelwagen
+- [x] 'Waar gebruik je hem?' op elke productpagina
+- [x] Productinhoud, FAQ en verzend-/retourinfo in de server-HTML, NL/EN/FR met eigen titel

@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, useRef, lazy, Suspense } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
+import { captureAngle } from "@/lib/angles";
 import { trackSiteEvent } from "@/lib/siteAnalytics";
 // Kernpad blijft direct geladen: dit zijn de pagina's waar advertentieverkeer
 // op landt en waar geconverteerd wordt. Alles daarbuiten wordt pas opgehaald
@@ -54,6 +55,10 @@ const AdsTracking = () => {
     captureClickIds();
     initializeAnalytics();
   }, []);
+
+  useEffect(() => {
+    captureAngle(search);
+  }, [search]);
 
   useEffect(() => {
     // Eigen meting telt elke weergave, ook de eerste.

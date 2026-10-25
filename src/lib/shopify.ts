@@ -322,6 +322,69 @@ export async function createStorefrontCheckout(
   return appendClickIdsToUrl(url.toString());
 }
 
+export interface CartPreview {
+  discounts: Array<{ title: string; amount: number }>;
+  total: number;
+}
+
+/**
+ * Laat Shopify de winkelwagen doorrekenen (incl. automatische kortingen),
+ * zonder checkout of attributie. Geeft null als dat niet lukt.
+ */
+export async function previewCart(
+  items: CheckoutItem[],
+  discountCodes: string[] = []
+): Promise<CartPreview | null> {
+  if (!items.length) return null;
+  const alloc = `discountedAmount { amount }
+    ... on CartAutomaticDiscountAllocation { title }
+    ... on CartCodeDiscountAllocation { code }
+    ... on CartCustomDiscountAllocation { title }`;
+  const mutation = `
+    mutation PreviewCart($input: CartInput!) {
+      cartCreate(input: $input) {
+        cart {
+          cost { totalAmount { amount } }
+          discountAllocations { ${alloc} }
+          lines(first: 50) { edges { node { discountAllocations { ${alloc} } } } }
+        }
+      }
+    }
+  `;
+  try {
+    const buyerCountry = await getBuyerCountry();
+    const data = (await storefrontApiRequest(mutation, {
+      input: {
+        lines: items.map((item) => ({
+          merchandiseId: item.variantId.startsWith('gid://')
+            ? item.variantId
+            : `gid://shopify/ProductVariant/${toNumericVariantId(item.variantId)}`,
+          quantity: item.quantity,
+        })),
+        discountCodes,
+        ...(buyerCountry ? { buyerIdentity: { countryCode: buyerCountry } } : {}),
+      },
+    })) as any;
+    const cart = data?.data?.cartCreate?.cart;
+    if (!cart?.cost?.totalAmount) return null;
+    const sums = new Map<string, number>();
+    const add = (a: any) => {
+      const amount = parseFloat(a?.discountedAmount?.amount ?? '0');
+      if (!amount) return;
+      const title = a.title || a.code || 'Korting';
+      sums.set(title, (sums.get(title) ?? 0) + amount);
+    };
+    (cart.discountAllocations ?? []).forEach(add);
+    for (const edge of cart.lines?.edges ?? []) (edge.node.discountAllocations ?? []).forEach(add);
+    return {
+      discounts: Array.from(sums, ([title, amount]) => ({ title, amount: Math.round(amount * 100) / 100 })),
+      total: parseFloat(cart.cost.totalAmount.amount),
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** Cookiekeuze van de bezoeker voor advertentiemeting. */
 function readAdConsent(): 'granted' | 'denied' | null {
   try {
