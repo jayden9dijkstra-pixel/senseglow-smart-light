@@ -46,7 +46,12 @@ export async function accessToken(): Promise<string> {
   return (await res.json()).access_token;
 }
 
-const base = () => `https://sheets.googleapis.com/v4/spreadsheets/${Deno.env.get("ADS_IMPORT_SHEET_ID")}`;
+/** Accepteert een kaal ID of een volledige Sheet-URL. */
+export const sheetId = () => {
+  const raw = (Deno.env.get("ADS_IMPORT_SHEET_ID") ?? "").trim();
+  return raw.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1] ?? raw.replace(/[^a-zA-Z0-9_-]/g, "");
+};
+const base = () => `https://sheets.googleapis.com/v4/spreadsheets/${sheetId()}`;
 
 /** Order IDs die al in kolom F staan. */
 export async function existingOrderIds(token?: string): Promise<{ ids: Set<string>; token: string }> {

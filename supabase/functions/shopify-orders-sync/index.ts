@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
     const steps: Record<string, unknown> = {};
     try {
       const t = await accessToken();
-      const base = `https://sheets.googleapis.com/v4/spreadsheets/${Deno.env.get("ADS_IMPORT_SHEET_ID")}`;
+      const base = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId()}`;
       const h = { Authorization: `Bearer ${t}`, "Content-Type": "application/json" };
       let r = await fetch(`${base}:batchUpdate`, { method: "POST", headers: h, body: JSON.stringify({ requests: [{ addSheet: { properties: { title: "Schrijftest" } } }] }) });
       if (!r.ok) throw new Error(`tabblad maken [${r.status}]: ${await r.text()}`);
