@@ -5,7 +5,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { exportConversions, syncOrders } from "../_shared/shopify-orders.ts";
-import { accessToken, serviceAccountEmail } from "../_shared/google-sheets.ts";
+import { accessToken, serviceAccountEmail, sheetId } from "../_shared/google-sheets.ts";
 
 let lastRun = 0;
 
