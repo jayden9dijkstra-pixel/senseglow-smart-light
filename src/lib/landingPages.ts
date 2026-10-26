@@ -92,7 +92,7 @@ const DELIVERY_FAQ: ProductFaq = {
 
 const AMBIENT_CHARGE_FAQ: ProductFaq = {
   question: "Hoe vaak moet ik opladen?",
-  answer: "Bij normaal gebruik (5-10 keer per nacht) ongeveer 3-4 weken op één lading. Opladen via USB-C duurt 2-3 uur.",
+  answer: "Ongeveer één keer per paar weken, afhankelijk van hoe vaak de lamp aangaat. Je laadt hem op via USB-C; de kabel zit erbij.",
 };
 
 const AMBIENT_MOUNT_FAQ: ProductFaq = {
