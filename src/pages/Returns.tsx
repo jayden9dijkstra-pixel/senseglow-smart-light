@@ -5,12 +5,12 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { ArrowLeft, RotateCcw, Euro, FileText } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 
-const Returns = () => {
+export const ReturnsContent = () => {
   const navigate = useNavigate();
   const { localizePath } = useI18n();
 
   return (
-    <PageLayout>
+    <>
       <div className="container py-12 max-w-4xl">
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -93,8 +93,14 @@ const Returns = () => {
           </Card>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
+
+const Returns = () => (
+  <PageLayout>
+    <ReturnsContent />
+  </PageLayout>
+);
 
 export default Returns;

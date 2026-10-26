@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Truck, Clock, Package } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 
-const Shipping = () => {
+export const ShippingContent = () => {
   const navigate = useNavigate();
 
   return (
-    <PageLayout>
+    <>
       <div className="container py-12 max-w-4xl">
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -104,8 +104,14 @@ const Shipping = () => {
           ))}
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
+
+const Shipping = () => (
+  <PageLayout>
+    <ShippingContent />
+  </PageLayout>
+);
 
 export default Shipping;

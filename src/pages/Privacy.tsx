@@ -4,11 +4,11 @@ import { ArrowLeft } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 
 
-const Privacy = () => {
+export const PrivacyContent = () => {
   const navigate = useNavigate();
 
   return (
-    <PageLayout>
+    <>
       <div className="container py-12 max-w-4xl">
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -123,7 +123,7 @@ const Privacy = () => {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold">7. Cookies</h2>
             <p className="text-foreground/70 leading-relaxed">
-              Onze website gebruikt cookies en vergelijkbare opslag in je browser. Bij je eerste bezoek vragen we expliciete toestemming voor niet-functionele cookies. Je keuze bewaren we 12 maanden; daarna vragen we opnieuw. Je kunt je keuze altijd wijzigen door de cookies van senseglow.shop in je browser te wissen.
+              Onze website gebruikt cookies en vergelijkbare opslag in je browser. Bij je eerste bezoek vragen we expliciete toestemming voor niet-functionele cookies. Je keuze bewaren we 12 maanden; daarna vragen we opnieuw. Je kunt je keuze altijd wijzigen via de link Cookie-instellingen onderaan elke pagina.
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border border-foreground/10">
@@ -150,7 +150,10 @@ const Privacy = () => {
               </table>
             </div>
             <p className="text-foreground/70 leading-relaxed">
-              Kies je "Alleen noodzakelijke", dan blijven analytische en marketingcookies uit en meet ook de afrekenpagina geen advertentieresultaten.
+              Kies je "Alleen noodzakelijk", dan blijven statistiek- en marketingcookies uit en meet ook de afrekenpagina geen advertentieresultaten.
+            </p>
+            <p className="text-foreground/70 leading-relaxed">
+              Kwam je via een Google-advertentie binnen en accepteer je marketingcookies? Dan geven we bij je bestelling de advertentieklik-ID, het orderbedrag en het ordernummer door aan Google. Zo ziet Google welke advertentie tot een bestelling leidde. We sturen daarbij geen naam, e-mailadres of adres mee. Kies je "Alleen noodzakelijk", dan geven we voor jouw bestelling niets door aan Google.
             </p>
           </section>
 
@@ -184,8 +187,14 @@ const Privacy = () => {
           </section>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
+
+const Privacy = () => (
+  <PageLayout>
+    <PrivacyContent />
+  </PageLayout>
+);
 
 export default Privacy;

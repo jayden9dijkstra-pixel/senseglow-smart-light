@@ -5,11 +5,11 @@ import { ArrowLeft, Mail, Package, Clock, RotateCcw, Shield, FileText } from "lu
 import { PageLayout } from "@/components/layout/PageLayout";
 
 
-const Contact = () => {
+export const ContactContent = () => {
   const navigate = useNavigate();
 
   return (
-    <PageLayout>
+    <>
       <div className="container py-12 max-w-4xl">
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -106,8 +106,14 @@ const Contact = () => {
           </Card>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
+
+const Contact = () => (
+  <PageLayout>
+    <ContactContent />
+  </PageLayout>
+);
 
 export default Contact;

@@ -1,18 +1,19 @@
 <!doctype html>
 <html lang="nl">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18351813640"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', { ad_storage: 'denied', analytics_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', wait_for_update: 500 });
+      (function(){try{var v=localStorage.getItem('sg_consent')||decodeURIComponent((document.cookie.match(/(?:^|;\s*)sg_consent=([^;]+)/)||[])[1]||'');var a=v==='all',m=v==='all',c=/^custom:a([01])m([01])$/.exec(v);if(c){a=c[1]==='1';m=c[2]==='1';}if(v==='all'||v==='necessary'||c){var g=m?'granted':'denied';gtag('consent','update',{ad_storage:g,ad_user_data:g,ad_personalization:g,analytics_storage:a?'granted':'denied'});}}catch(e){}})();
       gtag('js', new Date());
-      gtag('consent', 'default', { ad_storage: 'denied', analytics_storage: 'denied' });
       gtag('config', 'AW-18351813640', {
         send_page_view: true,
         linker: { domains: ['senseglow.shop', 'www.senseglow.shop', 'checkout.senseglow.shop'] }
       });
     </script>
+    <!-- Google tag (gtag.js) laadt pas na de consent-default -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18351813640"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">

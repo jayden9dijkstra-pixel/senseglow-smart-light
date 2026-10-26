@@ -11,11 +11,11 @@ const Article = ({ n, title, children }: { n: number; title: string; children: R
   </section>
 );
 
-const Terms = () => {
+export const TermsContent = () => {
   const navigate = useNavigate();
 
   return (
-    <PageLayout>
+    <>
       <div className="container py-12 max-w-4xl">
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -95,8 +95,14 @@ const Terms = () => {
           </Article>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
+
+const Terms = () => (
+  <PageLayout>
+    <TermsContent />
+  </PageLayout>
+);
 
 export default Terms;
