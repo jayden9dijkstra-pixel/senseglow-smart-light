@@ -26,7 +26,7 @@ import {
 import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
 import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
-import { purchaseFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
+import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
 import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
@@ -260,7 +260,7 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   const uses = USE_CASES[handle];
   if (uses?.length) parts.push(`<h2>${t(USE_CASE_HEADING)}</h2><ul>${uses.map((u) => `<li>${t(u)}</li>`).join("")}</ul>`);
   parts.push(`<h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
-  parts.push(`<h2>${t("Veelgestelde vragen")}</h2>${purchaseFaqs.map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
+  parts.push(`<h2>${t("Veelgestelde vragen")}</h2>${getProductFaqs(content?.faqs).map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
   parts.push(`</article>`);
   return parts.join("");
 }

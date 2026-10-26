@@ -16,7 +16,7 @@ import { FinalProductCTA } from "@/components/product/FinalProductCTA";
 import { HowItWorksSection } from "@/components/product/HowItWorksSection";
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
 import { MobileAddToCartBar } from "@/components/product/MobileAddToCartBar";
-import { purchaseFaqs } from "@/components/product/ProductFAQSection";
+import { getProductFaqs } from "@/lib/productFaqs";
 import { UseCasesSection } from "@/components/product/UseCasesSection";
 import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
@@ -213,7 +213,7 @@ const ProductDetail = () => {
         {handle && <ProductRelatedSection currentHandle={handle} />}
         <ProductFAQSection
           subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
-          faqs={purchaseFaqs}
+          faqs={getProductFaqs(content?.faqs)}
         />
       </div>
 
