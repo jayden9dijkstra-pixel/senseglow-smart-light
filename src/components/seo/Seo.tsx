@@ -41,12 +41,10 @@ export const Seo = ({
       <title>{localizedTitle}</title>
       <meta name="description" content={localizedDescription} />
       <link rel="canonical" href={canonical} />
-      {!dutchOnly && [
-  <link rel="alternate" hrefLang="nl" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`}  key="0" />,
-  <link rel="alternate" hrefLang="en" href={`${SITE_URL}${addLocale(cleanPath, "en")}`}  key="1" />,
-  <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${addLocale(cleanPath, "fr")}`}  key="2" />,
-  <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`}  key="3" />
-      ]}
+      {!dutchOnly && <link rel="alternate" hrefLang="nl" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />}
+      {!dutchOnly && <link rel="alternate" hrefLang="en" href={`${SITE_URL}${addLocale(cleanPath, "en")}`} />}
+      {!dutchOnly && <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${addLocale(cleanPath, "fr")}`} />}
+      {!dutchOnly && <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />}
       {noindex && <meta name="robots" content="noindex, nofollow" />}
       <meta property="og:title" content={localizedTitle} />
       <meta property="og:description" content={localizedDescription} />
