@@ -7,7 +7,7 @@ export const HOME_HERO = {
   eyebrow: "SenseGlow, draadloze sensorverlichting",
   h1: "Licht dat aangaat wanneer jij binnenkomt.",
   subtitle:
-    "Draadloze sensor-verlichting voor kast, hal, tuin en werkplek. Geplaatst binnen 60 seconden, zonder boren of stopcontact.",
+    "Draadloze sensor-verlichting voor kast, hal, tuin en werkplek. In een paar minuten geplaatst, zonder elektricien.",
 };
 
 export const HOME_TILES_HEADING = "Voor elke kamer een ander licht";
@@ -44,7 +44,7 @@ export const HOME_PILLARS_HEADING = "Wat ze met elkaar gemeen hebben";
 export const HOME_PILLARS = [
   {
     title: "Geen elektricien nodig",
-    body: "Magnetisch, plakstrip of twee schroeven. Geïnstalleerd in minuten, niet uren.",
+    body: "Magnetisch, plakstrip of twee schroeven. In een paar minuten geplaatst.",
   },
   {
     title: "USB-C oplaadbaar of solar",
@@ -73,7 +73,7 @@ export const HOME_FAQS = [
   {
     question: "Hoe zit het met installatie?",
     answer:
-      "Niet één van onze producten heeft een elektricien nodig. Vier producten zijn magnetisch of zelfklevend, alleen de Solar Lantern krijgt twee schroeven mee. Gemiddelde montagetijd: 30 seconden tot 5 minuten.",
+      "Niet één van onze producten heeft een elektricien nodig. Vier producten zijn magnetisch of zelfklevend, alleen de Solar Lantern krijgt twee schroeven mee. Elk product is in een paar minuten geplaatst.",
   },
   {
     question: "Hoe lang gaat de batterij mee?",
@@ -83,7 +83,7 @@ export const HOME_FAQS = [
   {
     question: "Kan ik bundels combineren?",
     answer:
-      "Ja. Op de productpagina vind je per product de beschikbare 2-, 3- of 4-packs met kortingen tot 15%. Bundle-korting wordt automatisch in je winkelwagen verrekend.",
+      "Ja. Op de productpagina vind je per product de beschikbare 2-, 3- of 4-packs met korting. Bundle-korting wordt automatisch in je winkelwagen verrekend.",
   },
   {
     question: "Wat is de garantie?",

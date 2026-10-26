@@ -27,7 +27,7 @@ const Shipping = () => {
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { icon: Truck, title: "Gratis verzending", sub: "Naar Nederland en België, zonder minimumbedrag." },
-              { icon: Clock, title: "7-14 dagen", sub: "Verzendtijd na verwerking; je bestelling gaat binnen 1-3 werkdagen op weg." },
+              { icon: Clock, title: "7-14 werkdagen", sub: "Levering in 7-14 werkdagen." },
               { icon: Package, title: "Met track & trace", sub: "Je krijgt een track-code per mail." },
             ].map(({ icon: Icon, title, sub }) => (
               <Card key={title} className="border-foreground/10 bg-background">
@@ -55,12 +55,12 @@ const Shipping = () => {
                 {
                   n: "2",
                   title: "We verwerken en verzenden",
-                  body: "We verwerken je bestelling binnen 1 tot 3 werkdagen en geven hem af bij de vervoerder. Op dat moment krijg je een tweede mail met je track-code.",
+                  body: "We verwerken je bestelling en geven hem af bij de vervoerder. Op dat moment krijg je een tweede mail met je track-code.",
                 },
                 {
                   n: "3",
                   title: "DHL bezorgt",
-                  body: "Na verwerking is je pakket 7 tot 14 dagen onderweg. Via senseglow.shop/volg-je-bestelling volg je 'm met je track-code.",
+                  body: "Levering in 7-14 werkdagen. Via senseglow.shop/volg-je-bestelling volg je 'm met je track-code.",
                 },
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">
