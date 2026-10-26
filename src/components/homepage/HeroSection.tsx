@@ -56,7 +56,7 @@ export const HeroSection = () => {
           </h1>
 
           <p className="mt-6 text-base md:text-lg leading-relaxed text-hero-foreground/70 max-w-xl">
-            Draadloze sensor-verlichting voor kast, hal, tuin en werkplek. Geplaatst binnen 60 seconden, zonder boren of stopcontact.
+            Draadloze sensor-verlichting voor kast, hal, tuin en werkplek. In een paar minuten geplaatst, zonder elektricien.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-5">

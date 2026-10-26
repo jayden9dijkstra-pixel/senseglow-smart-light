@@ -1,3 +1,4 @@
+import { BUSINESS_INFO, isBusinessInfoComplete } from "@/lib/businessInfo";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -124,6 +125,14 @@ export const SiteFooter = () => {
               ))}
             </div>
           </div>
+
+          {isBusinessInfoComplete() && (
+            <address className="not-italic text-[11px] text-foreground/45 pt-10 mt-10 border-t border-foreground/6 space-y-1">
+              <p>{BUSINESS_INFO.companyName} · {BUSINESS_INFO.legalForm}</p>
+              <p>KvK {BUSINESS_INFO.kvk} · btw {BUSINESS_INFO.vat}</p>
+              <p>{BUSINESS_INFO.address}</p>
+            </address>
+          )}
 
           <div className="text-[11px] text-foreground/30 pt-10 mt-10 border-t border-foreground/6">
             <p>© 2026 Jayden Ecom (SenseGlow™). Alle rechten voorbehouden. KvK 99634929 · BTW NL005399692B39</p>

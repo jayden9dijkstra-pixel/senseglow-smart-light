@@ -13,7 +13,7 @@ const PILLARS = [
   {
     icon: ShieldCheck,
     title: "Garantie",
-    body: "1 jaar garantie op alle onderdelen en 30 dagen retour. Retourkosten zijn voor ons.",
+    body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. 30 dagen retour, retourkosten zijn voor ons.",
   },
   {
     icon: MessageCircle,
@@ -57,7 +57,7 @@ const WhySenseGlow = () => {
                 dat gewoon aangaat wanneer het moet.
               </p>
               <p className="text-base text-foreground/60 leading-relaxed">
-                Zonder elektricien. Zonder boren. Je plakt de lamp op zijn plek en hij doet
+                Zonder elektricien. In een paar minuten geplaatst, daarna doet de lamp
                 de rest.
               </p>
             </div>

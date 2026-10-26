@@ -224,7 +224,7 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
                       </li>
                       <li className="flex items-start gap-2 text-sm text-foreground/70">
                         <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                        <span>1 jaar garantie · 30 dagen retour</span>
+                        <span>Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow · 30 dagen retour</span>
                       </li>
                     </ul>
 

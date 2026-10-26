@@ -133,7 +133,7 @@ export const FLEX_TECH_BENEFITS = [
   {
     icon: "🧲",
     tech: "Magnetische bevestiging + 3M",
-    benefit: "Bevestig overal zonder boren, verplaats wanneer je wilt",
+    benefit: "Magnetisch vastklikken, verplaats wanneer je wilt",
   },
 ];
 

@@ -10,7 +10,7 @@ import { HOME_FAQS } from "@/lib/homeContent";
 const faqs = HOME_FAQS;
 
 const trustIcons = [
-  { icon: Shield, text: "1 jaar garantie" },
+  { icon: Shield, text: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow" },
   { icon: Truck, text: "Gratis verzending" },
   { icon: RotateCcw, text: "30 dagen gratis retour" },
 ];

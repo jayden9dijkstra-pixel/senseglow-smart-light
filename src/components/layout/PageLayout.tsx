@@ -11,6 +11,7 @@ interface PageSeoOverride {
   description?: string;
   path?: string;
   noindex?: boolean;
+  dutchOnly?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   preloadImage?: string;
   preloadImageSrcSet?: string;
@@ -32,6 +33,7 @@ export const PageLayout = ({ children, seo }: PageLayoutProps) => {
         description={seo?.description ?? base.description}
         path={seo?.path ?? pathname}
         noindex={seo?.noindex}
+        dutchOnly={seo?.dutchOnly}
         jsonLd={seo?.jsonLd}
         preloadImage={seo?.preloadImage}
         preloadImageSrcSet={seo?.preloadImageSrcSet}

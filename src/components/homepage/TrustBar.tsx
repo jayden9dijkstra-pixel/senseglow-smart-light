@@ -3,8 +3,8 @@ import { Truck, Clock, Shield, Package } from "lucide-react";
 const items = [
   { icon: Truck, label: "Gratis verzending NL/BE" },
   { icon: Clock, label: "30 dagen retour" },
-  { icon: Shield, label: "1 jaar garantie" },
-  { icon: Package, label: "Bij je thuis binnen 7-14 werkdagen na verwerking" },
+  { icon: Shield, label: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow" },
+  { icon: Package, label: "Levering in 7-14 werkdagen" },
 ];
 
 export const TrustBar = () => {

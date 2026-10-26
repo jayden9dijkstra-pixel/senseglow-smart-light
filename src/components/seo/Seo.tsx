@@ -8,6 +8,8 @@ interface SeoProps {
   /** Canonical pathname, bijv. "/producten" */
   path: string;
   noindex?: boolean;
+  /** Pagina bestaat alleen in het Nederlands: geen hreflang-alternatieven. */
+  dutchOnly?: boolean;
   /** Eén of meerdere JSON-LD objecten */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** Optionele afbeelding om te preloaden (LCP) */
@@ -20,6 +22,7 @@ export const Seo = ({
   description,
   path,
   noindex,
+  dutchOnly,
   jsonLd,
   preloadImage,
   preloadImageSrcSet,
@@ -38,10 +41,10 @@ export const Seo = ({
       <title>{localizedTitle}</title>
       <meta name="description" content={localizedDescription} />
       <link rel="canonical" href={canonical} />
-      <link rel="alternate" hrefLang="nl" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />
-      <link rel="alternate" hrefLang="en" href={`${SITE_URL}${addLocale(cleanPath, "en")}`} />
-      <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${addLocale(cleanPath, "fr")}`} />
-      <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />
+      {!dutchOnly && <link rel="alternate" hrefLang="nl" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />}
+      {!dutchOnly && <link rel="alternate" hrefLang="en" href={`${SITE_URL}${addLocale(cleanPath, "en")}`} />}
+      {!dutchOnly && <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${addLocale(cleanPath, "fr")}`} />}
+      {!dutchOnly && <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${addLocale(cleanPath, "nl")}`} />}
       {noindex && <meta name="robots" content="noindex, nofollow" />}
       <meta property="og:title" content={localizedTitle} />
       <meta property="og:description" content={localizedDescription} />

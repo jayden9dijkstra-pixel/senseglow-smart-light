@@ -57,14 +57,14 @@ const Terms = () => {
           </Article>
 
           <Article n={6} title="Levering">
-            <p>Je bestelling wordt binnen 1 tot 3 werkdagen verwerkt. De verzending duurt daarna 7 tot 14 dagen. SenseGlow levert aan adressen in Nederland en België; verzending naar beide landen is gratis. Levering buiten Nederland en België is op dit moment niet beschikbaar.</p>
+            <p>Levering in 7-14 werkdagen. SenseGlow levert aan adressen in Nederland en België; verzending naar beide landen is gratis. Levering buiten Nederland en België is op dit moment niet beschikbaar.</p>
             <p>Het risico van beschadiging of vermissing van producten berust bij SenseGlow tot het moment van bezorging aan de consument.</p>
           </Article>
 
           <Article n={7} title="Herroepingsrecht">
             <p>De consument heeft het recht om de overeenkomst binnen <strong>30 dagen</strong> zonder opgave van redenen te ontbinden, dit is langer dan de wettelijke 14 dagen termijn. Deze periode gaat in op de dag na ontvangst van het product.</p>
             <p>Tijdens de bedenktijd zal de consument zorgvuldig omgaan met het product en de verpakking. Hij/zij mag het product slechts uitpakken en gebruiken voor zover dat nodig is om de aard en het functioneren ervan vast te stellen.</p>
-            <p>Om gebruik te maken van het herroepingsrecht, stuurt de consument een ondubbelzinnige verklaring per e-mail naar support@senseglow.shop, of gebruikt het modelformulier voor herroeping (beschikbaar op senseglow.shop/retourneren).</p>
+            <p>Om gebruik te maken van het herroepingsrecht, stuurt de consument een ondubbelzinnige verklaring per e-mail naar support@senseglow.shop, of gebruikt het modelformulier voor herroeping (beschikbaar op senseglow.shop/herroepingsformulier).</p>
           </Article>
 
           <Article n={8} title="Kosten van retournering">

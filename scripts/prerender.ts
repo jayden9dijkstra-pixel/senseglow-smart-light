@@ -25,8 +25,12 @@ import {
 } from "../src/lib/structuredData";
 import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
+import { LANDING_PAGES, type LandingPage } from "../src/lib/landingPages";
+import { hasFixedKitPrice } from "../src/lib/angles";
+import { WARRANTY_TEXT } from "../src/lib/productFaqs";
+import { DELIVERY_TEXT } from "../src/lib/delivery";
 import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
-import { purchaseFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
+import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
 import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
@@ -50,6 +54,7 @@ const BASE_STATIC_ROUTES = [
   "/producten",
   "/verzending",
   "/retourneren",
+  "/herroepingsformulier",
   "/voorwaarden",
   "/privacy",
   "/over",
@@ -141,19 +146,24 @@ interface HeadInput {
   schemas: unknown[];
   ogType: string;
   ogImage?: string;
+  dutchOnly?: boolean;
 }
 
-function buildHead({ path, seo, schemas, ogType, ogImage }: HeadInput): string {
+function buildHead({ path, seo, schemas, ogType, ogImage, dutchOnly }: HeadInput): string {
   const cleanPath = path.replace(/^\/(en|fr)(?=\/|$)/, "") || "/";
   const url = `${SITE_URL}${path === "/" ? "/" : path}`;
   const lines = [
     `<title>${escapeHtml(seo.title)}</title>`,
     `<meta name="description" content="${escapeAttr(seo.description)}" />`,
     `<link rel="canonical" href="${escapeAttr(url)}" />`,
-    `<link rel="alternate" hreflang="nl" href="${SITE_URL}${cleanPath}" />`,
-    `<link rel="alternate" hreflang="en" href="${SITE_URL}/en${cleanPath}" />`,
-    `<link rel="alternate" hreflang="fr" href="${SITE_URL}/fr${cleanPath}" />`,
-    `<link rel="alternate" hreflang="x-default" href="${SITE_URL}${cleanPath}" />`,
+    ...(dutchOnly
+      ? []
+      : [
+          `<link rel="alternate" hreflang="nl" href="${SITE_URL}${cleanPath}" />`,
+          `<link rel="alternate" hreflang="en" href="${SITE_URL}/en${cleanPath}" />`,
+          `<link rel="alternate" hreflang="fr" href="${SITE_URL}/fr${cleanPath}" />`,
+          `<link rel="alternate" hreflang="x-default" href="${SITE_URL}${cleanPath}" />`,
+        ]),
     `<meta property="og:site_name" content="${escapeAttr(SITE_NAME)}" />`,
     `<meta property="og:type" content="${ogType}" />`,
     `<meta property="og:url" content="${escapeAttr(url)}" />`,
@@ -197,7 +207,7 @@ function extractOgImage(html: string): string | undefined {
  * Statische catalogus-markup in de SPA-root. React vervangt deze inhoud bij
  * hydratie; crawlers en HTML-only checks zien wel de echte producten.
  */
-function catalogFallback(products: ShopifyProduct[]): string {
+function catalogFallback(products: ShopifyProduct[], heading: "h1" | "h2" = "h1"): string {
   if (!products.length) return "";
   const items = products
     .map((p) => {
@@ -221,7 +231,7 @@ function catalogFallback(products: ShopifyProduct[]): string {
   // refresh geen flits van productafbeeldingen zien voor React hydrateert.
   const hidden =
     "position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0";
-  return `<section id="prerendered-catalog" style="${hidden}"><h1>SenseGlow collectie</h1><ul>${items}</ul></section>`;
+  return `<section id="prerendered-catalog" style="${hidden}"><${heading}>SenseGlow collectie</${heading}><ul>${items}</ul></section>`;
 }
 
 function catalogSchema(products: ShopifyProduct[], path: string): unknown {
@@ -254,15 +264,61 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   const price = product?.node.priceRange?.minVariantPrice;
   if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(locale === "en" ? parseFloat(price.amount).toFixed(2) : parseFloat(price.amount).toFixed(2).replace(".", ","))}</p>`);
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
-  if (product?.node.description) parts.push(`<p${locale === "nl" ? "" : ' lang="nl"'}>${t(product.node.description)}</p>`);
+  if (product?.node.description) parts.push(descriptionMarkup(product.node.description, locale));
   const kits = PRODUCT_KITS[handle];
   if (kits?.length) parts.push(`<h2>${t(KITS_HEADING)}</h2><ul>${kits.map((k) => `<li>${t(k.label)}</li>`).join("")}</ul>`);
   const uses = USE_CASES[handle];
   if (uses?.length) parts.push(`<h2>${t(USE_CASE_HEADING)}</h2><ul>${uses.map((u) => `<li>${t(u)}</li>`).join("")}</ul>`);
   parts.push(`<h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
-  parts.push(`<h2>${t("Veelgestelde vragen")}</h2>${purchaseFaqs.map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
+  parts.push(`<h2>${t("Veelgestelde vragen")}</h2>${getProductFaqs(content?.faqs).map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
   parts.push(`</article>`);
   return parts.join("");
+}
+
+/**
+ * Shopify-omschrijving als leesbare blokken: 'Dit doet hij', 'Voor wie?' en
+ * 'Specificaties' worden H2's. Zinnen zonder bron worden weggelaten.
+ */
+const UNSOURCED = [/Eén op de drie 65-plussers[^.]*\.\s*De meeste valpartijen[^.]*\.\s*(Dit is de simpelste[^.]*\.)?/i];
+function descriptionMarkup(description: string, locale: Locale): string {
+  let text = description;
+  for (const re of UNSOURCED) text = text.replace(re, "");
+  const lang = locale === "nl" ? "" : ' lang="nl"';
+  const parts = text.split(/\s*(Dit doet hij|Voor wie\?|Specificaties)\s+/);
+  let out = `<p${lang}>${escapeHtml(parts[0].trim())}</p>`;
+  for (let i = 1; i < parts.length; i += 2) {
+    out += `<h2${lang}>${escapeHtml(parts[i])}</h2><p${lang}>${escapeHtml((parts[i + 1] ?? "").trim())}</p>`;
+  }
+  return out;
+}
+
+/** Landingspagina in de server-HTML: zelfde inhoud als de React-pagina. */
+function landingFallback(page: LandingPage, products: Record<string, ShopifyProduct>): string {
+  const e = escapeHtml;
+  const fmt = (n: number) => `&euro;${n.toFixed(2).replace(".", ",")}`;
+  const p: string[] = [`<article id="prerendered-landing" style="max-width:60rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
+  p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p><ul>`);
+  for (const o of page.offers) {
+    const prod = products[o.handle];
+    const variants = prod?.node.variants.edges.map((x) => x.node) ?? [];
+    const match = variants.find((v) =>
+      o.kit.optionValue ? v.selectedOptions.some((s) => s.value === o.kit.optionValue)
+      : o.kit.sizeCm ? v.selectedOptions.some((s) => new RegExp(`\\b${o.kit.sizeCm}\\s*cm`, "i").test(s.value))
+      : true,
+    );
+    const price = !hasFixedKitPrice(o.kit) && match ? ` ${fmt(parseFloat(match.price.amount) * o.kit.quantity)}` : "";
+    const img = prod?.node.images?.edges?.[0]?.node;
+    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.kit.label)}" width="400" height="400" />` : ""}<h2>${e(o.kit.label)}${price}</h2><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
+  }
+  p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
+  p.push(`<h2>Waarom deze keuze</h2><ul>${[...page.benefits, WARRANTY_TEXT].map((b) => `<li>${e(b)}</li>`).join("")}</ul>`);
+  p.push(`<h2>Specificaties</h2>`);
+  for (const t of page.specs) {
+    p.push(`<table><caption>${e(t.product)}</caption><tbody>${t.rows.map(([k, v]) => `<tr><th scope="row">${e(k)}</th><td>${e(v)}</td></tr>`).join("")}</tbody></table>`);
+  }
+  p.push(`<h2>Veelgestelde vragen</h2>${page.faqs.map((f) => `<h3>${e(f.question)}</h3><p>${e(f.answer)}</p>`).join("")}`);
+  p.push(`</article>`);
+  return p.join("");
 }
 
 /** Leesbare homepage-tekst in de server-HTML, zichtbaar zonder JavaScript. */
@@ -333,7 +389,9 @@ async function main() {
       `[prerender] catalogus onvolledig: ${catalogProducts.length}/${ENABLED_PRODUCT_HANDLES.length} producten opgehaald.`,
     );
   }
+  // Op de homepage staat de H1 al in de homepagetekst; daar wordt de catalogus een H2.
   const catalogMarkup = catalogFallback(catalogProducts);
+  const homeCatalogMarkup = catalogFallback(catalogProducts, "h2");
 
   // Vaste routes
   for (const path of STATIC_ROUTES) {
@@ -355,7 +413,7 @@ async function main() {
     if (withCatalog && catalogProducts.length) schemas.push(catalogSchema(catalogProducts, path));
     let html = render({ path, seo, schemas, ogType: "website" });
     if (withCatalog && catalogMarkup) {
-      html = html.replace(/(<div id="root">)/i, `$1${catalogMarkup}`);
+      html = html.replace(/(<div id="root">)/i, `$1${cleanPath === "/" ? homeCatalogMarkup : catalogMarkup}`);
     }
     if (cleanPath === "/") {
       html = html
@@ -366,6 +424,29 @@ async function main() {
         .replace(/(<div id="root">)/i, `$1${homeFallback(localeOf(path))}`);
     }
     writeRoute(path, html);
+    written++;
+  }
+
+  // Landingspagina's (alleen Nederlands)
+  const byHandle: Record<string, ShopifyProduct> = {};
+  for (const prod of catalogProducts) byHandle[prod.node.handle] = prod;
+  for (const page of LANDING_PAGES) {
+    const handles = [...new Set(page.offers.map((o) => o.handle))];
+    const schemas: unknown[] = handles
+      .filter((h) => byHandle[h])
+      .map((h) => productSchema(byHandle[h], { path: page.path, description: page.description }));
+    if (schemas.length < handles.length) {
+      degraded++;
+      console.warn(`[prerender] ${page.path}: niet alle producten opgehaald, Product-schema onvolledig.`);
+    }
+    schemas.push(breadcrumbSchema([{ name: "Home", path: "/" }, { name: page.h1, path: page.path }]));
+    const html = render({ path: page.path, seo: { title: page.title, description: page.description }, schemas, ogType: "website", dutchOnly: true })
+      .replace(
+        /<\/head>/i,
+        `    <style>.js-on #prerendered-landing{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
+      )
+      .replace(/(<div id="root">)/i, `$1${landingFallback(page, byHandle)}`);
+    writeRoute(page.path, html);
     written++;
   }
 

@@ -101,7 +101,7 @@ const results: Record<ResultKey, { title: string; copy: string; url: string }> =
   },
   walllamp8: {
     title: "SenseGlow Wall Lamp™, 8-delige set",
-    copy: "Voor jou: de SenseGlow Wall Lamp™ 8-delige set. Voor langere trappen of meerdere ruimtes tegelijk. Hele huis veilig in tien minuten.",
+    copy: "Voor jou: de SenseGlow Wall Lamp™ 8-delige set. Voor langere trappen of meerdere ruimtes tegelijk.",
     url: "/product/senseglow_wall_lamp?set=8",
   },
   wave30: {
@@ -126,7 +126,7 @@ const results: Record<ResultKey, { title: string; copy: string; url: string }> =
   },
   ambient4: {
     title: "SenseGlow Ambient Motion Bar™ 30cm, 4-pack",
-    copy: "Voor jou: de SenseGlow Ambient Motion Bar™ 30cm, 4-pack. Voor het hele huis. 15% korting tov los.",
+    copy: "Voor jou: de SenseGlow Ambient Motion Bar™ 30cm, 4-pack. Voor het hele huis, met bundelkorting.",
     url: "/product/senseglow_ambient_motion_bar?size=30&bundle=4",
   },
 };

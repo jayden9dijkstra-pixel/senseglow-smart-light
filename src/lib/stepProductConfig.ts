@@ -25,13 +25,13 @@ export const STEP_OUTCOMES = [
   },
   {
     icon: "🛡️",
-    title: "Voorkom valpartijen",
-    description: "Eén op de drie 65-plussers valt jaarlijks. De meeste valpartijen gebeuren op de trap, 's nachts.",
+    title: "Licht waar je stapt",
+    description: "De lampjes gaan aan zodra je de trap nadert, zodat je 's nachts niet in het donker loopt.",
   },
   {
     icon: "⚡",
     title: "Plakken en klaar",
-    description: "Geen boren, geen kabels, geen installateur. Binnen 5 minuten geïnstalleerd.",
+    description: "Geen boren, geen kabels, geen installateur. In een paar minuten geplaatst.",
   },
 ];
 

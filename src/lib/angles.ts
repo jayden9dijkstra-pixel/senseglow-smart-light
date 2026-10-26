@@ -20,6 +20,8 @@ export interface Kit {
   quantity: number;
   /** Maat in cm die de variant moet hebben; leeg = maat van de gekozen variant. */
   sizeCm?: number;
+  /** Optiewaarde die de variant moet hebben, bv. "8-delige set". */
+  optionValue?: string;
 }
 
 export interface Angle {
@@ -38,28 +40,28 @@ export const KITS: Record<string, Kit> = {
   trapkit: {
     id: "trapkit",
     name: "Trapkit",
-    label: "Trapkit: 4x Ambient Motion Bar 20 cm voor €84,95 (los €99,80)",
+    label: "Trapkit: 4x Ambient Motion Bar 20 cm voor €84,95 (los gekocht €99,80)",
     quantity: 4,
     sizeCm: 20,
   },
   gangset: {
     id: "gangset",
     name: "Gangset",
-    label: "Gangset: 2x Ambient Motion Bar 30 cm voor €52,95 (los €59,90)",
+    label: "Gangset: 2x Ambient Motion Bar 30 cm voor €52,95 (los gekocht €59,90)",
     quantity: 2,
     sizeCm: 30,
   },
   verhuurderskit: {
     id: "verhuurderskit",
     name: "Verhuurderskit",
-    label: "Verhuurderskit: 4x Ambient Motion Bar 30 cm voor €99,95 (los €119,80)",
+    label: "Verhuurderskit: 4x Ambient Motion Bar 30 cm voor €99,95 (los gekocht €119,80)",
     quantity: 4,
     sizeCm: 30,
   },
   solarduo: {
     id: "solarduo",
     name: "Solar duo",
-    label: "Solar duo: 2x Solar Lantern voor €74,95 (los €89,90)",
+    label: "Solar duo: 2x Solar Lantern voor €74,95 (los gekocht €89,90)",
     quantity: 2,
   },
 };
@@ -91,7 +93,7 @@ export const ANGLES: Record<string, Record<string, Angle>> = {
   },
   [FLEX_PRODUCT_HANDLE]: {
     student: {
-      heading: "Design-lamp voor je kamer, zonder boren.",
+      heading: "Design-lamp voor je kamer, die je zelf ophangt.",
       benefits: [
         "Touch-dimbaar: jij kiest de sfeer",
         "Magnetisch ophangen en verplaatsen, ideaal voor een huurkamer",
@@ -120,7 +122,7 @@ export const USE_CASES: Record<string, string[]> = {
     "Terras: een warme gloed op tafel of in de hoek, zonder stopcontact in de buurt.",
   ],
   [FLEX_PRODUCT_HANDLE]: [
-    "Studentenkamer: een design-lamp die je magnetisch ophangt, zonder gaten in de muur van je huurkamer.",
+    "Studentenkamer: een design-lamp die je met de magnetische wandbeugel boven je bureau of bed hangt.",
     "Slaapkamer: dim het licht met een aanraking tot een rustige sfeer voor het slapen.",
     "Leeshoek: verplaats de lamp naar je stoel en kies zelf hoe fel je wilt lezen.",
   ],
@@ -133,6 +135,17 @@ export const USE_CASES: Record<string, string[]> = {
     "Gang: lampjes laag langs de muur die aangaan zodra je 's nachts opstaat.",
   ],
 };
+
+/** Losse producten en sets zonder vaste kitprijs (prijs komt uit Shopify). */
+export const OFFERS: Record<string, Kit> = {
+  wall4: { id: "wall4", name: "Wall Lamp 4-delige set", label: "SenseGlow Wall Lamp™ 4-delige set", quantity: 1, optionValue: "4-delige set" },
+  wall8: { id: "wall8", name: "Wall Lamp 8-delige set", label: "SenseGlow Wall Lamp™ 8-delige set", quantity: 1, optionValue: "8-delige set" },
+  solar1: { id: "solar1", name: "Solar Lantern", label: "SenseGlow Solar Lantern™", quantity: 1 },
+  flex1: { id: "flex1", name: "Flex", label: "SenseGlow Flex™", quantity: 1 },
+};
+
+/** Kits waarvan de prijs vast in de tekst staat (korting via Shopify). */
+export const hasFixedKitPrice = (kit: Kit) => /voor €/.test(kit.label);
 
 export const USE_CASE_HEADING = "Waar gebruik je hem?";
 export const KITS_HEADING = "Voordeliger per set";
@@ -186,8 +199,12 @@ const colorOf = (v: VariantLike) => {
 
 /** Variant van dezelfde kleur als de keuze, in de maat die de kit vraagt. */
 export function kitVariant<V extends VariantLike>(kit: Kit, selected: V | null | undefined, variants: V[]): V | null {
-  if (!kit.sizeCm) return selected ?? variants[0] ?? null;
+  if (!kit.sizeCm && !kit.optionValue) return selected ?? variants[0] ?? null;
   const color = selected ? colorOf(selected) : null;
-  const inSize = variants.filter((v) => sizeOf(v) === kit.sizeCm);
+  const inSize = variants.filter((v) =>
+    kit.optionValue
+      ? v.selectedOptions.some((o) => o.value.toLowerCase() === kit.optionValue!.toLowerCase())
+      : sizeOf(v) === kit.sizeCm,
+  );
   return inSize.find((v) => colorOf(v) === color) ?? inSize[0] ?? null;
 }

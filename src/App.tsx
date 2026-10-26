@@ -18,6 +18,9 @@ import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import Catalog from "./pages/Catalog";
 import NotFound from "./pages/NotFound";
+import LandingPage from "./pages/LandingPage";
+import WithdrawalForm from "./pages/WithdrawalForm";
+import { LANDING_PATHS } from "@/lib/landingPages";
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const Quiz = lazy(() => import("./pages/Quiz"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -100,6 +103,10 @@ const App = () => (
             <Route path="/track" element={<OrderTracking />} />
             <Route path="/bestelling-volgen" element={<OrderTracking />} />
             <Route path="/retourneren" element={<Returns />} />
+            <Route path="/herroepingsformulier" element={<WithdrawalForm />} />
+            {LANDING_PATHS.map((p) => (
+              <Route key={p} path={p} element={<LandingPage />} />
+            ))}
             <Route path="/over" element={<About />} />
             <Route path="/stel-je-bundel-samen" element={<BundleBuilder />} />
             <Route path="/bundels" element={<BundleBuilder />} />
@@ -122,6 +129,7 @@ const App = () => (
               <Route key={`${locale}-track`} path={`/${locale}/track`} element={<OrderTracking />} />,
               <Route key={`${locale}-legacy-track`} path={`/${locale}/bestelling-volgen`} element={<OrderTracking />} />,
               <Route key={`${locale}-returns`} path={`/${locale}/retourneren`} element={<Returns />} />,
+              <Route key={`${locale}-withdrawal`} path={`/${locale}/herroepingsformulier`} element={<WithdrawalForm />} />,
               <Route key={`${locale}-about`} path={`/${locale}/over`} element={<About />} />,
               <Route key={`${locale}-builder`} path={`/${locale}/stel-je-bundel-samen`} element={<BundleBuilder />} />,
               <Route key={`${locale}-bundles`} path={`/${locale}/bundels`} element={<BundleBuilder />} />,

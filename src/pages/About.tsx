@@ -92,7 +92,7 @@ const About = () => {
                 SenseGlow is een handelsnaam van Jayden Ecom, een Nederlandse eenmanszaak gevestigd in Kimswerd, Friesland. Geregistreerd bij de Kamer van Koophandel onder nummer 99634929.
               </p>
               <p>
-                Bestellingen worden afgehandeld via een logistiek partner in Europa. Klantcontact, advies en garantie-afhandeling lopen rechtstreeks vanuit Nederland. Geen overzeese helpdesk, geen vertraging.
+                Bestellingen worden afgehandeld via een logistiek partner. Klantcontact, advies en garantie-afhandeling lopen rechtstreeks vanuit Nederland. Geen overzeese helpdesk, geen vertraging.
               </p>
             </div>
           </section>

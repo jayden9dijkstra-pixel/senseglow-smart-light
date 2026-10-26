@@ -4,7 +4,7 @@ const items = [
   {
     icon: Wrench,
     title: "Geen elektricien nodig",
-    body: "Magnetisch, plakstrip of twee schroeven. Geïnstalleerd in minuten, niet uren.",
+    body: "Magnetisch, plakstrip of twee schroeven. In een paar minuten geplaatst.",
   },
   {
     icon: BatteryCharging,
