@@ -162,6 +162,10 @@ export const ProductHeroSection = ({
 
               <ReviewSummary />
 
+              {angle?.kit && (
+                <KitOffers product={product} selectedVariant={selectedVariant} preselectedKitId={angle.kit.id} />
+              )}
+
               {/* Price with animation */}
               <div className="space-y-1">
                 <div className="flex items-baseline gap-4">
