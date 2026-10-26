@@ -1,18 +1,25 @@
 /**
- * Wettelijke bedrijfsgegevens voor de footer. Zolang er nog een veld op
- * PLACEHOLDER staat, toont de footer dit blok niet.
+ * Wettelijke bedrijfsgegevens voor de footer (client én prerender).
+ * Rechtsvorm blijft leeg tot Jay die bevestigt.
  */
-export const PLACEHOLDER = "[INVULLEN]";
-
 export const BUSINESS_INFO = {
-  companyName: PLACEHOLDER,
-  legalForm: PLACEHOLDER,
-  kvk: PLACEHOLDER,
-  vat: PLACEHOLDER,
-  address: PLACEHOLDER,
+  companyName: "Jayden Ecom (SenseGlow)",
+  legalForm: "",
+  kvk: "99634929",
+  vat: "NL005399692B39",
+  address: "Tolheksleane 4A, 8821 MD Kimswerd",
+  addressNote: "post- en retouradres, geen bezoekadres",
+  email: "support@senseglow.shop",
 };
 
 export type BusinessInfo = typeof BUSINESS_INFO;
 
-export const isBusinessInfoComplete = (info: BusinessInfo = BUSINESS_INFO) =>
-  Object.values(info).every((v) => v.trim() !== "" && !v.includes(PLACEHOLDER));
+/** Eén regel bedrijfsgegevens, zelfde tekst in footer en server-HTML. */
+export const businessLine = (info: BusinessInfo = BUSINESS_INFO) =>
+  [
+    info.legalForm ? `${info.companyName}, ${info.legalForm}` : info.companyName,
+    `KvK ${info.kvk}`,
+    `btw ${info.vat}`,
+    `${info.address} (${info.addressNote})`,
+    info.email,
+  ].join(" · ");

@@ -1,3 +1,4 @@
+import { adConsentStatus } from "@/lib/consent";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
@@ -385,11 +386,10 @@ export async function previewCart(
   }
 }
 
-/** Cookiekeuze van de bezoeker voor advertentiemeting. */
+/** Cookiekeuze van de bezoeker voor advertentiemeting (marketing). */
 function readAdConsent(): 'granted' | 'denied' | null {
   try {
-    const v = window.localStorage.getItem('sg_consent') ?? document.cookie.match(/(?:^|;\s*)sg_consent=(all|necessary)/)?.[1];
-    return v === 'all' ? 'granted' : v === 'necessary' ? 'denied' : null;
+    return adConsentStatus();
   } catch {
     return null;
   }

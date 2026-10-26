@@ -1,0 +1,191 @@
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+
+
+export const PrivacyContent = () => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <div className="container py-12 max-w-4xl">
+        <Button variant="ghost" onClick={() => navigate("/")} className="mb-8">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Terug naar home
+        </Button>
+
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">Privacyverklaring</h1>
+            <p className="text-sm text-foreground/50">
+              Laatst bijgewerkt: 15 juni 2026
+            </p>
+          </div>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">Inleiding</h2>
+            <p className="text-foreground/70 leading-relaxed">
+              SenseGlow verwerkt persoonsgegevens van bezoekers en klanten. In deze verklaring lees je welke gegevens we verwerken, waarom, hoe lang, en welke rechten je hebt. We houden ons aan de Algemene Verordening Gegevensbescherming (AVG/GDPR).
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">1. Wie zijn wij?</h2>
+            <div className="text-foreground/70 leading-relaxed space-y-1">
+              <p>Jayden Ecom, handelend onder de naam SenseGlow™, is gevestigd in Nederland.</p>
+              <p>KvK-nummer: 99634929</p>
+              <p>BTW-nummer: NL005399692B39</p>
+              <p>Vestigingsadres: Tolheksleane 4 A, 8821 MD Kimswerd</p>
+              <p>Contact: <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a></p>
+              <p className="pt-2">Voor vragen over deze privacyverklaring of het uitoefenen van je rechten, mail support@senseglow.shop.</p>
+            </div>
+          </section>
+
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">2. Welke persoonsgegevens verwerken we?</h2>
+            <p className="text-foreground/70">We verwerken de volgende gegevens, alleen wanneer je ze actief deelt of wanneer ze nodig zijn voor de uitvoering van onze dienst:</p>
+            <ul className="space-y-2 text-foreground/70 list-disc pl-6">
+              <li><strong>Bij een bestelling:</strong> voor- en achternaam, e-mailadres, bezorgadres, factuuradres, telefoonnummer (alleen voor bezorging), betaalgegevens (afgehandeld door betaalprovider).</li>
+              <li><strong>Bij contact:</strong> naam, e-mailadres, inhoud van je bericht.</li>
+              <li><strong>Bij websitegebruik:</strong> IP-adres, browsertype, bezochte pagina's, klikgedrag, verwijzende website (analytisch).</li>
+              <li><strong>Bij marketing (alleen na opt-in):</strong> e-mailadres voor nieuwsbrief.</li>
+            </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">3. Waarom verwerken we deze gegevens?</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-foreground/10">
+                <thead className="bg-background-secondary">
+                  <tr>
+                    <th className="text-left p-3 border-b border-foreground/10">Doel</th>
+                    <th className="text-left p-3 border-b border-foreground/10">Welke gegevens</th>
+                    <th className="text-left p-3 border-b border-foreground/10">Rechtsgrondslag</th>
+                  </tr>
+                </thead>
+                <tbody className="text-foreground/70">
+                  {[
+                    ["Uitvoeren bestelling", "NAW, e-mail, betaalgegevens", "Uitvoering overeenkomst"],
+                    ["Klantenservice", "Contactgegevens + berichtinhoud", "Uitvoering overeenkomst"],
+                    ["Verzending", "NAW + telefoonnummer", "Uitvoering overeenkomst"],
+                    ["Boekhouding (factuur)", "NAW + bestelgegevens", "Wettelijke verplichting"],
+                    ["Website-analyse", "IP, browsergegevens, gedrag", "Gerechtvaardigd belang"],
+                    ["Marketing-e-mail", "E-mailadres", "Toestemming"],
+                    ["Retargeting/advertenties", "Cookies, browsergedrag", "Toestemming"],
+                  ].map(([a, b, c]) => (
+                    <tr key={a} className="border-b border-foreground/10">
+                      <td className="p-3">{a}</td>
+                      <td className="p-3">{b}</td>
+                      <td className="p-3">{c}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">4. Hoe lang bewaren we je gegevens?</h2>
+            <ul className="space-y-1 text-foreground/70 list-disc pl-6">
+              <li>Bestelgegevens (incl. factuur): 7 jaar (fiscale bewaarplicht)</li>
+              <li>Klantenservice-correspondentie: 2 jaar na laatste contact</li>
+              <li>Nieuwsbrief-data: tot je je uitschrijft</li>
+              <li>Website-analytics: maximaal 26 maanden</li>
+              <li>Cookies: zie punt 7 (Cookies)</li>
+            </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">5. Met wie delen we je gegevens?</h2>
+            <p className="text-foreground/70">Voor het uitvoeren van onze dienst werken we met de volgende verwerkers/partijen:</p>
+            <ul className="space-y-2 text-foreground/70 list-disc pl-6">
+              <li><strong>Shopify</strong> (Canada/VS), onze webshop-platform en betaalverwerking. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
+              <li><strong>DHL</strong> (Nederland/EU), bezorging van pakketten. Ontvangt NAW + telefoonnummer.</li>
+              <li><strong>17TRACK</strong> (China), pakkettracking. Ontvangt alleen track-code, geen persoonsgegevens.</li>
+              <li><strong>Betaalprovider</strong> (Mollie, Stripe, of vergelijkbaar, EU), verwerkt betalingen.</li>
+              <li><strong>E-mailprovider</strong>, ontvangt e-mailadres + naam voor transactionele en marketing-mails.</li>
+              <li><strong>Google</strong> (VS), advertentiemeting en website-analyse. Alleen na cookie-toestemming. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
+              <li><strong>Meta (Facebook/Instagram)</strong>, alleen na cookie-toestemming.</li>
+              <li><strong>TikTok</strong>, alleen na cookie-toestemming.</li>
+            </ul>
+            <p className="text-foreground/70">We verkopen geen persoonsgegevens aan derden.</p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">6. Doorgifte buiten de EU</h2>
+            <p className="text-foreground/70 leading-relaxed">
+              Sommige van onze verwerkers (Shopify, 17TRACK, Meta, TikTok) zijn gevestigd buiten de Europese Economische Ruimte (EER). We hebben passende waarborgen getroffen door middel van EU-Standard Contractual Clauses (SCC's) en/of bestaande adequaatheidsbesluiten.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">7. Cookies</h2>
+            <p className="text-foreground/70 leading-relaxed">
+              Onze website gebruikt cookies en vergelijkbare opslag in je browser. Bij je eerste bezoek vragen we expliciete toestemming voor niet-functionele cookies. Je keuze bewaren we 12 maanden; daarna vragen we opnieuw. Je kunt je keuze altijd wijzigen via de link Cookie-instellingen onderaan elke pagina.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-foreground/10">
+                <thead className="bg-background-secondary">
+                  <tr>
+                    <th className="text-left p-3 border-b border-foreground/10">Soort</th>
+                    <th className="text-left p-3 border-b border-foreground/10">Waarvoor</th>
+                    <th className="text-left p-3 border-b border-foreground/10">Bewaartermijn</th>
+                  </tr>
+                </thead>
+                <tbody className="text-foreground/70">
+                  {[
+                    ["Functioneel", "Winkelwagen, sessie, gekozen taal en je cookiekeuze. Altijd actief, de site werkt niet zonder.", "Sessie tot 12 maanden"],
+                    ["Analytisch", "Eigen bezoekmeting en Google Analytics. Alleen actief na toestemming.", "Maximaal 26 maanden"],
+                    ["Marketing", "Google Ads meet welke advertentie tot een aankoop leidde (klik-id, 90 dagen). Meta en TikTok alleen na toestemming.", "90 dagen"],
+                  ].map(([a, b, c]) => (
+                    <tr key={a} className="border-b border-foreground/10">
+                      <td className="p-3">{a}</td>
+                      <td className="p-3">{b}</td>
+                      <td className="p-3">{c}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-foreground/70 leading-relaxed">
+              Kies je "Alleen noodzakelijk", dan blijven statistiek- en marketingcookies uit en meet ook de afrekenpagina geen advertentieresultaten.
+            </p>
+            <p className="text-foreground/70 leading-relaxed">
+              Kwam je via een Google-advertentie binnen en accepteer je marketingcookies? Dan geven we bij je bestelling de advertentieklik-ID, het orderbedrag en het ordernummer door aan Google. Zo ziet Google welke advertentie tot een bestelling leidde. We sturen daarbij geen naam, e-mailadres of adres mee. Kies je "Alleen noodzakelijk", dan geven we voor jouw bestelling niets door aan Google.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">8. Jouw rechten</h2>
+            <p className="text-foreground/70">Onder de AVG heb je de volgende rechten:</p>
+            <ul className="space-y-1 text-foreground/70 list-disc pl-6">
+              <li><strong>Recht op inzage</strong>, opvragen welke gegevens we van je hebben.</li>
+              <li><strong>Recht op correctie</strong>, onjuiste gegevens laten aanpassen.</li>
+              <li><strong>Recht op verwijdering</strong>, je gegevens laten wissen.</li>
+              <li><strong>Recht op beperking</strong>, verwerking tijdelijk laten stoppen.</li>
+              <li><strong>Recht op dataportabiliteit</strong>, je gegevens in een gangbaar formaat ontvangen.</li>
+              <li><strong>Recht van bezwaar</strong>, bezwaar maken tegen verwerking.</li>
+              <li><strong>Recht om toestemming in te trekken</strong>, bv. uitschrijven nieuwsbrief.</li>
+            </ul>
+            <p className="text-foreground/70">Een verzoek doe je via support@senseglow.shop. We reageren binnen 30 dagen.</p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">9. Klacht indienen</h2>
+            <p className="text-foreground/70 leading-relaxed">
+              Heb je een klacht over hoe wij met je gegevens omgaan? Probeer het eerst met ons op te lossen via support@senseglow.shop. Lukt dat niet, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens via autoriteitpersoonsgegevens.nl.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">10. Wijzigingen</h2>
+            <p className="text-foreground/70 leading-relaxed">
+              Deze privacyverklaring kan gewijzigd worden. De meest recente versie staat altijd op senseglow.shop/privacy met de datum van laatste wijziging bovenaan.
+            </p>
+          </section>
+        </div>
+      </div>
+    </>
+  );
+};

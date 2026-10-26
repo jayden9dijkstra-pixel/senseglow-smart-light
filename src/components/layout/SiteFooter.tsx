@@ -1,4 +1,5 @@
-import { BUSINESS_INFO, isBusinessInfoComplete } from "@/lib/businessInfo";
+import { businessLine } from "@/lib/businessInfo";
+import { openCookieSettings } from "@/lib/consent";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -106,6 +107,7 @@ export const SiteFooter = () => {
               <ul className="space-y-3 text-sm">
                 <li><Link to={localizePath("/privacy")} className={linkClass}>Privacybeleid</Link></li>
                 <li><Link to={localizePath("/voorwaarden")} className={linkClass}>Algemene voorwaarden</Link></li>
+                <li><button type="button" onClick={openCookieSettings} className={linkClass}>Cookie-instellingen</button></li>
               </ul>
             </div>
             <div>
@@ -126,16 +128,12 @@ export const SiteFooter = () => {
             </div>
           </div>
 
-          {isBusinessInfoComplete() && (
-            <address className="not-italic text-[11px] text-foreground/45 pt-10 mt-10 border-t border-foreground/6 space-y-1">
-              <p>{BUSINESS_INFO.companyName} · {BUSINESS_INFO.legalForm}</p>
-              <p>KvK {BUSINESS_INFO.kvk} · btw {BUSINESS_INFO.vat}</p>
-              <p>{BUSINESS_INFO.address}</p>
-            </address>
-          )}
+          <address className="not-italic text-[11px] text-foreground/45 pt-10 mt-10 border-t border-foreground/6">
+            <p>{businessLine()}</p>
+          </address>
 
           <div className="text-[11px] text-foreground/30 pt-10 mt-10 border-t border-foreground/6">
-            <p>© 2026 Jayden Ecom (SenseGlow™). Alle rechten voorbehouden. KvK 99634929 · BTW NL005399692B39</p>
+            <p>© 2026 Jayden Ecom (SenseGlow™). Alle rechten voorbehouden.</p>
           </div>
         </div>
       </div>
