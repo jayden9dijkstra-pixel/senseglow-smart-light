@@ -79,7 +79,7 @@ const Shipping = () => {
           {/* Toelichting */}
           {[
             {
-              title: "Waarom 7-14 dagen?",
+              title: "Waarom 7-14 werkdagen?",
               body: "We werken met een logistiek partner buiten Nederland om de prijzen laag te houden. Dat scheelt jou geld en kost een paar dagen extra verzendtijd. We zijn daar liever eerlijk over dan dat we bezorging van morgen beloven.",
             },
             {
@@ -91,7 +91,7 @@ const Shipping = () => {
               body: "De vervoerder probeert het opnieuw of brengt het pakket naar een afhaalpunt in de buurt. Je krijgt bericht waar je het kunt ophalen.",
             },
             {
-              title: "Pakket niet ontvangen na 14 dagen verzendtijd?",
+              title: "Pakket niet ontvangen na 14 werkdagen?",
               body: "Mail support@senseglow.shop met je bestelnummer. We zoeken het uit met de vervoerder en zorgen dat je je product krijgt of je geld terug.",
             },
           ].map(({ title, body }) => (
