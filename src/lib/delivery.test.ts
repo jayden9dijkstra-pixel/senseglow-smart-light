@@ -16,10 +16,13 @@ describe("delivery window", () => {
   });
 });
 
-import { BUSINESS_INFO, isBusinessInfoComplete } from "./businessInfo";
+import { businessLine } from "./businessInfo";
 describe("footer business details", () => {
-  it("stay hidden while any field is a placeholder", () => {
-    expect(isBusinessInfoComplete()).toBe(false);
-    expect(isBusinessInfoComplete({ ...BUSINESS_INFO, companyName: "X", legalForm: "X", kvk: "1", vat: "NL1", address: "A" })).toBe(true);
+  it("toont KvK, btw en adres als post- en retouradres", () => {
+    const line = businessLine();
+    expect(line).toContain("Jayden Ecom (SenseGlow)");
+    expect(line).toContain("KvK 99634929");
+    expect(line).toContain("btw NL005399692B39");
+    expect(line).toContain("Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres, geen bezoekadres)");
   });
 });
