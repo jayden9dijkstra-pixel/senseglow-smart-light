@@ -123,3 +123,8 @@
 - [x] Shopify-kortingsregels in de winkelwagen
 - [x] 'Waar gebruik je hem?' op elke productpagina
 - [x] Productinhoud, FAQ en verzend-/retourinfo in de server-HTML, NL/EN/FR met eigen titel
+
+## Rechtsvorm en landingspagina's (2026-10-26)
+- [x] Rechtsvorm eenmanszaak door Jay bevestigd: in footerregel (businessLine), /contact-kaart en artikel 1 van /voorwaarden
+- [x] Vijf NL-landingspagina's in sitemap: /trapverlichting, /gangverlichting, /verlichting-vakantiewoning, /solar-buitenlamp, /lamp-studentenkamer
+- [ ] Publiceren (rechtsvorm en landingspagina's staan nog niet op het openbare domein)
