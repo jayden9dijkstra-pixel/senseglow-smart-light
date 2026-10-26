@@ -3,6 +3,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { ENABLED_PRODUCT_HANDLES } from "../src/lib/productConfig";
+import { LANDING_PATHS } from "../src/lib/landingPages";
 
 const BASE_URL = "https://www.senseglow.shop";
 
@@ -23,6 +24,7 @@ const entries: SitemapEntry[] = [
   { path: "/quiz", changefreq: "monthly", priority: "0.6" },
   { path: "/verzending", changefreq: "yearly", priority: "0.5" },
   { path: "/retourneren", changefreq: "yearly", priority: "0.5" },
+  { path: "/herroepingsformulier", changefreq: "yearly", priority: "0.3" },
   { path: "/bestelling-volgen", changefreq: "yearly", priority: "0.4" },
   { path: "/over", changefreq: "yearly", priority: "0.5" },
   { path: "/duurzaamheid", changefreq: "yearly", priority: "0.4" },
@@ -54,5 +56,11 @@ function generateSitemap(list: SitemapEntry[]) {
   ].join("\n");
 }
 
-writeFileSync(resolve("public/sitemap.xml"), generateSitemap(localizedEntries));
-console.log(`sitemap.xml written (${localizedEntries.length} entries)`);
+// Landingspagina's bestaan alleen in het Nederlands.
+const allEntries = [
+  ...localizedEntries,
+  ...LANDING_PATHS.map((path) => ({ path, changefreq: "weekly" as const, priority: "0.8" })),
+];
+
+writeFileSync(resolve("public/sitemap.xml"), generateSitemap(allEntries));
+console.log(`sitemap.xml written (${allEntries.length} entries)`);
