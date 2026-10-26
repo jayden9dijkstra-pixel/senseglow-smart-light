@@ -1,3 +1,4 @@
+import { adConsentStatus } from "@/lib/consent";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ENABLED_PRODUCT_HANDLES } from "@/lib/productConfig";
