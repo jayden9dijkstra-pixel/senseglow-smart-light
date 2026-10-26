@@ -1,17 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ArrowLeft, RotateCcw, Euro, FileText } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const Returns = () => {
   const navigate = useNavigate();
+  const { localizePath } = useI18n();
 
   return (
     <PageLayout>
@@ -73,7 +69,7 @@ const Returns = () => {
 
           {[
             { title: "Wat als het product defect is?", body: "Mail ons direct met een foto/video van het defect. Bij erkende defecten sturen we óf direct een vervanger, óf betalen we het volledige bedrag (inclusief jouw retour-verzendkosten) terug. Geen gedoe." },
-            { title: "Wat valt onder de garantie?", body: "Eén jaar functionele garantie. Als het product binnen die periode kapot gaat door normaal gebruik, lossen we het op. Schade door val, water (behalve Solar Lantern die IP65 is), of opzettelijke beschadiging valt er niet onder." },
+            { title: "Wat valt onder de garantie?", body: "Naast je wettelijke garantie krijg je 1 jaar extra functionele garantie van SenseGlow. Als het product binnen die periode kapot gaat door normaal gebruik, lossen we het op. Schade door val, water (behalve Solar Lantern die IP65 is), of opzettelijke beschadiging valt er niet onder." },
           ].map(({ title, body }) => (
             <Card key={title} className="border-foreground/10 bg-background">
               <CardContent className="p-6">
@@ -83,38 +79,16 @@ const Returns = () => {
             </Card>
           ))}
 
-          {/* Modelformulier */}
-          <Card className="border-foreground/10 bg-background">
-            <CardContent className="p-2">
-              <Accordion type="single" collapsible>
-                <AccordionItem value="model" className="border-b-0">
-                  <AccordionTrigger className="px-4 text-base font-semibold hover:text-glow hover:no-underline">
-                    Modelformulier voor herroeping
-                  </AccordionTrigger>
-                  <AccordionContent className="px-4 pb-4">
-                    <pre className="whitespace-pre-wrap text-sm text-foreground/70 bg-background-secondary p-5 rounded-lg border border-foreground/10 font-mono leading-relaxed">
-{`Modelformulier voor herroeping
-
-(Dit formulier alleen invullen en terugsturen wanneer je de overeenkomst wilt herroepen)
-
-Aan: SenseGlow
-E-mail: support@senseglow.shop
-
-Hierbij deel ik/delen wij* mede dat ik/wij* onze overeenkomst betreffende
-de verkoop van de volgende goederen herroep/herroepen*:
-
-Besteld op*/Ontvangen op*: ...........................
-Naam consument(en): ......................................
-Adres consument(en): .....................................
-Bestelnummer: ............................................
-Handtekening (alleen bij papier): ........................
-Datum: ...................................................
-
-* Doorhalen wat niet van toepassing is.`}
-                    </pre>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+          {/* Wettelijk herroepingsrecht */}
+          <Card id="herroepingsrecht" className="border-foreground/10 bg-background">
+            <CardContent className="p-6 space-y-2">
+              <h2 className="font-semibold text-lg">Wettelijk herroepingsrecht van 14 dagen</h2>
+              <p className="text-foreground/60 leading-relaxed">
+                Je hebt altijd het wettelijke recht om je aankoop binnen 14 dagen na ontvangst zonder opgave van reden te herroepen. Onze 30 dagen retour komt daar bovenop. Je kunt herroepen met een e-mail naar support@senseglow.shop of met het modelformulier.
+              </p>
+              <Link to={localizePath("/herroepingsformulier")} className="inline-block text-primary underline underline-offset-4">
+                Naar het modelformulier voor herroeping
+              </Link>
             </CardContent>
           </Card>
         </div>
