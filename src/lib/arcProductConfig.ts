@@ -71,7 +71,6 @@ export const ARC_USE_CASES = [
     icon: "🚪",
     title: "Voorgevel / voordeur",
     description: "Symmetrisch licht naast je entree",
-    badge: "Meest gekozen",
   },
   {
     icon: "🌿",

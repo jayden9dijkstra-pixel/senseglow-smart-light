@@ -48,7 +48,7 @@ export const STEP_PROBLEM_SOLUTION = {
 };
 
 export const STEP_USE_CASES = [
-  { icon: "🪜", title: "Trap", description: "De primaire plek waar Step het verschil maakt", badge: "Meest gekozen" },
+  { icon: "🪜", title: "Trap", description: "De primaire plek waar Step het verschil maakt" },
   { icon: "🚪", title: "Gang / hal", description: "Veilige route naar de badkamer 's nachts" },
   { icon: "🛏️", title: "Kinderkamer", description: "Zacht nachtlampje zonder schakelaar" },
   { icon: "🚿", title: "Badkamer", description: "Wegwijs in het donker" },

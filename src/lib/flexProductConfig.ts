@@ -69,7 +69,6 @@ export const FLEX_USE_CASES = [
     icon: "💻",
     title: "Bureau / study setup",
     description: "Perfect gericht licht op je werkplek",
-    badge: "Populair",
   },
   {
     icon: "📖",

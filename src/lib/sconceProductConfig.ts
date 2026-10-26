@@ -36,7 +36,7 @@ export const SCONCE_PROBLEM_SOLUTION = {
 };
 
 export const SCONCE_USE_CASES = [
-  { icon: "🛏️", title: "Slaapkamer", description: "Boven het bed als sfeerlicht", badge: "Meest gekozen" },
+  { icon: "🛏️", title: "Slaapkamer", description: "Boven het bed als sfeerlicht" },
   { icon: "🛋️", title: "Woonkamer", description: "Symmetrisch naast de bank" },
   { icon: "🚪", title: "Hal", description: "Warm onthaal bij de deur" },
   { icon: "🖼️", title: "Boven kunst", description: "Accentverlichting zonder kabels" },

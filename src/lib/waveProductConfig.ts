@@ -55,7 +55,6 @@ export const WAVE_USE_CASES = [
     icon: "🗄️",
     title: "Onder kastjes",
     description: "Stijlvolle verlichting",
-    badge: "Populair",
   },
   {
     icon: "💻",

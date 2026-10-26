@@ -67,7 +67,6 @@ export const LANTERN_USE_CASES = [
     icon: "🌿",
     title: "Tuin / tuinpad",
     description: "Sfeervolle verlichting langs het pad",
-    badge: "Meest gekozen",
   },
   {
     icon: "🏗️",

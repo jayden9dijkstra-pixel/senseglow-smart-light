@@ -5,39 +5,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Shield, Truck, RotateCcw } from "lucide-react";
+import { HOME_FAQS } from "@/lib/homeContent";
 
-const faqs = [
-  {
-    question: "Hoe zit het met installatie?",
-    answer:
-      "Niet één van onze producten heeft een elektricien nodig. Vier producten zijn magnetisch of zelfklevend, alleen de Solar Lantern krijgt twee schroeven mee. Gemiddelde montagetijd: 30 seconden tot 5 minuten.",
-  },
-  {
-    question: "Hoe lang gaat de batterij mee?",
-    answer:
-      "Tussen de 3 weken (Ambient bij intensief nachtgebruik) en 8 weken (Flex bij studie-gebruik). De Solar Lantern hoef je niet op te laden, die doet het zonnepaneel zelf.",
-  },
-  {
-    question: "Kan ik bundels combineren?",
-    answer:
-      "Ja. Op de productpagina vind je per product de beschikbare 2-, 3- of 4-packs met kortingen tot 15%. Bundle-korting wordt automatisch in je winkelwagen verrekend.",
-  },
-  {
-    question: "Wat is de garantie?",
-    answer:
-      "Eén jaar volledige functionele garantie op alle producten. Werkt iets niet zoals beloofd? Mail support@senseglow.shop, we sturen een vervanger of geven je geld terug. Bovenop je wettelijke rechten.",
-  },
-  {
-    question: "Hoe snel wordt mijn bestelling geleverd?",
-    answer:
-      "Tussen de 7 en 14 dagen in totaal, inclusief verwerking. Je krijgt een track-code per mail zodra het pakket onderweg is. Track via senseglow.shop/volg-je-bestelling.",
-  },
-  {
-    question: "Mag ik retourneren als het niet bevalt?",
-    answer:
-      "Ja, 30 dagen lang, zonder opgaaf van reden. De retourkosten zijn voor onze rekening. Stuur het product in originele staat terug naar Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres) en je hebt binnen 14 dagen je geld retour.",
-  },
-];
+const faqs = HOME_FAQS;
 
 const trustIcons = [
   { icon: Shield, text: "1 jaar garantie" },
