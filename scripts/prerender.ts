@@ -27,6 +27,7 @@ import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
 import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
 import { purchaseFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
+import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -264,6 +265,20 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   return parts.join("");
 }
 
+/** Leesbare homepage-tekst in de server-HTML, zichtbaar zonder JavaScript. */
+function homeFallback(locale: Locale): string {
+  const t = (x: string) => escapeHtml(translate(locale, x));
+  const prefix = locale === "nl" ? "" : `/${locale}`;
+  const p: string[] = [`<article id="prerendered-home" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
+  p.push(`<p>${t(HOME_HERO.eyebrow)}</p><h1>${t(HOME_HERO.h1)}</h1><p>${t(HOME_HERO.subtitle)}</p>`);
+  p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}"><h3>${t(x.title)}</h3></a><p>${t(x.body)}</p></li>`).join("")}</ul>`);
+  p.push(`<h2>${t(HOME_PILLARS_HEADING)}</h2><ul>${HOME_PILLARS.map((x) => `<li><h3>${t(x.title)}</h3><p>${t(x.body)}</p></li>`).join("")}</ul>`);
+  p.push(`<h2>${t(HOME_STORY.heading)}</h2>${HOME_STORY.paragraphs.map((x) => `<p>${t(x)}</p>`).join("")}`);
+  p.push(`<h2>${t("Veelgestelde vragen")}</h2>${HOME_FAQS.map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
+  p.push(`</article>`);
+  return p.join("");
+}
+
 function writeRoute(path: string, html: string) {
   const outPath =
     path === "/" ? resolve(DIST, "index.html") : resolve(DIST, `.${path}/index.html`);
@@ -341,6 +356,14 @@ async function main() {
     let html = render({ path, seo, schemas, ogType: "website" });
     if (withCatalog && catalogMarkup) {
       html = html.replace(/(<div id="root">)/i, `$1${catalogMarkup}`);
+    }
+    if (cleanPath === "/") {
+      html = html
+        .replace(
+          /<\/head>/i,
+          `    <style>.js-on #prerendered-home{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
+        )
+        .replace(/(<div id="root">)/i, `$1${homeFallback(localeOf(path))}`);
     }
     writeRoute(path, html);
     written++;

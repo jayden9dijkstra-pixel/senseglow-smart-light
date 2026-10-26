@@ -346,7 +346,7 @@ export const VariantPicker = ({
       <div className="flex flex-wrap gap-3">
         {values.map((v) => {
           const isSelected = selected === v;
-          const isHighlight = v === highlightValue;
+          
           return (
             <button
               key={v}

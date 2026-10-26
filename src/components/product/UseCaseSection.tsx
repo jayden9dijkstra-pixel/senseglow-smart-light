@@ -15,7 +15,7 @@ interface UseCaseSectionProps {
 }
 
 const defaultUseCases: UseCase[] = [
-  { icon: "🪜", title: "Trap", description: "Meest gekozen voor veiligheid", badge: "Meest gekozen" },
+  { icon: "🪜", title: "Trap", description: "Voor veiligheid op elke tree" },
   { icon: "🚪", title: "Gang & Hal", description: "Oriëntatie zonder te storen" },
   { icon: "🛏️", title: "Kinderkamer", description: "Geeft kinderen vertrouwen in het donker" },
   { icon: "🚿", title: "Badkamer & Keuken", description: "Nachtelijke bezoeken zonder fel licht" },
