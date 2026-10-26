@@ -151,6 +151,21 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://www.senseglow.shop/herroepingsformulier</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/en/herroepingsformulier</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/fr/herroepingsformulier</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://www.senseglow.shop/bestelling-volgen</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
@@ -239,5 +254,30 @@
     <loc>https://www.senseglow.shop/fr/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/trapverlichting</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/gangverlichting</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/verlichting-vakantiewoning</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/solar-buitenlamp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/lamp-studentenkamer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
