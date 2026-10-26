@@ -57,9 +57,6 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
           <p className="truncate text-sm font-semibold text-foreground">{product.node.title}</p>
           <div className="mt-0.5 flex items-center gap-2">
             <span className="font-semibold text-primary">{formatPrice(selectedVariant.price.amount)}</span>
-            <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-              <Star className="h-3 w-3 text-muted-foreground/50" /> Nog geen reviews
-            </span>
           </div>
         </div>
         <Button

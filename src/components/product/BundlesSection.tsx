@@ -126,9 +126,6 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
               {headline}
             </h2>
-            <p className="text-sm text-foreground/60 max-w-2xl mx-auto">
-              90% van onze klanten kiest voor meer dan één lamp.
-            </p>
           </div>
 
           {/* Same variant picker as the single product page */}
@@ -160,8 +157,6 @@ export const BundlesSection = ({ product, selectedVariant, headlineOverride }: B
               const badge =
                 config.packSizes.length === 1
                   ? "Beste prijs per set"
-                  : pack === 3
-                  ? "⭐ Meest gekozen"
                   : pack === largestPack
                   ? "Maximaal voordeel"
                   : null;

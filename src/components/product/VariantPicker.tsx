@@ -359,11 +359,6 @@ export const VariantPicker = ({
                   : "border-foreground/10 bg-background hover:border-foreground/25 hover:bg-foreground/[0.02]"
               )}
             >
-              {isHighlight && (
-                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-glow bg-background border border-glow/30 rounded-full whitespace-nowrap">
-                  Meest gekozen
-                </span>
-              )}
               <span className={cn("block text-sm font-medium transition-colors duration-300", isSelected ? "text-foreground" : "text-foreground/70")}>
                 {v}
               </span>

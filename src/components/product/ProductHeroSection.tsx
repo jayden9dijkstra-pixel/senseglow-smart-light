@@ -8,7 +8,8 @@ import { useCartStore } from "@/stores/cartStore";
 import { ProductImageGallery } from "./ProductImageGallery";
 
 import { VariantPicker } from "./VariantPicker";
-import { Check, RotateCcw, Shield, Star, CreditCard } from "lucide-react";
+import { Check, RotateCcw, Shield, CreditCard } from "lucide-react";
+import { ReviewSummary } from "@/components/product/ProductReviewsSection";
 import { getProductVideoUrl } from "@/lib/videos";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { formatPrice } from "@/lib/price";
@@ -157,11 +158,7 @@ export const ProductHeroSection = ({
                 selectedVariant={selectedVariant}
               />
 
-              <span className="flex" aria-label="5 van 5 sterren">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Star key={index} className="h-4 w-4 fill-primary text-primary" />
-                ))}
-              </span>
+              <ReviewSummary />
 
               {/* Price with animation */}
               <div className="space-y-1">
