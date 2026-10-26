@@ -32,6 +32,15 @@ import { DELIVERY_TEXT } from "../src/lib/delivery";
 import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
 import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
 import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
+import { createElement, type ComponentType } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { MemoryRouter } from "react-router-dom";
+import { ContactContent } from "../src/pages/content/ContactContent";
+import { TermsContent } from "../src/pages/content/TermsContent";
+import { PrivacyContent } from "../src/pages/content/PrivacyContent";
+import { ReturnsContent } from "../src/pages/content/ReturnsContent";
+import { ShippingContent } from "../src/pages/content/ShippingContent";
+import { businessLine } from "../src/lib/businessInfo";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -335,7 +344,47 @@ function homeFallback(locale: Locale): string {
   return p.join("");
 }
 
+const LEGAL_PAGES: Record<string, ComponentType> = {
+  "/contact": ContactContent,
+  "/voorwaarden": TermsContent,
+  "/privacy": PrivacyContent,
+  "/retourneren": ReturnsContent,
+  "/verzending": ShippingContent,
+};
+
+/** Vertaal losse tekstknopen in statische markup met het woordenboek. */
+function translateMarkup(locale: Locale, html: string): string {
+  if (locale === "nl") return html;
+  return html.replace(/>([^<>]+)</g, (m, text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return m;
+    const decoded = trimmed.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;/g, "'");
+    const hit = DICTS[locale][decoded];
+    return hit ? `>${text.replace(trimmed, escapeHtml(hit))}<` : m;
+  });
+}
+
+function legalFallback(path: string, locale: Locale): string | null {
+  const Comp = LEGAL_PAGES[path];
+  if (!Comp) return null;
+  try {
+    const markup = renderToStaticMarkup(createElement(MemoryRouter, { initialEntries: [path] }, createElement(Comp)));
+    return `<article id="prerendered-legal">${translateMarkup(locale, markup)}</article>`;
+  } catch (error) {
+    console.warn(`[prerender] ${path}: inhoud niet te renderen`, error);
+    return null;
+  }
+}
+
+const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal">${escapeHtml(businessLine())}</address></footer>`;
+
 function writeRoute(path: string, html: string) {
+  html = html
+    .replace(
+      /<\/head>/i,
+      `    <style>.js-on #prerendered-footer{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
+    )
+    .replace(/(<script type="module")/i, `${FOOTER_MARKUP}\n    $1`);
   const outPath =
     path === "/" ? resolve(DIST, "index.html") : resolve(DIST, `.${path}/index.html`);
   mkdirSync(dirname(outPath), { recursive: true });
@@ -422,6 +471,12 @@ async function main() {
           `    <style>.js-on #prerendered-home{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
         )
         .replace(/(<div id="root">)/i, `$1${homeFallback(localeOf(path))}`);
+    }
+    const legal = legalFallback(cleanPath, localeOf(path));
+    if (legal) {
+      html = html
+        .replace(/<\/head>/i, `    <style>.js-on #prerendered-legal{display:none}</style>\n  </head>`)
+        .replace(/(<div id="root">)/i, `$1${legal}`);
     }
     writeRoute(path, html);
     written++;
