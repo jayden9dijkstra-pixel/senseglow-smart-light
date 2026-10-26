@@ -14,6 +14,8 @@ import { getProductVideoUrl } from "@/lib/videos";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { formatPrice } from "@/lib/price";
 import { AngleBlock, KitOffers } from "./AngleBlock";
+import { DeliveryEstimate } from "./DeliveryEstimate";
+import { WARRANTY_TEXT } from "@/lib/productFaqs";
 import { getAngle, getStoredAngle } from "@/lib/angles";
 
 interface HeroContent {
@@ -206,12 +208,14 @@ export const ProductHeroSection = ({
                 {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
               </Button>
 
-              <KitOffers product={product} selectedVariant={selectedVariant} excludeKitId={angle?.kit?.id} />
+              <DeliveryEstimate />
 
-              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground sm:grid-cols-3">
+              {!angle?.kit && <KitOffers product={product} selectedVariant={selectedVariant} />}
+
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground">
                 <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
-                <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />1 jaar garantie</span>
                 <span className="flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" />iDEAL / PayPal</span>
+                <span className="col-span-2 flex items-start gap-1.5"><Shield className="h-3.5 w-3.5 flex-shrink-0 text-primary" />{WARRANTY_TEXT}</span>
               </div>
             </div>
           </div>
