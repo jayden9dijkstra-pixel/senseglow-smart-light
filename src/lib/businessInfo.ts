@@ -1,10 +1,10 @@
 /**
  * Wettelijke bedrijfsgegevens voor de footer (client én prerender).
- * Rechtsvorm blijft leeg tot Jay die bevestigt.
+ * Rechtsvorm door Jay bevestigd (staat ook op de Over-pagina).
  */
 export const BUSINESS_INFO = {
   companyName: "Jayden Ecom (SenseGlow)",
-  legalForm: "",
+  legalForm: "eenmanszaak",
   kvk: "99634929",
   vat: "NL005399692B39",
   address: "Tolheksleane 4A, 8821 MD Kimswerd",

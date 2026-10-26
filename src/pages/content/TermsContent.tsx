@@ -30,8 +30,8 @@ export const TermsContent = () => {
           </div>
 
           <Article n={1} title="Identiteit van de ondernemer">
-            <p>Jayden Ecom (handelend onder de naam SenseGlow™)</p>
-            <p>Vestigingsadres: Tolheksleane 4 A, 8821 MD Kimswerd</p>
+            <p>Jayden Ecom (handelend onder de naam SenseGlow™), eenmanszaak</p>
+            <p>Vestigingsadres: Tolheksleane 4A, 8821 MD Kimswerd</p>
             <p>KvK-nummer: 99634929</p>
             <p>BTW-nummer: NL005399692B39</p>
             <p>E-mail: support@senseglow.shop</p>

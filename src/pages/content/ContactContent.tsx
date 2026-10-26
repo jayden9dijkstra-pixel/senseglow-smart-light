@@ -95,6 +95,7 @@ export const ContactContent = () => {
               <h2 className="text-lg font-semibold mb-4">Bedrijfsgegevens</h2>
               <div className="space-y-2 text-sm text-foreground/70">
                 <p><strong>Jayden Ecom (handelend onder de naam SenseGlow™)</strong></p>
+                <p>Rechtsvorm: eenmanszaak</p>
                 <p>KvK-nummer: 99634929</p>
                 <p>BTW-nummer: NL005399692B39</p>
                 <p>Vestigings- en retouradres: Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres, geen bezoekadres of winkel)</p>
