@@ -13,6 +13,7 @@ const Article = ({ n, title, children }: { n: number; title: string; children: R
 
 export const TermsContent = () => {
   const navigate = useNavigate();
+  const { localizePath } = useI18n();
 
   return (
     <>
