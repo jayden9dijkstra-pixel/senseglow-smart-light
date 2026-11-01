@@ -29,7 +29,7 @@ import { LANDING_PAGES, type LandingPage } from "../src/lib/landingPages";
 import { hasFixedKitPrice } from "../src/lib/angles";
 import { WARRANTY_TEXT } from "../src/lib/productFaqs";
 import { DELIVERY_TEXT } from "../src/lib/delivery";
-import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
+import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING, KITS } from "../src/lib/angles";
 import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
 import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import React, { createElement, type ComponentType } from "react";
@@ -302,6 +302,49 @@ function descriptionMarkup(description: string, locale: Locale): string {
   return out;
 }
 
+/** /producten in de server-HTML: per product naam, vanaf-prijs, één zin uit Shopify en link, plus de kits. */
+const KIT_LINKS: Record<string, string> = {
+  trapkit: "/trapverlichting",
+  gangset: "/gangverlichting",
+  verhuurderskit: "/verlichting-vakantiewoning",
+  solarduo: "/solar-buitenlamp",
+};
+function firstSentence(description: string): string {
+  let text = description;
+  for (const re of UNSOURCED) text = text.replace(re, "");
+  text = text.split(/\s*(?:Dit doet hij|Voor wie\?|Specificaties)\s+/)[0].trim();
+  const m = text.match(/^.*?[.!?](?=\s|$)/);
+  return (m ? m[0] : text).trim();
+}
+function productsPageFallback(products: ShopifyProduct[], locale: Locale): string {
+  const t = (x: string) => escapeHtml(translate(locale, x));
+  const prefix = locale === "nl" ? "" : `/${locale}`;
+  const money = (a: string) => `&euro;${locale === "en" ? parseFloat(a).toFixed(2) : parseFloat(a).toFixed(2).replace(".", ",")}`;
+  const from = locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From";
+  const lang = locale === "nl" ? "" : ' lang="nl"';
+  const p: string[] = [`<article id="prerendered-products" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
+  p.push(`<h1>${t("SenseGlow collectie")}</h1><ul>`);
+  for (const prod of products) {
+    const n = prod.node;
+    const content = getProductContent(n.handle);
+    const price = n.priceRange?.minVariantPrice;
+    const url = `${SITE_URL}${prefix}/product/${n.handle}`;
+    p.push(`<li><h2><a href="${escapeAttr(url)}">${escapeHtml(n.title)}</a></h2>`);
+    if (price) p.push(`<p>${from} ${money(price.amount)}</p>`);
+    if (content?.hero.subtitle) p.push(`<p>${t(content.hero.subtitle)}</p>`);
+    if (n.description) p.push(`<p${lang}>${escapeHtml(firstSentence(n.description))}</p>`);
+    p.push(`<p><a href="${escapeAttr(url)}">${escapeHtml(n.title)}</a></p></li>`);
+  }
+  p.push(`</ul><h2>${t(KITS_HEADING)}</h2><ul>`);
+  for (const kit of Object.values(KITS)) {
+    const href = KIT_LINKS[kit.id];
+    p.push(`<li>${href ? `<a href="${escapeAttr(`${SITE_URL}${href}`)}">${t(kit.label)}</a>` : t(kit.label)}</li>`);
+  }
+  p.push(`</ul><h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
+  p.push(`</article>`);
+  return p.join("");
+}
+
 /** Landingspagina in de server-HTML: zelfde inhoud als de React-pagina. */
 function landingFallback(page: LandingPage, products: Record<string, ShopifyProduct>): string {
   const e = escapeHtml;
@@ -440,7 +483,6 @@ async function main() {
     );
   }
   // Op de homepage staat de H1 al in de homepagetekst; daar wordt de catalogus een H2.
-  const catalogMarkup = catalogFallback(catalogProducts);
   const homeCatalogMarkup = catalogFallback(catalogProducts, "h2");
 
   // Vaste routes
@@ -462,8 +504,16 @@ async function main() {
     const withCatalog = cleanPath === "/" || cleanPath === "/producten";
     if (withCatalog && catalogProducts.length) schemas.push(catalogSchema(catalogProducts, path));
     let html = render({ path, seo, schemas, ogType: "website" });
-    if (withCatalog && catalogMarkup) {
-      html = html.replace(/(<div id="root">)/i, `$1${cleanPath === "/" ? homeCatalogMarkup : catalogMarkup}`);
+    if (cleanPath === "/" && homeCatalogMarkup) {
+      html = html.replace(/(<div id="root">)/i, `$1${homeCatalogMarkup}`);
+    }
+    if (cleanPath === "/producten" && catalogProducts.length) {
+      html = html
+        .replace(
+          /<\/head>/i,
+          `    <style>.js-on #prerendered-products{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
+        )
+        .replace(/(<div id="root">)/i, `$1${productsPageFallback(catalogProducts, localeOf(path))}`);
     }
     if (cleanPath === "/") {
       html = html

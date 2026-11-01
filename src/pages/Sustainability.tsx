@@ -22,8 +22,8 @@ const points = [
   },
   {
     icon: Wrench,
-    title: "Eén jaar garantie + replacement bij defect",
-    body: "Werkt iets niet zoals beloofd? Mail support@senseglow.shop en we sturen een vervanger. We gooien geen producten weg die nog te repareren of vervangen zijn. Bovenop je wettelijke conformiteitsrechten.",
+    title: "Extra garantie + vervanging bij defect",
+    body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Werkt iets niet zoals beloofd? Mail support@senseglow.shop en we sturen een vervanger. We gooien geen producten weg die nog te repareren of vervangen zijn.",
   },
 ];
 

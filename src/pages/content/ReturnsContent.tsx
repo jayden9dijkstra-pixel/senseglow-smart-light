@@ -68,7 +68,7 @@ export const ReturnsContent = () => {
 
           {[
             { title: "Wat als het product defect is?", body: "Mail ons direct met een foto/video van het defect. Bij erkende defecten sturen we óf direct een vervanger, óf betalen we het volledige bedrag (inclusief jouw retour-verzendkosten) terug. Geen gedoe." },
-            { title: "Wat valt onder de garantie?", body: "Naast je wettelijke garantie krijg je 1 jaar extra functionele garantie van SenseGlow. Als het product binnen die periode kapot gaat door normaal gebruik, lossen we het op. Schade door val, water (behalve Solar Lantern die IP65 is), of opzettelijke beschadiging valt er niet onder." },
+            { title: "Wat valt onder de garantie?", body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Als het product binnen die periode kapot gaat door normaal gebruik, lossen we het op. Schade door val, water (behalve Solar Lantern die IP65 is), of opzettelijke beschadiging valt er niet onder." },
           ].map(({ title, body }) => (
             <Card key={title} className="border-foreground/10 bg-background">
               <CardContent className="p-6">
@@ -77,6 +77,13 @@ export const ReturnsContent = () => {
               </CardContent>
             </Card>
           ))}
+          <Card className="border-foreground/10 bg-background">
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-lg mb-2">Wettelijke garantie</h3>
+              <p className="text-foreground/60 leading-relaxed">Je hebt altijd recht op een product dat werkt zoals je redelijkerwijs mag verwachten. De extra garantie van SenseGlow beperkt die rechten niet. Voor klanten in België geldt minimaal 2 jaar wettelijke garantie op nieuwe producten.</p>
+              <p className="text-foreground/60 leading-relaxed mt-2">Een defect meld je via onze <Link to={localizePath("/contact")} className="underline">contactpagina</Link>.</p>
+            </CardContent>
+          </Card>
 
           {/* Wettelijk herroepingsrecht */}
           <Card id="herroepingsrecht" className="border-foreground/10 bg-background">
