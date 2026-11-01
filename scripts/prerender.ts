@@ -29,7 +29,7 @@ import { LANDING_PAGES, type LandingPage } from "../src/lib/landingPages";
 import { hasFixedKitPrice } from "../src/lib/angles";
 import { WARRANTY_TEXT } from "../src/lib/productFaqs";
 import { DELIVERY_TEXT } from "../src/lib/delivery";
-import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING } from "../src/lib/angles";
+import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING, KITS } from "../src/lib/angles";
 import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
 import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import React, { createElement, type ComponentType } from "react";
