@@ -55,8 +55,8 @@ export const HOME_PILLARS = [
     body: "Magnetische bevestiging betekent: kamer uit, lamp in de tas. Geen gaten, geen sporen.",
   },
   {
-    title: "Eén jaar garantie + 30 dagen retour",
-    body: "Iets niet zoals het hoort? support@senseglow.shop. Wij sturen vervanger of geld terug.",
+    title: "Extra garantie + 30 dagen retour",
+    body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Iets niet zoals het hoort? Mail support@senseglow.shop, wij sturen een vervanger of geven je geld terug.",
   },
 ];
 
@@ -88,7 +88,7 @@ export const HOME_FAQS = [
   {
     question: "Wat is de garantie?",
     answer:
-      "Eén jaar volledige functionele garantie op alle producten. Werkt iets niet zoals beloofd? Mail support@senseglow.shop, we sturen een vervanger of geven je geld terug. Bovenop je wettelijke rechten.",
+      "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Werkt iets niet zoals beloofd? Mail support@senseglow.shop, we sturen een vervanger of geven je geld terug.",
   },
   {
     question: "Hoe snel wordt mijn bestelling geleverd?",

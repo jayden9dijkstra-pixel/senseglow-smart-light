@@ -18,8 +18,8 @@ const items = [
   },
   {
     icon: ShieldCheck,
-    title: "Eén jaar garantie + 30 dagen retour",
-    body: "Iets niet zoals het hoort? support@senseglow.shop. Wij sturen vervanger of geld terug.",
+    title: "Extra garantie + 30 dagen retour",
+    body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Iets niet zoals het hoort? Mail support@senseglow.shop, wij sturen een vervanger of geven je geld terug.",
   },
 ];
 

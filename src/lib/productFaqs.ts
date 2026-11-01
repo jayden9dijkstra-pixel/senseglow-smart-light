@@ -9,7 +9,7 @@ export const WARRANTY_TEXT = "Naast je wettelijke garantie: 1 jaar extra functio
 export const purchaseFaqs: ProductFaq[] = [
   {
     question: "Wat als mijn lamp kapotgaat?",
-    answer: "Naast je wettelijke garantie krijg je 1 jaar extra functionele garantie van SenseGlow. Mail support@senseglow.shop met je bestelnummer en een korte uitleg, dan zoeken we een passende oplossing.",
+    answer: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Mail support@senseglow.shop met je bestelnummer en een korte uitleg, dan zoeken we een passende oplossing.",
   },
   {
     question: "Kan ik mijn bestelling retourneren?",

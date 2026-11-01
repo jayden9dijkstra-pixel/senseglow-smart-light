@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ArrowLeft } from "lucide-react";
 
 
@@ -75,8 +76,11 @@ export const TermsContent = () => {
           </Article>
 
           <Article n={10} title="Garantie">
-            <p>SenseGlow biedt <strong>bovenop de wettelijke conformiteitsrechten</strong> een additionele functionele garantie van <strong>één jaar</strong> op alle producten. Deze garantie laat de wettelijke rechten van de consument uit hoofde van non-conformiteit onverlet, de consument behoudt te allen tijde zijn wettelijke rechten.</p>
+            <p>Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow.</p>
             <p>De garantie geldt voor defecten bij normaal gebruik. Schade door val, water (uitgezonderd IP65-gecertificeerde producten zoals de Solar Lantern), of opzettelijke beschadiging vallen niet onder de garantie.</p>
+            <h3 className="font-semibold text-foreground">Wettelijke garantie</h3>
+            <p>Je hebt altijd recht op een product dat werkt zoals je redelijkerwijs mag verwachten. De extra garantie van SenseGlow beperkt die rechten niet. Voor klanten in België geldt minimaal 2 jaar wettelijke garantie op nieuwe producten.</p>
+            <p>Een defect meld je via onze <Link to={localizePath("/contact")} className="underline">contactpagina</Link>.</p>
           </Article>
 
           <Article n={11} title="Klachtenregeling">
