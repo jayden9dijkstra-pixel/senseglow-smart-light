@@ -55,14 +55,14 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
             to={`/product/${HOME_HERO_PRODUCT}`}
             className="group block rounded-3xl border border-foreground/10 bg-background/80 p-5 shadow-lg backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1"
           >
-            <div className="aspect-square w-full overflow-hidden rounded-2xl bg-secondary">
+            <div className="aspect-square w-full overflow-hidden rounded-2xl">
               {image ? (
                 <img
                   src={image.url}
                   alt={image.altText || product?.title || ""}
                   loading="eager"
                   {...{ fetchpriority: "high" }}
-                  className="h-full w-full object-contain p-6"
+                  className="h-full w-full object-cover"
                 />
               ) : (
                 <div className="h-full w-full animate-pulse" />
