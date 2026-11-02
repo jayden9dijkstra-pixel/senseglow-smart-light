@@ -13,7 +13,9 @@ import { ReviewSummary } from "@/components/product/ProductReviewsSection";
 import { getProductVideoUrl } from "@/lib/videos";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import { formatPrice } from "@/lib/price";
-import { AngleBlock, KitOffers } from "./AngleBlock";
+import { AngleBlock } from "./AngleBlock";
+import { QuantityOfferPicker } from "./QuantityOfferPicker";
+import { isOfferProduct, OFFER_TEXT, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { DeliveryEstimate } from "./DeliveryEstimate";
 import { WARRANTY_TEXT } from "@/lib/productFaqs";
 import { getAngle, getStoredAngle } from "@/lib/angles";
@@ -21,7 +23,6 @@ import { getAngle, getStoredAngle } from "@/lib/angles";
 interface HeroContent {
   h1: string;
   subtitle: string;
-  bundleCta: string;
   bullets: string[];
 }
 
@@ -32,6 +33,8 @@ interface ProductHeroSectionProps {
     variant: ShopifyProduct["node"]["variants"]["edges"][0]["node"]
   ) => void;
   heroContent?: HeroContent;
+  qty?: OfferQty;
+  onQtyChange?: (qty: OfferQty) => void;
 }
 
 export const ProductHeroSection = ({
@@ -39,11 +42,12 @@ export const ProductHeroSection = ({
   selectedVariant: propVariant,
   onVariantChange,
   heroContent,
+  qty = 1,
+  onQtyChange,
 }: ProductHeroSectionProps) => {
   const defaultContent: HeroContent = {
     h1: "Veilig licht. Precies wanneer jij beweegt.",
     subtitle: "Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken.",
-    bundleCta: "Voordeliger met bundels",
     bullets: [
       "Automatische bewegingssensor",
       "Warm licht (2700K), slaapvriendelijk",
@@ -58,9 +62,10 @@ export const ProductHeroSection = ({
   const selectedVariant = propVariant ?? localVariant;
   const addItem = useCartStore((state) => state.addItem);
   const [priceKey, setPriceKey] = useState(0);
+  const offer = isOfferProduct(product.node.handle);
   const angle = getAngle(product.node.handle, searchParams.get("a") ?? getStoredAngle());
 
-  // Handle URL params for variant selection (from quiz or bundle links)
+  // Handle URL params for variant selection (from quiz or ad links)
   useEffect(() => {
     const sizeParam = searchParams.get("size");
     const colorParam = searchParams.get("color");
@@ -115,7 +120,7 @@ export const ProductHeroSection = ({
         amount: selectedVariant.price.amount,
         currencyCode: selectedVariant.price.currencyCode,
       },
-      quantity: 1,
+      quantity: offer ? qty : 1,
       selectedOptions: selectedVariant.selectedOptions,
     });
   };
@@ -127,9 +132,10 @@ export const ProductHeroSection = ({
     })) || [];
   const productImageClassName = "w-full h-full object-contain";
 
-  const displayPrice = selectedVariant
-    ? formatPrice(selectedVariant.price.amount)
-    : formatPrice(0);
+  const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
+  const displayPrice = formatPrice(
+    unitPrice == null ? 0 : offer ? quoteQty(unitPrice, qty).total : unitPrice,
+  );
 
   return (
     <section id="product-hero" className="w-full overflow-hidden bg-background py-16 md:py-24 lg:py-32 animate-fade-in-slow">
@@ -168,9 +174,6 @@ export const ProductHeroSection = ({
 
               <ReviewSummary />
 
-              {angle?.kit && (
-                <KitOffers product={product} selectedVariant={selectedVariant} preselectedKitId={angle.kit.id} />
-              )}
 
               {/* Price with animation */}
               <div className="space-y-1">
@@ -198,6 +201,10 @@ export const ProductHeroSection = ({
                 />
               )}
 
+              {offer && (
+                <QuantityOfferPicker unitPrice={unitPrice} value={qty} onChange={(q) => onQtyChange?.(q)} />
+              )}
+
               {/* 3 Bullets (bij een invalshoek staan de voordelen al in het hoekblok) */}
               {!angle && <div className="space-y-1.5 py-3 border-y border-foreground/10">
                 {content.bullets.map((bullet, i) => (
@@ -220,7 +227,7 @@ export const ProductHeroSection = ({
 
               <DeliveryEstimate />
 
-              {!angle?.kit && <KitOffers product={product} selectedVariant={selectedVariant} />}
+              {offer && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground">
                 <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>

@@ -4,18 +4,21 @@ import { Button } from "@/components/ui/button";
 import type { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { formatPrice } from "@/lib/price";
+import { isOfferProduct, quoteQty } from "@/lib/quantityOffer";
 
 type ProductVariant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
 
 interface MobileAddToCartBarProps {
   product: ShopifyProduct;
   selectedVariant: ProductVariant | null;
+  qty?: number;
 }
 
-export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCartBarProps) {
+export function MobileAddToCartBar({ product, selectedVariant, qty: chosenQty = 1 }: MobileAddToCartBarProps) {
   const [visible, setVisible] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
   const image = product.node.images.edges[0]?.node;
+  const qty = isOfferProduct(product.node.handle) ? chosenQty : 1;
 
   useEffect(() => {
     const hero = document.getElementById("product-hero");
@@ -38,7 +41,7 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
-      quantity: 1,
+      quantity: qty,
       selectedOptions: selectedVariant.selectedOptions,
     });
   };
@@ -56,7 +59,8 @@ export function MobileAddToCartBar({ product, selectedVariant }: MobileAddToCart
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-foreground">{product.node.title}</p>
           <div className="mt-0.5 flex items-center gap-2">
-            <span className="font-semibold text-primary">{formatPrice(selectedVariant.price.amount)}</span>
+            <span className="font-semibold text-primary">{formatPrice(quoteQty(parseFloat(selectedVariant.price.amount), qty).total)}</span>
+            {qty > 1 && <span className="text-xs text-muted-foreground">{qty} lampen</span>}
           </div>
         </div>
         <Button
