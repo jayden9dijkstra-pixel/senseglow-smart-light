@@ -5,7 +5,6 @@
 export const WAVE_HERO_CONTENT = {
   h1: "Light that moves with you.",
   subtitle: "A subtle wave of light that activates the moment you enter, without disturbing your space.",
-  bundleCta: "Bespaar meer met bundels ↓",
   bullets: [
     "Bewegingssensor, automatisch aan bij beweging",
     "Uniek wave lichteffect op de muur",
@@ -129,7 +128,6 @@ export const WAVE_FAQS = [
   },
 ];
 
-export const WAVE_BUNDLE_HEADLINE = "Creëer een doorlopende wave van licht in je ruimte.";
 
 export const WAVE_FINAL_CTA = {
   headline: "Upgrade your lighting.",

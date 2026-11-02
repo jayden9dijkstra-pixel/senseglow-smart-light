@@ -165,8 +165,6 @@ export const ARC_FAQS = [
 
 // ─── Bundle headline ───────────────────────────────────
 
-export const ARC_BUNDLE_HEADLINE =
-  "Creëer symmetrie en diepte met meerdere Arc lights.";
 
 // ─── Final CTA ─────────────────────────────────────────
 

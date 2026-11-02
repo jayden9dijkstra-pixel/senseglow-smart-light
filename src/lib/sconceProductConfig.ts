@@ -54,7 +54,6 @@ export const SCONCE_FAQS = [
   { question: "Mag dit buiten?", answer: "Nee, de Sconce is uitsluitend geschikt voor binnen, niet waterdicht." },
 ];
 
-export const SCONCE_BUNDLE_HEADLINE = "Meerdere kamers in één set.";
 
 export const SCONCE_FINAL_CTA = {
   headline: "Sfeer in elke kamer, zonder gereedschap.",

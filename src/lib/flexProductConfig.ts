@@ -163,8 +163,6 @@ export const FLEX_FAQS = [
 
 // ─── Bundle headline ───────────────────────────────────
 
-export const FLEX_BUNDLE_HEADLINE =
-  "Meer licht, meer controle in je ruimte.";
 
 // ─── Final CTA ─────────────────────────────────────────
 

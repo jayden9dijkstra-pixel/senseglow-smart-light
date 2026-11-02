@@ -66,7 +66,6 @@ export const STEP_FAQS = [
   { question: "Welke set heb ik nodig?", answer: "Een 4-pack volstaat voor een korte trap of gang. Voor langere trappen of meerdere ruimtes raden we de 8-pack aan." },
 ];
 
-export const STEP_BUNDLE_HEADLINE = "Verlicht je hele trap met één set.";
 
 export const STEP_FINAL_CTA = {
   headline: "Veilig, automatisch, zonder gedoe.",

@@ -156,8 +156,6 @@ export const LANTERN_FAQS = [
 
 // ─── Bundle headline ───────────────────────────────────
 
-export const LANTERN_BUNDLE_HEADLINE =
-  "Verlicht je hele buitenruimte zonder kabels.";
 
 // ─── Final CTA ─────────────────────────────────────────
 
