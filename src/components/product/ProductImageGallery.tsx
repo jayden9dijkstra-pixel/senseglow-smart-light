@@ -14,6 +14,8 @@ interface ProductImageGalleryProps {
   productTitle: string;
   videoUrl?: string;
   imageClassName?: string;
+  /** Eigen Shopify-foto van de gekozen variant; de galerij springt erheen. */
+  activeImageUrl?: string | null;
 }
 
 export const ProductImageGallery = ({
@@ -21,8 +23,14 @@ export const ProductImageGallery = ({
   productTitle,
   videoUrl = "",
   imageClassName = "w-full h-full object-contain",
+  activeImageUrl,
 }: ProductImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  useEffect(() => {
+    if (!activeImageUrl) return;
+    const idx = images.findIndex((img) => img.url === activeImageUrl);
+    if (idx >= 0) setSelectedIndex(idx);
+  }, [activeImageUrl, images]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
