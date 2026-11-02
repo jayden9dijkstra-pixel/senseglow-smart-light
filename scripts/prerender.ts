@@ -387,13 +387,21 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   return p.join("");
 }
 
+function homeTilePrice(products: ShopifyProduct[], href: string, locale: Locale): string {
+  const n = products.find((p) => `/product/${p.node.handle}` === href)?.node;
+  const a = n?.priceRange?.minVariantPrice?.amount;
+  if (!a) return "";
+  const v = locale === "en" ? parseFloat(a).toFixed(2) : parseFloat(a).toFixed(2).replace(".", ",");
+  return `<p>${escapeHtml(translate(locale, "Vanaf"))} &euro;${v}</p>`;
+}
+
 /** Leesbare homepage-tekst in de server-HTML, zichtbaar zonder JavaScript. */
-function homeFallback(locale: Locale): string {
+function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
   const t = (x: string) => escapeHtml(translate(locale, x));
   const prefix = locale === "nl" ? "" : `/${locale}`;
   const p: string[] = [`<article id="prerendered-home" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
   p.push(`<p>${t(HOME_HERO.eyebrow)}</p><h1>${t(HOME_HERO.h1)}</h1><p>${t(HOME_HERO.subtitle)}</p>`);
-  p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}"><h3>${t(x.title)}</h3></a><p>${t(x.body)}</p></li>`).join("")}</ul>`);
+  p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}"><h3>${t(x.title)}</h3></a><p>${t(x.body)}</p>${homeTilePrice(products, x.href, locale)}</li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_PILLARS_HEADING)}</h2><ul>${HOME_PILLARS.map((x) => `<li><h3>${t(x.title)}</h3><p>${t(x.body)}</p></li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_STORY.heading)}</h2>${HOME_STORY.paragraphs.map((x) => `<p>${t(x)}</p>`).join("")}`);
   p.push(`<h2>${t("Veelgestelde vragen")}</h2>${HOME_FAQS.map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
@@ -534,7 +542,7 @@ async function main() {
           /<\/head>/i,
           `    <style>.js-on #prerendered-home{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
         )
-        .replace(/(<div id="root">)/i, `$1${homeFallback(localeOf(path))}`);
+        .replace(/(<div id="root">)/i, `$1${homeFallback(localeOf(path), catalogProducts)}`);
     }
     const legal = legalFallback(cleanPath, localeOf(path));
     if (legal) {

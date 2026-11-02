@@ -1,57 +1,11 @@
 import { Link } from "react-router-dom";
-import { MoonStar, ChefHat, Footprints, DoorOpen, Lamp } from "lucide-react";
+import { Footprints, ChefHat, Baby, Sun, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
-import wallLampHomepageAsset from "@/assets/wall-lamp-homepage-square.png.asset.json";
-import waveHomepageAsset from "@/assets/wave-homepage-square.png.asset.json";
-import ambientHomepageAsset from "@/assets/ambient-homepage-square.png.asset.json";
+import { formatPrice } from "@/lib/price";
+import { HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE } from "@/lib/homeContent";
 
-const homepageImages: Record<string, { url: string; altText: string }> = {
-  senseglow_wall_lamp: {
-    url: wallLampHomepageAsset.url,
-    altText: "SenseGlow Wall Lamp naast een bed",
-  },
-  senseglow_wave: {
-    url: waveHomepageAsset.url,
-    altText: "SenseGlow Wave onder een wandplank",
-  },
-  senseglow_ambient_motion_bar: {
-    url: ambientHomepageAsset.url,
-    altText: "SenseGlow Ambient Bar boven een wastafel",
-  },
-};
-
-const tiles = [
-  {
-    icon: MoonStar,
-    title: "Nooit meer struikelen 's nachts",
-    body: "Bewegingssensor-balk voor gang, slaapkamer en badkamer, zacht licht dat partners niet wakker maakt.",
-    href: "/product/senseglow_ambient_motion_bar",
-  },
-  {
-    icon: ChefHat,
-    title: "Een keuken die eindelijk áf voelt",
-    body: "Sfeerverlichting met golfeffect, reageert als je langsloopt, geen elektricien nodig.",
-    href: "/product/senseglow_wave",
-  },
-  {
-    icon: Footprints,
-    title: "Veilig de trap op zelfs 's nachts",
-    body: "Traplampen met sensor, zelfklevend gemonteerd. Voor (groot)ouders én voor kleine voetjes.",
-    href: "/product/senseglow_wall_lamp",
-  },
-  {
-    icon: DoorOpen,
-    title: "Voordeur verlicht zonder kabel",
-    body: "Solar buitenlamp met sensor, IP65, twee schroeven en klaar.",
-    href: "/product/senseglow_solar_lantern",
-  },
-  {
-    icon: Lamp,
-    title: "Bureau dat niet als studentenkamer aanvoelt",
-    body: "Touch-dimbare lamp voor late studie-sessies, magnetisch, verhuist mee.",
-    href: "/product/senseglow_flex",
-  },
-];
+const icons = [Footprints, ChefHat, Baby, Sun, Lamp];
+const tiles = HOME_TILES.map((tile, i) => ({ ...tile, icon: icons[i] ?? Lamp }));
 
 interface UseCaseGridProps {
   products?: ShopifyProduct[];
@@ -69,10 +23,10 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
               Onze producten
             </p>
             <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight mb-4">
-              Voor elke kamer een ander licht
+              {HOME_TILES_HEADING}
             </h2>
             <p className="text-base text-foreground/60">
-              Vijf producten. Vijf concrete problemen opgelost.
+              {HOME_TILES_SUBTITLE}
             </p>
           </div>
 
@@ -80,7 +34,9 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
             {tiles.map(({ icon: Icon, title, body, href }, i) => {
               const handle = href.replace("/product/", "");
               const product = productsByHandle.get(handle);
-               const image = homepageImages[handle] || product?.node.images?.edges?.[0]?.node;
+              // Zelfde eerste foto als productpagina en /producten.
+              const image = product?.node.featuredImage ?? product?.node.images?.edges?.[0]?.node;
+              const fromPrice = product?.node.priceRange?.minVariantPrice?.amount;
 
               return (
                 <Link
@@ -114,6 +70,11 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                     <p className="text-sm text-foreground/60 leading-relaxed mb-5">
                       {body}
                     </p>
+                    {fromPrice && (
+                      <p className="text-sm font-semibold text-foreground mb-4">
+                        Vanaf {formatPrice(fromPrice)}
+                      </p>
+                    )}
                     <span className="text-[11px] uppercase tracking-[0.2em] text-glow group-hover:translate-x-1 inline-block transition-transform duration-500">
                       Bekijken →
                     </span>
