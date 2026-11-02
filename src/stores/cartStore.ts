@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { trackAdsEvent, numericVariantId } from '@/lib/adsTracking';
 import { trackSiteEvent } from '@/lib/siteAnalytics';
 import { translateStatic as tr } from '@/i18n/I18nProvider';
+import { isOfferProduct, offerRate } from '@/lib/quantityOffer';
 
 /** Zet cart-regels om naar het items-formaat dat Google Ads verwacht. */
 function toAdsItems(items: CartItem[]) {
@@ -18,10 +19,17 @@ function toAdsItems(items: CartItem[]) {
 }
 
 
-function adsValue(items: CartItem[]): number {
+/** Lampen die meedoen aan 'Meer lampen' (alles behalve Wall Lamp). */
+export function offerLampCount(items: CartItem[]): number {
+  return items.filter((i) => isOfferProduct(i.product.node.handle)).reduce((n, i) => n + i.quantity, 0);
+}
+
+/** Waarde incl. btw met dezelfde 'Meer lampen'-regel die Shopify toepast. */
+function adsValue(items: CartItem[], cart: CartItem[] = items): number {
+  const rate = offerRate(offerLampCount(cart));
   const total = items.reduce((sum, i) => {
     const gross = parseFloat(i.price.amount) * i.quantity;
-    return sum + (i.isBundle && i.bundleRate ? gross * (1 - i.bundleRate) : gross);
+    return sum + (isOfferProduct(i.product.node.handle) ? gross * (1 - rate) : gross);
   }, 0);
   return Math.round(total * 100) / 100;
 }
@@ -31,22 +39,6 @@ export function mergeCheckoutLines(items: CartItem[]) {
   const variantQty = new Map<string, number>();
   for (const i of items) variantQty.set(i.variantId, (variantQty.get(i.variantId) || 0) + i.quantity);
   return Array.from(variantQty.entries()).map(([variantId, quantity]) => ({ variantId, quantity }));
-}
-
-/** Bundelcode met de grootste besparing, of null. */
-export function pickBundleCode(items: CartItem[]): string | null {
-  let bestCode: string | null = null;
-  let bestSaving = 0;
-  for (const i of items) {
-    if (i.isBundle && i.bundleDiscountCode && i.bundleRate) {
-      const saving = parseFloat(i.price.amount) * i.quantity * i.bundleRate;
-      if (saving > bestSaving) {
-        bestSaving = saving;
-        bestCode = i.bundleDiscountCode;
-      }
-    }
-  }
-  return bestCode;
 }
 
 export interface CartItem {
@@ -64,13 +56,6 @@ export interface CartItem {
     name: string;
     value: string;
   }>;
-  // ── Bundle metadata ─────────────────────────────────
-  isBundle?: boolean;
-  bundleName?: string;        // "Duopak"
-  bundleVariantLabel?: string; // "30cm • Zwart"
-  bundlePackSize?: 2 | 3 | 4 | 5;
-  bundleRate?: number;         // 0.08 | 0.12 | 0.15
-  bundleDiscountCode?: string; // Shopify code applied at checkout
 }
 
 interface CartStore {
@@ -82,10 +67,8 @@ interface CartStore {
   lastAddedAt: number;
 
   addItem: (item: CartItem) => void;
-  /** Meerdere regels van een zelf samengestelde bundel, met één melding. */
-  addBundleItems: (items: CartItem[], message: string) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
-  removeItem: (variantId: string, isBundle?: boolean, packSize?: number) => void;
+  removeItem: (variantId: string) => void;
   clearCart: () => void;
   setCartId: (cartId: string) => void;
   setCheckoutUrl: (url: string) => void;
@@ -96,9 +79,6 @@ interface CartStore {
   refreshPrices: () => Promise<void>;
 }
 
-function bundleLineKey(item: Pick<CartItem, 'variantId' | 'bundlePackSize'>): string {
-  return `${item.variantId}::${item.bundlePackSize}`;
-}
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -123,76 +103,26 @@ export const useCartStore = create<CartStore>()(
       },
 
 
-      addBundleItems: (newItems, message) => {
-        if (newItems.length === 0) return;
-        const merged = [...get().items];
-        for (const item of newItems) {
-          const index = merged.findIndex(
-            (i) => i.isBundle && bundleLineKey(i) === bundleLineKey(item)
-          );
-          if (index >= 0) {
-            merged[index] = { ...merged[index], quantity: merged[index].quantity + item.quantity };
-          } else {
-            merged.push(item);
-          }
-        }
-        set({ items: merged });
-        set({ lastAddedAt: Date.now() });
-        trackAdsEvent('add_to_cart', {
-          value: adsValue(newItems),
-          currency: 'EUR',
-          items: toAdsItems(newItems),
-        });
-        void trackSiteEvent('add_to_cart', {
-          itemName: newItems[0]?.product.node.title,
-          value: adsValue(newItems),
-        });
-        toast.success(tr(message));
-      },
-
-
       addItem: (item) => {
         const { items } = get();
         set({ lastAddedAt: Date.now() });
         trackAdsEvent('add_to_cart', {
-          value: adsValue([item]),
+          value: adsValue([item], [...items, item]),
           currency: 'EUR',
           items: toAdsItems([item]),
         });
         void trackSiteEvent('add_to_cart', {
           itemName: item.product.node.title,
-          value: adsValue([item]),
+          value: adsValue([item], [...items, item]),
         });
 
 
-        if (item.isBundle && item.bundlePackSize) {
-          // Bundles: stack identical (variant + pack size) lines
-          const existing = items.find(
-            (i) => i.isBundle && bundleLineKey(i) === bundleLineKey(item)
-          );
-          if (existing) {
-            set({
-              items: items.map((i) =>
-                i.isBundle && bundleLineKey(i) === bundleLineKey(item)
-                  ? { ...i, quantity: i.quantity + item.quantity }
-                  : i
-              ),
-            });
-          } else {
-            set({ items: [...items, item] });
-          }
-          toast.success(tr('Bundel toegevoegd aan winkelwagen'), {
-            description: `${item.bundleName}${item.bundleVariantLabel ? `, ${item.bundleVariantLabel}` : ''}`,
-          });
-          return;
-        }
-
-        // Singles: merge by variantId
-        const existingItem = items.find((i) => i.variantId === item.variantId && !i.isBundle);
+        // Eén regel per variant
+        const existingItem = items.find((i) => i.variantId === item.variantId);
         if (existingItem) {
           set({
             items: items.map((i) =>
-              i.variantId === item.variantId && !i.isBundle
+              i.variantId === item.variantId
                 ? { ...i, quantity: i.quantity + item.quantity }
                 : i
             ),
@@ -215,20 +145,13 @@ export const useCartStore = create<CartStore>()(
         }
         set({
           items: get().items.map((item) =>
-            item.variantId === variantId && !item.isBundle ? { ...item, quantity } : item
+            item.variantId === variantId ? { ...item, quantity } : item
           ),
         });
       },
 
-      removeItem: (variantId, isBundle, packSize) => {
-        set({
-          items: get().items.filter((item) => {
-            if (isBundle) {
-              return !(item.isBundle && item.variantId === variantId && item.bundlePackSize === packSize);
-            }
-            return !(item.variantId === variantId && !item.isBundle);
-          }),
-        });
+      removeItem: (variantId) => {
+        set({ items: get().items.filter((item) => item.variantId !== variantId) });
         toast.info(tr('Verwijderd uit winkelwagen'));
       },
 
@@ -255,8 +178,6 @@ export const useCartStore = create<CartStore>()(
 
         setLoading(true);
         try {
-          // Merge identical variants across single + bundle lines so Shopify
-          // gets one line per variant with combined quantity.
           const variantQty = new Map<string, number>();
           for (const i of items) {
             variantQty.set(i.variantId, (variantQty.get(i.variantId) || 0) + i.quantity);
@@ -266,23 +187,8 @@ export const useCartStore = create<CartStore>()(
             quantity,
           }));
 
-          // Pick best discount code (highest absolute saving) among bundles.
-          let bestCode: string | null = null;
-          let bestSaving = 0;
-          for (const i of items) {
-            if (i.isBundle && i.bundleDiscountCode && i.bundleRate) {
-              const saving = parseFloat(i.price.amount) * i.quantity * i.bundleRate;
-              if (saving > bestSaving) {
-                bestSaving = saving;
-                bestCode = i.bundleDiscountCode;
-              }
-            }
-          }
-
-          const checkoutUrl = await createStorefrontCheckout(
-            checkoutItems,
-            bestCode ? [bestCode] : []
-          );
+          // Geen kortingscodes: Shopify past 'Meer lampen' automatisch toe.
+          const checkoutUrl = await createStorefrontCheckout(checkoutItems, []);
           setCheckoutUrl(checkoutUrl);
 
           // Succes-event: pas hier staat vast dat Shopify een afrekenlink gaf.
@@ -312,6 +218,20 @@ export const useCartStore = create<CartStore>()(
     {
       name: 'shopify-cart',
       storage: createJSONStorage(() => localStorage),
+      // v1: oude bundelregels worden gewone regels, één per variant.
+      version: 1,
+      migrate: (persisted) => {
+        const state = (persisted ?? {}) as { items?: CartItem[]; cartId?: string | null };
+        const merged = new Map<string, CartItem>();
+        for (const raw of state.items ?? []) {
+          const { isBundle, bundleName, bundleVariantLabel, bundlePackSize, bundleRate, bundleDiscountCode, ...item } =
+            raw as CartItem & Record<string, unknown>;
+          void isBundle; void bundleName; void bundleVariantLabel; void bundlePackSize; void bundleRate; void bundleDiscountCode;
+          const prev = merged.get(item.variantId);
+          merged.set(item.variantId, prev ? { ...prev, quantity: prev.quantity + item.quantity } : (item as CartItem));
+        }
+        return { items: Array.from(merged.values()), cartId: state.cartId ?? null } as unknown as CartStore;
+      },
       partialize: (state) => ({
         items: state.items,
         cartId: state.cartId,
