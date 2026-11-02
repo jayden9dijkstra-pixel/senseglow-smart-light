@@ -46,7 +46,7 @@ const Index = () => {
   return (
     <PageLayout>
       {/* 1. Hero */}
-      <HeroSection />
+      <HeroSection products={products} />
 
       {/* Trust bar */}
       <TrustBar />
