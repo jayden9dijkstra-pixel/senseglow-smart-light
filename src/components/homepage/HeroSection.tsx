@@ -53,9 +53,9 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
 
           <Link
             to={`/product/${HOME_HERO_PRODUCT}`}
-            className="group block rounded-3xl border border-foreground/10 bg-background/80 p-5 shadow-lg backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1"
+            className="group block overflow-hidden rounded-3xl border border-foreground/10 bg-background/80 shadow-lg backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1"
           >
-            <div className="aspect-square w-full overflow-hidden rounded-2xl">
+            <div className="aspect-square w-full overflow-hidden">
               {image ? (
                 <img
                   src={image.url}
@@ -68,11 +68,11 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
                 <div className="h-full w-full animate-pulse" />
               )}
             </div>
-            <div className="mt-4 flex items-baseline justify-between gap-3">
+            <div className="flex items-baseline justify-between gap-3 px-5 pt-4">
               <p className="font-semibold text-foreground">{product?.title ?? "\u00a0"}</p>
               {price && <p className="whitespace-nowrap text-sm text-foreground/70">Vanaf <span className="font-semibold text-primary">{formatPrice(price)}</span></p>}
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">2 lampen 10%, 4+ lampen 15% korting</p>
+            <p className="mt-1 px-5 pb-5 text-sm text-muted-foreground">2 lampen 10%, 4+ lampen 15% korting</p>
           </Link>
         </div>
       </div>
