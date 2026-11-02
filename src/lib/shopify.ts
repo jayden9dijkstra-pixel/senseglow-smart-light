@@ -50,6 +50,7 @@ export interface ShopifyProduct {
         currencyCode: string;
       };
     };
+    featuredImage?: { url: string; altText: string | null } | null;
     images: {
       edges: Array<{
         node: {
@@ -68,6 +69,7 @@ export interface ShopifyProduct {
             currencyCode: string;
           };
           availableForSale: boolean;
+          image?: { url: string; altText: string | null } | null;
           selectedOptions: Array<{
             name: string;
             value: string;
@@ -89,12 +91,14 @@ const STOREFRONT_QUERY = `
         node {
           id title description handle
           priceRange { minVariantPrice { amount currencyCode } }
+          featuredImage { url altText }
           images(first: 20) { edges { node { url altText } } }
           variants(first: 30) {
             edges { node {
               id title
               price { amount currencyCode }
               availableForSale
+              image { url altText }
               selectedOptions { name value }
             } }
           }
@@ -187,12 +191,14 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
         productByHandle(handle: $handle) {
           id title description handle
           priceRange { minVariantPrice { amount currencyCode } }
+          featuredImage { url altText }
           images(first: 20) { edges { node { url altText } } }
           variants(first: 30) {
             edges { node {
               id title
               price { amount currencyCode }
               availableForSale
+              image { url altText }
               selectedOptions { name value }
             } }
           }

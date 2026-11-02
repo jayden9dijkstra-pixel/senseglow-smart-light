@@ -1,3 +1,4 @@
+import { pickDefaultVariant } from "@/lib/defaultVariant";
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { trackViewItem, numericVariantId } from "@/lib/adsTracking";
@@ -88,10 +89,7 @@ const ProductDetail = () => {
             );
             setSelectedVariant(def?.node || found.node.variants.edges[0]?.node || null);
           } else {
-            const v30 = found.node.variants.edges.find((v) =>
-              v.node.selectedOptions.some((o) => o.value.includes("30"))
-            );
-            setSelectedVariant(v30?.node || found.node.variants.edges[0]?.node || null);
+            setSelectedVariant(pickDefaultVariant(found));
           }
         }
         setLoading(false);

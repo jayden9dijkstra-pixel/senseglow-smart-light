@@ -15,7 +15,7 @@ export const HOME_TILES_SUBTITLE = "Vijf producten. Vijf concrete problemen opge
 export const HOME_TILES = [
   {
     title: "Nooit meer struikelen 's nachts",
-    body: "Bewegingssensor-balk voor gang, slaapkamer en badkamer, zacht licht dat partners niet wakker maakt.",
+    body: "Bewegingssensor-balk onder het bed, zacht licht dat partners niet wakker maakt.",
     href: "/product/senseglow_ambient_motion_bar",
   },
   {
@@ -24,12 +24,12 @@ export const HOME_TILES = [
     href: "/product/senseglow_wave",
   },
   {
-    title: "Veilig de trap op zelfs 's nachts",
-    body: "Traplampen met sensor, zelfklevend gemonteerd. Voor (groot)ouders én voor kleine voetjes.",
+    title: "Zacht nachtlicht in de kinderkamer",
+    body: "Wandlampjes met sensor, zelfklevend gemonteerd. Licht laag bij de vloer, voor kleine voetjes.",
     href: "/product/senseglow_wall_lamp",
   },
   {
-    title: "Voordeur verlicht zonder kabel",
+    title: "Buitenmuur verlicht zonder kabel",
     body: "Solar buitenlamp met sensor, IP65, twee schroeven en klaar.",
     href: "/product/senseglow_solar_lantern",
   },

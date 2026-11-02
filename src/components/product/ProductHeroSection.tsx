@@ -143,6 +143,12 @@ export const ProductHeroSection = ({
                 productTitle={product.node.title}
                 videoUrl={getProductVideoUrl(product.node.handle)}
                 imageClassName={productImageClassName}
+                activeImageUrl={
+                  selectedVariant?.image?.url &&
+                  selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
+                    ? selectedVariant.image.url
+                    : null
+                }
               />
             </div>
 
