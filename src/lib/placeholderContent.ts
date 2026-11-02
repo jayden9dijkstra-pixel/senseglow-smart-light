@@ -10,7 +10,6 @@ export interface PlaceholderContent {
   hero: {
     h1: string;
     subtitle: string;
-    bundleCta: string;
     bullets: string[];
   };
   outcomeHeadline: string;
@@ -31,7 +30,6 @@ export interface PlaceholderContent {
   beforeAfter: Array<{ before: string; after: string }>;
   faqSubtitle: string;
   faqs: Array<{ question: string; answer: string }>;
-  bundleHeadline: string;
   finalCta: { headline: string; subtext: string; cta: string };
 }
 
@@ -41,7 +39,6 @@ export function buildPlaceholderContent(productTitle: string): PlaceholderConten
     hero: {
       h1: productTitle || PH,
       subtitle: PH,
-      bundleCta: "Voordeliger met bundels",
       bullets: [PH, PH, PH],
     },
     outcomeHeadline: PH,
@@ -79,7 +76,6 @@ export function buildPlaceholderContent(productTitle: string): PlaceholderConten
       { question: PH, answer: PH },
       { question: PH, answer: PH },
     ],
-    bundleHeadline: "Bundels",
     finalCta: { headline: PH, subtext: PH, cta: "In winkelwagen" },
   };
 }

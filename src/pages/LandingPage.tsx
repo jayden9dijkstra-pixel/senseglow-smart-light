@@ -5,14 +5,16 @@ import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { DeliveryEstimate } from "@/components/product/DeliveryEstimate";
-import { useAddKit } from "@/components/product/AngleBlock";
+import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
 import { getLandingPage, landingOfferPrice, type LandingOffer } from "@/lib/landingPages";
 import { WhySenseGlow } from "@/components/product/WhySenseGlow";
-import { hasFixedKitPrice, kitVariant } from "@/lib/angles";
+import { variantIn } from "@/lib/angles";
+import { isOfferProduct, quoteQty, OFFER_TEXT, type OfferQty } from "@/lib/quantityOffer";
 import { formatPrice } from "@/lib/price";
 import { WARRANTY_TEXT } from "@/lib/productFaqs";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
+import { useCartStore } from "@/stores/cartStore";
 import NotFound from "./NotFound";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
@@ -25,32 +27,50 @@ const colorLabel = (v: Variant) => {
 };
 
 function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyProduct | undefined }) {
+  const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
   const choices = useMemo(() => {
     const seen = new Set<string>();
     return variants
-      .map((v) => kitVariant(offer.kit, v, variants))
+      .map((v) => variantIn(offer, v, variants))
       .filter((v): v is Variant => !!v && !seen.has(v.id) && !!seen.add(v.id));
-  }, [variants, offer.kit]);
+  }, [variants, offer]);
   const [chosen, setChosen] = useState<Variant | null>(null);
+  const [qty, setQty] = useState<OfferQty>(offer.qty ?? 1);
   const variant = chosen ?? choices[0] ?? null;
-  const addKit = useAddKit(product as ShopifyProduct, variant);
   const image = product?.node.images?.edges?.[0]?.node;
-  const fixed = hasFixedKitPrice(offer.kit);
+  const picker = isOfferProduct(offer.handle);
+  const unit = variant ? parseFloat(variant.price.amount) : null;
+  const count = picker ? qty : 1;
+
+  const add = () => {
+    if (!product || !variant) return;
+    addItem({
+      product,
+      variantId: variant.id,
+      variantTitle: variant.title,
+      price: { amount: variant.price.amount, currencyCode: variant.price.currencyCode },
+      quantity: count,
+      selectedOptions: variant.selectedOptions,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-background p-4">
       {image && (
         <img
           src={image.url}
-          alt={image.altText || product?.node.title || offer.kit.label}
+          alt={image.altText || product?.node.title || offer.label}
           className="aspect-square w-full rounded-xl bg-secondary object-contain p-4"
           loading="eager"
         />
       )}
-      <h2 className="text-base font-semibold text-foreground">{offer.kit.label}</h2>
-      {!fixed && variant && (
-        <p className="text-2xl font-bold text-primary">{formatPrice(parseFloat(variant.price.amount) * offer.kit.quantity)}</p>
+      <div>
+        <h2 className="text-base font-semibold text-foreground">{offer.label}</h2>
+        {offer.note && <p className="text-sm text-muted-foreground">{offer.note}</p>}
+      </div>
+      {unit != null && (
+        <p className="text-2xl font-bold text-primary">{formatPrice(quoteQty(unit, count).total)}</p>
       )}
       {choices.length > 1 && (
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Kleur">
@@ -68,9 +88,10 @@ function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyPr
           ))}
         </div>
       )}
+      {picker && <QuantityOfferPicker unitPrice={unit} value={qty} onChange={setQty} />}
       <Button
         disabled={!product || !variant?.availableForSale}
-        onClick={() => addKit(offer.kit)}
+        onClick={add}
         className="mt-auto w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
@@ -116,10 +137,11 @@ const LandingPage = () => {
           </div>
           <div className={`grid gap-4 ${cols}`}>
             {page.offers.map((o) => (
-              <OfferCard key={o.kit.id} offer={o} product={products[o.handle]} />
+              <OfferCard key={o.id} offer={o} product={products[o.handle]} />
             ))}
           </div>
           <DeliveryEstimate />
+          {page.offers.some((o) => isOfferProduct(o.handle)) && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
         </section>
 
         {page.why && <WhySenseGlow handles={[...new Set(page.offers.map((o) => o.handle))]} />}
@@ -130,11 +152,14 @@ const LandingPage = () => {
             <p className="text-foreground/80">{page.extra.text}</p>
             <ul className="space-y-1.5 text-foreground/80">
               {page.offers.map((o) => {
-                const amount = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? []);
+                const q = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? []);
+                const n = isOfferProduct(o.handle) ? o.qty ?? 1 : 1;
                 return (
-                  <li key={o.kit.id}>
-                    {o.kit.label}
-                    {amount != null && <span className="font-semibold text-foreground"> {formatPrice(amount)}</span>}
+                  <li key={o.id}>
+                    {o.label}
+                    {n > 1 ? `, ${n} lampen` : ""}
+                    {q && <span className="font-semibold text-foreground"> {formatPrice(q.total)}</span>}
+                    {q && n > 1 && <span> ({formatPrice(q.perLamp)} per lamp)</span>}
                   </li>
                 );
               })}

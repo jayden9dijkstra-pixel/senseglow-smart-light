@@ -17,7 +17,6 @@ export const ARC_HERO_CONTENT = {
   h1: "Shape your space with light.",
   subtitle:
     "Precision lighting that creates depth, symmetry and presence, inside and outside.",
-  bundleCta: "Voordeliger met bundels ↓",
   bullets: [
     "IP65 waterproof, geschikt voor binnen & buiten",
     "Up & down light design voor een architectural effect",
@@ -166,8 +165,6 @@ export const ARC_FAQS = [
 
 // ─── Bundle headline ───────────────────────────────────
 
-export const ARC_BUNDLE_HEADLINE =
-  "Creëer symmetrie en diepte met meerdere Arc lights.";
 
 // ─── Final CTA ─────────────────────────────────────────
 
@@ -183,10 +180,7 @@ export const ARC_FINAL_CTA = {
 export type ArcWattage = "12W";
 export type ArcLightColor = "warm" | "cold";
 
-import { computeBundlePricing } from "./productConfig";
 
-/** Bundle pricing, uses centralized 11/13/20% tiers. */
-export const computeArcBundlePricing = computeBundlePricing;
 
 /**
  * Parse an Arc variant's selectedOptions to extract wattage, body color and light color.

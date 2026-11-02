@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ShopifyProduct, fetchProductByHandle } from "@/lib/shopify";
 import { ProductHeroSection } from "@/components/product/ProductHeroSection";
-import { BundlesSection } from "@/components/product/BundlesSection";
 import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
 import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 
@@ -23,6 +22,8 @@ import { WhySenseGlow } from "@/components/product/WhySenseGlow";
 import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { getAngle, getStoredAngle, variantIn } from "@/lib/angles";
+import { parseQty, type OfferQty } from "@/lib/quantityOffer";
 import { getProductContent } from "@/lib/productContent";
 import { buildPlaceholderContent } from "@/lib/placeholderContent";
 import { getProductSeo, DEFAULT_SEO } from "@/lib/seoContent";
@@ -35,6 +36,10 @@ const ProductDetail = () => {
   const [searchParams] = useSearchParams();
   const variantParam = searchParams.get("variant");
   const viewedRef = useRef<string | null>(null);
+  const angle = getAngle(handle, searchParams.get("a") ?? getStoredAngle());
+  const [qty, setQty] = useState<OfferQty>(
+    () => parseQty(searchParams.get("qty")) ?? angle?.preselect?.qty ?? 1,
+  );
 
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +57,7 @@ const ProductDetail = () => {
   // magnetische/oplaadbare producten maar niet voor bijvoorbeeld Arc
   // (netstroom, geen accu). Zonder eigen content-item moet dit dus terugvallen
   // op de zichtbare placeholder, niet stilzwijgend op andermans specifieke
-  // claims — vandaar hier wél de fallback, net als bij hero/bundleHeadline.
+  // claims — vandaar hier wél de fallback, net als bij hero.
   const techHeadline = content?.techHeadline ?? fallback?.techHeadline;
   const techBenefits = content?.techBenefits ?? fallback?.techBenefits;
   const stepsHeadline = content?.stepsHeadline ?? fallback?.stepsHeadline;
@@ -64,7 +69,6 @@ const ProductDetail = () => {
   const beforeLabel = content?.beforeLabel;
   const afterLabel = content?.afterLabel;
   const beforeAfter = content?.beforeAfter ?? fallback?.beforeAfter;
-  const bundleHeadline = content?.bundleHeadline ?? fallback?.bundleHeadline;
   const finalCta = content?.finalCta ?? fallback?.finalCta;
 
   useEffect(() => {
@@ -89,7 +93,11 @@ const ProductDetail = () => {
             );
             setSelectedVariant(def?.node || found.node.variants.edges[0]?.node || null);
           } else {
-            setSelectedVariant(pickDefaultVariant(found));
+            const def = pickDefaultVariant(found);
+            const size = angle?.preselect?.sizeCm;
+            setSelectedVariant(
+              size ? variantIn({ sizeCm: size }, def, found.node.variants.edges.map((e) => e.node)) ?? def : def,
+            );
           }
         }
         setLoading(false);
@@ -185,6 +193,8 @@ const ProductDetail = () => {
           selectedVariant={selectedVariant}
           onVariantChange={setSelectedVariant}
           heroContent={hero}
+          qty={qty}
+          onQtyChange={setQty}
         />
 
         {handle && (
@@ -193,11 +203,6 @@ const ProductDetail = () => {
           </div>
         )}
 
-        <BundlesSection
-          product={product}
-          selectedVariant={selectedVariant || undefined}
-          headlineOverride={bundleHeadline}
-        />
 
         <BeforeAfterSection
           headline={beforeAfterHeadline}
@@ -222,7 +227,7 @@ const ProductDetail = () => {
         />
       </div>
 
-      <MobileAddToCartBar product={product} selectedVariant={selectedVariant} />
+      <MobileAddToCartBar product={product} selectedVariant={selectedVariant} qty={qty} />
     </PageLayout>
   );
 };

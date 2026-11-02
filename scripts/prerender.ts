@@ -27,12 +27,12 @@ import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
 import { LANDING_PAGES, landingOfferPrice, type LandingPage } from "../src/lib/landingPages";
 import { WHY_HEADING, WHY_CONTACT_TEXT, whyItems } from "../src/lib/whySenseGlow";
-import { hasFixedKitPrice } from "../src/lib/angles";
 import { WARRANTY_TEXT } from "../src/lib/productFaqs";
 import { DELIVERY_TEXT } from "../src/lib/delivery";
-import { USE_CASES, USE_CASE_HEADING, PRODUCT_KITS, KITS_HEADING, KITS } from "../src/lib/angles";
+import { USE_CASES, USE_CASE_HEADING } from "../src/lib/angles";
+import { OFFER_TEXT, MIX_NOTE, isOfferProduct } from "../src/lib/quantityOffer";
 import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
-import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
+import { HOME_HERO, HOME_HERO_PRODUCT, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import React, { createElement, type ComponentType } from "react";
 (globalThis as { React?: typeof React }).React = React;
 import { renderToStaticMarkup } from "react-dom/server";
@@ -74,7 +74,6 @@ const BASE_STATIC_ROUTES = [
   "/bestelling-volgen",
   "/volg-je-bestelling",
   "/quiz",
-  "/stel-je-bundel-samen",
 ];
 const STATIC_ROUTES = BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]);
 
@@ -277,8 +276,7 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
   parts.push(whyMarkup([handle], locale));
   if (product?.node.description) parts.push(descriptionMarkup(product.node.description, locale));
-  const kits = PRODUCT_KITS[handle];
-  if (kits?.length) parts.push(`<h2>${t(KITS_HEADING)}</h2><ul>${kits.map((k) => `<li>${t(k.label)}</li>`).join("")}</ul>`);
+  if (isOfferProduct(handle)) parts.push(`<p>${t(OFFER_TEXT)}</p><p>${t(MIX_NOTE)}</p>`);
   const uses = USE_CASES[handle];
   if (uses?.length) parts.push(`<h2>${t(USE_CASE_HEADING)}</h2><ul>${uses.map((u) => `<li>${t(u)}</li>`).join("")}</ul>`);
   parts.push(`<h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
@@ -304,13 +302,7 @@ function descriptionMarkup(description: string, locale: Locale): string {
   return out;
 }
 
-/** /producten in de server-HTML: per product naam, vanaf-prijs, één zin uit Shopify en link, plus de kits. */
-const KIT_LINKS: Record<string, string> = {
-  trapkit: "/trapverlichting",
-  gangset: "/gangverlichting",
-  verhuurderskit: "/verlichting-vakantiewoning",
-  solarduo: "/solar-buitenlamp",
-};
+/** /producten in de server-HTML: per product naam, vanaf-prijs, één zin uit Shopify en link, plus het aanbod. */
 function firstSentence(description: string): string {
   let text = description;
   for (const re of UNSOURCED) text = text.replace(re, "");
@@ -337,11 +329,8 @@ function productsPageFallback(products: ShopifyProduct[], locale: Locale): strin
     if (n.description) p.push(`<p${lang}>${escapeHtml(firstSentence(n.description))}</p>`);
     p.push(`<p><a href="${escapeAttr(url)}">${escapeHtml(n.title)}</a></p></li>`);
   }
-  p.push(`</ul><h2>${t(KITS_HEADING)}</h2><ul>`);
-  for (const kit of Object.values(KITS)) {
-    const href = KIT_LINKS[kit.id];
-    p.push(`<li>${href ? `<a href="${escapeAttr(`${SITE_URL}${href}`)}">${t(kit.label)}</a>` : t(kit.label)}</li>`);
-  }
+  p.push(`</ul><h2>${t("Meer lampen, lagere prijs")}</h2><p>${t(OFFER_TEXT)}</p><p>${t(MIX_NOTE)}</p><ul>`);
+  for (const lp of LANDING_PAGES) p.push(`<li><a href="${escapeAttr(`${SITE_URL}${lp.path}`)}">${escapeHtml(lp.h1)}</a></li>`);
   p.push(`</ul><h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
   p.push(`</article>`);
   return p.join("");
@@ -354,27 +343,31 @@ function whyMarkup(handles: string[], locale: Locale): string {
   return `<h2>${t(WHY_HEADING)}</h2><ul>${whyItems(handles).map((x) => `<li>${t(x)}</li>`).join("")}<li><a href="${escapeAttr(`${SITE_URL}${prefix}/contact`)}">${t(WHY_CONTACT_TEXT)}</a></li></ul>`;
 }
 
+const euro = (n: number) => `€${n.toFixed(2).replace(".", ",")}`;
+/** Voorgeselecteerde keuze met totaal en prijs per lamp, uit de Shopify-prijs. */
+function offerLine(o: LandingPage["offers"][number], prod: ShopifyProduct | undefined): string {
+  const q = landingOfferPrice(o, prod?.node.variants.edges.map((x) => x.node) ?? []);
+  if (!q) return "";
+  if (q.qty === 1) return euro(q.total);
+  return `${q.qty} lampen (${Math.round(q.rate * 100)}% korting): ${euro(q.total)}, ${euro(q.perLamp)} per lamp`;
+}
+
 /** Landingspagina in de server-HTML: zelfde inhoud als de React-pagina. */
 function landingFallback(page: LandingPage, products: Record<string, ShopifyProduct>): string {
   const e = escapeHtml;
-  const fmt = (n: number) => `&euro;${n.toFixed(2).replace(".", ",")}`;
   const p: string[] = [`<article id="prerendered-landing" style="max-width:60rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
   p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p><ul>`);
   for (const o of page.offers) {
     const prod = products[o.handle];
-    const amount = landingOfferPrice(o, prod?.node.variants.edges.map((x) => x.node) ?? []);
-    const price = amount != null ? ` ${fmt(amount)}` : "";
     const img = prod?.node.images?.edges?.[0]?.node;
-    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.kit.label)}" width="400" height="400" />` : ""}<h2>${e(o.kit.label)}${price}</h2><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
+    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
+  if (page.offers.some((o) => isOfferProduct(o.handle))) p.push(`<p>${e(OFFER_TEXT)}</p><p>${e(MIX_NOTE)}</p>`);
   if (page.why) p.push(whyMarkup([...new Set(page.offers.map((o) => o.handle))], "nl"));
   if (page.extra) {
     p.push(`<h2>${e(page.extra.heading)}</h2><p>${e(page.extra.text)}</p><ul>`);
-    for (const o of page.offers) {
-      const amount = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((x) => x.node) ?? []);
-      p.push(`<li>${e(o.kit.label)}${amount != null ? ` ${fmt(amount)}` : ""}</li>`);
-    }
+    for (const o of page.offers) p.push(`<li>${e(o.label)}: ${e(offerLine(o, products[o.handle]))}</li>`);
     p.push(`</ul>`);
   }
   p.push(`<h2>Waarom deze keuze</h2><ul>${[...page.benefits, WARRANTY_TEXT].map((b) => `<li>${e(b)}</li>`).join("")}</ul>`);
@@ -401,6 +394,13 @@ function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
   const prefix = locale === "nl" ? "" : `/${locale}`;
   const p: string[] = [`<article id="prerendered-home" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
   p.push(`<p>${t(HOME_HERO.eyebrow)}</p><h1>${t(HOME_HERO.h1)}</h1><p>${t(HOME_HERO.subtitle)}</p>`);
+  const heroProduct = products.find((x) => x.node.handle === HOME_HERO_PRODUCT)?.node;
+  if (heroProduct) {
+    const a = heroProduct.priceRange?.minVariantPrice?.amount;
+    const v = a ? (locale === "en" ? parseFloat(a).toFixed(2) : parseFloat(a).toFixed(2).replace(".", ",")) : null;
+    p.push(`<p><a href="${escapeAttr(`${SITE_URL}${prefix}/product/${heroProduct.handle}`)}">${escapeHtml(heroProduct.title)}</a>${v ? ` ${escapeHtml(translate(locale, "Vanaf"))} &euro;${v}` : ""}</p>`);
+  }
+  p.push(`<p>${t(OFFER_TEXT)}</p>`);
   p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}"><h3>${t(x.title)}</h3></a><p>${t(x.body)}</p>${homeTilePrice(products, x.href, locale)}</li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_PILLARS_HEADING)}</h2><ul>${HOME_PILLARS.map((x) => `<li><h3>${t(x.title)}</h3><p>${t(x.body)}</p></li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_STORY.heading)}</h2>${HOME_STORY.paragraphs.map((x) => `<p>${t(x)}</p>`).join("")}`);

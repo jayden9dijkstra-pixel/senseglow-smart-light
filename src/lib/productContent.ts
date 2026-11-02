@@ -14,7 +14,6 @@ export interface ProductPageContent {
   hero: {
     h1: string;
     subtitle: string;
-    bundleCta: string;
     bullets: string[];
   };
   techHeadline: string;
@@ -27,7 +26,6 @@ export interface ProductPageContent {
   beforeAfter: Array<{ before: string; after: string }>;
   faqSubtitle: string;
   faqs: Array<{ question: string; answer: string }>;
-  bundleHeadline: string;
   finalCta: { headline: string; subtext: string; cta: string };
 }
 
@@ -38,7 +36,6 @@ const AMBIENT: ProductPageContent = {
   hero: {
     h1: "SenseGlow™ Ambient Motion Bar",
     subtitle: "Nachtverlichting die aanspringt vóórdat jij struikelt.",
-    bundleCta: "Voordeliger met bundels",
     bullets: [
       "Bewegingssensor, automatisch aan bij beweging",
       "Warm licht, slaapvriendelijk, niet verblindend",
@@ -87,7 +84,6 @@ const AMBIENT: ProductPageContent = {
     { question: "Garantie?",
       answer: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Werkt iets niet zoals het hoort? Mail support@senseglow.shop met je bestelnummer." },
   ],
-  bundleHeadline: "Verlicht je hele huis met een bundel",
   finalCta: { headline: "Klaar voor zacht, automatisch licht?", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
 };
 
@@ -96,7 +92,6 @@ const WAVE: ProductPageContent = {
   hero: {
     h1: "SenseGlow Wave™",
     subtitle: "Sfeerverlichting die meebeweegt, voor de keuken die nét niet áf voelt.",
-    bundleCta: "Bespaar meer met bundels",
     bullets: [
       "Uniek wave-lichteffect bij beweging",
       "3 lichtkleuren in één lamp",
@@ -144,7 +139,6 @@ const WAVE: ProductPageContent = {
     { question: "Garantie?",
       answer: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Werkt iets niet zoals het hoort? Mail support@senseglow.shop met je bestelnummer." },
   ],
-  bundleHeadline: "Creëer een doorlopende wave van licht",
   finalCta: { headline: "Upgrade je verlichting.", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
 };
 
@@ -153,7 +147,6 @@ const SCONCE: ProductPageContent = {
   hero: {
     h1: "SenseGlow Wall Lamp™",
     subtitle: "Veilig de trap op en af, ook 's nachts. Geen boren, geen elektricien.",
-    bundleCta: "Voordeliger met bundels",
     bullets: [
       "Bewegingssensor, automatisch aan bij elke stap",
       "Zelfklevend, geen boren, geen kabels",
@@ -202,7 +195,6 @@ const SCONCE: ProductPageContent = {
     { question: "Past het ook in een huurwoning?",
       answer: "Ja, geen boren, geen schroeven, geen kabels. De ideale renter-oplossing." },
   ],
-  bundleHeadline: "Verlicht de hele trap met een set",
   finalCta: { headline: "Veilig de trap op, elke nacht.", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
 };
 
@@ -211,7 +203,6 @@ const LANTERN: ProductPageContent = {
   hero: {
     h1: "SenseGlow Solar Lantern™",
     subtitle: "Buitenverlichting zonder kabels, zonder elektriciteitsrekening.",
-    bundleCta: "Voordeliger met bundels",
     bullets: [
       "Op zonne-energie, geen stroomrekening",
       "IP65 waterdicht, bestand tegen Nederlands weer",
@@ -263,7 +254,6 @@ const LANTERN: ProductPageContent = {
     { question: "Garantie?",
       answer: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Werkt iets niet zoals het hoort? Mail support@senseglow.shop met je bestelnummer." },
   ],
-  bundleHeadline: "Verlicht je hele buitenruimte",
   finalCta: { headline: "Licht in huis, zonder gedoe.", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
 };
 
@@ -272,7 +262,6 @@ const FLEX: ProductPageContent = {
   hero: {
     h1: "SenseGlow Flex™",
     subtitle: "Touch-dimbare bureaulamp, voor late studie-sessies en het bureau dat eindelijk niet meer naar studentenkamer ruikt.",
-    bundleCta: "Voordeliger met bundels",
     bullets: [
       "Touch-dimming, tik aan, vasthouden om te dimmen",
       "Magnetisch + USB-C, verhuist mee elk studiejaar",
@@ -321,7 +310,6 @@ const FLEX: ProductPageContent = {
     { question: "Garantie?",
       answer: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. Werkt iets niet zoals het hoort? Mail support@senseglow.shop met je bestelnummer." },
   ],
-  bundleHeadline: "Bundel met een tweede lamp",
   finalCta: { headline: "Een bureau dat eindelijk werkt.", subtext: TRUST_SUBTEXT, cta: "In winkelwagen" },
 };
 

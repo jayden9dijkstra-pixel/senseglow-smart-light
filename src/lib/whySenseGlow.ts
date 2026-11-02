@@ -5,6 +5,7 @@
 import { DELIVERY_TEXT } from "./delivery";
 import { WARRANTY_TEXT } from "./productFaqs";
 import { LANTERN_PRODUCT_HANDLE } from "./productConfig";
+import { OFFER_TEXT, isOfferProduct } from "./quantityOffer";
 
 export const WHY_HEADING = "Waarom SenseGlow";
 export const WHY_CONTACT_TEXT = "Nederlandse klantenservice via de contactpagina";
@@ -20,6 +21,6 @@ export function whyItems(handles: string[]): string[] {
     "30 dagen retour",
     WARRANTY_TEXT,
     ...(usbC ? ["Opladen via USB-C"] : []),
-    "Kits met korting als je meer lampen samen koopt",
+    ...(handles.some(isOfferProduct) ? [OFFER_TEXT] : []),
   ];
 }

@@ -1,13 +1,11 @@
 /**
  * SenseGlow Step™, Trapverlichting met sensor
  */
-import { computeBundlePricing } from "./productConfig";
 
 export const STEP_HERO_CONTENT = {
   h1: "Veilig de trap op en af, ook 's nachts.",
   subtitle:
     "Kleine traplampen met bewegingssensor. Geen boren, geen elektricien. Plakken, opladen, klaar.",
-  bundleCta: "Voordeliger met sets ↓",
   bullets: [
     "Bewegingssensor, automatisch aan/uit",
     "Zelfklevend, geen boren",
@@ -68,7 +66,6 @@ export const STEP_FAQS = [
   { question: "Welke set heb ik nodig?", answer: "Een 4-pack volstaat voor een korte trap of gang. Voor langere trappen of meerdere ruimtes raden we de 8-pack aan." },
 ];
 
-export const STEP_BUNDLE_HEADLINE = "Verlicht je hele trap met één set.";
 
 export const STEP_FINAL_CTA = {
   headline: "Veilig, automatisch, zonder gedoe.",
@@ -93,4 +90,3 @@ export function parseStepVariant(
   return { pack, color };
 }
 
-export const computeStepBundlePricing = computeBundlePricing;

@@ -1,6 +1,6 @@
 /**
  * Product registry, single place for variant parsing + key building.
- * Used by VariantPicker, BundlesSection and the checkout discount-code mapper.
+ * Used by VariantPicker and the cart labels.
  */
 import { ProductKey, HANDLE_TO_KEY } from "./productConfig";
 

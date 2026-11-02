@@ -15,7 +15,6 @@ export const FLEX_HERO_CONTENT = {
   h1: "Light, exactly where you need it.",
   subtitle:
     "A flexible, magnetic light that adapts to your space, in seconds.",
-  bundleCta: "Voordeliger met bundels ↓",
   bullets: [
     "88° verstelbaar, richt het licht precies waar je wil",
     "Magnetisch & 3M bevestiging, geen boren",
@@ -164,8 +163,6 @@ export const FLEX_FAQS = [
 
 // ─── Bundle headline ───────────────────────────────────
 
-export const FLEX_BUNDLE_HEADLINE =
-  "Meer licht, meer controle in je ruimte.";
 
 // ─── Final CTA ─────────────────────────────────────────
 
@@ -199,7 +196,4 @@ export function parseFlexVariant(
   return { bodyColor };
 }
 
-import { computeBundlePricing } from "./productConfig";
 
-/** Bundle pricing, uses centralized 11/13/20% tiers. */
-export const computeFlexBundlePricing = computeBundlePricing;

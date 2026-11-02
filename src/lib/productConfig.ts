@@ -1,11 +1,6 @@
 /**
- * Product configuration & per-product bundle tiers
- *
- * Bundle pricing model:
- * - User picks a single variant (color + size) and a pack size (2, 3 or 4)
- * - Cart line = N × variantId of that single variant
- * - At checkout a Shopify discount code is applied that gives the
- *   standardized % off (8 / 12 / 15 for 2 / 3 / 4 pack)
+ * Product configuration. Kortingen regelt Shopify automatisch ('Meer lampen',
+ * zie src/lib/quantityOffer.ts); de site past geen kortingscodes toe.
  */
 
 export const VAT_RATE = 0.21;
@@ -39,121 +34,6 @@ export const HANDLE_TO_KEY: Record<string, ProductKey> = {
   [WAVE_PRODUCT_HANDLE]: "wave",
   [SCONCE_PRODUCT_HANDLE]: "sconce",
 };
-
-// ─── Standardized bundle tiers ──────────────────────────
-export type PackSize = 2 | 3 | 4 | 5;
-export const PACK_RATE: Record<PackSize, number> = {
-  2: 0.10,
-  3: 0.15,
-  4: 0.20,
-  5: 0.25,
-};
-export const PACK_LABEL: Record<PackSize, string> = {
-  2: "Duopak",
-  3: "Familiepak",
-  4: "Voordeelpak",
-  5: "Compleetpak",
-};
-export const PACK_SUBTITLE: Record<PackSize, string> = {
-  2: "Ideaal om te starten",
-  3: "Voor het hele huis",
-  4: "Voor elke ruimte",
-  5: "Maximale besparing",
-};
-
-// ─── Per-product configuration ─────────────────────────
-export interface ProductBundleConfig {
-  packSizes: PackSize[];
-  /** Afwijkend kortingspercentage per pack, bv. Wall Lamp 2x = 25% */
-  rateOverride?: Partial<Record<PackSize, number>>;
-  /** Alleen varianten met deze optiewaarde mogen in de bundel (bv. "8-delige set") */
-  requiredOptionValue?: string;
-  /** Vaste kortingscode voor dit product in plaats van SG-PACK-<n> */
-  discountCode?: string;
-  /** Afwijkende bundelnaam per pack */
-  labelOverride?: Partial<Record<PackSize, string>>;
-}
-
-export const BUNDLE_CONFIG: Record<ProductKey, ProductBundleConfig> = {
-  ambient: { packSizes: [2, 3, 4] },
-  wave: { packSizes: [2, 3, 4] },
-  lantern: { packSizes: [2, 3, 4] },
-  flex: { packSizes: [2] },
-  sconce: {
-    packSizes: [2],
-    rateOverride: { 2: 0.25 },
-    requiredOptionValue: "8-delige set",
-    discountCode: "SG-WALL-2X8",
-    labelOverride: { 2: "Dubbele set (2x 8)" },
-  },
-  arc: { packSizes: [] },
-};
-
-export function getBundleConfig(productKey: ProductKey | null): ProductBundleConfig {
-  return productKey ? BUNDLE_CONFIG[productKey] : { packSizes: [] };
-}
-
-export function getPackRate(productKey: ProductKey | null, packSize: PackSize): number {
-  const config = getBundleConfig(productKey);
-  return config.rateOverride?.[packSize] ?? PACK_RATE[packSize];
-}
-
-// ─── Discount-code mapping ─────────────────────────────
-/**
- * Universele pack-kortingscodes: 2 → 10%, 3 → 15%, 4 → 20%, 5 → 25%.
- * SG-PACK-3 en SG-PACK-4 gaven in Shopify 20% en 30% in plaats van 15% en 20%,
- * daarom gebruiken die staffels de nieuwe, nagemeten codes.
- */
-const PACK_DISCOUNT_CODE: Record<PackSize, string> = {
-  2: "SG-PACK-2",
-  3: "SG-BUNDLE-3",
-  4: "SG-BUNDLE-4",
-  5: "SG-PACK-5",
-};
-
-export function getBundleDiscountCode(
-  productKey: ProductKey,
-  packSize: PackSize,
-  variantKey: string
-): string | null {
-  const config = getBundleConfig(productKey);
-  if (config.discountCode) return config.discountCode;
-  return PACK_DISCOUNT_CODE[packSize];
-}
-
-// ─── Bundle quote helper ───────────────────────────────
-export interface BundleQuote {
-  packSize: PackSize;
-  rate: number;
-  label: string;        // "Duopak"
-  subtitle: string;     // marketing subtitle
-  discountLabel: string; // "-8%"
-  unitPrice: number;
-  originalTotal: number;
-  total: number;        // discounted
-  save: number;
-}
-
-export function buildBundleQuote(
-  packSize: PackSize,
-  unitPrice: number,
-  options?: { rate?: number; label?: string }
-): BundleQuote {
-  const rate = options?.rate ?? PACK_RATE[packSize];
-  const originalTotal = +(unitPrice * packSize).toFixed(2);
-  const total = +(originalTotal * (1 - rate)).toFixed(2);
-  return {
-    packSize,
-    rate,
-    label: options?.label ?? PACK_LABEL[packSize],
-    subtitle: PACK_SUBTITLE[packSize],
-    discountLabel: `-${Math.round(rate * 100)}%`,
-    unitPrice,
-    originalTotal,
-    total,
-    save: +(originalTotal - total).toFixed(2),
-  };
-}
 
 // ─── Legacy Ambient Bar size helpers (still used by quiz) ──
 export type SizeVariant = "20cm" | "30cm" | "40cm";
@@ -196,61 +76,10 @@ export const sizeRecommendations = {
   large: "40cm" as SizeVariant,
 } as const;
 
-// Backwards-compat re-export for Quiz.tsx (Ambient bundle preview)
-export const bundlePricing: Record<SizeVariant, {
-  basePrice: string;
-  two: { price: string; originalPrice: string; save: string; discount: string };
-  three: { price: string; originalPrice: string; save: string; discount: string };
-  four: { price: string; originalPrice: string; save: string; discount: string };
-}> = (() => {
-  const build = (size: SizeVariant) => {
-    const unit = parseFloat(incVatPrices[size]);
-    const wrap = (q: BundleQuote) => ({
-      price: q.total.toFixed(2),
-      originalPrice: q.originalTotal.toFixed(2),
-      save: q.save.toFixed(2),
-      discount: q.discountLabel,
-    });
-    return {
-      basePrice: incVatPrices[size],
-      two: wrap(buildBundleQuote(2, unit)),
-      three: wrap(buildBundleQuote(3, unit)),
-      four: wrap(buildBundleQuote(4, unit)),
-    };
-  };
-  return {
-    "20cm": build("20cm"),
-    "30cm": build("30cm"),
-    "40cm": build("40cm"),
-  };
-})();
-
-export const bundleNames: Record<number, string> = {
-  2: "Duopak",
-  3: "Familiepak",
-  4: "Voordeelpak",
-};
-
 export function getProductUrl(size?: SizeVariant, color?: string): string {
   const params = new URLSearchParams();
   if (size) params.set("size", size);
   if (color) params.set("color", color);
   const qs = params.toString();
   return `/product/${PRODUCT_HANDLE}${qs ? `?${qs}` : ""}`;
-}
-
-// Legacy alias used by other product config files (kept harmless)
-export function computeBundlePricing(unitPrice: number) {
-  const wrap = (q: BundleQuote) => ({
-    price: q.total.toFixed(2),
-    originalPrice: q.originalTotal.toFixed(2),
-    save: q.save.toFixed(2),
-    discount: q.discountLabel,
-  });
-  return {
-    basePrice: unitPrice.toFixed(2),
-    two: wrap(buildBundleQuote(2, unitPrice)),
-    three: wrap(buildBundleQuote(3, unitPrice)),
-    four: wrap(buildBundleQuote(4, unitPrice)),
-  };
 }
