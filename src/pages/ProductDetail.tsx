@@ -88,10 +88,7 @@ const ProductDetail = () => {
             );
             setSelectedVariant(def?.node || found.node.variants.edges[0]?.node || null);
           } else {
-            const v30 = found.node.variants.edges.find((v) =>
-              v.node.selectedOptions.some((o) => o.value.includes("30"))
-            );
-            setSelectedVariant(v30?.node || found.node.variants.edges[0]?.node || null);
+            setSelectedVariant(pickDefaultVariant(found));
           }
         }
         setLoading(false);
