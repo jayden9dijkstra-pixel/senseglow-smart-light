@@ -1,10 +1,10 @@
 /**
  * Landingspagina's per zoekintentie (alleen Nederlands). Pure data, gedeeld
  * door de pagina en scripts/prerender.ts. Specificaties komen letterlijk uit
- * de Shopify-productomschrijvingen; prijzen komen live uit Shopify, behalve de
- * vaste kitprijzen in de kitteksten.
+ * de Shopify-productomschrijvingen; prijzen komen live uit Shopify.
  */
-import { KITS, OFFERS, ANGLES, hasFixedKitPrice, type Kit } from "./angles";
+import { ANGLES } from "./angles";
+import { isOfferProduct, quoteQty } from "./quantityOffer";
 import { purchaseFaqs, type ProductFaq } from "./productFaqs";
 import { DELIVERY_TEXT } from "./delivery";
 import {
@@ -15,8 +15,18 @@ import {
 } from "./productConfig";
 
 export interface LandingOffer {
+  id: string;
   handle: string;
-  kit: Kit;
+  /** Kaarttitel, zonder prijs. */
+  label: string;
+  /** Korte toelichting onder de titel. */
+  note?: string;
+  /** Voorgeselecteerd aantal in de aantal-kiezer (alleen producten die meedoen). */
+  qty?: 1 | 2 | 4;
+  /** Maat in cm die de variant moet hebben. */
+  sizeCm?: number;
+  /** Optiewaarde die de variant moet hebben, bv. "8-delige set". */
+  optionValue?: string;
 }
 
 export interface SpecTable {
@@ -34,7 +44,7 @@ export interface LandingPage {
   benefits: string[];
   specs: SpecTable[];
   faqs: ProductFaq[];
-  /** Extra H2-sectie met de kits en prijzen van deze pagina. */
+  /** Extra H2-sectie met de keuzes en prijzen van deze pagina. */
   extra?: { heading: string; text: string };
   /** Toon het blok 'Waarom SenseGlow' onder de koopknoppen. */
   why?: boolean;
@@ -116,13 +126,13 @@ export const LANDING_PAGES: LandingPage[] = [
     path: "/trapverlichting",
     title: "Trapverlichting met sensor, zonder boren | SenseGlow",
     description:
-      "Trapverlichting met bewegingssensor die je zonder boren plaatst. Kies de Wall Lamp 4- of 8-delige set of de Trapkit met 4 Ambient Motion Bars. Gratis verzending NL/BE.",
+      "Trapverlichting met bewegingssensor die je zonder boren plaatst. Kies 4 Ambient Motion Bars met 15% korting of de Wall Lamp 4- of 8-delige set. Gratis verzending NL/BE.",
     h1: "Trapverlichting met sensor, zonder boren",
     intro: "Licht dat vanzelf aangaat zodra je de trap nadert. Je plakt de lampen op hun plek en laadt ze op via USB-C.",
     offers: [
-      { handle: STEP_PRODUCT_HANDLE, kit: OFFERS.wall4 },
-      { handle: STEP_PRODUCT_HANDLE, kit: OFFERS.wall8 },
-      { handle: PRODUCT_HANDLE, kit: KITS.trapkit },
+      { id: "ambient-trap", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 20 cm", note: "4 lampen, genoeg voor een trap", qty: 4, sizeCm: 20 },
+      { id: "wall4", handle: STEP_PRODUCT_HANDLE, label: "SenseGlow Wall Lamp™ 4-delige set", optionValue: "4-delige set" },
+      { id: "wall8", handle: STEP_PRODUCT_HANDLE, label: "SenseGlow Wall Lamp™ 8-delige set", optionValue: "8-delige set" },
     ],
     benefits: [
       "Gaat vanzelf aan zodra je beweegt, en weer uit als je weg bent",
@@ -132,7 +142,7 @@ export const LANDING_PAGES: LandingPage[] = [
     specs: [SPECS.wall, SPECS.ambient],
     extra: {
       heading: "Looplicht voor je trap",
-      text: "Zet de lampen langs je trap en ze gaan vanzelf aan als je loopt. Zo heb je looplicht zonder schakelaar. Dit zijn de kits:",
+      text: "Zet de lampen langs je trap en ze gaan vanzelf aan als je loopt. Zo heb je looplicht zonder schakelaar. Dit zijn de keuzes:",
     },
     why: true,
     faqs: common(
@@ -155,10 +165,10 @@ export const LANDING_PAGES: LandingPage[] = [
     path: "/gangverlichting",
     title: "Gangverlichting met sensor, zonder boren | SenseGlow",
     description:
-      "Gangverlichting met bewegingssensor: de Gangset met 2x Ambient Motion Bar 30 cm. Magnetisch bevestigen, opladen via USB-C. Gratis verzending NL/BE, 30 dagen retour.",
+      "Gangverlichting met bewegingssensor: 2 Ambient Motion Bars van 30 cm met 10% korting. Magnetisch bevestigen, opladen via USB-C. Gratis verzending NL/BE, 30 dagen retour.",
     h1: "Gangverlichting met sensor, zonder boren",
     intro: "Zacht licht in de gang, precies wanneer je erlangs loopt. Geen schakelaar zoeken in het donker.",
-    offers: [{ handle: PRODUCT_HANDLE, kit: KITS.gangset }],
+    offers: [{ id: "ambient-gang", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "2 lampen voor een gang", qty: 2, sizeCm: 30 }],
     benefits: ANGLES[PRODUCT_HANDLE].gang.benefits,
     specs: [SPECS.ambient],
     why: true,
@@ -176,10 +186,10 @@ export const LANDING_PAGES: LandingPage[] = [
     path: "/verlichting-vakantiewoning",
     title: "Verlichting voor je vakantiewoning, met sensor | SenseGlow",
     description:
-      "Sensorverlichting voor je vakantie- of huurwoning: de Verhuurderskit met 4x Ambient Motion Bar 30 cm. Gasten vinden 's nachts zelf de weg. Plaatsen zonder boren.",
+      "Sensorverlichting voor je vakantie- of huurwoning: 4 Ambient Motion Bars van 30 cm met 15% korting. Gasten vinden 's nachts zelf de weg. Plaatsen zonder boren.",
     h1: "Verlichting voor je vakantiewoning, met sensor",
     intro: "Gasten vinden 's nachts zelf de weg naar badkamer of keuken. Jij plaatst de lampen zonder te boren.",
-    offers: [{ handle: PRODUCT_HANDLE, kit: KITS.verhuurderskit }],
+    offers: [{ id: "ambient-verhuur", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "4 lampen voor gang, slaapkamer en badkamer", qty: 4, sizeCm: 30 }],
     benefits: ANGLES[PRODUCT_HANDLE].verhuur.benefits,
     specs: [SPECS.ambient],
     why: true,
@@ -187,8 +197,8 @@ export const LANDING_PAGES: LandingPage[] = [
       AMBIENT_SENSOR_FAQ,
       AMBIENT_CHARGE_FAQ,
       {
-        question: "Kan ik meerdere sets bestellen?",
-        answer: "Ja, je kunt meerdere sets in je winkelwagen zetten. Heb je meerdere woningen of een groter aantal nodig? Mail support@senseglow.shop.",
+        question: "Kan ik meer lampen bestellen?",
+        answer: "Ja. Vanaf 4 lampen krijg je 15% korting, ook als je verschillende SenseGlow-lampen combineert (behalve Wall Lamp). Heb je meerdere woningen of een groter aantal nodig? Mail support@senseglow.shop.",
       },
       {
         question: "Kan ik een factuur krijgen?",
@@ -201,12 +211,11 @@ export const LANDING_PAGES: LandingPage[] = [
     path: "/solar-buitenlamp",
     title: "Solar lantaarn: buitenlamp met sensor | SenseGlow",
     description:
-      "De SenseGlow Solar Lantern is een solar lantaarn en buitenlamp met sensor. Laadt op met zonlicht, IP65 waterdicht, bewegingssensor tot 6 meter. Ook als Solar duo.",
+      "De SenseGlow Solar Lantern is een solar lantaarn en buitenlamp met sensor. Laadt op met zonlicht, IP65 waterdicht, bewegingssensor tot 6 meter. 2 lampen: 10% korting.",
     h1: "Solar lantaarn: buitenlamp met sensor",
     intro: "Een solar lantaarn voor voordeur, tuin of terras. Overdag laadt hij op via het zonnepaneel, 's avonds gaat hij aan als er iemand aankomt.",
     offers: [
-      { handle: LANTERN_PRODUCT_HANDLE, kit: OFFERS.solar1 },
-      { handle: LANTERN_PRODUCT_HANDLE, kit: KITS.solarduo },
+      { id: "solar", handle: LANTERN_PRODUCT_HANDLE, label: "SenseGlow Solar Lantern™", note: "2 lampen, bijvoorbeeld links en rechts van de deur", qty: 2 },
     ],
     benefits: ANGLES[LANTERN_PRODUCT_HANDLE].buiten.benefits,
     specs: [SPECS.solar],
@@ -237,7 +246,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "De SenseGlow Flex: een touch-dimbare lamp voor je studentenkamer. Magnetische wandbeugel, oplaadbaar via USB-C, warm en koel wit. Gratis verzending NL/BE.",
     h1: "Lamp voor je studentenkamer",
     intro: "Een design-lamp boven je bureau of bed. Tik om aan te zetten, houd vast om te dimmen.",
-    offers: [{ handle: FLEX_PRODUCT_HANDLE, kit: OFFERS.flex1 }],
+    offers: [{ id: "flex", handle: FLEX_PRODUCT_HANDLE, label: "SenseGlow Flex™", qty: 1 }],
     benefits: [
       "Touch-dimbaar: jij kiest de sfeer",
       "Magnetische wandbeugel: klik de lamp los om mee te nemen",
@@ -267,14 +276,22 @@ export const getLandingPage = (path: string) => LANDING_PAGES.find((p) => p.path
 
 type PricedVariant = { price: { amount: string }; selectedOptions: Array<{ value: string }> };
 
-/** Shopify-prijs van een aanbieding, of null bij een kit met vaste prijs in de tekst. */
-export function landingOfferPrice(offer: LandingOffer, variants: PricedVariant[]): number | null {
-  if (hasFixedKitPrice(offer.kit)) return null;
-  const k = offer.kit;
-  const match = variants.find((v) =>
-    k.optionValue ? v.selectedOptions.some((s) => s.value === k.optionValue)
-    : k.sizeCm ? v.selectedOptions.some((s) => new RegExp(`\\b${k.sizeCm}\\s*cm`, "i").test(s.value))
-    : true,
+/** Variant die bij de aanbieding past (maat of setgrootte). */
+export function landingOfferVariant<V extends PricedVariant>(offer: LandingOffer, variants: V[]): V | null {
+  return (
+    variants.find((v) =>
+      offer.optionValue ? v.selectedOptions.some((s) => s.value === offer.optionValue)
+      : offer.sizeCm ? v.selectedOptions.some((s) => new RegExp(`\\b${offer.sizeCm}\\s*cm`, "i").test(s.value))
+      : true,
+    ) ?? null
   );
-  return match ? parseFloat(match.price.amount) * k.quantity : null;
+}
+
+/** Totaal en prijs per lamp van de voorgeselecteerde keuze, uit de Shopify-prijs. */
+export function landingOfferPrice(offer: LandingOffer, variants: PricedVariant[]) {
+  const match = landingOfferVariant(offer, variants);
+  if (!match) return null;
+  const unit = parseFloat(match.price.amount);
+  const qty = isOfferProduct(offer.handle) ? offer.qty ?? 1 : 1;
+  return quoteQty(unit, isOfferProduct(offer.handle) ? qty : 1);
 }
