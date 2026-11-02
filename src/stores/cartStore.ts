@@ -50,7 +50,7 @@ export interface CartItem {
     amount: string;
     currencyCode: string;
   };
-  /** Quantity sent to Shopify. For bundles this equals the pack size. */
+  /** Quantity sent to Shopify. */
   quantity: number;
   selectedOptions: Array<{
     name: string;

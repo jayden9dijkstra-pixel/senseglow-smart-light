@@ -9,9 +9,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Package, Check, RotateCcw, Shield, Truck } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Check, RotateCcw, Shield, Truck, Lightbulb } from "lucide-react";
 import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/layout/PaymentIcons";
-import { useCartStore, mergeCheckoutLines, pickBundleCode } from "@/stores/cartStore";
+import { useCartStore, mergeCheckoutLines, offerLampCount } from "@/stores/cartStore";
+import { cartUpsell } from "@/lib/quantityOffer";
 import { previewCart, type CartPreview } from "@/lib/shopify";
 import { formatVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
@@ -102,39 +103,21 @@ export function CartDrawer() {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Total inc-VAT, applying bundle discount per bundle line.
-  const totalPrice = React.useMemo(() => {
-    let total = 0;
-    for (const item of items) {
-      const lineGross = parseFloat(item.price.amount) * item.quantity;
-      if (item.isBundle && item.bundleRate) {
-        total += lineGross * (1 - item.bundleRate);
-      } else {
-        total += lineGross;
-      }
-    }
-    return Math.round(total * 100) / 100;
-  }, [items]);
+  // Subtotaal zonder korting; de korting toont Shopify zelf hieronder.
+  const totalPrice = React.useMemo(
+    () => Math.round(items.reduce((t, i) => t + parseFloat(i.price.amount) * i.quantity, 0) * 100) / 100,
+    [items],
+  );
+  const upsell = cartUpsell(offerLampCount(items));
 
-  const totalSavings = React.useMemo(() => {
-    let s = 0;
-    for (const item of items) {
-      if (item.isBundle && item.bundleRate) {
-        s += parseFloat(item.price.amount) * item.quantity * item.bundleRate;
-      }
-    }
-    return Math.round(s * 100) / 100;
-  }, [items]);
-
-  // Shopify rekent automatische kortingen (zoals kitprijzen) zelf uit; toon die
+  // Shopify rekent de automatische korting 'Meer lampen' zelf uit; toon die
   // regels zodra de winkelwagen open staat.
   const [preview, setPreview] = React.useState<CartPreview | null>(null);
   React.useEffect(() => {
     if (!isOpen || items.length === 0) { setPreview(null); return; }
     let cancelled = false;
     const timer = setTimeout(async () => {
-      const code = pickBundleCode(items);
-      const result = await previewCart(mergeCheckoutLines(items), code ? [code] : []);
+      const result = await previewCart(mergeCheckoutLines(items), []);
       if (!cancelled) setPreview(result);
     }, 400);
     return () => { cancelled = true; clearTimeout(timer); };
@@ -230,8 +213,7 @@ export function CartDrawer() {
                 <div className="space-y-4">
                   {items.map((item, idx) => {
                     const lineGross = parseFloat(item.price.amount) * item.quantity;
-                    const lineNet = item.isBundle && item.bundleRate ? lineGross * (1 - item.bundleRate) : lineGross;
-                    const key = item.isBundle ? `${item.variantId}-bundle-${item.bundlePackSize}-${idx}` : item.variantId;
+                    const key = `${item.variantId}-${idx}`;
                     return (
                       <div key={key} className="flex gap-4 p-3 rounded-lg border border-border/50">
                         <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
@@ -245,27 +227,7 @@ export function CartDrawer() {
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          {item.isBundle ? (
-                            <>
-                              <div className="flex items-center gap-2 mb-1">
-                                <Package className="w-3.5 h-3.5 text-glow" />
-                                <Badge variant="outline" className="text-[10px] border-glow/30 text-glow px-1.5 py-0">
-                                  Bundel · {Math.round((item.bundleRate || 0) * 100)}%
-                                </Badge>
-                              </div>
-                              <h4 className="font-medium text-sm">
-                                {item.bundleName}
-                                {item.bundleVariantLabel ? `, ${item.bundleVariantLabel}` : ""}
-                              </h4>
-                              <p className="text-xs text-muted-foreground">
-                                {item.product.node.title} · {item.quantity}×
-                              </p>
-                              <div className="flex items-baseline gap-2">
-                                <p className="font-semibold text-foreground">{formatPrice(lineNet)}</p>
-                                <p className="text-xs text-muted-foreground line-through">{formatPrice(lineGross)}</p>
-                              </div>
-                            </>
-                          ) : (
+                          {(
                             <>
                               <h4 className="font-medium truncate">{item.product.node.title}</h4>
                               <p className="text-sm text-muted-foreground">
@@ -283,12 +245,12 @@ export function CartDrawer() {
                             variant="ghost"
                             size="icon"
                             className="h-6 w-6"
-                            onClick={() => removeItem(item.variantId, item.isBundle, item.bundlePackSize)}
+                            onClick={() => removeItem(item.variantId)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
 
-                          {!item.isBundle && (
+                          {(
                             <div className="flex items-center gap-1">
                               <Button
                                 variant="outline"
@@ -317,6 +279,12 @@ export function CartDrawer() {
               </div>
 
               <div className="flex-shrink-0 space-y-2 pt-4 border-t bg-background">
+                {upsell && (
+                  <div className="flex items-center gap-2 rounded-lg bg-primary/5 px-3 py-2 text-sm text-foreground">
+                    <Lightbulb className="h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{upsell}</span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
                   <span>Gratis bezorgd. Levering in 7-14 werkdagen</span>
@@ -327,12 +295,6 @@ export function CartDrawer() {
                     <span>−{formatPrice(d.amount)}</span>
                   </div>
                 ))}
-                {!shopifyDiscounts && totalSavings > 0 && (
-                  <div className="flex justify-between items-center text-sm text-glow">
-                    <span>Bundelkorting</span>
-                    <span>−{formatPrice(totalSavings)}</span>
-                  </div>
-                )}
                 <div className="flex justify-between items-center text-sm text-muted-foreground">
                   <span>Verzending</span>
                   <span>Gratis</span>
