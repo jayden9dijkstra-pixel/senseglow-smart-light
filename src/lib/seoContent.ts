@@ -36,7 +36,7 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
   "/quiz": {
     title: "Welke SenseGlow past bij jou? Doe de lampenkeuzehulp | SenseGlow",
     description:
-      "Beantwoord een paar korte vragen over je ruimtes en ontvang direct een passend SenseGlow advies, inclusief voordeelpakket. Gratis verzending NL/BE, 30 dagen retour.",
+      "Beantwoord een paar korte vragen over je ruimtes en ontvang direct een passend SenseGlow advies. 2 lampen 10%, 4+ lampen 15% korting. Gratis verzending NL/BE, 30 dagen retour.",
   },
   "/verzending": {
     title: "Verzending en levertijd, gratis bezorging in Nederland | SenseGlow",
@@ -47,11 +47,6 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
     title: "Volg je bestelling · SenseGlow",
     description:
       "Bekijk de status van je SenseGlow bestelling. Vul je ordernummer en e-mailadres in en zie direct waar je pakket is.",
-  },
-  "/stel-je-bundel-samen": {
-    title: "Stel je eigen bundel samen, tot 20% korting | SenseGlow",
-    description:
-      "Kies zelf 2, 3 of 4 SenseGlow lampen en bepaal per lamp de maat en kleur. Je korting loopt op tot 20 procent en wordt automatisch verrekend.",
   },
   "/volg-je-bestelling": {
     title: "Volg je bestelling · SenseGlow",

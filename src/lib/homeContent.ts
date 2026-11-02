@@ -84,9 +84,9 @@ export const HOME_FAQS = [
       "Tussen de 3 weken (Ambient bij intensief nachtgebruik) en 8 weken (Flex bij studie-gebruik). De Solar Lantern hoef je niet op te laden, die doet het zonnepaneel zelf.",
   },
   {
-    question: "Kan ik bundels combineren?",
+    question: "Krijg ik korting als ik meer lampen koop?",
     answer:
-      "Ja. Op de productpagina vind je per product de beschikbare 2-, 3- of 4-packs met korting. Bundle-korting wordt automatisch in je winkelwagen verrekend.",
+      "Ja. Meer lampen, lagere prijs per lamp: 2 lampen 10%, 4+ lampen 15%. Je mag verschillende SenseGlow-lampen combineren, behalve de Wall Lamp. De korting staat automatisch in je winkelwagen.",
   },
   {
     question: "Wat is de garantie?",

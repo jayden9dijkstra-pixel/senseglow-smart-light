@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import { useEffect, useRef, lazy, Suspense } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
@@ -33,7 +33,6 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Login = lazy(() => import("./pages/Login"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
-const BundleBuilder = lazy(() => import("./pages/BundleBuilder"));
 const WhySenseGlow = lazy(() => import("./pages/WhySenseGlow"));
 import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
@@ -108,8 +107,8 @@ const App = () => (
               <Route key={p} path={p} element={<LandingPage />} />
             ))}
             <Route path="/over" element={<About />} />
-            <Route path="/stel-je-bundel-samen" element={<BundleBuilder />} />
-            <Route path="/bundels" element={<BundleBuilder />} />
+            <Route path="/stel-je-bundel-samen" element={<Navigate to="/producten" replace />} />
+            <Route path="/bundels" element={<Navigate to="/producten" replace />} />
             <Route path="/waarom-senseglow" element={<WhySenseGlow />} />
             <Route path="/duurzaamheid" element={<Sustainability />} />
             <Route path="/privacy" element={<Privacy />} />
@@ -131,8 +130,8 @@ const App = () => (
               <Route key={`${locale}-returns`} path={`/${locale}/retourneren`} element={<Returns />} />,
               <Route key={`${locale}-withdrawal`} path={`/${locale}/herroepingsformulier`} element={<WithdrawalForm />} />,
               <Route key={`${locale}-about`} path={`/${locale}/over`} element={<About />} />,
-              <Route key={`${locale}-builder`} path={`/${locale}/stel-je-bundel-samen`} element={<BundleBuilder />} />,
-              <Route key={`${locale}-bundles`} path={`/${locale}/bundels`} element={<BundleBuilder />} />,
+              <Route key={`${locale}-builder`} path={`/${locale}/stel-je-bundel-samen`} element={<Navigate to={`/${locale}/producten`} replace />} />,
+              <Route key={`${locale}-bundles`} path={`/${locale}/bundels`} element={<Navigate to={`/${locale}/producten`} replace />} />,
               <Route key={`${locale}-why`} path={`/${locale}/waarom-senseglow`} element={<WhySenseGlow />} />,
               <Route key={`${locale}-sustainability`} path={`/${locale}/duurzaamheid`} element={<Sustainability />} />,
               <Route key={`${locale}-privacy`} path={`/${locale}/privacy`} element={<Privacy />} />,
