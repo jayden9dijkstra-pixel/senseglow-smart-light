@@ -132,7 +132,7 @@ export const LANDING_PAGES: LandingPage[] = [
     specs: [SPECS.wall, SPECS.ambient],
     extra: {
       heading: "Looplicht voor je trap",
-      text: "Zet de lampen langs je trap en ze gaan vanzelf aan als je loopt. Zo heb je looplicht zonder schakelaar. Kies een van de kits hieronder.",
+      text: "Zet de lampen langs je trap en ze gaan vanzelf aan als je loopt. Zo heb je looplicht zonder schakelaar. Dit zijn de kits:",
     },
     why: true,
     faqs: common(
