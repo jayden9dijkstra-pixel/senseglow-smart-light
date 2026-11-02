@@ -120,14 +120,14 @@ const results: Record<ResultKey, { title: string; copy: string; url: string }> =
     url: "/product/senseglow_ambient_motion_bar?size=30",
   },
   ambient3: {
-    title: "SenseGlow Ambient Motion Bar™ 30cm, 3-pack",
-    copy: "Voor jou: de SenseGlow Ambient Motion Bar™ 30cm, 3-pack. Voor gang, slaapkamer en badkamer. 12% korting tov los.",
-    url: "/product/senseglow_ambient_motion_bar?size=30&bundle=3",
+    title: "SenseGlow Ambient Motion Bar™ 30cm, 2 lampen",
+    copy: "Voor jou: 2 SenseGlow Ambient Motion Bars™ van 30cm, met 10% korting. Neem er 4 voor gang, slaapkamer en badkamer en je krijgt 15%.",
+    url: "/product/senseglow_ambient_motion_bar?size=30&qty=2",
   },
   ambient4: {
-    title: "SenseGlow Ambient Motion Bar™ 30cm, 4-pack",
-    copy: "Voor jou: de SenseGlow Ambient Motion Bar™ 30cm, 4-pack. Voor het hele huis, met bundelkorting.",
-    url: "/product/senseglow_ambient_motion_bar?size=30&bundle=4",
+    title: "SenseGlow Ambient Motion Bar™ 30cm, 4 lampen",
+    copy: "Voor jou: 4 SenseGlow Ambient Motion Bars™ van 30cm, met 15% korting. Voor het hele huis.",
+    url: "/product/senseglow_ambient_motion_bar?size=30&qty=4",
   },
 };
 
