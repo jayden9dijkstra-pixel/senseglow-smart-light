@@ -32,7 +32,7 @@ import { DELIVERY_TEXT } from "../src/lib/delivery";
 import { USE_CASES, USE_CASE_HEADING } from "../src/lib/angles";
 import { OFFER_TEXT, MIX_NOTE, isOfferProduct } from "../src/lib/quantityOffer";
 import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
-import { HOME_HERO, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
+import { HOME_HERO, HOME_HERO_PRODUCT, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS } from "../src/lib/homeContent";
 import React, { createElement, type ComponentType } from "react";
 (globalThis as { React?: typeof React }).React = React;
 import { renderToStaticMarkup } from "react-dom/server";
@@ -74,7 +74,6 @@ const BASE_STATIC_ROUTES = [
   "/bestelling-volgen",
   "/volg-je-bestelling",
   "/quiz",
-  "/stel-je-bundel-samen",
 ];
 const STATIC_ROUTES = BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]);
 
@@ -356,7 +355,6 @@ function offerLine(o: LandingPage["offers"][number], prod: ShopifyProduct | unde
 /** Landingspagina in de server-HTML: zelfde inhoud als de React-pagina. */
 function landingFallback(page: LandingPage, products: Record<string, ShopifyProduct>): string {
   const e = escapeHtml;
-  const fmt = (n: number) => `&euro;${n.toFixed(2).replace(".", ",")}`;
   const p: string[] = [`<article id="prerendered-landing" style="max-width:60rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
   p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p><ul>`);
   for (const o of page.offers) {
@@ -396,6 +394,13 @@ function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
   const prefix = locale === "nl" ? "" : `/${locale}`;
   const p: string[] = [`<article id="prerendered-home" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
   p.push(`<p>${t(HOME_HERO.eyebrow)}</p><h1>${t(HOME_HERO.h1)}</h1><p>${t(HOME_HERO.subtitle)}</p>`);
+  const heroProduct = products.find((x) => x.node.handle === HOME_HERO_PRODUCT)?.node;
+  if (heroProduct) {
+    const a = heroProduct.priceRange?.minVariantPrice?.amount;
+    const v = a ? (locale === "en" ? parseFloat(a).toFixed(2) : parseFloat(a).toFixed(2).replace(".", ",")) : null;
+    p.push(`<p><a href="${escapeAttr(`${SITE_URL}${prefix}/product/${heroProduct.handle}`)}">${escapeHtml(heroProduct.title)}</a>${v ? ` ${escapeHtml(translate(locale, "Vanaf"))} &euro;${v}` : ""}</p>`);
+  }
+  p.push(`<p>${t(OFFER_TEXT)}</p>`);
   p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}"><h3>${t(x.title)}</h3></a><p>${t(x.body)}</p>${homeTilePrice(products, x.href, locale)}</li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_PILLARS_HEADING)}</h2><ul>${HOME_PILLARS.map((x) => `<li><h3>${t(x.title)}</h3><p>${t(x.body)}</p></li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_STORY.heading)}</h2>${HOME_STORY.paragraphs.map((x) => `<p>${t(x)}</p>`).join("")}`);
