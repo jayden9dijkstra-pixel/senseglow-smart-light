@@ -116,7 +116,7 @@ const results: Record<ResultKey, { title: string; copy: string; url: string }> =
   },
   ambientSingle: {
     title: "SenseGlow Ambient Motion Bar™ 30cm",
-    copy: "Voor jou: de SenseGlow Ambient Motion Bar™ 30cm. De maat die 9 van de 10 klanten kiezen. Begin met één, hij is verslavend.",
+    copy: "Voor jou: de SenseGlow Ambient Motion Bar™ 30cm. Begin met één, hij is verslavend.",
     url: "/product/senseglow_ambient_motion_bar?size=30",
   },
   ambient3: {
