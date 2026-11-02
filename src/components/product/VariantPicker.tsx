@@ -43,7 +43,7 @@ function parseDimensions(
 ): ParsedDimensions {
   const d: ParsedDimensions = { size: "", color: "", wattage: "", lightColor: "", variantType: "" };
 
-  // Skip BUNDLE variants, they are handled by BundlesSection, not the picker
+  // Skip legacy BUNDLE variants
   if (selectedOptions.some((o) => /^bundle\b/i.test(o.value))) {
     return d;
   }

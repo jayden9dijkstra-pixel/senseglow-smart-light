@@ -13,7 +13,6 @@ export const LANTERN_HERO_CONTENT = {
   h1: "Warm light. No wires.",
   subtitle:
     "A solar-powered lantern that automatically lights up your home, no cables, no effort.",
-  bundleCta: "Voordeliger met bundels ↓",
   bullets: [
     "Solar powered, geen stroom nodig",
     "Automatische sensor (dag/nacht + beweging)",
@@ -168,7 +167,4 @@ export const LANTERN_FINAL_CTA = {
   cta: "Bekijk SenseGlow Lantern™",
 };
 
-import { computeBundlePricing } from "./productConfig";
 
-/** Bundle pricing, uses centralized 11/13/20% tiers. */
-export const computeLanternBundlePricing = computeBundlePricing;

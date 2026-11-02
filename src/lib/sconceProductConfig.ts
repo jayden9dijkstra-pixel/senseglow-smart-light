@@ -1,13 +1,11 @@
 /**
  * SenseGlow Sconce™, Draadloze wandlamp set (set van 2)
  */
-import { computeBundlePricing } from "./productConfig";
 
 export const SCONCE_HERO_CONTENT = {
   h1: "Wandlampen ophangen zonder boren.",
   subtitle:
     "Een set van 2 draadloze wandlampen op batterij. Geen bedrading, geen elektricien, gewoon ophangen en genieten.",
-  bundleCta: "Voordeliger met sets ↓",
   bullets: [
     "Volledig draadloos op accu (12.000mAh)",
     "Tot ±30 dagen licht per lading",
@@ -77,4 +75,3 @@ export function parseSconceVariant(
   return { color };
 }
 
-export const computeSconceBundlePricing = computeBundlePricing;

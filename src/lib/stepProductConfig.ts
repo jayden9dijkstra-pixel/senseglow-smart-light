@@ -1,13 +1,11 @@
 /**
  * SenseGlow Step™, Trapverlichting met sensor
  */
-import { computeBundlePricing } from "./productConfig";
 
 export const STEP_HERO_CONTENT = {
   h1: "Veilig de trap op en af, ook 's nachts.",
   subtitle:
     "Kleine traplampen met bewegingssensor. Geen boren, geen elektricien. Plakken, opladen, klaar.",
-  bundleCta: "Voordeliger met sets ↓",
   bullets: [
     "Bewegingssensor, automatisch aan/uit",
     "Zelfklevend, geen boren",
@@ -93,4 +91,3 @@ export function parseStepVariant(
   return { pack, color };
 }
 
-export const computeStepBundlePricing = computeBundlePricing;
