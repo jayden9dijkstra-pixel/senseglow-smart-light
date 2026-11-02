@@ -4,7 +4,7 @@
  * de Shopify-productomschrijvingen; prijzen komen live uit Shopify, behalve de
  * vaste kitprijzen in de kitteksten.
  */
-import { KITS, OFFERS, ANGLES, type Kit } from "./angles";
+import { KITS, OFFERS, ANGLES, hasFixedKitPrice, type Kit } from "./angles";
 import { purchaseFaqs, type ProductFaq } from "./productFaqs";
 import { DELIVERY_TEXT } from "./delivery";
 import {
@@ -34,6 +34,10 @@ export interface LandingPage {
   benefits: string[];
   specs: SpecTable[];
   faqs: ProductFaq[];
+  /** Extra H2-sectie met de kits en prijzen van deze pagina. */
+  extra?: { heading: string; text: string };
+  /** Toon het blok 'Waarom SenseGlow' onder de koopknoppen. */
+  why?: boolean;
 }
 
 const SPECS: Record<string, SpecTable> = {
@@ -100,6 +104,11 @@ const AMBIENT_MOUNT_FAQ: ProductFaq = {
   answer: "Er zit een dubbelzijdige plakstrip bij die je op de muur plakt; de lamp klikt magnetisch aan die strip vast. Zo haal je hem makkelijk los om op te laden.",
 };
 
+const AMBIENT_SENSOR_FAQ: ProductFaq = {
+  question: "Hoe werkt de bewegingssensor?",
+  answer: "De bewegingssensor, ook wel bewegingsmelder genoemd, ziet beweging binnen 120° en tot 5 meter. Loop je erlangs, dan gaat het licht vanzelf aan.",
+};
+
 const common = (...faqs: ProductFaq[]) => [...faqs, DELIVERY_FAQ, ...purchaseFaqs];
 
 export const LANDING_PAGES: LandingPage[] = [
@@ -121,7 +130,16 @@ export const LANDING_PAGES: LandingPage[] = [
       "Oplaadbaar via USB-C, in een paar minuten geplaatst",
     ],
     specs: [SPECS.wall, SPECS.ambient],
+    extra: {
+      heading: "Looplicht voor je trap",
+      text: "Zet de lampen langs je trap en ze gaan vanzelf aan als je loopt. Zo heb je looplicht zonder schakelaar. Dit zijn de kits:",
+    },
+    why: true,
     faqs: common(
+      {
+        question: "Werkt de trapverlichting met een bewegingsmelder?",
+        answer: "Ja. Beide lampen hebben een bewegingssensor, ook wel bewegingsmelder genoemd. De Wall Lamp gaat aan als je nadert en uit na inactiviteit. De Ambient Motion Bar ziet beweging binnen 120° en tot 5 meter.",
+      },
       {
         question: "Hoeveel lampen heb ik nodig voor mijn trap?",
         answer: "Voor 8-12 treden: de 4-delige set. Voor 13 of meer treden of een lange gang erbij: de 8-delige set.",
@@ -143,7 +161,9 @@ export const LANDING_PAGES: LandingPage[] = [
     offers: [{ handle: PRODUCT_HANDLE, kit: KITS.gangset }],
     benefits: ANGLES[PRODUCT_HANDLE].gang.benefits,
     specs: [SPECS.ambient],
+    why: true,
     faqs: common(
+      AMBIENT_SENSOR_FAQ,
       AMBIENT_CHARGE_FAQ,
       {
         question: "Kan ik hem ook altijd aan zetten?",
@@ -162,7 +182,9 @@ export const LANDING_PAGES: LandingPage[] = [
     offers: [{ handle: PRODUCT_HANDLE, kit: KITS.verhuurderskit }],
     benefits: ANGLES[PRODUCT_HANDLE].verhuur.benefits,
     specs: [SPECS.ambient],
+    why: true,
     faqs: common(
+      AMBIENT_SENSOR_FAQ,
       AMBIENT_CHARGE_FAQ,
       {
         question: "Kan ik meerdere sets bestellen?",
@@ -188,7 +210,12 @@ export const LANDING_PAGES: LandingPage[] = [
     ],
     benefits: ANGLES[LANTERN_PRODUCT_HANDLE].buiten.benefits,
     specs: [SPECS.solar],
+    why: true,
     faqs: common(
+      {
+        question: "Heeft de solar lantaarn een bewegingsmelder?",
+        answer: "Ja. De PIR-bewegingssensor, ook wel bewegingsmelder genoemd, ziet beweging tot 6 meter binnen 120°. Je kiest uit alleen bij beweging, altijd aan (dim) of altijd uit.",
+      },
       {
         question: "Hoeveel uur licht geeft de buitenlamp op één lading?",
         answer: "Tot 8-12 uur op een volle accu. Opladen duurt ongeveer 6 uur in direct zonlicht.",
@@ -237,3 +264,17 @@ export const LANDING_PAGES: LandingPage[] = [
 export const LANDING_PATHS = LANDING_PAGES.map((p) => p.path);
 
 export const getLandingPage = (path: string) => LANDING_PAGES.find((p) => p.path === path) ?? null;
+
+type PricedVariant = { price: { amount: string }; selectedOptions: Array<{ value: string }> };
+
+/** Shopify-prijs van een aanbieding, of null bij een kit met vaste prijs in de tekst. */
+export function landingOfferPrice(offer: LandingOffer, variants: PricedVariant[]): number | null {
+  if (hasFixedKitPrice(offer.kit)) return null;
+  const k = offer.kit;
+  const match = variants.find((v) =>
+    k.optionValue ? v.selectedOptions.some((s) => s.value === k.optionValue)
+    : k.sizeCm ? v.selectedOptions.some((s) => new RegExp(`\\b${k.sizeCm}\\s*cm`, "i").test(s.value))
+    : true,
+  );
+  return match ? parseFloat(match.price.amount) * k.quantity : null;
+}

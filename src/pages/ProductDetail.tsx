@@ -18,6 +18,7 @@ import { ProductRelatedSection } from "@/components/product/ProductRelatedSectio
 import { MobileAddToCartBar } from "@/components/product/MobileAddToCartBar";
 import { getProductFaqs } from "@/lib/productFaqs";
 import { UseCasesSection } from "@/components/product/UseCasesSection";
+import { WhySenseGlow } from "@/components/product/WhySenseGlow";
 import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
@@ -187,6 +188,12 @@ const ProductDetail = () => {
           onVariantChange={setSelectedVariant}
           heroContent={hero}
         />
+
+        {handle && (
+          <div className="container max-w-3xl py-8">
+            <WhySenseGlow handles={[handle]} />
+          </div>
+        )}
 
         <BundlesSection
           product={product}

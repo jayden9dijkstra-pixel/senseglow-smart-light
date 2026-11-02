@@ -25,7 +25,8 @@ import {
 } from "../src/lib/structuredData";
 import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
-import { LANDING_PAGES, type LandingPage } from "../src/lib/landingPages";
+import { LANDING_PAGES, landingOfferPrice, type LandingPage } from "../src/lib/landingPages";
+import { WHY_HEADING, WHY_CONTACT_TEXT, whyItems } from "../src/lib/whySenseGlow";
 import { hasFixedKitPrice } from "../src/lib/angles";
 import { WARRANTY_TEXT } from "../src/lib/productFaqs";
 import { DELIVERY_TEXT } from "../src/lib/delivery";
@@ -274,6 +275,7 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   const price = product?.node.priceRange?.minVariantPrice;
   if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(locale === "en" ? parseFloat(price.amount).toFixed(2) : parseFloat(price.amount).toFixed(2).replace(".", ","))}</p>`);
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
+  parts.push(whyMarkup([handle], locale));
   if (product?.node.description) parts.push(descriptionMarkup(product.node.description, locale));
   const kits = PRODUCT_KITS[handle];
   if (kits?.length) parts.push(`<h2>${t(KITS_HEADING)}</h2><ul>${kits.map((k) => `<li>${t(k.label)}</li>`).join("")}</ul>`);
@@ -345,6 +347,13 @@ function productsPageFallback(products: ShopifyProduct[], locale: Locale): strin
   return p.join("");
 }
 
+/** 'Waarom SenseGlow'-checklist in de server-HTML. */
+function whyMarkup(handles: string[], locale: Locale): string {
+  const t = (x: string) => escapeHtml(translate(locale, x));
+  const prefix = locale === "nl" ? "" : `/${locale}`;
+  return `<h2>${t(WHY_HEADING)}</h2><ul>${whyItems(handles).map((x) => `<li>${t(x)}</li>`).join("")}<li><a href="${escapeAttr(`${SITE_URL}${prefix}/contact`)}">${t(WHY_CONTACT_TEXT)}</a></li></ul>`;
+}
+
 /** Landingspagina in de server-HTML: zelfde inhoud als de React-pagina. */
 function landingFallback(page: LandingPage, products: Record<string, ShopifyProduct>): string {
   const e = escapeHtml;
@@ -353,17 +362,21 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p><ul>`);
   for (const o of page.offers) {
     const prod = products[o.handle];
-    const variants = prod?.node.variants.edges.map((x) => x.node) ?? [];
-    const match = variants.find((v) =>
-      o.kit.optionValue ? v.selectedOptions.some((s) => s.value === o.kit.optionValue)
-      : o.kit.sizeCm ? v.selectedOptions.some((s) => new RegExp(`\\b${o.kit.sizeCm}\\s*cm`, "i").test(s.value))
-      : true,
-    );
-    const price = !hasFixedKitPrice(o.kit) && match ? ` ${fmt(parseFloat(match.price.amount) * o.kit.quantity)}` : "";
+    const amount = landingOfferPrice(o, prod?.node.variants.edges.map((x) => x.node) ?? []);
+    const price = amount != null ? ` ${fmt(amount)}` : "";
     const img = prod?.node.images?.edges?.[0]?.node;
     p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.kit.label)}" width="400" height="400" />` : ""}<h2>${e(o.kit.label)}${price}</h2><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
+  if (page.why) p.push(whyMarkup([...new Set(page.offers.map((o) => o.handle))], "nl"));
+  if (page.extra) {
+    p.push(`<h2>${e(page.extra.heading)}</h2><p>${e(page.extra.text)}</p><ul>`);
+    for (const o of page.offers) {
+      const amount = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((x) => x.node) ?? []);
+      p.push(`<li>${e(o.kit.label)}${amount != null ? ` ${fmt(amount)}` : ""}</li>`);
+    }
+    p.push(`</ul>`);
+  }
   p.push(`<h2>Waarom deze keuze</h2><ul>${[...page.benefits, WARRANTY_TEXT].map((b) => `<li>${e(b)}</li>`).join("")}</ul>`);
   p.push(`<h2>Specificaties</h2>`);
   for (const t of page.specs) {
