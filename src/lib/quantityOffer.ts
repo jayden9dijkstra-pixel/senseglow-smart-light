@@ -43,7 +43,10 @@ const round = (n: number) => Math.round(n * 100) / 100;
 /** Totaal en prijs per lamp voor een aantal, op basis van de Shopify-prijs van één lamp. */
 export function quoteQty(unitPrice: number, qty: number) {
   const rate = offerRate(qty);
-  const total = round(unitPrice * qty * (1 - rate));
+  const gross = round(unitPrice * qty);
+  // Shopify rondt het kortingsbedrag naar beneden af op hele centen.
+  const discount = Math.floor(gross * rate * 100 + 1e-6) / 100;
+  const total = round(gross - discount);
   return { qty, rate, total, perLamp: round(total / qty) };
 }
 
