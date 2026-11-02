@@ -7,7 +7,8 @@ import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { DeliveryEstimate } from "@/components/product/DeliveryEstimate";
 import { useAddKit } from "@/components/product/AngleBlock";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
-import { getLandingPage, type LandingOffer } from "@/lib/landingPages";
+import { getLandingPage, landingOfferPrice, type LandingOffer } from "@/lib/landingPages";
+import { WhySenseGlow } from "@/components/product/WhySenseGlow";
 import { hasFixedKitPrice, kitVariant } from "@/lib/angles";
 import { formatPrice } from "@/lib/price";
 import { WARRANTY_TEXT } from "@/lib/productFaqs";
@@ -120,6 +121,26 @@ const LandingPage = () => {
           </div>
           <DeliveryEstimate />
         </section>
+
+        {page.why && <WhySenseGlow handles={[...new Set(page.offers.map((o) => o.handle))]} />}
+
+        {page.extra && (
+          <section className="max-w-3xl space-y-3">
+            <h2 className="text-2xl font-bold text-foreground">{page.extra.heading}</h2>
+            <p className="text-foreground/80">{page.extra.text}</p>
+            <ul className="space-y-1.5 text-foreground/80">
+              {page.offers.map((o) => {
+                const amount = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? []);
+                return (
+                  <li key={o.kit.id}>
+                    {o.kit.label}
+                    {amount != null && <span className="font-semibold text-foreground"> {formatPrice(amount)}</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
         <section className="space-y-3">
           <h2 className="text-2xl font-bold text-foreground">Waarom deze keuze</h2>

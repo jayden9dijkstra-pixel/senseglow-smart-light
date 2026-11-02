@@ -4,7 +4,7 @@
  * de Shopify-productomschrijvingen; prijzen komen live uit Shopify, behalve de
  * vaste kitprijzen in de kitteksten.
  */
-import { KITS, OFFERS, ANGLES, type Kit } from "./angles";
+import { KITS, OFFERS, ANGLES, hasFixedKitPrice, type Kit } from "./angles";
 import { purchaseFaqs, type ProductFaq } from "./productFaqs";
 import { DELIVERY_TEXT } from "./delivery";
 import {
@@ -264,3 +264,17 @@ export const LANDING_PAGES: LandingPage[] = [
 export const LANDING_PATHS = LANDING_PAGES.map((p) => p.path);
 
 export const getLandingPage = (path: string) => LANDING_PAGES.find((p) => p.path === path) ?? null;
+
+type PricedVariant = { price: { amount: string }; selectedOptions: Array<{ value: string }> };
+
+/** Shopify-prijs van een aanbieding, of null bij een kit met vaste prijs in de tekst. */
+export function landingOfferPrice(offer: LandingOffer, variants: PricedVariant[]): number | null {
+  if (hasFixedKitPrice(offer.kit)) return null;
+  const k = offer.kit;
+  const match = variants.find((v) =>
+    k.optionValue ? v.selectedOptions.some((s) => s.value === k.optionValue)
+    : k.sizeCm ? v.selectedOptions.some((s) => new RegExp(`\\b${k.sizeCm}\\s*cm`, "i").test(s.value))
+    : true,
+  );
+  return match ? parseFloat(match.price.amount) * k.quantity : null;
+}
