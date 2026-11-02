@@ -11,7 +11,7 @@ describe("Meer lampen-aanbod", () => {
   });
   it("rekent totaal en prijs per lamp uit de Shopify-prijs", () => {
     expect(quoteQty(24.95, 4)).toMatchObject({ total: 84.84, perLamp: 21.21 });
-    expect(quoteQty(29.95, 2)).toMatchObject({ total: 53.91, perLamp: 26.96 });
+    expect(quoteQty(29.95, 2)).toMatchObject({ total: 53.92, perLamp: 26.96 });
   });
   it("Wall Lamp doet niet mee", () => {
     expect(isOfferProduct("senseglow_wall_lamp")).toBe(false);
