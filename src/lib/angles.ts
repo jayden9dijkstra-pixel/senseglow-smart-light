@@ -1,7 +1,6 @@
 /**
- * Advertentie-invalshoeken (?a=) per product, kits en toepassingen.
- * Pure data + functies; prijzen komen uit Shopify. Alleen de 'los'-prijzen in
- * de kitteksten staan hier vast, op verzoek van de eigenaar.
+ * Advertentie-invalshoeken (?a=) per product en toepassingen.
+ * Een invalshoek selecteert alleen de aantal-kiezer voor; prijzen komen uit Shopify.
  */
 import {
   PRODUCT_HANDLE,
@@ -11,23 +10,17 @@ import {
   STEP_PRODUCT_HANDLE,
 } from "./productConfig";
 
-export interface Kit {
-  id: string;
-  /** Volledige kittekst, zoals de eigenaar hem aanleverde. */
-  label: string;
-  /** Knoptekst. */
-  name: string;
-  quantity: number;
+/** Voorselectie van de aantal-kiezer; prijzen komen uit Shopify. */
+export interface Preselect {
+  qty: 1 | 2 | 4;
   /** Maat in cm die de variant moet hebben; leeg = maat van de gekozen variant. */
   sizeCm?: number;
-  /** Optiewaarde die de variant moet hebben, bv. "8-delige set". */
-  optionValue?: string;
 }
 
 export interface Angle {
   heading: string;
   benefits: string[];
-  kit?: Kit;
+  preselect?: Preselect;
 }
 
 const AMBIENT_BENEFITS = [
@@ -36,40 +29,10 @@ const AMBIENT_BENEFITS = [
   "3 kleurtemperaturen, van warm tot helder",
 ];
 
-export const KITS: Record<string, Kit> = {
-  trapkit: {
-    id: "trapkit",
-    name: "Trapkit",
-    label: "Trapkit: 4x Ambient Motion Bar 20 cm voor €84,95 (los gekocht €99,80)",
-    quantity: 4,
-    sizeCm: 20,
-  },
-  gangset: {
-    id: "gangset",
-    name: "Gangset",
-    label: "Gangset: 2x Ambient Motion Bar 30 cm voor €52,95 (los gekocht €59,90)",
-    quantity: 2,
-    sizeCm: 30,
-  },
-  verhuurderskit: {
-    id: "verhuurderskit",
-    name: "Verhuurderskit",
-    label: "Verhuurderskit: 4x Ambient Motion Bar 30 cm voor €99,95 (los gekocht €119,80)",
-    quantity: 4,
-    sizeCm: 30,
-  },
-  solarduo: {
-    id: "solarduo",
-    name: "Solar duo",
-    label: "Solar duo: 2x Solar Lantern voor €74,95 (los gekocht €89,90)",
-    quantity: 2,
-  },
-};
-
 export const ANGLES: Record<string, Record<string, Angle>> = {
   [PRODUCT_HANDLE]: {
-    trap: { heading: "Nooit meer in het donker de trap op.", benefits: AMBIENT_BENEFITS, kit: KITS.trapkit },
-    gang: { heading: "Licht in de gang, precies wanneer je het nodig hebt.", benefits: AMBIENT_BENEFITS, kit: KITS.gangset },
+    trap: { heading: "Nooit meer in het donker de trap op.", benefits: AMBIENT_BENEFITS, preselect: { qty: 4, sizeCm: 20 } },
+    gang: { heading: "Licht in de gang, precies wanneer je het nodig hebt.", benefits: AMBIENT_BENEFITS, preselect: { qty: 2, sizeCm: 30 } },
     verhuur: {
       heading: "Gasten vinden 's nachts zelf de weg.",
       benefits: [
@@ -77,7 +40,7 @@ export const ANGLES: Record<string, Record<string, Angle>> = {
         "In een paar minuten geplaatst, zonder boren: geschikt voor huur- en vakantiewoningen",
         "Opladen via USB-C, 3 kleurtemperaturen",
       ],
-      kit: KITS.verhuurderskit,
+      preselect: { qty: 4, sizeCm: 30 },
     },
   },
   [LANTERN_PRODUCT_HANDLE]: {
@@ -88,7 +51,7 @@ export const ANGLES: Record<string, Record<string, Angle>> = {
         "Bewegingssensor: licht wanneer je thuiskomt",
         "IP65: bestand tegen regen",
       ],
-      kit: KITS.solarduo,
+      preselect: { qty: 2 },
     },
   },
   [FLEX_PRODUCT_HANDLE]: {
@@ -101,12 +64,6 @@ export const ANGLES: Record<string, Record<string, Angle>> = {
       ],
     },
   },
-};
-
-/** Kits die altijd als 'Voordeliger per set' op de productpagina staan. */
-export const PRODUCT_KITS: Record<string, Kit[]> = {
-  [PRODUCT_HANDLE]: [KITS.trapkit, KITS.gangset, KITS.verhuurderskit],
-  [LANTERN_PRODUCT_HANDLE]: [KITS.solarduo],
 };
 
 export const USE_CASES: Record<string, string[]> = {
@@ -136,19 +93,7 @@ export const USE_CASES: Record<string, string[]> = {
   ],
 };
 
-/** Losse producten en sets zonder vaste kitprijs (prijs komt uit Shopify). */
-export const OFFERS: Record<string, Kit> = {
-  wall4: { id: "wall4", name: "Wall Lamp 4-delige set", label: "SenseGlow Wall Lamp™ 4-delige set", quantity: 1, optionValue: "4-delige set" },
-  wall8: { id: "wall8", name: "Wall Lamp 8-delige set", label: "SenseGlow Wall Lamp™ 8-delige set", quantity: 1, optionValue: "8-delige set" },
-  solar1: { id: "solar1", name: "Solar Lantern", label: "SenseGlow Solar Lantern™", quantity: 1 },
-  flex1: { id: "flex1", name: "Flex", label: "SenseGlow Flex™", quantity: 1 },
-};
-
-/** Kits waarvan de prijs vast in de tekst staat (korting via Shopify). */
-export const hasFixedKitPrice = (kit: Kit) => /voor €/.test(kit.label);
-
 export const USE_CASE_HEADING = "Waar gebruik je hem?";
-export const KITS_HEADING = "Voordeliger per set";
 
 const ANGLE_KEY = "sg_angle";
 const VALID_ANGLE = /^[a-z0-9_-]{1,40}$/i;
@@ -197,14 +142,18 @@ const colorOf = (v: VariantLike) => {
   return null;
 };
 
-/** Variant van dezelfde kleur als de keuze, in de maat die de kit vraagt. */
-export function kitVariant<V extends VariantLike>(kit: Kit, selected: V | null | undefined, variants: V[]): V | null {
-  if (!kit.sizeCm && !kit.optionValue) return selected ?? variants[0] ?? null;
+/** Variant van dezelfde kleur als de keuze, in een gevraagde maat of optiewaarde. */
+export function variantIn<V extends VariantLike>(
+  want: { sizeCm?: number; optionValue?: string },
+  selected: V | null | undefined,
+  variants: V[],
+): V | null {
+  if (!want.sizeCm && !want.optionValue) return selected ?? variants[0] ?? null;
   const color = selected ? colorOf(selected) : null;
   const inSize = variants.filter((v) =>
-    kit.optionValue
-      ? v.selectedOptions.some((o) => o.value.toLowerCase() === kit.optionValue!.toLowerCase())
-      : sizeOf(v) === kit.sizeCm,
+    want.optionValue
+      ? v.selectedOptions.some((o) => o.value.toLowerCase() === want.optionValue!.toLowerCase())
+      : sizeOf(v) === want.sizeCm,
   );
   return inSize.find((v) => colorOf(v) === color) ?? inSize[0] ?? null;
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getAngle, kitVariant, KITS, PRODUCT_KITS, ANGLES } from "./angles";
+import { getAngle, variantIn, ANGLES } from "./angles";
 
 const v = (id: string, value: string) => ({ id, selectedOptions: [{ name: "Kleur en maat", value }] });
 const ambient = [v("z20", "Zwart 20 cm"), v("s20", "Zilver 20 cm"), v("z30", "Zwart 30 cm"), v("s30", "Zilver 30 cm"), v("s40", "Zilver 40 cm")];
@@ -11,20 +11,20 @@ describe("angles", () => {
     expect(getAngle("senseglow_flex", "trap")).toBeNull();
   });
 
-  it("kit quantities match the brief", () => {
-    expect([KITS.trapkit.quantity, KITS.trapkit.sizeCm]).toEqual([4, 20]);
-    expect([KITS.gangset.quantity, KITS.gangset.sizeCm]).toEqual([2, 30]);
-    expect([KITS.verhuurderskit.quantity, KITS.verhuurderskit.sizeCm]).toEqual([4, 30]);
-    expect(KITS.solarduo.quantity).toBe(2);
+  it("angles only preselect the quantity picker", () => {
+    const a = ANGLES["senseglow_ambient_motion_bar"];
+    expect(a.trap.preselect).toEqual({ qty: 4, sizeCm: 20 });
+    expect(a.gang.preselect).toEqual({ qty: 2, sizeCm: 30 });
+    expect(a.verhuur.preselect).toEqual({ qty: 4, sizeCm: 30 });
+    expect(ANGLES["senseglow_solar_lantern"].buiten.preselect).toEqual({ qty: 2 });
   });
 
-  it("kit keeps the chosen colour but switches to the kit size", () => {
-    expect(kitVariant(KITS.trapkit, ambient[4], ambient)?.id).toBe("s20");
-    expect(kitVariant(KITS.gangset, ambient[0], ambient)?.id).toBe("z30");
+  it("preselection keeps the chosen colour but switches size", () => {
+    expect(variantIn({ sizeCm: 20 }, ambient[4], ambient)?.id).toBe("s20");
+    expect(variantIn({ sizeCm: 30 }, ambient[0], ambient)?.id).toBe("z30");
   });
 
-  it("Flex has no kit and never mentions a motion sensor", () => {
-    expect(PRODUCT_KITS["senseglow_flex"]).toBeUndefined();
+  it("Flex never mentions a motion sensor", () => {
     const text = JSON.stringify(ANGLES["senseglow_flex"]).toLowerCase();
     expect(text).not.toMatch(/beweg|sensor|pir/);
   });
