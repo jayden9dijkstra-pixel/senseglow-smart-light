@@ -30,7 +30,8 @@ export const ProductImageGallery = ({
     if (!activeImageUrl) return;
     const idx = images.findIndex((img) => img.url === activeImageUrl);
     if (idx >= 0) setSelectedIndex(idx);
-  }, [activeImageUrl, images]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeImageUrl, images.length]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
