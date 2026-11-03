@@ -363,6 +363,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
+  if (page.pickerNote) p.push(`<p>${e(page.pickerNote)}</p>`);
   if (page.offers.some((o) => isOfferProduct(o.handle))) p.push(`<p>${e(OFFER_TEXT)}</p><p>${e(MIX_NOTE)}</p>`);
   if (page.why) p.push(whyMarkup([...new Set(page.offers.map((o) => o.handle))], "nl"));
   if (page.extra) {
@@ -370,7 +371,8 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     for (const o of page.offers) p.push(`<li>${e(o.label)}: ${e(offerLine(o, products[o.handle]))}</li>`);
     p.push(`</ul>`);
   }
-  p.push(`<h2>Waarom deze keuze</h2><ul>${[...page.benefits, WARRANTY_TEXT].map((b) => `<li>${e(b)}</li>`).join("")}</ul>`);
+  p.push(`<h2>${e(page.benefitsHeading ?? "Waarom deze keuze")}</h2><ul>${[...page.benefits, WARRANTY_TEXT].map((b) => `<li>${e(b)}</li>`).join("")}</ul>`);
+  for (const sec of page.sections ?? []) p.push(`<h2>${e(sec.heading)}</h2><ul>${sec.items.map((x) => `<li>${e(x)}</li>`).join("")}</ul>`);
   p.push(`<h2>Specificaties</h2>`);
   for (const t of page.specs) {
     p.push(`<table><caption>${e(t.product)}</caption><tbody>${t.rows.map(([k, v]) => `<tr><th scope="row">${e(k)}</th><td>${e(v)}</td></tr>`).join("")}</tbody></table>`);
