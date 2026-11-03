@@ -48,6 +48,12 @@ export interface LandingPage {
   extra?: { heading: string; text: string };
   /** Toon het blok 'Waarom SenseGlow' onder de koopknoppen. */
   why?: boolean;
+  /** Eigen titel voor de voordelenlijst (standaard 'Waarom deze keuze'). */
+  benefitsHeading?: string;
+  /** Korte regel onder de aantal-kiezer. */
+  pickerNote?: string;
+  /** Extra H2-secties met een korte lijst. */
+  sections?: Array<{ heading: string; items: string[] }>;
 }
 
 const SPECS: Record<string, SpecTable> = {
@@ -258,6 +264,74 @@ export const LANDING_PAGES: LandingPage[] = [
         question: "Heeft de Flex een bewegingssensor?",
         answer: "Nee, bewust niet. Je bepaalt zelf wanneer het licht aangaat en hoe fel het is.",
       },
+      {
+        question: "Hoe hang ik de Flex op?",
+        answer: "Met de magnetische wandbeugel. De schroeven zitten erbij. De lamp klikt magnetisch op de beugel, zodat je hem makkelijk loshaalt om op te laden.",
+      },
+      {
+        question: "Hoe werkt touch-dimmen?",
+        answer: "Eén tik is aan, nog een tik is uit. Vasthouden dimt langzaam op of af tot je loslaat.",
+      },
+    ),
+  },
+  {
+    path: "/kastverlichting",
+    title: "Kastverlichting met sensor, zonder boren | SenseGlow",
+    description:
+      "LED-kastverlichting met bewegingssensor. Magnetisch of met plakstrip, oplaadbaar via USB-C. Gratis verzending NL & BE, 30 dagen retour.",
+    h1: "Kastverlichting met sensor, zonder boren",
+    intro: "Licht dat vanzelf aangaat als je bij je kast komt, en uit als je weggaat. Plakken of met de magneet vastzetten, opladen via USB-C.",
+    offers: [{ id: "ambient-kast", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar", qty: 2, sizeCm: 30 }],
+    benefitsHeading: "Waarom in je kast",
+    benefits: [
+      "Bewegingssensor tot 5 meter, 120°",
+      "3 lichtmodi: aan bij beweging / altijd aan / altijd uit",
+      "Magneet + plakstrip inbegrepen, geen boren of kabels",
+      "USB-C oplaadbaar, één keer per paar weken laden",
+    ],
+    sections: [
+      {
+        heading: "Welke lengte?",
+        items: [
+          "20 cm past goed bij een kastplank of lade.",
+          "30 cm is een fijne keuze voor een standaard kledingkast.",
+          "40 cm raden we aan voor een brede kast of inloopkast.",
+        ],
+      },
+    ],
+    specs: [SPECS.ambient],
+    why: true,
+    faqs: common(AMBIENT_SENSOR_FAQ, AMBIENT_CHARGE_FAQ, AMBIENT_MOUNT_FAQ),
+  },
+  {
+    path: "/oplaadbare-wandlamp",
+    title: "Oplaadbare wandlamp zonder bekabeling | SenseGlow Flex",
+    description:
+      "Oplaadbare wandlamp met magnetische beugel en touch-dimmer. Geen kabel in de muur. Gratis verzending NL & BE, 30 dagen retour.",
+    h1: "Oplaadbare wandlamp, zonder kabel in de muur",
+    intro: "Hang hem aan de magnetische beugel boven je bed, bureau of boekenplank. Leeg? Even van de beugel, opladen via USB-C en terughangen.",
+    offers: [{ id: "flex-wand", handle: FLEX_PRODUCT_HANDLE, label: "SenseGlow Flex™", qty: 1 }],
+    pickerNote: "Twee naast je bed? 2 lampen = 10% korting.",
+    benefitsHeading: "Zo werkt hij",
+    benefits: [
+      "Touch-bediening: tik voor aan/uit, houd vast om te dimmen",
+      "Warm wit om te ontspannen, koel wit om te focussen",
+      "USB-C oplaadbaar, geen vaste aansluiting nodig",
+      "Magnetische wandbeugel, schroeven inbegrepen",
+    ],
+    sections: [
+      {
+        heading: "Waar hang je hem?",
+        items: [
+          "Bed: een leeslamp die je met één tik aanzet.",
+          "Bureau: fel licht als je werkt, zacht als je klaar bent.",
+          "Boekenplank: warm licht op je boeken en spullen.",
+        ],
+      },
+    ],
+    specs: [{ ...SPECS.flex, rows: SPECS.flex.rows.filter(([k]) => k !== "Sensor") }],
+    why: true,
+    faqs: common(
       {
         question: "Hoe hang ik de Flex op?",
         answer: "Met de magnetische wandbeugel. De schroeven zitten erbij. De lamp klikt magnetisch op de beugel, zodat je hem makkelijk loshaalt om op te laden.",

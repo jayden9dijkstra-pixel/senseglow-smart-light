@@ -141,6 +141,7 @@ const LandingPage = () => {
             ))}
           </div>
           <DeliveryEstimate />
+          {page.pickerNote && <p className="text-sm text-foreground/70">{page.pickerNote}</p>}
           {page.offers.some((o) => isOfferProduct(o.handle)) && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
         </section>
 
@@ -168,7 +169,7 @@ const LandingPage = () => {
         )}
 
         <section className="space-y-3">
-          <h2 className="text-2xl font-bold text-foreground">Waarom deze keuze</h2>
+          <h2 className="text-2xl font-bold text-foreground">{page.benefitsHeading ?? "Waarom deze keuze"}</h2>
           <ul className="space-y-2">
             {page.benefits.map((b) => (
               <li key={b} className="flex items-start gap-2.5 text-foreground/80">
@@ -182,6 +183,17 @@ const LandingPage = () => {
             </li>
           </ul>
         </section>
+
+        {page.sections?.map((sec) => (
+          <section key={sec.heading} className="max-w-3xl space-y-3">
+            <h2 className="text-2xl font-bold text-foreground">{sec.heading}</h2>
+            <ul className="space-y-1.5 text-foreground/80">
+              {sec.items.map((it) => (
+                <li key={it}>{it}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
 
         <section className="space-y-6">
           <h2 className="text-2xl font-bold text-foreground">Specificaties</h2>
