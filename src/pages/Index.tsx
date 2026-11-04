@@ -13,6 +13,7 @@ import { StorytellingSection } from "@/components/homepage/StorytellingSection";
 import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
 import { VoetCTA } from "@/components/homepage/VoetCTA";
 import { FAQSection } from "@/components/FAQSection";
+import { CustomerReviews } from "@/components/CustomerReviews";
 
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -111,6 +112,7 @@ const Index = () => {
 
       {/* 8. FAQ */}
       <div id="faq" className="w-full bg-background-secondary">
+        <CustomerReviews className="container max-w-5xl py-12" />
         <FAQSection />
       </div>
 
