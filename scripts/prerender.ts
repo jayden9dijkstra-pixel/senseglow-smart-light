@@ -43,7 +43,7 @@ import { PrivacyContent } from "../src/pages/content/PrivacyContent";
 import { ReturnsContent } from "../src/pages/content/ReturnsContent";
 import { ShippingContent } from "../src/pages/content/ShippingContent";
 import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
-import { businessLine } from "../src/lib/businessInfo";
+import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -449,7 +449,7 @@ function legalFallback(path: string, locale: Locale): string | null {
   }
 }
 
-const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal">${escapeHtml(businessLine())}</address></footer>`;
+const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal"><p>${escapeHtml(TRADE_NAME_LINE)}</p><p>${escapeHtml(businessLine())}</p></address></footer>`;
 
 function writeRoute(path: string, html: string) {
   html = html
