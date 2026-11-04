@@ -9,3 +9,5 @@
 - Search-intent landing pages are data in src/lib/landingPages.ts (NL only, no hreflang) and rendered by both src/pages/LandingPage.tsx and scripts/prerender.ts; why: one source so server HTML and the live page never diverge.
 - Legal/info page bodies live in src/pages/content/*Content.tsx (no layout imports) and scripts/prerender.ts renders them plus the businessInfo footer line into server HTML; cookie choice encoding lives in src/lib/consent.ts; why: one source for client and server HTML, and no asset imports in the prerender.
 - Product and landing pages share one mobile buy order (gallery, title, price, pickers, button, TrustLine, 3 benefits) and put all deeper content in InfoAccordion (src/components/product/InfoAccordion.tsx); why: one short, consistent buy flow on mobile.
+- Landing-page first photos are chosen by Shopify alt text in src/lib/scenes.ts and carried to product pages via ?scene=; why: the photo the ad promised stays first, and falls back to the normal first photo when an alt is missing.
+- Customer reviews live only in src/data/reviews.ts and the section hides when it is empty; why: no sample or invented reviews may ever render.
