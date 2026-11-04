@@ -34,6 +34,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Login = lazy(() => import("./pages/Login"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 const WhySenseGlow = lazy(() => import("./pages/WhySenseGlow"));
+const ReviewPolicy = lazy(() => import("./pages/ReviewPolicy"));
 import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
@@ -112,6 +113,7 @@ const App = () => (
             <Route path="/waarom-senseglow" element={<WhySenseGlow />} />
             <Route path="/duurzaamheid" element={<Sustainability />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/reviews-beleid" element={<ReviewPolicy />} />
             <Route path="/voorwaarden" element={<Terms />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

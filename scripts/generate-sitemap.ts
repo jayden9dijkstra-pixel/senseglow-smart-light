@@ -27,6 +27,7 @@ const entries: SitemapEntry[] = [
   { path: "/herroepingsformulier", changefreq: "yearly", priority: "0.3" },
   { path: "/bestelling-volgen", changefreq: "yearly", priority: "0.4" },
   { path: "/over", changefreq: "yearly", priority: "0.5" },
+  { path: "/reviews-beleid", changefreq: "yearly", priority: "0.3" },
   { path: "/duurzaamheid", changefreq: "yearly", priority: "0.4" },
   { path: "/contact", changefreq: "yearly", priority: "0.5" },
   { path: "/voorwaarden", changefreq: "yearly", priority: "0.3" },

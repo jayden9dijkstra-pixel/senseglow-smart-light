@@ -42,6 +42,7 @@ import { TermsContent } from "../src/pages/content/TermsContent";
 import { PrivacyContent } from "../src/pages/content/PrivacyContent";
 import { ReturnsContent } from "../src/pages/content/ReturnsContent";
 import { ShippingContent } from "../src/pages/content/ShippingContent";
+import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
 import { businessLine } from "../src/lib/businessInfo";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
@@ -75,7 +76,10 @@ const BASE_STATIC_ROUTES = [
   "/volg-je-bestelling",
   "/quiz",
 ];
-const STATIC_ROUTES = BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]);
+const STATIC_ROUTES = [
+  ...BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]),
+  "/reviews-beleid",
+];
 
 /* ---------------------------------------------------------------- Shopify */
 
@@ -418,6 +422,7 @@ const LEGAL_PAGES: Record<string, ComponentType> = {
   "/privacy": PrivacyContent,
   "/retourneren": ReturnsContent,
   "/verzending": ShippingContent,
+  "/reviews-beleid": ReviewPolicyContent,
 };
 
 /** Vertaal losse tekstknopen in statische markup met het woordenboek. */
