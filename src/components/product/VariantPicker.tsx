@@ -341,7 +341,7 @@ export const VariantPicker = ({
     <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
-        {hint && <span className="text-xs text-foreground/40">{hint}</span>}
+        {/* hint bewust niet getoond: kiezers zonder uitlegtekst */}
       </div>
       <div className="flex flex-wrap gap-3">
         {values.map((v) => {
