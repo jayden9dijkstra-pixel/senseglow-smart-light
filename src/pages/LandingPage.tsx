@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
-import { getLandingPage, landingOfferPrice, offerImage, type LandingOffer } from "@/lib/landingPages";
+import { getLandingPage, landingOfferPrice, offerImage, offerProductHref, type LandingOffer } from "@/lib/landingPages";
+import { HowItWorksSteps } from "@/components/product/HowItWorksSteps";
+import { AskUs } from "@/components/product/AskUs";
+import { CustomerReviews } from "@/components/CustomerReviews";
 import { variantIn } from "@/lib/angles";
 import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { formatPrice } from "@/lib/price";
@@ -35,12 +38,15 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
   const choices = useMemo(() => {
     const seen = new Set<string>();
     return variants
-      .map((v) => variantIn(offer, v, variants))
+      .map((v) => variantIn(want, v, variants))
       .filter((v): v is Variant => !!v && !seen.has(v.id) && !!seen.add(v.id));
-  }, [variants, offer]);
+  }, [variants, want]);
+  const [option, setOption] = useState<string | undefined>(offer.optionValue);
+  const want = useMemo(() => ({ ...offer, optionValue: option }), [offer, option]);
   const [chosen, setChosen] = useState<Variant | null>(null);
   const [qty, setQty] = useState<OfferQty>(offer.qty ?? 1);
-  const variant = chosen ?? choices[0] ?? null;
+  // Bij een andere set blijft de gekozen kleur staan.
+  const variant = (chosen && choices.find((v) => colorLabel(v) === colorLabel(chosen))) ?? choices[0] ?? null;
   const image = offerImage(offer, product?.node.images?.edges?.map((e) => e.node) ?? []);
   const picker = isOfferProduct(offer.handle);
   const unit = variant ? parseFloat(variant.price.amount) : null;
@@ -70,10 +76,29 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
         />
       )}
       <div>
-        <h2 className="text-base font-semibold text-foreground">{offer.label}</h2>
-        {offer.note && <p className="text-sm text-muted-foreground">{offer.note}</p>}
+        <h2 className="text-lg font-semibold text-foreground">{offer.label}</h2>
+        {offer.note && <p className="text-base text-foreground/80">{offer.note}</p>}
       </div>
       <PerLampPrice unitPrice={unit} qty={count} offer={picker} />
+      {offer.choices && (
+        <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Set">
+            {offer.choices.map((c) => (
+              <button
+                key={c}
+                type="button"
+                role="radio"
+                aria-checked={c === option}
+                onClick={() => setOption(c)}
+                className={`min-h-12 rounded-xl border px-3 text-base font-medium ${c === option ? "border-primary bg-primary/10 text-foreground" : "border-foreground/20 text-foreground"}`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+          {offer.choiceNote && <p className="text-base text-foreground/80">{offer.choiceNote}</p>}
+        </div>
+      )}
       {choices.length > 1 && (
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Kleur">
           {choices.map((v) => (
@@ -83,7 +108,7 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
               role="radio"
               aria-checked={v.id === variant?.id}
               onClick={() => setChosen(v)}
-              className={`rounded-full border px-3 py-1 text-sm ${v.id === variant?.id ? "border-primary bg-primary/10 text-foreground" : "border-foreground/15 text-foreground/70"}`}
+              className={`min-h-12 rounded-full border px-5 text-base ${v.id === variant?.id ? "border-primary bg-primary/10 text-foreground" : "border-foreground/20 text-foreground"}`}
             >
               {colorLabel(v)}
             </button>
@@ -95,7 +120,7 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
         ref={btnRef}
         disabled={!product || !variant?.availableForSale}
         onClick={add}
-        className="mt-auto w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+        className="mt-auto h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
@@ -171,7 +196,7 @@ const LandingPage = () => {
             {handles.map((h, i) => (
               <span key={h}>
                 {i > 0 && " en "}
-                <Link to={`/product/${h}`} className="text-primary underline underline-offset-4">
+                <Link to={offerProductHref(page.offers.find((o) => o.handle === h)!)} className="text-primary underline underline-offset-4">
                   {products[h]?.node.title ?? "dit product"}
                 </Link>
               </span>
@@ -198,7 +223,7 @@ const LandingPage = () => {
           </div>
           <div className="max-w-3xl space-y-1 md:space-y-3">
             <h1 className="line-clamp-2 text-2xl font-bold leading-tight text-foreground md:text-5xl">{page.h1}</h1>
-            <p className="text-sm text-muted-foreground md:text-lg">{intro}</p>
+            <p className="text-base text-foreground/80 md:text-lg">{intro}</p>
           </div>
           <div className={`grid gap-4 ${cols}`}>
             {page.offers.map((o, i) => (
@@ -206,13 +231,27 @@ const LandingPage = () => {
             ))}
           </div>
           {pair && <div className="max-w-3xl"><BeforeAfterBlock pair={pair} /></div>}
+          <div className="max-w-3xl">
+            <HowItWorksSteps handle={first.handle} />
+          </div>
           <div className="max-w-3xl border-t border-foreground/10 pt-4">
             <Benefits items={page.benefits} />
           </div>
         </section>
 
-        <div className="max-w-3xl">
+        <div className="max-w-3xl space-y-8">
           <InfoAccordion sections={sections} />
+          <CustomerReviews handle={first.handle} />
+          {page.alternative && (
+            <aside className="space-y-2 rounded-2xl border border-foreground/10 p-4">
+              <h2 className="text-lg font-semibold text-foreground">{page.alternative.heading}</h2>
+              <p className="text-base text-foreground/80">{page.alternative.text}</p>
+              <Link to={page.alternative.href} className="inline-flex min-h-12 items-center text-base font-medium text-primary underline underline-offset-4">
+                {page.alternative.label}
+              </Link>
+            </aside>
+          )}
+          <AskUs />
         </div>
       </div>
     </PageLayout>
