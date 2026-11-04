@@ -26,7 +26,7 @@ export function QuantityOfferPicker({
               aria-checked={active}
               aria-label={qtyLabel(qty)}
               onClick={() => onChange(qty)}
-              className={`flex flex-col items-center gap-0.5 rounded-xl border px-1 py-2 text-center transition-colors md:flex-row md:justify-between md:gap-3 md:px-4 md:py-3 md:text-left ${
+              className={`flex flex-col items-center gap-0.5 min-h-12 rounded-xl border px-1 py-2 text-center transition-colors md:flex-row md:justify-between md:gap-3 md:px-4 md:py-3 md:text-left ${
                 active ? "border-primary bg-primary/5" : "border-foreground/15 hover:border-primary/40"
               }`}
             >
@@ -35,14 +35,14 @@ export function QuantityOfferPicker({
                   aria-hidden
                   className={`hidden h-4 w-4 flex-shrink-0 rounded-full border-2 md:block ${active ? "border-primary bg-primary" : "border-foreground/30"}`}
                 />
-                <span className="text-sm font-medium text-foreground md:hidden">{qty === 1 ? "1 lamp" : `${qty} lampen`}</span>
-                <span className="hidden text-sm font-medium text-foreground md:inline">{qtyLabel(qty)}</span>
+                <span className="text-base font-medium text-foreground md:hidden">{qty === 1 ? "1 lamp" : `${qty} lampen`}</span>
+                <span className="hidden text-base font-medium text-foreground md:inline">{qtyLabel(qty)}</span>
               </span>
-              <span className="text-[11px] font-medium text-primary md:hidden">{rate ? `${Math.round(rate * 100)}% korting` : "\u00a0"}</span>
+              <span className="text-sm font-semibold text-primary md:hidden">{rate ? `${Math.round(rate * 100)}% korting` : "\u00a0"}</span>
               {q && (
                 <span className="md:text-right">
-                  <span className="block text-sm font-semibold text-foreground">{formatPrice(q.total)}</span>
-                  {qty > 1 && <span className="hidden text-xs text-muted-foreground md:block">{formatPrice(q.perLamp)} per lamp</span>}
+                  <span className="block text-base font-semibold text-foreground">{formatPrice(q.total)}</span>
+                  {qty > 1 && <span className="hidden text-sm text-foreground/80 md:block">{formatPrice(q.perLamp)} per lamp</span>}
                 </span>
               )}
             </button>

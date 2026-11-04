@@ -27,3 +27,16 @@ const LOCALE_TAG: Record<string, string> = { nl: "nl-NL", en: "en-GB", fr: "fr-F
 export function formatDeliveryDate(d: Date, locale = "nl"): string {
   return d.toLocaleDateString(LOCALE_TAG[locale] ?? "nl-NL", { weekday: "short", day: "numeric", month: "short" });
 }
+
+/** "Bezorgd tussen 13 en 21 november" (of "tussen 28 november en 5 december"). */
+export function deliveryBetweenText(today: Date = new Date(), locale = "nl"): string {
+  const { from, to } = deliveryWindow(today);
+  const tag = LOCALE_TAG[locale] ?? "nl-NL";
+  const month = (d: Date) => d.toLocaleDateString(tag, { month: "long" });
+  const sameMonth = from.getMonth() === to.getMonth();
+  const a = sameMonth ? `${from.getDate()}` : `${from.getDate()} ${month(from)}`;
+  const b = `${to.getDate()} ${month(to)}`;
+  if (locale === "en") return `Delivered between ${a} and ${b}`;
+  if (locale === "fr") return `Livré entre le ${a} et le ${b}`;
+  return `Bezorgd tussen ${a} en ${b}`;
+}

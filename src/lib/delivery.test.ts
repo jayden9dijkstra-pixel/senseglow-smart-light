@@ -27,3 +27,13 @@ describe("footer business details", () => {
     expect(line).toContain("Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres, geen bezoekadres)");
   });
 });
+
+import { deliveryBetweenText } from "./delivery";
+describe("bezorgdatum bij de koopknop", () => {
+  it("woensdag 4 november 2026: bezorgd tussen 13 en 24 november", () => {
+    expect(deliveryBetweenText(new Date(2026, 10, 4))).toBe("Bezorgd tussen 13 en 24 november");
+  });
+  it("noemt beide maanden als het venster over de maandgrens loopt", () => {
+    expect(deliveryBetweenText(new Date(2026, 10, 13))).toBe("Bezorgd tussen 24 november en 3 december");
+  });
+});

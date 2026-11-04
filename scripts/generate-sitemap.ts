@@ -60,6 +60,7 @@ function generateSitemap(list: SitemapEntry[]) {
 const allEntries = [
   ...localizedEntries,
   ...LANDING_PATHS.map((path) => ({ path, changefreq: "weekly" as const, priority: "0.8" })),
+  { path: "/reviews-beleid", changefreq: "yearly" as const, priority: "0.3" },
 ];
 
 writeFileSync(resolve("public/sitemap.xml"), generateSitemap(allEntries));

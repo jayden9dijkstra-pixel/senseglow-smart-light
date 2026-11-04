@@ -1,3 +1,4 @@
+import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -93,7 +94,8 @@ export const ContactContent = () => {
           <Card className="border-foreground/10 bg-background">
             <CardContent className="p-6">
               <h2 className="text-lg font-semibold mb-4">Bedrijfsgegevens</h2>
-              <div className="space-y-2 text-sm text-foreground/70">
+              <p className="mb-3 text-base text-foreground">{TRADE_NAME_LINE}</p>
+              <div className="space-y-2 text-base text-foreground/80">
                 <p><strong>Jayden Ecom (handelend onder de naam SenseGlow™)</strong></p>
                 <p>Rechtsvorm: eenmanszaak</p>
                 <p>KvK-nummer: 99634929</p>

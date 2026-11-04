@@ -83,6 +83,11 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
     description:
       "Lees welke persoonsgegevens SenseGlow verwerkt, waarom we dat doen, hoe lang we ze bewaren en welke rechten je hebt volgens de AVG.",
   },
+  "/reviews-beleid": {
+    title: "Hoe wij reviews verzamelen | SenseGlow",
+    description:
+      "Reviews op SenseGlow komen van klanten die het product kochten en gebruikten. We plaatsen positieve en negatieve reviews, zonder beloning.",
+  },
   "/voorwaarden": {
     title: "Algemene voorwaarden van SenseGlow webshop | SenseGlow",
     description:

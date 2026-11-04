@@ -14,6 +14,7 @@ import { QuantityOfferPicker } from "./QuantityOfferPicker";
 import { Benefits } from "./InfoAccordion";
 import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { getAngle, getStoredAngle } from "@/lib/angles";
+import { sceneAlt, withSceneFirst } from "@/lib/scenes";
 
 interface HeroContent {
   h1: string;
@@ -60,6 +61,7 @@ export const ProductHeroSection = ({
   const selectedVariant = propVariant ?? localVariant;
   const addItem = useCartStore((state) => state.addItem);
   const [priceKey, setPriceKey] = useState(0);
+  const [pickedByUser, setPickedByUser] = useState(false);
   const offer = isOfferProduct(product.node.handle);
   const angle = getAngle(product.node.handle, searchParams.get("a") ?? getStoredAngle());
 
@@ -123,13 +125,16 @@ export const ProductHeroSection = ({
     });
   };
 
-  const productImages =
+  // Vanaf een landingspagina (?scene=trap|gang|kast|keuken|buiten) blijft die scènefoto vooraan.
+  const productImages = withSceneFirst(
     product.node.images?.edges?.map((edge) => ({
       url: edge.node.url,
       altText: edge.node.altText,
       width: edge.node.width,
       height: edge.node.height,
-    })) || [];
+    })) || [],
+    sceneAlt(searchParams.get("scene"), product.node.handle),
+  );
   const productImageClassName = "h-full w-full object-contain";
 
   const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
@@ -150,6 +155,7 @@ export const ProductHeroSection = ({
               videoUrl={getProductVideoUrl(product.node.handle)}
               imageClassName={productImageClassName}
               activeImageUrl={
+                (pickedByUser || !searchParams.get("scene")) &&
                 selectedVariant?.image?.url &&
                 selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
                   ? selectedVariant.image.url
@@ -163,7 +169,7 @@ export const ProductHeroSection = ({
               <h1 className="line-clamp-2 text-2xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">
                 {content.h1}
               </h1>
-              <p className="text-sm text-muted-foreground md:text-base">{subtitle}</p>
+              <p className="text-base text-foreground/80 md:text-lg">{subtitle}</p>
             </div>
 
             <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
@@ -174,7 +180,10 @@ export const ProductHeroSection = ({
               <VariantPicker
                 product={product}
                 selectedVariant={selectedVariant}
-                onVariantChange={handleVariantChange}
+                onVariantChange={(v) => {
+                  setPickedByUser(true);
+                  handleVariantChange(v);
+                }}
               />
             )}
 
@@ -187,7 +196,7 @@ export const ProductHeroSection = ({
               onClick={handleAddToCart}
               size="lg"
               disabled={!selectedVariant?.availableForSale}
-              className="w-full min-h-12 h-auto rounded-full bg-primary px-10 py-4 text-sm font-medium tracking-wide text-primary-foreground transition-all duration-500 hover:bg-primary/90"
+              className="w-full min-h-12 h-auto rounded-full bg-primary px-10 py-4 text-base font-medium tracking-wide text-primary-foreground transition-all duration-500 hover:bg-primary/90"
             >
               {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
             </Button>

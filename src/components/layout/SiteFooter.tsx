@@ -1,4 +1,4 @@
-import { businessLine } from "@/lib/businessInfo";
+import { businessLine, TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { openCookieSettings } from "@/lib/consent";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -128,7 +128,8 @@ export const SiteFooter = () => {
             </div>
           </div>
 
-          <address className="not-italic text-[11px] text-foreground/45 pt-10 mt-10 border-t border-foreground/6">
+          <address className="not-italic space-y-1 text-sm text-foreground/80 pt-10 mt-10 border-t border-foreground/6">
+            <p className="text-base text-foreground">{TRADE_NAME_LINE}</p>
             <p>{businessLine()}</p>
           </address>
 

@@ -23,3 +23,6 @@ export const businessLine = (info: BusinessInfo = BUSINESS_INFO) =>
     `${info.address} (${info.addressNote})`,
     info.email,
   ].join(" · ");
+
+/** Handelsnaamregel voor footer en /contact. */
+export const TRADE_NAME_LINE = `SenseGlow is een handelsnaam van Jayden Ecom, Kimswerd (Friesland) · KvK ${BUSINESS_INFO.kvk}`;

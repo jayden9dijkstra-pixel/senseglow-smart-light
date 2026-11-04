@@ -25,7 +25,7 @@ import {
 } from "../src/lib/structuredData";
 import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
-import { LANDING_PAGES, landingOfferPrice, offerImage, type LandingPage } from "../src/lib/landingPages";
+import { LANDING_PAGES, landingOfferPrice, offerImage, offerProductHref, type LandingPage } from "../src/lib/landingPages";
 import { WHY_HEADING, WHY_CONTACT_TEXT, whyItems } from "../src/lib/whySenseGlow";
 import { WARRANTY_TEXT } from "../src/lib/productFaqs";
 import { DELIVERY_TEXT } from "../src/lib/delivery";
@@ -42,7 +42,8 @@ import { TermsContent } from "../src/pages/content/TermsContent";
 import { PrivacyContent } from "../src/pages/content/PrivacyContent";
 import { ReturnsContent } from "../src/pages/content/ReturnsContent";
 import { ShippingContent } from "../src/pages/content/ShippingContent";
-import { businessLine } from "../src/lib/businessInfo";
+import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
+import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -75,7 +76,10 @@ const BASE_STATIC_ROUTES = [
   "/volg-je-bestelling",
   "/quiz",
 ];
-const STATIC_ROUTES = BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]);
+const STATIC_ROUTES = [
+  ...BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]),
+  "/reviews-beleid",
+];
 
 /* ---------------------------------------------------------------- Shopify */
 
@@ -360,7 +364,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   for (const o of page.offers) {
     const prod = products[o.handle];
     const img = offerImage(o, prod?.node.images?.edges?.map((x) => x.node) ?? []);
-    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
+    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
   if (page.pickerNote) p.push(`<p>${e(page.pickerNote)}</p>`);
@@ -378,6 +382,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     p.push(`<table><caption>${e(t.product)}</caption><tbody>${t.rows.map(([k, v]) => `<tr><th scope="row">${e(k)}</th><td>${e(v)}</td></tr>`).join("")}</tbody></table>`);
   }
   p.push(`<h2>Veelgestelde vragen</h2>${page.faqs.map((f) => `<h3>${e(f.question)}</h3><p>${e(f.answer)}</p>`).join("")}`);
+  if (page.alternative) p.push(`<h2>${e(page.alternative.heading)}</h2><p>${e(page.alternative.text)}</p><p><a href="${escapeAttr(`${SITE_URL}${page.alternative.href}`)}">${e(page.alternative.label)}</a></p>`);
   p.push(`</article>`);
   return p.join("");
 }
@@ -417,6 +422,7 @@ const LEGAL_PAGES: Record<string, ComponentType> = {
   "/privacy": PrivacyContent,
   "/retourneren": ReturnsContent,
   "/verzending": ShippingContent,
+  "/reviews-beleid": ReviewPolicyContent,
 };
 
 /** Vertaal losse tekstknopen in statische markup met het woordenboek. */
@@ -443,7 +449,7 @@ function legalFallback(path: string, locale: Locale): string | null {
   }
 }
 
-const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal">${escapeHtml(businessLine())}</address></footer>`;
+const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal"><p>${escapeHtml(TRADE_NAME_LINE)}</p><p>${escapeHtml(businessLine())}</p></address></footer>`;
 
 function writeRoute(path: string, html: string) {
   html = html

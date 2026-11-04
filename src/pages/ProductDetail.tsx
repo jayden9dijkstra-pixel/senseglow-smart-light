@@ -17,6 +17,9 @@ import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { BeforeAfterBlock } from "@/components/product/BeforeAfterBlock";
 import { InfoAccordion, BeforeAfterRows, FaqList, type InfoSection } from "@/components/product/InfoAccordion";
 import { ShippingInfo } from "@/components/product/ShippingInfo";
+import { HowItWorksSteps } from "@/components/product/HowItWorksSteps";
+import { AskUs } from "@/components/product/AskUs";
+import { CustomerReviews } from "@/components/CustomerReviews";
 import { getAngle, getStoredAngle, variantIn } from "@/lib/angles";
 import { parseQty, type OfferQty } from "@/lib/quantityOffer";
 import { getProductContent } from "@/lib/productContent";
@@ -233,8 +236,11 @@ const ProductDetail = () => {
           afterTrust={slider}
         />
 
-        <div className="mx-auto max-w-3xl px-6 pb-12 md:px-8">
+        <div className="mx-auto max-w-3xl space-y-8 px-6 pb-12 md:px-8">
+          {handle && <HowItWorksSteps handle={handle} />}
           <InfoAccordion sections={sections} />
+          <CustomerReviews handle={handle} />
+          <AskUs />
         </div>
 
         {handle && <ProductRelatedSection currentHandle={handle} />}
