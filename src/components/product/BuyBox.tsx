@@ -1,4 +1,5 @@
 import { useEffect, useState, type RefObject } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/price";
 import { quoteQty, qtyLabel } from "@/lib/quantityOffer";
@@ -71,7 +72,8 @@ export function StickyAddBar({
   }, [watch]);
 
   if (!visible || total == null) return null;
-  return (
+  // Portal: een transform op een voorouder zou position:fixed anders breken.
+  return createPortal(
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl md:hidden">
       <div className="mx-auto flex max-w-md items-center gap-3">
         <div className="min-w-0 flex-1">
@@ -82,6 +84,7 @@ export function StickyAddBar({
           In winkelwagen
         </Button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
