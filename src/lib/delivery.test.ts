@@ -34,6 +34,6 @@ describe("bezorgdatum bij de koopknop", () => {
     expect(deliveryBetweenText(new Date(2026, 10, 4))).toBe("Bezorgd tussen 13 en 24 november");
   });
   it("noemt beide maanden als het venster over de maandgrens loopt", () => {
-    expect(deliveryBetweenText(new Date(2026, 10, 20))).toBe("Bezorgd tussen 1 december en 10 december");
+    expect(deliveryBetweenText(new Date(2026, 10, 13))).toBe("Bezorgd tussen 24 november en 3 december");
   });
 });
