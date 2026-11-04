@@ -32,7 +32,7 @@ export interface LandingOffer {
   imageAlt?: string;
 }
 
-type OfferImage = { url: string; altText: string | null };
+type OfferImage = { url: string; altText: string | null; width?: number | null; height?: number | null };
 
 /** Hoofdfoto van een aanbod: de gekozen Shopify-afbeelding, anders de eerste productfoto. */
 export function offerImage(offer: LandingOffer, images: OfferImage[]): OfferImage | undefined {
