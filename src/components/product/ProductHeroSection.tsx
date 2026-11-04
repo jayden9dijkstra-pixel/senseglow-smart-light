@@ -15,6 +15,9 @@ import { Benefits } from "./InfoAccordion";
 import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { getAngle, getStoredAngle } from "@/lib/angles";
 import { sceneAlt, withSceneFirst } from "@/lib/scenes";
+import { blueprintFor, eightSetSaving } from "@/lib/productBlueprint";
+import { AnchorNav, IconBenefits } from "./Blueprint";
+import { formatPrice } from "@/lib/price";
 
 interface HeroContent {
   h1: string;
@@ -33,6 +36,10 @@ interface ProductHeroSectionProps {
   onQtyChange?: (qty: OfferQty) => void;
   /** Sectie direct onder de vertrouwensregels, bijvoorbeeld de voor/na-schuif. */
   afterTrust?: ReactNode;
+  /** Ankernavigatie onder de galerij. */
+  anchorLinks?: { id: string; label: string }[];
+  /** Ref naar de koopknop, voor een herhaalde knop onderaan. */
+  onAddRef?: (add: () => void) => void;
 }
 
 export const ProductHeroSection = ({
@@ -43,6 +50,8 @@ export const ProductHeroSection = ({
   qty = 1,
   onQtyChange,
   afterTrust,
+  anchorLinks,
+  onAddRef,
 }: ProductHeroSectionProps) => {
   const defaultContent: HeroContent = {
     h1: "Veilig licht. Precies wanneer jij beweegt.",
@@ -137,6 +146,9 @@ export const ProductHeroSection = ({
   );
   const productImageClassName = "h-full w-full object-contain";
 
+  onAddRef?.(handleAddToCart);
+  const blueprint = blueprintFor(product.node.handle);
+  const saving = eightSetSaving(selectedVariant, product.node.variants.edges.map((e) => e.node));
   const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
   const count = offer ? qty : 1;
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -148,7 +160,7 @@ export const ProductHeroSection = ({
     <section id="product-hero" className="w-full overflow-hidden bg-background pb-8 md:py-24 lg:py-32 animate-fade-in-slow">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] md:gap-8">
-          <div className="relative md:max-h-[730px]">
+          <div className="relative min-w-0 md:max-h-[730px]">
             <ProductImageGallery
               images={productImages}
               productTitle={product.node.title}
@@ -164,7 +176,8 @@ export const ProductHeroSection = ({
             />
           </div>
 
-          <div className="space-y-4 pt-3 text-left md:pt-0">
+          <div id="kopen" className="min-w-0 scroll-mt-24 space-y-4 pt-3 text-left md:pt-0">
+            {anchorLinks && <AnchorNav links={anchorLinks} />}
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-2xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">
                 {content.h1}
@@ -172,9 +185,7 @@ export const ProductHeroSection = ({
               <p className="text-base text-foreground/80 md:text-lg">{subtitle}</p>
             </div>
 
-            <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
-              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
-            </div>
+            {blueprint ? <IconBenefits items={blueprint.benefits} /> : <Benefits items={benefits} />}
 
             {product.node.variants.edges.length > 1 && (
               <VariantPicker
@@ -186,10 +197,19 @@ export const ProductHeroSection = ({
                 }}
               />
             )}
+            {saving != null && (
+              <p className="text-base font-medium text-foreground">{formatPrice(saving)} voordeliger dan 2 sets van 4</p>
+            )}
 
             {offer && (
               <QuantityOfferPicker unitPrice={unitPrice} value={qty} onChange={(q) => onQtyChange?.(q)} />
             )}
+
+            <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
+              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
+            </div>
+
+            <TrustLine />
 
             <Button
               ref={btnRef}
@@ -201,13 +221,7 @@ export const ProductHeroSection = ({
               {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
             </Button>
 
-            <TrustLine />
-
             {afterTrust}
-
-            <div className="border-t border-foreground/10 pt-4">
-              <Benefits items={benefits} />
-            </div>
 
             <StickyAddBar
               watch={btnRef}
@@ -215,6 +229,8 @@ export const ProductHeroSection = ({
               total={unitPrice != null ? quoteQty(unitPrice, count).total : null}
               disabled={!selectedVariant?.availableForSale}
               onAdd={handleAddToCart}
+              image={productImages[0]?.url}
+          label={offer ? undefined : selectedVariant?.title}
             />
           </div>
         </div>

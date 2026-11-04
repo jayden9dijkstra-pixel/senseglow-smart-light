@@ -13,6 +13,7 @@ export function QuantityOfferPicker({
 }) {
   return (
     <div className="space-y-2">
+      <p className="text-base text-foreground">2+ lampen 10% korting, 4+ lampen 15%</p>
       <div className="grid grid-cols-3 gap-1.5 md:grid-cols-1 md:gap-2" role="radiogroup" aria-label="Aantal lampen">
         {QTY_OPTIONS.map((qty) => {
           const q = unitPrice != null ? quoteQty(unitPrice, qty) : null;

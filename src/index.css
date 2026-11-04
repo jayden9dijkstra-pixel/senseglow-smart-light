@@ -236,5 +236,5 @@ html {
 
 /* Ruimte onder de pagina voor de mobiele koopbalk. */
 @media (max-width: 767px) {
-  body.has-sticky-buy { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  body.has-sticky-buy { padding-bottom: calc(112px + env(safe-area-inset-bottom)); }
 }
