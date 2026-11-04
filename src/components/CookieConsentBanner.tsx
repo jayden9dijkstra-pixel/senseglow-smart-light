@@ -140,6 +140,7 @@ export function CookieConsentBanner() {
     setBusy(false);
     setVisible(false);
     setShowSettings(false);
+    window.dispatchEvent(new Event("sg:consent-saved"));
   };
 
   if (!visible || window.location.pathname.startsWith("/admin")) return null;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Globe2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useConsentPending } from "@/components/product/BuyBox";
 import { LANGUAGE_CHOICE_KEY, type Locale, useI18n } from "@/i18n/I18nProvider";
 
 /**
@@ -16,6 +17,7 @@ const options: Array<{ locale: Locale; label: string }> = [
 export function LanguageChooser() {
   const { setLocale } = useI18n();
   const [open, setOpen] = useState(false);
+  const consentPending = useConsentPending();
 
   useEffect(() => {
     try {
@@ -37,7 +39,7 @@ export function LanguageChooser() {
     }
   };
 
-  if (!open || window.location.pathname.startsWith("/admin")) return null;
+  if (!open || consentPending || window.location.pathname.startsWith("/admin")) return null;
 
   const choose = (locale: Locale) => {
     setOpen(false);
@@ -45,7 +47,7 @@ export function LanguageChooser() {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[90] px-4 pb-4">
+    <div className="fixed inset-x-0 top-[5.5rem] z-[45] px-4 md:bottom-0 md:top-auto md:pb-4">
       <div className="mx-auto flex max-w-xl items-center gap-3 rounded-full border border-primary/20 bg-card/95 px-4 py-2.5 shadow-lg backdrop-blur-md">
         <Globe2 className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
         <span className="flex-1 text-xs text-muted-foreground">
