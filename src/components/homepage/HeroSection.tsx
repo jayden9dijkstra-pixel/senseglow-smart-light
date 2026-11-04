@@ -1,4 +1,5 @@
-import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
+import { responsiveImg, preloadImage } from "@/lib/shopifyImage";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import type { ShopifyProduct } from "@/lib/shopify";
@@ -9,6 +10,9 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
   const navigate = useNavigate();
   const product = products.find((p) => p.node.handle === HOME_HERO_PRODUCT)?.node;
   const image = product?.featuredImage ?? product?.images?.edges?.[0]?.node;
+  useEffect(() => {
+    if (image?.url) preloadImage(image.url, "(min-width: 768px) 45vw, 100vw");
+  }, [image?.url]);
   const price = product?.priceRange?.minVariantPrice?.amount;
 
   const scrollToProducts = () => {
@@ -54,7 +58,7 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
             to={`/product/${HOME_HERO_PRODUCT}`}
             className="group order-1 -mx-6 block overflow-hidden md:order-2 md:mx-0 md:rounded-3xl md:border md:border-foreground/10 bg-background/80 md:shadow-lg backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1"
           >
-            <div className="aspect-[4/3] w-full overflow-hidden md:aspect-square">
+            <div className="aspect-[4/3] w-full overflow-hidden bg-secondary/60 md:aspect-square">
               {image ? (
                 <img
                   {...responsiveImg(image.url, "(min-width: 768px) 45vw, 100vw")}

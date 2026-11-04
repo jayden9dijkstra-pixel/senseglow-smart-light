@@ -29,8 +29,18 @@ export function PerLampPrice({ unitPrice, qty, offer }: { unitPrice: number | nu
   );
 }
 
-/** Alleen betaalmethoden die actief zijn in de Shopify-checkout. */
-const PAYMENT_METHODS = ["iDEAL", "Creditcard", "PayPal"];
+import idealLogo from "@/assets/pay/ideal.svg";
+import visaLogo from "@/assets/pay/visa.svg";
+import masterLogo from "@/assets/pay/master.svg";
+import paypalLogo from "@/assets/pay/paypal.svg";
+
+/** Alleen betaalmethoden die actief zijn in de Shopify-checkout (Klarna niet bevestigd). */
+const PAYMENT_METHODS = [
+  { name: "iDEAL", src: idealLogo },
+  { name: "Visa", src: visaLogo },
+  { name: "Mastercard", src: masterLogo },
+  { name: "PayPal", src: paypalLogo },
+];
 
 /** Eén vertrouwensblok onder de knop: leverdatum, service, betaalmethoden. */
 export function TrustLine() {
@@ -38,10 +48,10 @@ export function TrustLine() {
     <div className="space-y-1.5">
       <DeliveryEstimate />
       <p className="text-xs text-foreground/75">Gratis verzending · 30 dagen retour · 1 jaar extra garantie</p>
-      <ul className="flex flex-wrap gap-1.5" aria-label="Betaalmethoden">
+      <ul className="flex flex-wrap items-center gap-1.5" aria-label="Betaalmethoden">
         {PAYMENT_METHODS.map((m) => (
-          <li key={m} className="rounded border border-foreground/15 bg-background px-2 py-0.5 text-[10px] font-semibold tracking-wide text-foreground/70">
-            {m}
+          <li key={m.name}>
+            <img src={m.src} alt={m.name} title={m.name} width={36} height={23} className="h-[23px] w-[36px]" loading="lazy" />
           </li>
         ))}
       </ul>
