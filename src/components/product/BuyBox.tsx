@@ -96,10 +96,12 @@ export function StickyAddBar({
   disabled,
   onAdd,
   image,
+  label,
 }: {
   watch: RefObject<HTMLElement>;
   qty: number;
   image?: string | null;
+  label?: string;
   total: number | null;
   disabled: boolean;
   onAdd: () => void;
@@ -136,7 +138,7 @@ export function StickyAddBar({
       <div className="mx-auto flex max-w-md items-center gap-3">
         {image && <img src={shopifySized(image, 120)} alt="" width={48} height={48} className="h-12 w-12 flex-none rounded-lg bg-secondary object-cover" />}
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-foreground/80">{qty === 1 ? "1 lamp" : `${qty} lampen`}</p>
+          <p className="text-sm text-foreground/80">{label ?? (qty === 1 ? "1 lamp" : `${qty} lampen`)}</p>
           <p className="font-semibold text-primary">{formatPrice(total)}</p>
         </div>
         <Button onClick={onAdd} disabled={disabled} className="h-12 flex-none rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">

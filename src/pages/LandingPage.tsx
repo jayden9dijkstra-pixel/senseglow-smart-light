@@ -141,6 +141,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
           disabled={!product || !variant?.availableForSale}
           onAdd={add}
           image={image?.url}
+          label={picker ? undefined : variant?.title}
         />
       )}
     </div>

@@ -230,6 +230,7 @@ export const ProductHeroSection = ({
               disabled={!selectedVariant?.availableForSale}
               onAdd={handleAddToCart}
               image={productImages[0]?.url}
+          label={offer ? undefined : selectedVariant?.title}
             />
           </div>
         </div>
