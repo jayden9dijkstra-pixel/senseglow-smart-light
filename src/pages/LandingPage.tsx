@@ -46,8 +46,10 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
   const [chosen, setChosen] = useState<Variant | null>(null);
   const [qty, setQty] = useState<OfferQty>(offer.qty ?? 1);
   // Bij een andere set blijft de gekozen kleur staan.
-  const variant = (chosen && choices.find((v) => colorLabel(v) === colorLabel(chosen))) ?? choices[0] ?? null;
   const image = offerImage(offer, product?.node.images?.edges?.map((e) => e.node) ?? []);
+  // Standaard de kleur die op de eerste foto staat.
+  const photoColor = choices.find((v) => (image?.altText ?? "").toLowerCase().includes(` ${colorLabel(v).toLowerCase()} `));
+  const variant = (chosen && choices.find((v) => colorLabel(v) === colorLabel(chosen))) ?? photoColor ?? choices[0] ?? null;
   const picker = isOfferProduct(offer.handle);
   const unit = variant ? parseFloat(variant.price.amount) : null;
   const count = picker ? qty : 1;
