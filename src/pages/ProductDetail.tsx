@@ -15,8 +15,10 @@ import { getProductFaqs } from "@/lib/productFaqs";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { BeforeAfterBlock } from "@/components/product/BeforeAfterBlock";
-import { InfoAccordion, BeforeAfterRows, FaqList, type InfoSection } from "@/components/product/InfoAccordion";
-import { ShippingInfo } from "@/components/product/ShippingInfo";
+import { SpecTiles, FaqAccordion } from "@/components/product/Blueprint";
+import { blueprintFor, specsFromDescription } from "@/lib/productBlueprint";
+import { reviewsFor } from "@/data/reviews";
+import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { HowItWorksSteps } from "@/components/product/HowItWorksSteps";
 import { AskUs } from "@/components/product/AskUs";
 import { CustomerReviews } from "@/components/CustomerReviews";
@@ -34,6 +36,7 @@ const ProductDetail = () => {
   const [searchParams] = useSearchParams();
   const variantParam = searchParams.get("variant");
   const viewedRef = useRef<string | null>(null);
+  const addRef = useRef<(() => void) | null>(null);
   const angle = getAngle(handle, searchParams.get("a") ?? getStoredAngle());
   const [qty, setQty] = useState<OfferQty>(
     () => parseQty(searchParams.get("qty")) ?? angle?.preselect?.qty ?? 1,
@@ -183,44 +186,16 @@ const ProductDetail = () => {
   const pair = handle ? getBeforeAfterPair(handle) : undefined;
   const slider = pair && <BeforeAfterBlock pair={pair} />;
 
-  const sections: InfoSection[] = [
-    {
-      id: "voor-na",
-      title: "Zonder/met SenseGlow",
-      body: (
-        <div className="space-y-4">
-          {beforeAfter && <BeforeAfterRows rows={beforeAfter} beforeLabel={beforeLabel} afterLabel={afterLabel} />}
-        </div>
-      ),
-    },
-    {
-      id: "specs",
-      title: "Specificaties",
-      body: (
-        <div className="space-y-4">
-          {techBenefits && (
-            <dl className="space-y-2">
-              {techBenefits.map((b) => (
-                <div key={b.tech}>
-                  <dt className="font-medium text-foreground">{b.tech}</dt>
-                  <dd>{b.benefit}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-          {steps && (
-            <div>
-              <p className="mb-1 font-medium text-foreground">{stepsHeadline ?? "Hoe het werkt"}</p>
-              <ol className="list-decimal space-y-1 pl-5">
-                {steps.map((st) => <li key={st.title}><span className="font-medium text-foreground">{st.title}.</span> {st.description}</li>)}
-              </ol>
-            </div>
-          )}
-        </div>
-      ),
-    },
-    { id: "verzending", title: "Verzending & retour", body: <ShippingInfo handles={handle ? [handle] : []} /> },
-    { id: "faq", title: "Veelgestelde vragen", body: <FaqList faqs={getProductFaqs(content?.faqs)} /> },
+  const blueprint = blueprintFor(handle);
+  const specs = specsFromDescription(product.node.description);
+  const faqs = blueprint?.faqs ?? getProductFaqs(content?.faqs);
+  const hasReviews = reviewsFor(handle).length > 0;
+  const anchorLinks = [
+    { id: "kopen", label: "Kopen" },
+    { id: "zo-werkt-het", label: "Zo werkt het" },
+    ...(hasReviews ? [{ id: "reviews", label: "Reviews" }] : []),
+    ...(specs.length ? [{ id: "specificaties", label: "Specificaties" }] : []),
+    { id: "vragen", label: "Vragen" },
   ];
 
   return (
@@ -233,14 +208,29 @@ const ProductDetail = () => {
           heroContent={hero}
           qty={qty}
           onQtyChange={setQty}
-          afterTrust={slider}
+          anchorLinks={anchorLinks}
+          onAddRef={(fn) => (addRef.current = fn)}
         />
 
-        <div className="mx-auto max-w-3xl space-y-8 px-6 pb-12 md:px-8">
-          {handle && <HowItWorksSteps handle={handle} />}
-          <InfoAccordion sections={sections} />
-          <CustomerReviews handle={handle} />
-          <AskUs />
+        <div className="mx-auto max-w-3xl space-y-10 px-6 pb-12 md:px-8">
+          <div id="zo-werkt-het" className="scroll-mt-24 space-y-6">
+            {handle && <HowItWorksSteps handle={handle} />}
+            {slider}
+          </div>
+          <div id="reviews" className="scroll-mt-24"><CustomerReviews handle={handle} /></div>
+          <SpecTiles rows={specs} />
+          <FaqAccordion faqs={faqs} />
+          <div className="space-y-3">
+            <AskUs />
+            <p className="text-base text-foreground/80">{TRADE_NAME_LINE}</p>
+          </div>
+          <Button
+            onClick={() => addRef.current?.()}
+            disabled={!selectedVariant?.availableForSale}
+            className="h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
+          >
+            {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
+          </Button>
         </div>
 
         {handle && <ProductRelatedSection currentHandle={handle} />}
