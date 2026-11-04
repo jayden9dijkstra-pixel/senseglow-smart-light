@@ -24,7 +24,7 @@ type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
 const colorLabel = (v: Variant) => {
   const color = v.selectedOptions.find((o) => /kleur|color/i.test(o.name) && !/delige/i.test(o.value));
   const raw = color?.value ?? v.selectedOptions.find((o) => !/delige/i.test(o.value))?.value ?? v.title;
-  return raw.replace(/\s*\d+\s*cm.*$/i, "").trim();
+  return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
 function OfferCard({ offer, product, sticky }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean }) {
