@@ -7,6 +7,7 @@ import { ANGLES } from "./angles";
 import { isOfferProduct, quoteQty } from "./quantityOffer";
 import { purchaseFaqs, type ProductFaq } from "./productFaqs";
 import { DELIVERY_TEXT } from "./delivery";
+import { sceneAlt, type Scene } from "./scenes";
 import {
   PRODUCT_HANDLE,
   STEP_PRODUCT_HANDLE,
@@ -27,21 +28,26 @@ export interface LandingOffer {
   sizeCm?: number;
   /** Optiewaarde die de variant moet hebben, bv. "8-delige set". */
   optionValue?: string;
-  /** Shopify-afbeelding (url zonder query) die als hoofdfoto dient in plaats van de eerste productfoto. */
-  imageUrl?: string;
-  imageAlt?: string;
+  /** Scène waarvan de Shopify-foto (op alt-tekst) als eerste foto dient. */
+  scene?: Scene;
+  /** Optiewaarden waaruit de bezoeker kiest, bv. ["4-delige set", "8-delige set"]. */
+  choices?: string[];
+  /** Korte hulpregel bij die keuze. */
+  choiceNote?: string;
 }
 
 type OfferImage = { url: string; altText: string | null; width?: number | null; height?: number | null };
 
-/** Hoofdfoto van een aanbod: de gekozen Shopify-afbeelding, anders de eerste productfoto. */
+/** Hoofdfoto van een aanbod: de scènefoto (op Shopify alt-tekst), anders de eerste productfoto. */
 export function offerImage(offer: LandingOffer, images: OfferImage[]): OfferImage | undefined {
-  if (offer.imageUrl) {
-    const hit = images.find((i) => i.url.split("?")[0] === offer.imageUrl);
-    return hit ?? { url: offer.imageUrl, altText: offer.imageAlt ?? null };
-  }
-  return images[0];
+  const alt = sceneAlt(offer.scene, offer.handle);
+  const norm = (x: string | null | undefined) => (x ?? "").trim().toLowerCase();
+  return (alt && images.find((i) => norm(i.altText) === norm(alt))) || images[0];
 }
+
+/** Link naar de productpagina die dezelfde scènefoto vooraan houdt. */
+export const offerProductHref = (offer: LandingOffer) =>
+  `/product/${offer.handle}${offer.scene ? `?scene=${offer.scene}` : ""}`;
 
 export interface SpecTable {
   product: string;
@@ -68,6 +74,8 @@ export interface LandingPage {
   pickerNote?: string;
   /** Extra H2-secties met een korte lijst. */
   sections?: Array<{ heading: string; items: string[] }>;
+  /** Klein blok onderaan met een ander product als alternatief. */
+  alternative?: { heading: string; text: string; href: string; label: string };
 }
 
 const SPECS: Record<string, SpecTable> = {
@@ -146,29 +154,41 @@ export const LANDING_PAGES: LandingPage[] = [
     path: "/trapverlichting",
     title: "Trapverlichting met sensor, zonder boren | SenseGlow",
     description:
-      "Trapverlichting met bewegingssensor die je zonder boren plaatst. Kies 4 Ambient Motion Bars met 15% korting of de Wall Lamp 4- of 8-delige set. Gratis verzending NL/BE.",
+      "Trapverlichting met bewegingssensor die je zonder boren plakt: de SenseGlow Wall Lamp als 4- of 8-delige set. Opladen via USB-C. Gratis verzending NL/BE.",
     h1: "Trapverlichting met sensor, zonder boren",
     intro: "Licht dat vanzelf aangaat zodra je de trap nadert. Je plakt de lampen op hun plek en laadt ze op via USB-C.",
     offers: [
-      { id: "ambient-trap", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 20 cm", note: "4 lampen, genoeg voor een trap", qty: 4, sizeCm: 20, imageUrl: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/senseglow-ambient-trap-v2.png", imageAlt: "SenseGlow Ambient Motion Bar zwart aan de muur boven de trap, licht op de traptreden" },
-      { id: "wall4", handle: STEP_PRODUCT_HANDLE, label: "SenseGlow Wall Lamp™ 4-delige set", optionValue: "4-delige set" },
-      { id: "wall8", handle: STEP_PRODUCT_HANDLE, label: "SenseGlow Wall Lamp™ 8-delige set", optionValue: "8-delige set" },
+      {
+        id: "wall-trap",
+        handle: STEP_PRODUCT_HANDLE,
+        label: "SenseGlow Wall Lamp™",
+        optionValue: "4-delige set",
+        choices: ["4-delige set", "8-delige set"],
+        choiceNote: "Korte trap of overloop: 4-set. Langere trap: 8-set.",
+        scene: "trap",
+      },
     ],
     benefits: [
       "Gaat vanzelf aan zodra je beweegt, en weer uit als je weg bent",
-      "Zelfklevend of magnetisch: geen boren, geen kabels",
+      "Zelfklevend: geen boren, geen kabels",
       "Oplaadbaar via USB-C, in een paar minuten geplaatst",
     ],
-    specs: [SPECS.wall, SPECS.ambient],
+    specs: [SPECS.wall],
     extra: {
       heading: "Looplicht voor je trap",
       text: "Zet de lampen langs je trap en ze gaan vanzelf aan als je loopt. Zo heb je looplicht zonder schakelaar. Dit zijn de keuzes:",
     },
     why: true,
+    alternative: {
+      heading: "Liever één lichtstrip boven de trap?",
+      text: "De Ambient Motion Bar is één lichtbalk met bewegingssensor die je boven de trap hangt.",
+      href: "/product/senseglow_ambient_motion_bar?scene=trap",
+      label: "Bekijk de Ambient Motion Bar",
+    },
     faqs: common(
       {
         question: "Werkt de trapverlichting met een bewegingsmelder?",
-        answer: "Ja. Beide lampen hebben een bewegingssensor, ook wel bewegingsmelder genoemd. De Wall Lamp gaat aan als je nadert en uit na inactiviteit. De Ambient Motion Bar ziet beweging binnen 120° en tot 5 meter.",
+        answer: "Ja. De Wall Lamp heeft een bewegingssensor, ook wel bewegingsmelder genoemd. Hij gaat aan als je nadert en uit na inactiviteit.",
       },
       {
         question: "Hoeveel lampen heb ik nodig voor mijn trap?",
@@ -178,7 +198,6 @@ export const LANDING_PAGES: LandingPage[] = [
         question: "Beschadigt de plakstrip van de Wall Lamp de muur?",
         answer: "De montagestrip is residuvrij. Verwijder je hem voorzichtig, dan blijft de muur intact.",
       },
-      AMBIENT_CHARGE_FAQ,
     ),
   },
   {
@@ -188,7 +207,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "Gangverlichting met bewegingssensor: 2 Ambient Motion Bars van 30 cm met 10% korting. Magnetisch bevestigen, opladen via USB-C. Gratis verzending NL/BE, 30 dagen retour.",
     h1: "Gangverlichting met sensor, zonder boren",
     intro: "Zacht licht in de gang, precies wanneer je erlangs loopt. Geen schakelaar zoeken in het donker.",
-    offers: [{ id: "ambient-gang", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "2 lampen voor een gang", qty: 2, sizeCm: 30 }],
+    offers: [{ id: "ambient-gang", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "2 lampen voor een gang", qty: 2, sizeCm: 30, scene: "gang" }],
     benefits: ANGLES[PRODUCT_HANDLE].gang.benefits,
     specs: [SPECS.ambient],
     why: true,
@@ -209,7 +228,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "Sensorverlichting voor je vakantie- of huurwoning: 4 Ambient Motion Bars van 30 cm met 15% korting. Gasten vinden 's nachts zelf de weg. Plaatsen zonder boren.",
     h1: "Verlichting voor je vakantiewoning, met sensor",
     intro: "Gasten vinden 's nachts zelf de weg naar badkamer of keuken. Jij plaatst de lampen zonder te boren.",
-    offers: [{ id: "ambient-verhuur", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "4 lampen voor gang, slaapkamer en badkamer", qty: 4, sizeCm: 30 }],
+    offers: [{ id: "ambient-verhuur", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "4 lampen voor gang, slaapkamer en badkamer", qty: 4, sizeCm: 30, scene: "gang" }],
     benefits: ANGLES[PRODUCT_HANDLE].verhuur.benefits,
     specs: [SPECS.ambient],
     why: true,
@@ -235,7 +254,7 @@ export const LANDING_PAGES: LandingPage[] = [
     h1: "Solar lantaarn: buitenlamp met sensor",
     intro: "Een solar lantaarn voor voordeur, tuin of terras. Overdag laadt hij op via het zonnepaneel, 's avonds gaat hij aan als er iemand aankomt.",
     offers: [
-      { id: "solar", handle: LANTERN_PRODUCT_HANDLE, label: "SenseGlow Solar Lantern™", note: "2 lampen, bijvoorbeeld links en rechts van de deur", qty: 2 },
+      { id: "solar", handle: LANTERN_PRODUCT_HANDLE, label: "SenseGlow Solar Lantern™", note: "2 lampen, bijvoorbeeld links en rechts van de deur", qty: 2, scene: "buiten" },
     ],
     benefits: ANGLES[LANTERN_PRODUCT_HANDLE].buiten.benefits,
     specs: [SPECS.solar],
@@ -295,7 +314,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "LED-kastverlichting met bewegingssensor. Magnetisch of met plakstrip, oplaadbaar via USB-C. Gratis verzending NL & BE, 30 dagen retour.",
     h1: "Kastverlichting met sensor, zonder boren",
     intro: "Licht dat vanzelf aangaat als je bij je kast komt, en uit als je weggaat. Plakken of met de magneet vastzetten, opladen via USB-C.",
-    offers: [{ id: "ambient-kast", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar", qty: 2, sizeCm: 30 }],
+    offers: [{ id: "ambient-kast", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar", qty: 2, sizeCm: 30, scene: "kast" }],
     benefitsHeading: "Waarom in je kast",
     benefits: [
       "Bewegingssensor tot 5 meter, 120°",
@@ -310,6 +329,34 @@ export const LANDING_PAGES: LandingPage[] = [
           "20 cm past goed bij een kastplank of lade.",
           "30 cm is een fijne keuze voor een standaard kledingkast.",
           "40 cm raden we aan voor een brede kast of inloopkast.",
+        ],
+      },
+    ],
+    specs: [SPECS.ambient],
+    why: true,
+    faqs: common(AMBIENT_SENSOR_FAQ, AMBIENT_CHARGE_FAQ, AMBIENT_MOUNT_FAQ),
+  },
+  {
+    path: "/keukenverlichting",
+    title: "Keukenverlichting met sensor, zonder boren | SenseGlow",
+    description:
+      "LED-verlichting onder je keukenkastje met bewegingssensor. Magnetisch of met plakstrip, oplaadbaar via USB-C. Gratis verzending NL & BE, 30 dagen retour.",
+    h1: "Keukenverlichting met sensor, zonder boren",
+    intro: "Licht op je werkblad dat vanzelf aangaat als je de keuken in loopt. Plakken of met de magneet vastzetten, opladen via USB-C.",
+    offers: [{ id: "ambient-keuken", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar", qty: 2, sizeCm: 30, scene: "keuken" }],
+    benefitsHeading: "Waarom onder je keukenkastje",
+    benefits: [
+      "Bewegingssensor tot 5 meter, 120°",
+      "3 lichtmodi: aan bij beweging / altijd aan / altijd uit",
+      "Magneet + plakstrip inbegrepen, geen boren of kabels",
+      "USB-C oplaadbaar, één keer per paar weken laden",
+    ],
+    sections: [
+      {
+        heading: "Welke lengte?",
+        items: [
+          "Meet de onderkant van je kastje en kies 20, 30 of 40 cm.",
+          "Langer werkblad? Zet er een paar naast elkaar.",
         ],
       },
     ],
