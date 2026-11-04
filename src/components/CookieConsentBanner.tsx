@@ -144,16 +144,16 @@ export function CookieConsentBanner() {
 
   if (!visible || window.location.pathname.startsWith("/admin")) return null;
 
-  const btn = "rounded-full flex-1 min-w-[9rem]";
+  const btn = "h-auto min-h-9 whitespace-normal rounded-full px-2 py-2 text-xs leading-tight sm:min-w-[9rem] sm:flex-1 sm:px-3 sm:text-sm";
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[95] flex items-center justify-center px-4">
+    <div className="pointer-events-none fixed inset-0 z-[95] flex items-end justify-center sm:items-center sm:px-4">
       <div
         role="dialog"
         aria-label="Cookie-instellingen"
-        className="pointer-events-auto mx-auto w-full max-w-lg rounded-2xl border border-foreground/10 bg-card/95 p-6 shadow-xl backdrop-blur-md sm:p-8"
+        className={`pointer-events-auto mx-auto w-full max-w-lg overflow-y-auto rounded-t-2xl border border-foreground/10 bg-card/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl backdrop-blur-md sm:rounded-2xl sm:p-8 ${showSettings ? "max-h-[80vh]" : "max-h-[35vh]"} sm:max-h-none`}
       >
-        <p className="text-sm text-foreground/70 leading-relaxed">
+        <p className="text-xs text-foreground/70 leading-relaxed sm:text-sm">
           Deze site gebruikt cookies om een betere browsingervaring aan u te
           geven. Voor meer informatie lees ons{" "}
           <a href="/privacy" className="underline underline-offset-2 hover:text-foreground">
@@ -189,7 +189,7 @@ export function CookieConsentBanner() {
           </div>
         )}
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-3 grid grid-cols-3 gap-2 sm:mt-5 sm:flex sm:flex-wrap">
           <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => respond(ALL)} className={btn}>
             Alles accepteren
           </Button>
