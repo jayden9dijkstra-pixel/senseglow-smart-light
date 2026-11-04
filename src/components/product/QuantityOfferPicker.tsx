@@ -13,7 +13,7 @@ export function QuantityOfferPicker({
 }) {
   return (
     <div className="space-y-2">
-      <div className="grid gap-2" role="radiogroup" aria-label="Aantal lampen">
+      <div className="grid gap-1.5 md:gap-2" role="radiogroup" aria-label="Aantal lampen">
         {QTY_OPTIONS.map((qty) => {
           const q = unitPrice != null ? quoteQty(unitPrice, qty) : null;
           const active = qty === value;
@@ -24,7 +24,7 @@ export function QuantityOfferPicker({
               role="radio"
               aria-checked={active}
               onClick={() => onChange(qty)}
-              className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
+              className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-2 md:py-3 text-left transition-colors ${
                 active ? "border-primary bg-primary/5" : "border-foreground/15 hover:border-primary/40"
               }`}
             >

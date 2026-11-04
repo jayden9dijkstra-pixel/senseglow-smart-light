@@ -159,7 +159,7 @@ export const ProductImageGallery = ({
   return (
     <>
       {/* Main Gallery Container */}
-      <div className="space-y-4">
+      <div className="space-y-2 md:space-y-4">
         {/* Main Image with swipe */}
         <div 
           ref={containerRef}
@@ -172,7 +172,7 @@ export const ProductImageGallery = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
         >
-          <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-background border-2 border-primary/40 shadow-[0_24px_48px_-12px_rgba(93,64,55,0.08)]">
+          <div className="relative h-[220px] md:h-auto md:aspect-square overflow-hidden rounded-[1.25rem] md:rounded-[2rem] bg-background border-2 border-primary/40 shadow-[0_24px_48px_-12px_rgba(93,64,55,0.08)]">
             {/* Sliding track for smooth horizontal scroll */}
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
@@ -246,8 +246,8 @@ export const ProductImageGallery = ({
             {images.length > 1 && (
               <button
                 onClick={(e) => { e.stopPropagation(); openLightbox(0); }}
-                className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 
-                  bg-background/95 backdrop-blur-md text-foreground px-5 py-2.5 
+                className="absolute bottom-2 md:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 
+                  bg-background/95 backdrop-blur-md text-foreground px-4 py-1.5 md:px-5 md:py-2.5 
                   rounded-full text-xs font-semibold border border-foreground/10 
                   shadow-sm hover:bg-background transition-all duration-300 whitespace-nowrap z-10"
               >

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ShopifyProduct } from "@/lib/shopify";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 
@@ -8,7 +8,8 @@ import { useCartStore } from "@/stores/cartStore";
 import { ProductImageGallery } from "./ProductImageGallery";
 
 import { VariantPicker } from "./VariantPicker";
-import { Check, RotateCcw, Shield, CreditCard } from "lucide-react";
+import { Check, Shield } from "lucide-react";
+import { PerLampPrice, StickyAddBar, TrustLine } from "./BuyBox";
 import { ReviewSummary } from "@/components/product/ProductReviewsSection";
 import { getProductVideoUrl } from "@/lib/videos";
 import { PRODUCT_HANDLE } from "@/lib/productConfig";
@@ -133,17 +134,16 @@ export const ProductHeroSection = ({
   const productImageClassName = "w-full h-full object-contain";
 
   const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
-  const displayPrice = formatPrice(
-    unitPrice == null ? 0 : offer ? quoteQty(unitPrice, qty).total : unitPrice,
-  );
+  const count = offer ? qty : 1;
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <section id="product-hero" className="w-full overflow-hidden bg-background py-16 md:py-24 lg:py-32 animate-fade-in-slow">
+    <section id="product-hero" className="w-full overflow-hidden bg-background pb-10 pt-3 md:py-24 lg:py-32 animate-fade-in-slow">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div>
           <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] gap-0">
             {/* Left - Product Image Gallery */}
-            <div className="relative md:border-r border-foreground/10 md:pr-8 pb-6 md:pb-0 md:max-h-[730px]">
+            <div className="relative md:border-r border-foreground/10 md:pr-8 pb-3 md:pb-0 md:max-h-[730px]">
               <ProductImageGallery
                 images={productImages}
                 productTitle={product.node.title}
@@ -159,9 +159,9 @@ export const ProductHeroSection = ({
             </div>
 
             {/* Right - Product Info */}
-            <div className="space-y-4 md:pl-8 pt-6 md:pt-0 border-t md:border-t-0 border-foreground/10 text-left">
+            <div className="space-y-3 md:space-y-4 md:pl-8 pt-3 md:pt-0 border-t md:border-t-0 border-foreground/10 text-left">
               <div className="space-y-1.5">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.08]">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.08]">
                   {content.h1}
                 </h1>
               </div>
@@ -177,16 +177,10 @@ export const ProductHeroSection = ({
 
               {/* Price with animation */}
               <div className="space-y-1">
-                <div className="flex items-baseline gap-4">
-                  <span
-                    key={priceKey}
-                    className="text-3xl font-bold text-primary animate-fade-in"
-                    style={{ animation: "fade-in 0.4s ease-out" }}
-                  >
-                    {displayPrice}
-                  </span>
+                <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
+                  <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
                 </div>
-                <div className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
+                <div className="mt-1 hidden md:flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
                   <span>Gratis bezorgd</span>
                 </div>
@@ -205,6 +199,25 @@ export const ProductHeroSection = ({
                 <QuantityOfferPicker unitPrice={unitPrice} value={qty} onChange={(q) => onQtyChange?.(q)} />
               )}
 
+              {/* CTA */}
+              <Button
+                ref={btnRef}
+                onClick={handleAddToCart}
+                size="lg"
+                disabled={!selectedVariant?.availableForSale}
+                className="w-full min-h-12 text-sm px-10 py-4 h-auto font-medium tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
+              >
+                {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
+              </Button>
+
+              <TrustLine />
+
+              <DeliveryEstimate />
+
+              {offer && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
+
+              <p className="flex items-start gap-1.5 text-[11px] text-muted-foreground"><Shield className="h-3.5 w-3.5 flex-shrink-0 text-primary" />{WARRANTY_TEXT}</p>
+
               {/* 3 Bullets (bij een invalshoek staan de voordelen al in het hoekblok) */}
               {!angle && <div className="space-y-1.5 py-3 border-y border-foreground/10">
                 {content.bullets.map((bullet, i) => (
@@ -215,25 +228,13 @@ export const ProductHeroSection = ({
                 ))}
               </div>}
 
-              {/* CTA */}
-              <Button
-                onClick={handleAddToCart}
-                size="lg"
+              <StickyAddBar
+                watch={btnRef}
+                qty={count}
+                total={unitPrice != null ? quoteQty(unitPrice, count).total : null}
                 disabled={!selectedVariant?.availableForSale}
-                className="w-full min-h-12 text-sm px-10 py-4 h-auto font-medium tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
-              >
-                {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
-              </Button>
-
-              <DeliveryEstimate />
-
-              {offer && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
-
-              <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground">
-                <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
-                <span className="flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" />iDEAL / PayPal</span>
-                <span className="col-span-2 flex items-start gap-1.5"><Shield className="h-3.5 w-3.5 flex-shrink-0 text-primary" />{WARRANTY_TEXT}</span>
-              </div>
+                onAdd={handleAddToCart}
+              />
             </div>
           </div>
         </div>
