@@ -72,7 +72,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
   onAddRef?.(add);
 
   return (
-    <div className={`flex flex-col gap-3 bg-background md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
+    <div className={`flex flex-col gap-2 bg-background md:gap-3 md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
       {image && (
         <img
           {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
@@ -83,7 +83,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
         />
       )}
       <div>
-        <h2 className="text-lg font-semibold text-foreground">{offer.label}</h2>
+        <h2 className={`text-lg font-semibold text-foreground ${hideImage ? "sr-only md:not-sr-only" : ""}`}>{offer.label}</h2>
         {offer.note && <p className="text-base text-foreground/80">{offer.note}</p>}
       </div>
       {offer.choices && (
@@ -199,9 +199,9 @@ const LandingPage = () => {
         <section id="kopen" className="scroll-mt-24 space-y-3 md:space-y-6">
           <div className="md:hidden">
             {heroImage ? (
-              <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="34svh" />
+              <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="26svh" />
             ) : (
-              <div className="-mx-6 h-[34svh] animate-pulse bg-secondary" />
+              <div className="-mx-6 h-[26svh] animate-pulse bg-secondary" />
             )}
           </div>
           <div className="max-w-3xl space-y-1 md:space-y-3">
