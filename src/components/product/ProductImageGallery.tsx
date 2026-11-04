@@ -23,6 +23,8 @@ interface ProductImageGalleryProps {
   activeImageUrl?: string | null;
   /** Eerste dia vóór de foto's, bijvoorbeeld de voor/na-schuif. */
   leadSlide?: ReactNode;
+  /** Maximale fotohoogte op mobiel (CSS-lengte), standaard 70svh. */
+  mobileMaxHeight?: string;
 }
 
 export const ProductImageGallery = ({
@@ -32,6 +34,7 @@ export const ProductImageGallery = ({
   imageClassName = "h-full w-full object-contain",
   activeImageUrl,
   leadSlide,
+  mobileMaxHeight = "70svh",
 }: ProductImageGalleryProps) => {
   const offset = leadSlide ? 1 : 0;
   const total = images.length + offset;
@@ -190,7 +193,7 @@ export const ProductImageGallery = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
         >
-          <div style={{ ["--ar" as string]: ratio }} className="relative -mx-6 h-[min(calc(100vw/var(--ar)),70svh)] overflow-hidden bg-secondary/60 transition-[height] duration-300 md:mx-0 md:h-auto md:aspect-square md:rounded-[2rem] md:border md:border-foreground/10">
+          <div style={{ ["--ar" as string]: ratio, ["--mh" as string]: mobileMaxHeight }} className="relative -mx-6 h-[min(calc(100vw/var(--ar)),var(--mh))] overflow-hidden bg-secondary/60 transition-[height] duration-300 md:mx-0 md:h-auto md:aspect-square md:rounded-[2rem] md:border md:border-foreground/10">
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${selectedIndex * 100}%)` }}

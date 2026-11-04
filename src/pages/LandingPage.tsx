@@ -17,8 +17,11 @@ import { useCartStore } from "@/stores/cartStore";
 import { PerLampPrice, StickyAddBar, TrustLine } from "@/components/product/BuyBox";
 import { ProductImageGallery } from "@/components/product/ProductImageGallery";
 import { BeforeAfterBlock } from "@/components/product/BeforeAfterBlock";
-import { InfoAccordion, PlainList, FaqList, Benefits, type InfoSection } from "@/components/product/InfoAccordion";
-import { ShippingInfo } from "@/components/product/ShippingInfo";
+import { InfoAccordion, PlainList, Benefits, type InfoSection } from "@/components/product/InfoAccordion";
+import { AnchorNav, SpecTiles, FaqAccordion } from "@/components/product/Blueprint";
+import { eightSetSaving } from "@/lib/productBlueprint";
+import { reviewsFor } from "@/data/reviews";
+import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import NotFound from "./NotFound";
 
@@ -31,7 +34,7 @@ const colorLabel = (v: Variant) => {
   return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
-function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean }) {
+function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; onAddRef?: (add: () => void) => void }) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
@@ -53,6 +56,7 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
   const picker = isOfferProduct(offer.handle);
   const unit = variant ? parseFloat(variant.price.amount) : null;
   const count = picker ? qty : 1;
+  const saving = eightSetSaving(variant, variants);
 
   const add = () => {
     if (!product || !variant) return;
@@ -65,6 +69,7 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
       selectedOptions: variant.selectedOptions,
     });
   };
+  onAddRef?.(add);
 
   return (
     <div className={`flex flex-col gap-3 bg-background md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
@@ -81,7 +86,6 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
         <h2 className="text-lg font-semibold text-foreground">{offer.label}</h2>
         {offer.note && <p className="text-base text-foreground/80">{offer.note}</p>}
       </div>
-      <PerLampPrice unitPrice={unit} qty={count} offer={picker} />
       {offer.choices && (
         <div className="space-y-2">
           <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Set">
@@ -117,7 +121,9 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
           ))}
         </div>
       )}
+      {saving != null && <p className="text-base font-medium text-foreground">{formatPrice(saving)} voordeliger dan 2 sets van 4</p>}
       {picker && <QuantityOfferPicker unitPrice={unit} value={qty} onChange={setQty} />}
+      <PerLampPrice unitPrice={unit} qty={count} offer={picker} />
       <Button
         ref={btnRef}
         disabled={!product || !variant?.availableForSale}
@@ -134,6 +140,7 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
           total={unit != null ? quoteQty(unit, count).total : null}
           disabled={!product || !variant?.availableForSale}
           onAdd={add}
+          image={image?.url}
         />
       )}
     </div>
@@ -144,6 +151,7 @@ const LandingPage = () => {
   const { pathname } = useLocation();
   const page = getLandingPage(pathname.replace(/\/+$/, ""));
   const [products, setProducts] = useState<Record<string, ShopifyProduct>>({});
+  const addRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!page) return;
@@ -175,52 +183,25 @@ const LandingPage = () => {
   const sections: InfoSection[] = [
     ...(page.extra ? [{ id: "extra", title: page.extra.heading, body: <ExtraBlock page={page} products={products} /> }] : []),
     ...(page.sections ?? []).map((sec) => ({ id: sec.heading, title: sec.heading, body: <PlainList items={sec.items} /> })),
-    {
-      id: "specs",
-      title: "Specificaties",
-      body: (
-        <div className="space-y-4">
-          {page.specs.map((t) => (
-            <div key={t.product}>
-              <p className="mb-1 font-medium text-foreground">{t.product}</p>
-              <dl className="divide-y divide-foreground/10">
-                {t.rows.map(([k, v]) => (
-                  <div key={k} className="flex gap-3 py-1.5">
-                    <dt className="w-1/3 flex-shrink-0 font-medium text-foreground">{k}</dt>
-                    <dd>{v}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          ))}
-          <p>
-            Meer weten? Bekijk{" "}
-            {handles.map((h, i) => (
-              <span key={h}>
-                {i > 0 && " en "}
-                <Link to={offerProductHref(page.offers.find((o) => o.handle === h)!)} className="text-primary underline underline-offset-4">
-                  {products[h]?.node.title ?? "dit product"}
-                </Link>
-              </span>
-            ))}
-            .
-          </p>
-        </div>
-      ),
-    },
-    { id: "verzending", title: "Verzending & retour", body: <ShippingInfo handles={handles} /> },
-    { id: "faq", title: "Veelgestelde vragen", body: <FaqList faqs={page.faqs} /> },
+  ];
+  const hasReviews = reviewsFor(first.handle).length > 0;
+  const anchorLinks = [
+    { id: "kopen", label: "Kopen" },
+    { id: "zo-werkt-het", label: "Zo werkt het" },
+    ...(hasReviews ? [{ id: "reviews", label: "Reviews" }] : []),
+    { id: "specificaties", label: "Specificaties" },
+    { id: "vragen", label: "Vragen" },
   ];
 
   return (
     <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
       <div className="container max-w-6xl space-y-8 pb-12 md:space-y-12 md:py-14">
-        <section className="space-y-4 md:space-y-6">
+        <section id="kopen" className="scroll-mt-24 space-y-3 md:space-y-6">
           <div className="md:hidden">
             {heroImage ? (
-              <ProductImageGallery images={[heroImage]} productTitle={page.h1} />
+              <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="34svh" />
             ) : (
-              <div className="-mx-6 aspect-[4/5] animate-pulse bg-secondary" />
+              <div className="-mx-6 h-[34svh] animate-pulse bg-secondary" />
             )}
           </div>
           <div className="max-w-3xl space-y-1 md:space-y-3">
@@ -229,21 +210,40 @@ const LandingPage = () => {
           </div>
           <div className={`grid gap-4 ${cols}`}>
             {page.offers.map((o, i) => (
-              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} />
+              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} />
             ))}
           </div>
-          {pair && <div className="max-w-3xl"><BeforeAfterBlock pair={pair} /></div>}
-          <div className="max-w-3xl">
-            <HowItWorksSteps handle={first.handle} />
-          </div>
-          <div className="max-w-3xl border-t border-foreground/10 pt-4">
+          <div className="max-w-3xl space-y-4">
             <Benefits items={page.benefits} />
+            <AnchorNav links={anchorLinks} />
           </div>
         </section>
 
-        <div className="max-w-3xl space-y-8">
-          <InfoAccordion sections={sections} />
-          <CustomerReviews handle={first.handle} />
+        <div className="max-w-3xl space-y-10">
+          <div id="zo-werkt-het" className="scroll-mt-24 space-y-6">
+            <HowItWorksSteps handle={first.handle} />
+            {pair && <BeforeAfterBlock pair={pair} />}
+          </div>
+          <div id="reviews" className="scroll-mt-24"><CustomerReviews handle={first.handle} /></div>
+          <section id="specificaties" className="scroll-mt-24 space-y-6">
+            {page.specs.map((t, i) => (
+              <SpecTiles key={t.product} rows={t.rows} id={`spec-${i}`} title={page.specs.length > 1 ? t.product : "Specificaties"} />
+            ))}
+            <p className="text-base">
+              Meer weten? Bekijk{" "}
+              {handles.map((h, i) => (
+                <span key={h}>
+                  {i > 0 && " en "}
+                  <Link to={offerProductHref(page.offers.find((o) => o.handle === h)!)} className="text-primary underline underline-offset-4">
+                    {products[h]?.node.title ?? "dit product"}
+                  </Link>
+                </span>
+              ))}
+              .
+            </p>
+          </section>
+          <FaqAccordion faqs={page.faqs} />
+          {sections.length > 0 && <InfoAccordion sections={sections} />}
           {page.alternative && (
             <aside className="space-y-2 rounded-2xl border border-foreground/10 p-4">
               <h2 className="text-lg font-semibold text-foreground">{page.alternative.heading}</h2>
@@ -253,7 +253,13 @@ const LandingPage = () => {
               </Link>
             </aside>
           )}
-          <AskUs />
+          <div className="space-y-3">
+            <AskUs />
+            <p className="text-base text-foreground/80">{TRADE_NAME_LINE}</p>
+          </div>
+          <Button onClick={() => addRef.current?.()} className="h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90">
+            In winkelwagen
+          </Button>
         </div>
       </div>
     </PageLayout>
