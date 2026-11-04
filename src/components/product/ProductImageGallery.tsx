@@ -232,19 +232,23 @@ export const ProductImageGallery = ({
               ))}
             </div>
 
-            {videoUrl && selectedIndex >= offset && (
+            {videoUrl && selectedIndex === offset && (
               <Button
                 type="button"
-                size="icon"
                 onClick={(event) => {
                   event.stopPropagation();
                   setIsVideoOpen(true);
                 }}
-                className="absolute bottom-4 left-4 h-11 w-11 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
-                aria-label="Bekijk productvideo"
+                className="absolute bottom-4 left-4 h-12 gap-2 rounded-full bg-primary px-5 text-base text-primary-foreground shadow-lg hover:bg-primary/90"
               >
-                <Play className="h-5 w-5 fill-current" />
+                <Play className="h-5 w-5 fill-current" aria-hidden /> Bekijk video
               </Button>
+            )}
+
+            {total > 1 && (
+              <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-background/90 px-3 py-1 text-sm font-medium text-foreground" aria-live="polite">
+                {selectedIndex + 1}/{total}
+              </span>
             )}
 
             {total > 1 && (
@@ -270,20 +274,20 @@ export const ProductImageGallery = ({
           </div>
         </div>
 
-        {/* Dot indicators - minimal, always visible on mobile */}
-        {total > 1 && (
-          <div className="flex items-center justify-center gap-1.5">
-            {Array.from({ length: total }).map((_, index) => (
+        {/* Kleine thumbnails onder de foto, in de Shopify-volgorde */}
+        {images.length > 1 && (
+          <div className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 md:mx-0 md:px-0" aria-label="Alle foto's">
+            {images.map((image, idx) => (
               <button
-                key={index}
-                onClick={() => setSelectedIndex(index)}
-                className={`transition-all duration-300 rounded-full ${
-                  selectedIndex === index 
-                    ? 'w-6 h-1.5 bg-primary' 
-                    : 'w-1.5 h-1.5 bg-foreground/20 hover:bg-foreground/40'
-                }`}
-                aria-label={leadSlide && index === 0 ? "Voor/na: lamp uit en aan" : `Ga naar afbeelding ${index + 1 - offset}`}
-              />
+                key={image.url}
+                type="button"
+                onClick={() => setSelectedIndex(idx + offset)}
+                aria-label={`Foto ${idx + 1}`}
+                aria-current={selectedIndex === idx + offset}
+                className={`h-14 w-14 flex-none overflow-hidden rounded-lg border-2 bg-secondary md:h-16 md:w-16 ${selectedIndex === idx + offset ? "border-primary" : "border-transparent"}`}
+              >
+                <img src={shopifySized(image.url, 160)} alt="" width={56} height={56} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              </button>
             ))}
           </div>
         )}
