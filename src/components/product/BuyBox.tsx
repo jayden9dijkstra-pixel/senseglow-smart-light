@@ -3,6 +3,11 @@ import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/price";
 import { quoteQty, qtyLabel } from "@/lib/quantityOffer";
+import { readStoredConsent } from "@/lib/consent";
+import { DeliveryEstimate } from "./DeliveryEstimate";
+
+/** Event dat de cookiebanner stuurt zodra een keuze is opgeslagen. */
+export const CONSENT_SAVED_EVENT = "sg:consent-saved";
 
 /** Prijs per lamp groot, totaal klein eronder. Rekent alleen met de Shopify-prijs en het bestaande aanbod. */
 export function PerLampPrice({ unitPrice, qty, offer }: { unitPrice: number | null; qty: number; offer: boolean }) {
@@ -27,10 +32,12 @@ export function PerLampPrice({ unitPrice, qty, offer }: { unitPrice: number | nu
 /** Alleen betaalmethoden die actief zijn in de Shopify-checkout. */
 const PAYMENT_METHODS = ["iDEAL", "Creditcard", "PayPal"];
 
+/** Eén vertrouwensblok onder de knop: leverdatum, service, betaalmethoden. */
 export function TrustLine() {
   return (
-    <div className="space-y-2">
-      <p className="text-xs text-foreground/75">Gratis verzending NL &amp; BE · 30 dagen retour · 1 jaar extra garantie</p>
+    <div className="space-y-1.5">
+      <DeliveryEstimate />
+      <p className="text-xs text-foreground/75">Gratis verzending · 30 dagen retour · 1 jaar extra garantie</p>
       <ul className="flex flex-wrap gap-1.5" aria-label="Betaalmethoden">
         {PAYMENT_METHODS.map((m) => (
           <li key={m} className="rounded border border-foreground/15 bg-background px-2 py-0.5 text-[10px] font-semibold tracking-wide text-foreground/70">
@@ -42,7 +49,20 @@ export function TrustLine() {
   );
 }
 
-/** Vaste balk onderaan op mobiel zodra de gewone koopknop boven uit beeld is. */
+/** True zolang er nog geen cookiekeuze is (dan staat de cookiebalk onderin). */
+export function useConsentPending() {
+  const [pending, setPending] = useState(() => !readStoredConsent());
+  useEffect(() => {
+    const done = () => setPending(false);
+    window.addEventListener(CONSENT_SAVED_EVENT, done);
+    return () => window.removeEventListener(CONSENT_SAVED_EVENT, done);
+  }, []);
+  return pending;
+}
+
+const BAR_HEIGHT = 88;
+
+/** Vaste balk onderaan op mobiel zolang de gewone koopknop buiten beeld is. */
 export function StickyAddBar({
   watch,
   qty,
@@ -56,11 +76,15 @@ export function StickyAddBar({
   disabled: boolean;
   onAdd: () => void;
 }) {
-  const [visible, setVisible] = useState(false);
+  const [outOfView, setOutOfView] = useState(false);
+  const consentPending = useConsentPending();
+
   useEffect(() => {
     const update = () => {
       const el = watch.current;
-      setVisible(!!el && el.getBoundingClientRect().bottom < 0);
+      if (!el) return setOutOfView(false);
+      const r = el.getBoundingClientRect();
+      setOutOfView(r.bottom < 0 || r.top > window.innerHeight - BAR_HEIGHT);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -71,7 +95,13 @@ export function StickyAddBar({
     };
   }, [watch]);
 
-  if (!visible || total == null) return null;
+  // Ruimte onderaan de pagina, zodat niets achter de balk verdwijnt.
+  useEffect(() => {
+    document.body.classList.add("has-sticky-buy");
+    return () => document.body.classList.remove("has-sticky-buy");
+  }, []);
+
+  if (!outOfView || consentPending || total == null) return null;
   // Portal: een transform op een voorouder zou position:fixed anders breken.
   return createPortal(
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl md:hidden">

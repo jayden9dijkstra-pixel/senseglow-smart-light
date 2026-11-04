@@ -1,17 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Search, User, ChevronDown } from "lucide-react";
+import { Search, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n/I18nProvider";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { MobileNav } from "@/components/layout/MobileNav";
 import wordmark from "@/assets/logo-wordmark-sharp.png";
 import {
   PRODUCT_HANDLE,
@@ -57,19 +50,6 @@ const navItems: NavItem[] = [
       { label: "Contact", hint: "Stel je vraag", href: "/contact" },
     ],
   },
-];
-
-const productLinks: NavChild[] = [
-  { label: "SenseGlow Wave", hint: "Kast en keuken", href: `/product/${WAVE_PRODUCT_HANDLE}` },
-  { label: "Ambient Motion Bar", hint: "Hal en wand", href: `/product/${PRODUCT_HANDLE}` },
-  { label: "SenseGlow Wall Lamp", hint: "Woonkamer", href: `/product/${STEP_PRODUCT_HANDLE}` },
-  { label: "SenseGlow Solar Lantern", hint: "Tuin en pad", href: `/product/${LANTERN_PRODUCT_HANDLE}` },
-  { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
-];
-
-const mobileServiceLinks: NavChild[] = [
-  { label: "Bestelling volgen", href: "/volg-je-bestelling" },
-  { label: "Contact", href: "/contact" },
 ];
 
 const NavDropdown = ({ item }: { item: NavItem }) => {
@@ -167,62 +147,7 @@ export const SiteHeader = () => {
             </Button>
             <CartDrawer />
 
-            {/* Mobiel menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="lg:hidden text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
-                  aria-label={t("Menu openen")}
-                >
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-72 max-h-[calc(100vh-6rem)] overflow-y-auto bg-background border-border rounded-sm p-2">
-                <DropdownMenuLabel className="px-3 py-2 text-xs uppercase tracking-widest text-foreground/45">
-                  {t("Onze producten")}
-                </DropdownMenuLabel>
-                <DropdownMenuItem asChild>
-                  <Link
-                    to={localizePath("/producten")}
-                    className="cursor-pointer py-2.5 text-sm font-medium text-foreground"
-                  >
-                    {t("Bekijk alle producten")}
-                  </Link>
-                </DropdownMenuItem>
-                {productLinks.map((link) => (
-                  <DropdownMenuItem key={link.href} asChild>
-                    <Link
-                      to={localizePath(link.href)}
-                      className="cursor-pointer py-2 text-sm text-foreground/70 hover:text-foreground transition-colors"
-                    >
-                      {t(link.label)}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="px-3 py-2 text-xs uppercase tracking-widest text-foreground/45">
-                  {t("Over SenseGlow")}
-                </DropdownMenuLabel>
-                <DropdownMenuItem asChild>
-                  <Link to={localizePath("/waarom-senseglow")} className="cursor-pointer py-2 text-sm text-foreground/70">
-                    {t("Waarom SenseGlow")}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="px-3 py-2 text-xs uppercase tracking-widest text-foreground/45">
-                  {t("Service")}
-                </DropdownMenuLabel>
-                {mobileServiceLinks.map((link) => (
-                  <DropdownMenuItem key={link.href} asChild>
-                    <Link to={localizePath(link.href)} className="cursor-pointer py-2 text-sm text-foreground/70">
-                      {t(link.label)}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <MobileNav />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, type ReactNode } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { ChevronLeft, ChevronRight, X, Grid2X2, Play, Volume2, VolumeX } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Play, Volume2, VolumeX } from "lucide-react";
 import { Dialog, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -16,6 +16,8 @@ interface ProductImageGalleryProps {
   imageClassName?: string;
   /** Eigen Shopify-foto van de gekozen variant; de galerij springt erheen. */
   activeImageUrl?: string | null;
+  /** Eerste dia vóór de foto's, bijvoorbeeld de voor/na-schuif. */
+  leadSlide?: ReactNode;
 }
 
 export const ProductImageGallery = ({
@@ -24,12 +26,15 @@ export const ProductImageGallery = ({
   videoUrl = "",
   imageClassName = "w-full h-full object-contain",
   activeImageUrl,
+  leadSlide,
 }: ProductImageGalleryProps) => {
+  const offset = leadSlide ? 1 : 0;
+  const total = images.length + offset;
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     if (!activeImageUrl) return;
     const idx = images.findIndex((img) => img.url === activeImageUrl);
-    if (idx >= 0) setSelectedIndex(idx);
+    if (idx >= 0) setSelectedIndex(idx + offset);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeImageUrl, images.length]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -57,8 +62,8 @@ export const ProductImageGallery = ({
   }, []);
 
   const handleNext = useCallback(() => {
-    setSelectedIndex((prev) => Math.min(images.length - 1, prev + 1));
-  }, [images.length]);
+    setSelectedIndex((prev) => Math.min(total - 1, prev + 1));
+  }, [total]);
 
   // Touch events for main gallery
   const onTouchStart = (e: React.TouchEvent) => {
@@ -80,8 +85,8 @@ export const ProductImageGallery = ({
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
     
-    if (isLeftSwipe && images.length > 1) handleNext();
-    if (isRightSwipe && images.length > 1) handlePrevious();
+    if (isLeftSwipe && total > 1) handleNext();
+    if (isRightSwipe && total > 1) handlePrevious();
     
     touchStartX.current = null;
     touchEndX.current = null;
@@ -107,8 +112,8 @@ export const ProductImageGallery = ({
       const isLeftSwipe = distance > minSwipeDistance;
       const isRightSwipe = distance < -minSwipeDistance;
       
-      if (isLeftSwipe && images.length > 1) handleNext();
-      if (isRightSwipe && images.length > 1) handlePrevious();
+      if (isLeftSwipe && total > 1) handleNext();
+      if (isRightSwipe && total > 1) handlePrevious();
     }
     touchStartX.current = null;
     touchEndX.current = null;
@@ -128,7 +133,8 @@ export const ProductImageGallery = ({
     setLightboxIndex((prev) => Math.min(images.length - 1, prev + 1));
   };
 
-  const openLightbox = (index: number = selectedIndex) => {
+  const openLightbox = (index: number = selectedIndex - offset) => {
+    if (index < 0) return;
     setLightboxIndex(index);
     setIsLightboxOpen(true);
   };
@@ -172,13 +178,24 @@ export const ProductImageGallery = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
         >
-          <div className="relative h-[220px] md:h-auto md:aspect-square overflow-hidden rounded-[1.25rem] md:rounded-[2rem] bg-background border-2 border-primary/40 shadow-[0_24px_48px_-12px_rgba(93,64,55,0.08)]">
-            {/* Sliding track for smooth horizontal scroll */}
+          <div className="relative -mx-6 aspect-[4/5] overflow-hidden bg-secondary md:mx-0 md:aspect-square md:rounded-[2rem] md:border md:border-foreground/10">
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
               onClick={() => !isDragging.current && openLightbox()}
             >
+              {leadSlide && (
+                <div
+                  className="relative h-full w-full flex-shrink-0"
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchMove={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {leadSlide}
+                </div>
+              )}
               {images.map((image, idx) => (
                 <div key={idx} className="relative flex-shrink-0 w-full h-full">
                   {brokenImages.has(idx) ? (
@@ -191,7 +208,7 @@ export const ProductImageGallery = ({
                       alt={image.altText || productTitle}
                       className={imageClassName}
                       draggable={false}
-                      loading={idx === 0 ? "eager" : "lazy"}
+                      loading={idx === 0 && !leadSlide ? "eager" : "lazy"}
                       onError={() => markImageBroken(idx)}
                     />
                   )}
@@ -199,7 +216,7 @@ export const ProductImageGallery = ({
               ))}
             </div>
 
-            {videoUrl && (
+            {videoUrl && selectedIndex >= offset && (
               <Button
                 type="button"
                 size="icon"
@@ -207,62 +224,40 @@ export const ProductImageGallery = ({
                   event.stopPropagation();
                   setIsVideoOpen(true);
                 }}
-                className="absolute bottom-4 left-4 h-12 w-12 rounded-sm bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
+                className="absolute bottom-4 left-4 h-11 w-11 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
                 aria-label="Bekijk productvideo"
               >
                 <Play className="h-5 w-5 fill-current" />
               </Button>
             )}
 
-            {/* Desktop navigation arrows - subtle, minimal */}
-            {images.length > 1 && (
+            {total > 1 && (
               <>
                 <button
                   onClick={(e) => { e.stopPropagation(); handlePrevious(); }}
                   disabled={selectedIndex === 0}
-                  className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 
-                    items-center justify-center w-10 h-10 
-                    opacity-0 group-hover:opacity-100 transition-all duration-300
-                    hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
+                  className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none"
                   aria-label="Vorige afbeelding"
                 >
-                  <ChevronLeft className="h-6 w-6 text-foreground/30 hover:text-primary transition-colors" strokeWidth={1.5} />
+                  <ChevronLeft className="h-6 w-6 text-foreground/40 hover:text-primary transition-colors" strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleNext(); }}
-                  disabled={selectedIndex === images.length - 1}
-                  className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 
-                    items-center justify-center w-10 h-10 
-                    opacity-0 group-hover:opacity-100 transition-all duration-300
-                    hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
+                  disabled={selectedIndex === total - 1}
+                  className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none"
                   aria-label="Volgende afbeelding"
                 >
-                  <ChevronRight className="h-6 w-6 text-foreground/30 hover:text-primary transition-colors" strokeWidth={1.5} />
+                  <ChevronRight className="h-6 w-6 text-foreground/40 hover:text-primary transition-colors" strokeWidth={1.5} />
                 </button>
               </>
             )}
-
-            {/* "View all images" button — floating pill inside the frame */}
-            {images.length > 1 && (
-              <button
-                onClick={(e) => { e.stopPropagation(); openLightbox(0); }}
-                className="absolute bottom-2 md:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 
-                  bg-background/95 backdrop-blur-md text-foreground px-4 py-1.5 md:px-5 md:py-2.5 
-                  rounded-full text-xs font-semibold border border-foreground/10 
-                  shadow-sm hover:bg-background transition-all duration-300 whitespace-nowrap z-10"
-              >
-                <Grid2X2 className="h-3.5 w-3.5" strokeWidth={1.5} />
-                <span>Bekijk alle beelden</span>
-              </button>
-            )}
           </div>
-
         </div>
 
         {/* Dot indicators - minimal, always visible on mobile */}
-        {images.length > 1 && (
+        {total > 1 && (
           <div className="flex items-center justify-center gap-1.5">
-            {images.map((_, index) => (
+            {Array.from({ length: total }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedIndex(index)}
@@ -271,7 +266,7 @@ export const ProductImageGallery = ({
                     ? 'w-6 h-1.5 bg-primary' 
                     : 'w-1.5 h-1.5 bg-foreground/20 hover:bg-foreground/40'
                 }`}
-                aria-label={`Ga naar afbeelding ${index + 1}`}
+                aria-label={leadSlide && index === 0 ? "Voor/na: lamp uit en aan" : `Ga naar afbeelding ${index + 1 - offset}`}
               />
             ))}
           </div>

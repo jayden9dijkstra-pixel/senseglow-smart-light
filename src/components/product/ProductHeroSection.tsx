@@ -1,24 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ShopifyProduct } from "@/lib/shopify";
-import { useState, useEffect, useRef } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useState, useEffect, useRef, type ReactNode } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 
 
 import { ProductImageGallery } from "./ProductImageGallery";
 
 import { VariantPicker } from "./VariantPicker";
-import { Check, Shield } from "lucide-react";
 import { PerLampPrice, StickyAddBar, TrustLine } from "./BuyBox";
-import { ReviewSummary } from "@/components/product/ProductReviewsSection";
 import { getProductVideoUrl } from "@/lib/videos";
-import { PRODUCT_HANDLE } from "@/lib/productConfig";
-import { formatPrice } from "@/lib/price";
-import { AngleBlock } from "./AngleBlock";
 import { QuantityOfferPicker } from "./QuantityOfferPicker";
-import { isOfferProduct, OFFER_TEXT, quoteQty, type OfferQty } from "@/lib/quantityOffer";
-import { DeliveryEstimate } from "./DeliveryEstimate";
-import { WARRANTY_TEXT } from "@/lib/productFaqs";
+import { Benefits } from "./InfoAccordion";
+import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { getAngle, getStoredAngle } from "@/lib/angles";
 
 interface HeroContent {
@@ -36,6 +30,8 @@ interface ProductHeroSectionProps {
   heroContent?: HeroContent;
   qty?: OfferQty;
   onQtyChange?: (qty: OfferQty) => void;
+  /** Eerste dia van de galerij, bijvoorbeeld de voor/na-schuif. */
+  leadSlide?: ReactNode;
 }
 
 export const ProductHeroSection = ({
@@ -45,6 +41,7 @@ export const ProductHeroSection = ({
   heroContent,
   qty = 1,
   onQtyChange,
+  leadSlide,
 }: ProductHeroSectionProps) => {
   const defaultContent: HeroContent = {
     h1: "Veilig licht. Precies wanneer jij beweegt.",
@@ -131,114 +128,91 @@ export const ProductHeroSection = ({
       url: edge.node.url,
       altText: edge.node.altText,
     })) || [];
-  const productImageClassName = "w-full h-full object-contain";
+  const productImageClassName = "h-full w-full object-cover md:object-contain";
 
   const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
   const count = offer ? qty : 1;
   const btnRef = useRef<HTMLButtonElement>(null);
 
+  const subtitle = angle?.heading ?? firstSentence(content.subtitle);
+  const benefits = angle?.benefits ?? content.bullets;
+
   return (
-    <section id="product-hero" className="w-full overflow-hidden bg-background pb-10 pt-3 md:py-24 lg:py-32 animate-fade-in-slow">
+    <section id="product-hero" className="w-full overflow-hidden bg-background pb-8 md:py-24 lg:py-32 animate-fade-in-slow">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
-        <div>
-          <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] gap-0">
-            {/* Left - Product Image Gallery */}
-            <div className="relative md:border-r border-foreground/10 md:pr-8 pb-3 md:pb-0 md:max-h-[730px]">
-              <ProductImageGallery
-                images={productImages}
-                productTitle={product.node.title}
-                videoUrl={getProductVideoUrl(product.node.handle)}
-                imageClassName={productImageClassName}
-                activeImageUrl={
-                  selectedVariant?.image?.url &&
-                  selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
-                    ? selectedVariant.image.url
-                    : null
-                }
-              />
+        <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] md:gap-8">
+          <div className="relative md:max-h-[730px]">
+            <ProductImageGallery
+              images={productImages}
+              productTitle={product.node.title}
+              videoUrl={getProductVideoUrl(product.node.handle)}
+              imageClassName={productImageClassName}
+              leadSlide={leadSlide}
+              activeImageUrl={
+                selectedVariant?.image?.url &&
+                selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
+                  ? selectedVariant.image.url
+                  : null
+              }
+            />
+          </div>
+
+          <div className="space-y-4 pt-3 text-left md:pt-0">
+            <div className="space-y-1">
+              <h1 className="line-clamp-2 text-2xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">
+                {content.h1}
+              </h1>
+              <p className="text-sm text-muted-foreground md:text-base">{subtitle}</p>
             </div>
 
-            {/* Right - Product Info */}
-            <div className="space-y-3 md:space-y-4 md:pl-8 pt-3 md:pt-0 border-t md:border-t-0 border-foreground/10 text-left">
-              <div className="space-y-1.5">
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.08]">
-                  {content.h1}
-                </h1>
-              </div>
-              <AngleBlock
-                angle={angle}
-                neutral={content.subtitle}
+            <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
+              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
+            </div>
+
+            {product.node.variants.edges.length > 1 && (
+              <VariantPicker
                 product={product}
                 selectedVariant={selectedVariant}
+                onVariantChange={handleVariantChange}
               />
+            )}
 
-              <ReviewSummary />
+            {offer && (
+              <QuantityOfferPicker unitPrice={unitPrice} value={qty} onChange={(q) => onQtyChange?.(q)} />
+            )}
 
+            <Button
+              ref={btnRef}
+              onClick={handleAddToCart}
+              size="lg"
+              disabled={!selectedVariant?.availableForSale}
+              className="w-full min-h-12 h-auto rounded-full bg-primary px-10 py-4 text-sm font-medium tracking-wide text-primary-foreground transition-all duration-500 hover:bg-primary/90"
+            >
+              {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
+            </Button>
 
-              {/* Price with animation */}
-              <div className="space-y-1">
-                <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
-                  <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
-                </div>
-                <div className="mt-1 hidden md:flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
-                  <Check className="h-4 w-4" />
-                  <span>Gratis bezorgd</span>
-                </div>
-              </div>
+            <TrustLine />
 
-              {/* Premium Variant Picker */}
-              {product.node.variants.edges.length > 1 && (
-                <VariantPicker
-                  product={product}
-                  selectedVariant={selectedVariant}
-                  onVariantChange={handleVariantChange}
-                />
-              )}
-
-              {offer && (
-                <QuantityOfferPicker unitPrice={unitPrice} value={qty} onChange={(q) => onQtyChange?.(q)} />
-              )}
-
-              {/* CTA */}
-              <Button
-                ref={btnRef}
-                onClick={handleAddToCart}
-                size="lg"
-                disabled={!selectedVariant?.availableForSale}
-                className="w-full min-h-12 text-sm px-10 py-4 h-auto font-medium tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
-              >
-                {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
-              </Button>
-
-              <TrustLine />
-
-              <DeliveryEstimate />
-
-              {offer && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
-
-              <p className="flex items-start gap-1.5 text-[11px] text-muted-foreground"><Shield className="h-3.5 w-3.5 flex-shrink-0 text-primary" />{WARRANTY_TEXT}</p>
-
-              {/* 3 Bullets (bij een invalshoek staan de voordelen al in het hoekblok) */}
-              {!angle && <div className="space-y-1.5 py-3 border-y border-foreground/10">
-                {content.bullets.map((bullet, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-glow flex-shrink-0" />
-                    <span className="text-sm text-foreground/80">{bullet}</span>
-                  </div>
-                ))}
-              </div>}
-
-              <StickyAddBar
-                watch={btnRef}
-                qty={count}
-                total={unitPrice != null ? quoteQty(unitPrice, count).total : null}
-                disabled={!selectedVariant?.availableForSale}
-                onAdd={handleAddToCart}
-              />
+            <div className="border-t border-foreground/10 pt-4">
+              <Benefits items={benefits} />
             </div>
+
+            <StickyAddBar
+              watch={btnRef}
+              qty={count}
+              total={unitPrice != null ? quoteQty(unitPrice, count).total : null}
+              disabled={!selectedVariant?.availableForSale}
+              onAdd={handleAddToCart}
+            />
           </div>
         </div>
       </div>
     </section>
   );
 };
+
+/** Eerste zin van een tekst, zodat de intro onder de titel kort blijft. */
+function firstSentence(text: string) {
+  const m = text.match(/^.*?[.!?](\s|$)/);
+  return (m ? m[0] : text).trim();
+}

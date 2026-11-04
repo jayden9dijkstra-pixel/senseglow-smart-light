@@ -9,18 +9,14 @@ import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ShopifyProduct, fetchProductByHandle } from "@/lib/shopify";
 import { ProductHeroSection } from "@/components/product/ProductHeroSection";
-import { TechBenefitsSection } from "@/components/product/TechBenefitsSection";
-import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 
-import { FinalProductCTA } from "@/components/product/FinalProductCTA";
-import { HowItWorksSection } from "@/components/product/HowItWorksSection";
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
 import { getProductFaqs } from "@/lib/productFaqs";
-import { UseCasesSection } from "@/components/product/UseCasesSection";
-import { WhySenseGlow } from "@/components/product/WhySenseGlow";
-import { BeforeAfterSection } from "@/components/product/BeforeAfterSection";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
-import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { ARC_PRODUCT_HANDLE, PRODUCT_HANDLE } from "@/lib/productConfig";
+import { BeforeAfterSlider } from "@/components/product/BeforeAfterSlider";
+import { InfoAccordion, BeforeAfterRows, FaqList, type InfoSection } from "@/components/product/InfoAccordion";
+import { ShippingInfo } from "@/components/product/ShippingInfo";
 import { getAngle, getStoredAngle, variantIn } from "@/lib/angles";
 import { parseQty, type OfferQty } from "@/lib/quantityOffer";
 import { getProductContent } from "@/lib/productContent";
@@ -57,18 +53,15 @@ const ProductDetail = () => {
   // (netstroom, geen accu). Zonder eigen content-item moet dit dus terugvallen
   // op de zichtbare placeholder, niet stilzwijgend op andermans specifieke
   // claims — vandaar hier wél de fallback, net als bij hero.
-  const techHeadline = content?.techHeadline ?? fallback?.techHeadline;
   const techBenefits = content?.techBenefits ?? fallback?.techBenefits;
   const stepsHeadline = content?.stepsHeadline ?? fallback?.stepsHeadline;
   const steps = content?.steps ?? fallback?.steps;
   // Headline/labels zijn generiek genoeg ("Voor / Na", "Zonder SenseGlow") om
   // veilig op de eigen component-standaard terug te vallen; alleen de rijen
   // zelf bevatten een specifieke installatieclaim.
-  const beforeAfterHeadline = content?.beforeAfterHeadline;
   const beforeLabel = content?.beforeLabel;
   const afterLabel = content?.afterLabel;
   const beforeAfter = content?.beforeAfter ?? fallback?.beforeAfter;
-  const finalCta = content?.finalCta ?? fallback?.finalCta;
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -184,6 +177,53 @@ const ProductDetail = () => {
     );
   }
 
+  const pair = handle ? getBeforeAfterPair(handle) : undefined;
+  const sliderFirst = handle === PRODUCT_HANDLE && pair;
+  const slider = pair && (
+    <BeforeAfterSlider beforeSrc={pair.off} afterSrc={pair.on} alt={pair.alt} className={sliderFirst ? "h-full" : "aspect-[4/3]"} />
+  );
+
+  const sections: InfoSection[] = [
+    {
+      id: "voor-na",
+      title: "Zonder/met SenseGlow",
+      body: (
+        <div className="space-y-4">
+          {!sliderFirst && slider}
+          {beforeAfter && <BeforeAfterRows rows={beforeAfter} beforeLabel={beforeLabel} afterLabel={afterLabel} />}
+        </div>
+      ),
+    },
+    {
+      id: "specs",
+      title: "Specificaties",
+      body: (
+        <div className="space-y-4">
+          {techBenefits && (
+            <dl className="space-y-2">
+              {techBenefits.map((b) => (
+                <div key={b.tech}>
+                  <dt className="font-medium text-foreground">{b.tech}</dt>
+                  <dd>{b.benefit}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {steps && (
+            <div>
+              <p className="mb-1 font-medium text-foreground">{stepsHeadline ?? "Hoe het werkt"}</p>
+              <ol className="list-decimal space-y-1 pl-5">
+                {steps.map((st) => <li key={st.title}><span className="font-medium text-foreground">{st.title}.</span> {st.description}</li>)}
+              </ol>
+            </div>
+          )}
+        </div>
+      ),
+    },
+    { id: "verzending", title: "Verzending & retour", body: <ShippingInfo handles={handle ? [handle] : []} /> },
+    { id: "faq", title: "Veelgestelde vragen", body: <FaqList faqs={getProductFaqs(content?.faqs)} /> },
+  ];
+
   return (
     <PageLayout seo={seo}>
       <div className="w-full overflow-hidden">
@@ -194,39 +234,15 @@ const ProductDetail = () => {
           heroContent={hero}
           qty={qty}
           onQtyChange={setQty}
+          leadSlide={sliderFirst ? slider : undefined}
         />
 
-        {handle && (
-          <div className="container max-w-3xl py-8">
-            <WhySenseGlow handles={[handle]} />
-          </div>
-        )}
+        <div className="mx-auto max-w-3xl px-6 pb-12 md:px-8">
+          <InfoAccordion sections={sections} />
+        </div>
 
-
-        <BeforeAfterSection
-          headline={beforeAfterHeadline}
-          beforeLabel={beforeLabel}
-          afterLabel={afterLabel}
-          rows={beforeAfter}
-          imagePair={handle ? getBeforeAfterPair(handle) : undefined}
-        />
-
-        <TechBenefitsSection headline={techHeadline} benefits={techBenefits} />
-        <HowItWorksSection headline={stepsHeadline} steps={steps} />
-        <FinalProductCTA
-          headline={finalCta?.headline}
-          subtext={finalCta?.subtext}
-          ctaLabel={finalCta?.cta}
-        />
-        {handle && <UseCasesSection handle={handle} />}
         {handle && <ProductRelatedSection currentHandle={handle} />}
-        <ProductFAQSection
-          subtitle="Praktische antwoorden over gebruik, garantie en retourneren"
-          faqs={getProductFaqs(content?.faqs)}
-        />
       </div>
-
-      
     </PageLayout>
   );
 };

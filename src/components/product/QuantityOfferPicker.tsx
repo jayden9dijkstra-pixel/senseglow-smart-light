@@ -1,4 +1,4 @@
-import { QTY_OPTIONS, MIX_NOTE, offerRate, qtyLabel, quoteQty, type OfferQty } from "@/lib/quantityOffer";
+import { QTY_OPTIONS, offerRate, qtyLabel, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { formatPrice } from "@/lib/price";
 
 /** Aantal-kiezer: 1 lamp | 2 lampen (10%) | 4 lampen (15%), prijzen uit de Shopify-prijs van de variant. */
@@ -49,7 +49,6 @@ export function QuantityOfferPicker({
           );
         })}
       </div>
-      <p className="text-xs text-muted-foreground">{MIX_NOTE}</p>
     </div>
   );
 }
