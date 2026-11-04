@@ -7,6 +7,7 @@ import { readStoredConsent } from "@/lib/consent";
 import { Truck, Package, RotateCcw } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { deliveryBetweenText } from "@/lib/delivery";
+import { shopifySized } from "@/lib/shopifyImage";
 
 /** Event dat de cookiebanner stuurt zodra een keuze is opgeslagen. */
 export const CONSENT_SAVED_EVENT = "sg:consent-saved";
@@ -85,7 +86,7 @@ export function useConsentPending() {
   return pending;
 }
 
-const BAR_HEIGHT = 88;
+const BAR_HEIGHT = 112;
 
 /** Vaste balk onderaan op mobiel zolang de gewone koopknop buiten beeld is. */
 export function StickyAddBar({
@@ -94,9 +95,11 @@ export function StickyAddBar({
   total,
   disabled,
   onAdd,
+  image,
 }: {
   watch: RefObject<HTMLElement>;
   qty: number;
+  image?: string | null;
   total: number | null;
   disabled: boolean;
   onAdd: () => void;
@@ -131,6 +134,7 @@ export function StickyAddBar({
   return createPortal(
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl md:hidden">
       <div className="mx-auto flex max-w-md items-center gap-3">
+        {image && <img src={shopifySized(image, 120)} alt="" width={48} height={48} className="h-12 w-12 flex-none rounded-lg bg-secondary object-cover" />}
         <div className="min-w-0 flex-1">
           <p className="text-sm text-foreground/80">{qty === 1 ? "1 lamp" : `${qty} lampen`}</p>
           <p className="font-semibold text-primary">{formatPrice(total)}</p>
@@ -139,6 +143,7 @@ export function StickyAddBar({
           In winkelwagen
         </Button>
       </div>
+      <p className="mx-auto mt-1 max-w-md text-center text-sm text-foreground/80">Gratis verzending · Levering 7-14 werkdagen</p>
     </div>,
     document.body,
   );
