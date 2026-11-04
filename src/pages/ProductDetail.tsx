@@ -15,7 +15,6 @@ import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { FinalProductCTA } from "@/components/product/FinalProductCTA";
 import { HowItWorksSection } from "@/components/product/HowItWorksSection";
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
-import { MobileAddToCartBar } from "@/components/product/MobileAddToCartBar";
 import { getProductFaqs } from "@/lib/productFaqs";
 import { UseCasesSection } from "@/components/product/UseCasesSection";
 import { WhySenseGlow } from "@/components/product/WhySenseGlow";
@@ -227,7 +226,7 @@ const ProductDetail = () => {
         />
       </div>
 
-      <MobileAddToCartBar product={product} selectedVariant={selectedVariant} qty={qty} />
+      
     </PageLayout>
   );
 };

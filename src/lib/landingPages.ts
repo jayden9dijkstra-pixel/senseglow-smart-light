@@ -27,6 +27,20 @@ export interface LandingOffer {
   sizeCm?: number;
   /** Optiewaarde die de variant moet hebben, bv. "8-delige set". */
   optionValue?: string;
+  /** Shopify-afbeelding (url zonder query) die als hoofdfoto dient in plaats van de eerste productfoto. */
+  imageUrl?: string;
+  imageAlt?: string;
+}
+
+type OfferImage = { url: string; altText: string | null };
+
+/** Hoofdfoto van een aanbod: de gekozen Shopify-afbeelding, anders de eerste productfoto. */
+export function offerImage(offer: LandingOffer, images: OfferImage[]): OfferImage | undefined {
+  if (offer.imageUrl) {
+    const hit = images.find((i) => i.url.split("?")[0] === offer.imageUrl);
+    return hit ?? { url: offer.imageUrl, altText: offer.imageAlt ?? null };
+  }
+  return images[0];
 }
 
 export interface SpecTable {
@@ -136,7 +150,7 @@ export const LANDING_PAGES: LandingPage[] = [
     h1: "Trapverlichting met sensor, zonder boren",
     intro: "Licht dat vanzelf aangaat zodra je de trap nadert. Je plakt de lampen op hun plek en laadt ze op via USB-C.",
     offers: [
-      { id: "ambient-trap", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 20 cm", note: "4 lampen, genoeg voor een trap", qty: 4, sizeCm: 20 },
+      { id: "ambient-trap", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 20 cm", note: "4 lampen, genoeg voor een trap", qty: 4, sizeCm: 20, imageUrl: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/senseglow-ambient-trap-v2.png", imageAlt: "SenseGlow Ambient Motion Bar zwart aan de muur boven de trap, licht op de traptreden" },
       { id: "wall4", handle: STEP_PRODUCT_HANDLE, label: "SenseGlow Wall Lamp™ 4-delige set", optionValue: "4-delige set" },
       { id: "wall8", handle: STEP_PRODUCT_HANDLE, label: "SenseGlow Wall Lamp™ 8-delige set", optionValue: "8-delige set" },
     ],

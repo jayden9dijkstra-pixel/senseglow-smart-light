@@ -25,7 +25,7 @@ import {
 } from "../src/lib/structuredData";
 import type { ShopifyProduct } from "../src/lib/shopify";
 import { getProductContent } from "../src/lib/productContent";
-import { LANDING_PAGES, landingOfferPrice, type LandingPage } from "../src/lib/landingPages";
+import { LANDING_PAGES, landingOfferPrice, offerImage, type LandingPage } from "../src/lib/landingPages";
 import { WHY_HEADING, WHY_CONTACT_TEXT, whyItems } from "../src/lib/whySenseGlow";
 import { WARRANTY_TEXT } from "../src/lib/productFaqs";
 import { DELIVERY_TEXT } from "../src/lib/delivery";
@@ -359,7 +359,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p><ul>`);
   for (const o of page.offers) {
     const prod = products[o.handle];
-    const img = prod?.node.images?.edges?.[0]?.node;
+    const img = offerImage(o, prod?.node.images?.edges?.map((x) => x.node) ?? []);
     p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}/product/${o.handle}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);

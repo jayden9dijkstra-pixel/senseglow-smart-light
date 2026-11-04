@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { ProductFAQSection } from "@/components/product/ProductFAQSection";
 import { DeliveryEstimate } from "@/components/product/DeliveryEstimate";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
-import { getLandingPage, landingOfferPrice, type LandingOffer } from "@/lib/landingPages";
+import { getLandingPage, landingOfferPrice, offerImage, type LandingOffer } from "@/lib/landingPages";
 import { WhySenseGlow } from "@/components/product/WhySenseGlow";
 import { variantIn } from "@/lib/angles";
 import { isOfferProduct, quoteQty, OFFER_TEXT, type OfferQty } from "@/lib/quantityOffer";
@@ -15,6 +15,7 @@ import { formatPrice } from "@/lib/price";
 import { WARRANTY_TEXT } from "@/lib/productFaqs";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 import { useCartStore } from "@/stores/cartStore";
+import { PerLampPrice, StickyAddBar, TrustLine } from "@/components/product/BuyBox";
 import NotFound from "./NotFound";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
@@ -23,10 +24,11 @@ type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
 const colorLabel = (v: Variant) => {
   const color = v.selectedOptions.find((o) => /kleur|color/i.test(o.name) && !/delige/i.test(o.value));
   const raw = color?.value ?? v.selectedOptions.find((o) => !/delige/i.test(o.value))?.value ?? v.title;
-  return raw.replace(/\s*\d+\s*cm.*$/i, "").trim();
+  return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
-function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyProduct | undefined }) {
+function OfferCard({ offer, product, sticky }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean }) {
+  const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
   const choices = useMemo(() => {
@@ -38,7 +40,7 @@ function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyPr
   const [chosen, setChosen] = useState<Variant | null>(null);
   const [qty, setQty] = useState<OfferQty>(offer.qty ?? 1);
   const variant = chosen ?? choices[0] ?? null;
-  const image = product?.node.images?.edges?.[0]?.node;
+  const image = offerImage(offer, product?.node.images?.edges?.map((e) => e.node) ?? []);
   const picker = isOfferProduct(offer.handle);
   const unit = variant ? parseFloat(variant.price.amount) : null;
   const count = picker ? qty : 1;
@@ -56,12 +58,12 @@ function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyPr
   };
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-background p-4">
+    <div className="flex flex-col gap-2.5 rounded-2xl border border-foreground/10 bg-background p-3 md:gap-3 md:p-4">
       {image && (
         <img
           src={image.url}
           alt={image.altText || product?.node.title || offer.label}
-          className="aspect-square w-full rounded-xl bg-secondary object-contain p-4"
+          className={`h-[200px] w-full rounded-xl bg-secondary md:h-auto md:aspect-square ${offer.imageUrl ? "object-cover" : "object-contain p-3 md:p-4"}`}
           loading="eager"
         />
       )}
@@ -69,9 +71,7 @@ function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyPr
         <h2 className="text-base font-semibold text-foreground">{offer.label}</h2>
         {offer.note && <p className="text-sm text-muted-foreground">{offer.note}</p>}
       </div>
-      {unit != null && (
-        <p className="text-2xl font-bold text-primary">{formatPrice(quoteQty(unit, count).total)}</p>
-      )}
+      <PerLampPrice unitPrice={unit} qty={count} offer={picker} />
       {choices.length > 1 && (
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Kleur">
           {choices.map((v) => (
@@ -90,12 +90,23 @@ function OfferCard({ offer, product }: { offer: LandingOffer; product: ShopifyPr
       )}
       {picker && <QuantityOfferPicker unitPrice={unit} value={qty} onChange={setQty} />}
       <Button
+        ref={btnRef}
         disabled={!product || !variant?.availableForSale}
         onClick={add}
         className="mt-auto w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
+      <TrustLine />
+      {sticky && (
+        <StickyAddBar
+          watch={btnRef}
+          qty={count}
+          total={unit != null ? quoteQty(unit, count).total : null}
+          disabled={!product || !variant?.availableForSale}
+          onAdd={add}
+        />
+      )}
     </div>
   );
 }
@@ -129,15 +140,15 @@ const LandingPage = () => {
 
   return (
     <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
-      <div className="container max-w-6xl space-y-14 py-10 md:py-14">
-        <section className="space-y-6">
-          <div className="max-w-3xl space-y-3">
-            <h1 className="text-3xl font-bold leading-tight text-foreground md:text-5xl">{page.h1}</h1>
-            <p className="text-base text-muted-foreground md:text-lg">{page.intro}</p>
+      <div className="container max-w-6xl space-y-14 pb-10 pt-3 md:py-14">
+        <section className="space-y-3 md:space-y-6">
+          <div className="max-w-3xl space-y-1.5 md:space-y-3">
+            <h1 className="text-2xl font-bold leading-tight text-foreground md:text-5xl">{page.h1}</h1>
+            <p className="line-clamp-2 text-sm text-muted-foreground md:line-clamp-none md:text-lg">{page.intro}</p>
           </div>
           <div className={`grid gap-4 ${cols}`}>
-            {page.offers.map((o) => (
-              <OfferCard key={o.id} offer={o} product={products[o.handle]} />
+            {page.offers.map((o, i) => (
+              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} />
             ))}
           </div>
           <DeliveryEstimate />
