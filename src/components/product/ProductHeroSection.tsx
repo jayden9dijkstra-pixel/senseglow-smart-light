@@ -160,7 +160,7 @@ export const ProductHeroSection = ({
     <section id="product-hero" className="w-full overflow-hidden bg-background pb-8 md:py-24 lg:py-32 animate-fade-in-slow">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="grid md:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] md:gap-8">
-          <div className="relative md:max-h-[730px]">
+          <div className="relative min-w-0 md:max-h-[730px]">
             <ProductImageGallery
               images={productImages}
               productTitle={product.node.title}
@@ -176,7 +176,7 @@ export const ProductHeroSection = ({
             />
           </div>
 
-          <div id="kopen" className="scroll-mt-24 space-y-4 pt-3 text-left md:pt-0">
+          <div id="kopen" className="min-w-0 scroll-mt-24 space-y-4 pt-3 text-left md:pt-0">
             {anchorLinks && <AnchorNav links={anchorLinks} />}
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-2xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">
