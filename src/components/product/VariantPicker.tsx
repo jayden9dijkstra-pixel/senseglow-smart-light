@@ -338,7 +338,7 @@ export const VariantPicker = ({
     label: string; hint?: string; values: string[]; selected: string;
     onChange: (v: string) => void; highlightValue?: string;
   }) => (
-    <div className="space-y-2">
+    <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
         {hint && <span className="text-xs text-foreground/40">{hint}</span>}
@@ -352,7 +352,7 @@ export const VariantPicker = ({
               key={v}
               onClick={() => onChange(v)}
               className={cn(
-                "relative flex-1 min-w-[60px] py-3 px-3 rounded-lg border transition-all duration-500 ease-out",
+                "relative flex-1 min-w-[60px] py-2 md:py-3 px-3 rounded-lg border transition-all duration-500 ease-out",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-glow/50",
                 isSelected
                   ? "border-glow bg-glow/5 shadow-[0_10px_26px_-22px_hsl(var(--foreground)/0.5)]"
@@ -374,7 +374,7 @@ export const VariantPicker = ({
   }: {
     label: string; values: string[]; selected: string; onChange: (v: string) => void;
   }) => (
-    <div className="space-y-2">
+    <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center gap-3">
         <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
         <span className="text-xs text-foreground/40 capitalize">{selected}</span>
@@ -388,12 +388,12 @@ export const VariantPicker = ({
             <button
               key={color}
               onClick={() => onChange(color)}
-              className="group flex flex-col items-center gap-2 focus:outline-none"
+              className="group flex flex-col items-center gap-2 p-0.5 focus:outline-none"
               aria-label={`Selecteer kleur ${color}`}
             >
               <div
                 className={cn(
-                  "relative w-10 h-10 rounded-full transition-all duration-500 ease-out ring-offset-background ring-offset-2",
+                  "relative w-8 h-8 md:w-10 md:h-10 rounded-full transition-all duration-500 ease-out ring-offset-background ring-offset-2",
                   isSelected
                     ? "ring-2 ring-glow shadow-[0_8px_20px_-14px_hsl(var(--foreground)/0.5)]"
                     : "ring-1 ring-foreground/20 group-hover:ring-foreground/40"
@@ -402,7 +402,7 @@ export const VariantPicker = ({
               >
                 {isLight && <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 via-transparent to-black/10" />}
               </div>
-              <span className={cn("text-[10px] uppercase tracking-wider transition-colors duration-300", isSelected ? "text-foreground/80" : "text-foreground/40")}>
+              <span className={cn("hidden md:block text-[10px] uppercase tracking-wider transition-colors duration-300", isSelected ? "text-foreground/80" : "text-foreground/40")}>
                 {color}
               </span>
             </button>
@@ -416,7 +416,7 @@ export const VariantPicker = ({
 
   if (productType === "arc") {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {wattages.length > 1 && (
           <PillPicker label="Vermogen" hint="Kies het vermogen dat past bij je ruimte" values={wattages} selected={selectedWattage} onChange={handleWattageChange} highlightValue="12W" />
         )}
@@ -432,7 +432,7 @@ export const VariantPicker = ({
 
   if (productType === "flex") {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {colors.length > 1 && (
           <SwatchPicker label="Kleur" values={colors} selected={selectedColor} onChange={handleColorChange} />
         )}
@@ -448,7 +448,7 @@ export const VariantPicker = ({
   const sizeLabel = isCmSize ? "Lengte" : "Maat";
   const sizeHint = isCmSize ? "Kies de lengte die past bij jouw ruimte" : "Kies de set die past bij jouw ruimte";
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 md:space-y-4">
       {sizes.length > 1 && (
         <PillPicker label={sizeLabel} hint={sizeHint} values={sizes} selected={selectedSize} onChange={handleSizeChange} highlightValue={sizes.find((s) => s.includes("30")) || sizes.find((s) => s.includes("8"))} />
       )}
