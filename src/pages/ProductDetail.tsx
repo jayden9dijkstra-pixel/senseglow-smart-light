@@ -53,21 +53,6 @@ const ProductDetail = () => {
   const fallback = product ? buildPlaceholderContent(product.node.title) : undefined;
 
   const hero = content?.hero ?? fallback?.hero;
-  // techBenefits/steps/beforeAfter hebben ieder een eigen hardcoded standaard
-  // (USB-C, batterijduur, "magneet erop, geen boren") die klopt voor de
-  // magnetische/oplaadbare producten maar niet voor bijvoorbeeld Arc
-  // (netstroom, geen accu). Zonder eigen content-item moet dit dus terugvallen
-  // op de zichtbare placeholder, niet stilzwijgend op andermans specifieke
-  // claims — vandaar hier wél de fallback, net als bij hero.
-  const techBenefits = content?.techBenefits ?? fallback?.techBenefits;
-  const stepsHeadline = content?.stepsHeadline ?? fallback?.stepsHeadline;
-  const steps = content?.steps ?? fallback?.steps;
-  // Headline/labels zijn generiek genoeg ("Voor / Na", "Zonder SenseGlow") om
-  // veilig op de eigen component-standaard terug te vallen; alleen de rijen
-  // zelf bevatten een specifieke installatieclaim.
-  const beforeLabel = content?.beforeLabel;
-  const afterLabel = content?.afterLabel;
-  const beforeAfter = content?.beforeAfter ?? fallback?.beforeAfter;
 
   useEffect(() => {
     const loadProduct = async () => {
