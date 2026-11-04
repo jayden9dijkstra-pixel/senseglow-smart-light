@@ -1,21 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { ProductFAQSection } from "@/components/product/ProductFAQSection";
-import { DeliveryEstimate } from "@/components/product/DeliveryEstimate";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
 import { getLandingPage, landingOfferPrice, offerImage, type LandingOffer } from "@/lib/landingPages";
-import { WhySenseGlow } from "@/components/product/WhySenseGlow";
 import { variantIn } from "@/lib/angles";
-import { isOfferProduct, quoteQty, OFFER_TEXT, type OfferQty } from "@/lib/quantityOffer";
+import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { formatPrice } from "@/lib/price";
-import { WARRANTY_TEXT } from "@/lib/productFaqs";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 import { useCartStore } from "@/stores/cartStore";
 import { PerLampPrice, StickyAddBar, TrustLine } from "@/components/product/BuyBox";
+import { ProductImageGallery } from "@/components/product/ProductImageGallery";
+import { BeforeAfterSlider } from "@/components/product/BeforeAfterSlider";
+import { InfoAccordion, PlainList, FaqList, Benefits, type InfoSection } from "@/components/product/InfoAccordion";
+import { ShippingInfo } from "@/components/product/ShippingInfo";
+import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
+import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
@@ -27,7 +28,7 @@ const colorLabel = (v: Variant) => {
   return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
-function OfferCard({ offer, product, sticky }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean }) {
+function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean }) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
@@ -58,13 +59,13 @@ function OfferCard({ offer, product, sticky }: { offer: LandingOffer; product: S
   };
 
   return (
-    <div className="flex flex-col gap-2.5 rounded-2xl border border-foreground/10 bg-background p-3 md:gap-3 md:p-4">
+    <div className={`flex flex-col gap-3 bg-background md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
       {image && (
         <img
           src={image.url}
           alt={image.altText || product?.node.title || offer.label}
-          className={`h-[200px] w-full rounded-xl bg-secondary md:h-auto md:aspect-square ${offer.imageUrl ? "object-cover" : "object-contain p-3 md:p-4"}`}
-          loading="eager"
+          className={`aspect-[4/3] w-full rounded-xl bg-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
+          loading={hideImage ? "eager" : "lazy"}
         />
       )}
       <div>
@@ -97,7 +98,7 @@ function OfferCard({ offer, product, sticky }: { offer: LandingOffer; product: S
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
-      <TrustLine />
+      {sticky && <TrustLine />}
       {sticky && (
         <StickyAddBar
           watch={btnRef}
@@ -137,95 +138,36 @@ const LandingPage = () => {
   ];
 
   const cols = page.offers.length >= 3 ? "md:grid-cols-3" : page.offers.length === 2 ? "md:grid-cols-2" : "md:max-w-md";
+  const handles = [...new Set(page.offers.map((o) => o.handle))];
+  const first = page.offers[0];
+  const heroImage = first ? offerImage(first, products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? []) : null;
+  const pair = SLIDER_FIRST.has(page.path) ? getBeforeAfterPair(PRODUCT_HANDLE) : undefined;
+  const intro = page.intro.match(/^.*?[.!?](\s|$)/)?.[0].trim() ?? page.intro;
 
-  return (
-    <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
-      <div className="container max-w-6xl space-y-14 pb-10 pt-3 md:py-14">
-        <section className="space-y-3 md:space-y-6">
-          <div className="max-w-3xl space-y-1.5 md:space-y-3">
-            <h1 className="text-2xl font-bold leading-tight text-foreground md:text-5xl">{page.h1}</h1>
-            <p className="line-clamp-2 text-sm text-muted-foreground md:line-clamp-none md:text-lg">{page.intro}</p>
-          </div>
-          <div className={`grid gap-4 ${cols}`}>
-            {page.offers.map((o, i) => (
-              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} />
-            ))}
-          </div>
-          <DeliveryEstimate />
-          {page.pickerNote && <p className="text-sm text-foreground/70">{page.pickerNote}</p>}
-          {page.offers.some((o) => isOfferProduct(o.handle)) && <p className="text-sm text-foreground/70">{OFFER_TEXT}</p>}
-        </section>
-
-        {page.why && <WhySenseGlow handles={[...new Set(page.offers.map((o) => o.handle))]} />}
-
-        {page.extra && (
-          <section className="max-w-3xl space-y-3">
-            <h2 className="text-2xl font-bold text-foreground">{page.extra.heading}</h2>
-            <p className="text-foreground/80">{page.extra.text}</p>
-            <ul className="space-y-1.5 text-foreground/80">
-              {page.offers.map((o) => {
-                const q = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? []);
-                const n = isOfferProduct(o.handle) ? o.qty ?? 1 : 1;
-                return (
-                  <li key={o.id}>
-                    {o.label}
-                    {n > 1 ? `, ${n} lampen` : ""}
-                    {q && <span className="font-semibold text-foreground"> {formatPrice(q.total)}</span>}
-                    {q && n > 1 && <span> ({formatPrice(q.perLamp)} per lamp)</span>}
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )}
-
-        <section className="space-y-3">
-          <h2 className="text-2xl font-bold text-foreground">{page.benefitsHeading ?? "Waarom deze keuze"}</h2>
-          <ul className="space-y-2">
-            {page.benefits.map((b) => (
-              <li key={b} className="flex items-start gap-2.5 text-foreground/80">
-                <Check className="mt-1 h-4 w-4 flex-shrink-0 text-primary" />
-                <span>{b}</span>
-              </li>
-            ))}
-            <li className="flex items-start gap-2.5 text-foreground/80">
-              <Check className="mt-1 h-4 w-4 flex-shrink-0 text-primary" />
-              <span>{WARRANTY_TEXT}</span>
-            </li>
-          </ul>
-        </section>
-
-        {page.sections?.map((sec) => (
-          <section key={sec.heading} className="max-w-3xl space-y-3">
-            <h2 className="text-2xl font-bold text-foreground">{sec.heading}</h2>
-            <ul className="space-y-1.5 text-foreground/80">
-              {sec.items.map((it) => (
-                <li key={it}>{it}</li>
-              ))}
-            </ul>
-          </section>
-        ))}
-
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold text-foreground">Specificaties</h2>
+  const sections: InfoSection[] = [
+    ...(page.extra ? [{ id: "extra", title: page.extra.heading, body: <ExtraBlock page={page} products={products} /> }] : []),
+    ...(page.sections ?? []).map((sec) => ({ id: sec.heading, title: sec.heading, body: <PlainList items={sec.items} /> })),
+    {
+      id: "specs",
+      title: "Specificaties",
+      body: (
+        <div className="space-y-4">
           {page.specs.map((t) => (
-            <div key={t.product} className="overflow-hidden rounded-2xl border border-foreground/10">
-              <table className="w-full text-left text-sm">
-                <caption className="bg-secondary px-4 py-3 text-left font-semibold text-foreground">{t.product}</caption>
-                <tbody>
-                  {t.rows.map(([k, v]) => (
-                    <tr key={k} className="border-t border-foreground/10">
-                      <th scope="row" className="w-1/3 px-4 py-2.5 font-medium text-foreground">{k}</th>
-                      <td className="px-4 py-2.5 text-foreground/75">{v}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div key={t.product}>
+              <p className="mb-1 font-medium text-foreground">{t.product}</p>
+              <dl className="divide-y divide-foreground/10">
+                {t.rows.map(([k, v]) => (
+                  <div key={k} className="flex gap-3 py-1.5">
+                    <dt className="w-1/3 flex-shrink-0 font-medium text-foreground">{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           ))}
-          <p className="text-sm text-muted-foreground">
-            Meer weten? Bekijk de productpagina van{" "}
-            {[...new Set(page.offers.map((o) => o.handle))].map((h, i) => (
+          <p>
+            Meer weten? Bekijk{" "}
+            {handles.map((h, i) => (
               <span key={h}>
                 {i > 0 && " en "}
                 <Link to={`/product/${h}`} className="text-primary underline underline-offset-4">
@@ -235,12 +177,75 @@ const LandingPage = () => {
             ))}
             .
           </p>
-        </section>
-      </div>
+        </div>
+      ),
+    },
+    { id: "verzending", title: "Verzending & retour", body: <ShippingInfo handles={handles} /> },
+    { id: "faq", title: "Veelgestelde vragen", body: <FaqList faqs={page.faqs} /> },
+  ];
 
-      <ProductFAQSection headline="Veelgestelde vragen" subtitle={page.h1} faqs={page.faqs} />
+  return (
+    <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
+      <div className="container max-w-6xl space-y-8 pb-12 md:space-y-12 md:py-14">
+        <section className="space-y-4 md:space-y-6">
+          <div className="md:hidden">
+            {heroImage || pair ? (
+              <ProductImageGallery
+                images={heroImage ? [heroImage] : []}
+                productTitle={page.h1}
+                imageClassName="h-full w-full object-cover"
+                leadSlide={pair ? <BeforeAfterSlider beforeSrc={pair.off} afterSrc={pair.on} alt={pair.alt} className="h-full" /> : undefined}
+              />
+            ) : (
+              <div className="-mx-6 aspect-[4/5] animate-pulse bg-secondary" />
+            )}
+          </div>
+          <div className="max-w-3xl space-y-1 md:space-y-3">
+            <h1 className="line-clamp-2 text-2xl font-bold leading-tight text-foreground md:text-5xl">{page.h1}</h1>
+            <p className="text-sm text-muted-foreground md:text-lg">{intro}</p>
+          </div>
+          <div className={`grid gap-4 ${cols}`}>
+            {page.offers.map((o, i) => (
+              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} />
+            ))}
+          </div>
+          <div className="max-w-3xl border-t border-foreground/10 pt-4">
+            <Benefits items={page.benefits} />
+          </div>
+        </section>
+
+        <div className="max-w-3xl">
+          <InfoAccordion sections={sections} />
+        </div>
+      </div>
     </PageLayout>
   );
 };
+
+/** Pagina's waar de voor/na-schuif van de Ambient Motion Bar het eerste beeld is. */
+const SLIDER_FIRST = new Set(["/gangverlichting", "/trapverlichting"]);
+
+function ExtraBlock({ page, products }: { page: NonNullable<ReturnType<typeof getLandingPage>>; products: Record<string, ShopifyProduct> }) {
+  if (!page.extra) return null;
+  return (
+    <div className="space-y-2">
+      <p>{page.extra.text}</p>
+      <ul className="space-y-1">
+        {page.offers.map((o) => {
+          const q = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? []);
+          const n = isOfferProduct(o.handle) ? o.qty ?? 1 : 1;
+          return (
+            <li key={o.id}>
+              {o.label}
+              {n > 1 ? `, ${n} lampen` : ""}
+              {q && <span className="font-semibold text-foreground"> {formatPrice(q.total)}</span>}
+              {q && n > 1 && <span> ({formatPrice(q.perLamp)} per lamp)</span>}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
 
 export default LandingPage;
