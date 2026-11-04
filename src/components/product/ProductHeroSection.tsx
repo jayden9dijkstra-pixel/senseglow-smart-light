@@ -61,6 +61,7 @@ export const ProductHeroSection = ({
   const selectedVariant = propVariant ?? localVariant;
   const addItem = useCartStore((state) => state.addItem);
   const [priceKey, setPriceKey] = useState(0);
+  const [pickedByUser, setPickedByUser] = useState(false);
   const offer = isOfferProduct(product.node.handle);
   const angle = getAngle(product.node.handle, searchParams.get("a") ?? getStoredAngle());
 
@@ -154,6 +155,7 @@ export const ProductHeroSection = ({
               videoUrl={getProductVideoUrl(product.node.handle)}
               imageClassName={productImageClassName}
               activeImageUrl={
+                (pickedByUser || !searchParams.get("scene")) &&
                 selectedVariant?.image?.url &&
                 selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
                   ? selectedVariant.image.url
@@ -178,7 +180,10 @@ export const ProductHeroSection = ({
               <VariantPicker
                 product={product}
                 selectedVariant={selectedVariant}
-                onVariantChange={handleVariantChange}
+                onVariantChange={(v) => {
+                  setPickedByUser(true);
+                  handleVariantChange(v);
+                }}
               />
             )}
 
