@@ -30,8 +30,8 @@ interface ProductHeroSectionProps {
   heroContent?: HeroContent;
   qty?: OfferQty;
   onQtyChange?: (qty: OfferQty) => void;
-  /** Eerste dia van de galerij, bijvoorbeeld de voor/na-schuif. */
-  leadSlide?: ReactNode;
+  /** Sectie direct onder de vertrouwensregels, bijvoorbeeld de voor/na-schuif. */
+  afterTrust?: ReactNode;
 }
 
 export const ProductHeroSection = ({
@@ -41,7 +41,7 @@ export const ProductHeroSection = ({
   heroContent,
   qty = 1,
   onQtyChange,
-  leadSlide,
+  afterTrust,
 }: ProductHeroSectionProps) => {
   const defaultContent: HeroContent = {
     h1: "Veilig licht. Precies wanneer jij beweegt.",
@@ -149,7 +149,6 @@ export const ProductHeroSection = ({
               productTitle={product.node.title}
               videoUrl={getProductVideoUrl(product.node.handle)}
               imageClassName={productImageClassName}
-              leadSlide={leadSlide}
               activeImageUrl={
                 selectedVariant?.image?.url &&
                 selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
@@ -194,6 +193,8 @@ export const ProductHeroSection = ({
             </Button>
 
             <TrustLine />
+
+            {afterTrust}
 
             <div className="border-t border-foreground/10 pt-4">
               <Benefits items={benefits} />
