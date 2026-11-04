@@ -51,7 +51,7 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
 
           <Link
             to={`/product/${HOME_HERO_PRODUCT}`}
-            className="group order-1 -mx-6 block overflow-hidden md:order-2 md:mx-0 md:md:border md:border-foreground/10 bg-background/80 shadow-lg backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1"
+            className="group order-1 -mx-6 block overflow-hidden md:order-2 md:mx-0 md:rounded-3xl md:border md:border-foreground/10 bg-background/80 md:shadow-lg backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1"
           >
             <div className="aspect-[4/3] w-full overflow-hidden md:aspect-square">
               {image ? (
