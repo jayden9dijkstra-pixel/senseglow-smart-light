@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -76,7 +77,7 @@ export function MobileNav() {
                 className="flex items-center gap-3 border-b border-foreground/10 py-2.5"
               >
                 <span className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
-                  {images[p.handle] && <img src={images[p.handle]} alt="" className="h-full w-full object-cover" />}
+                  {images[p.handle] && <img src={shopifySized(images[p.handle], 200)} alt="" width={48} height={48} loading="lazy" className="h-full w-full object-cover" />}
                 </span>
                 <span className="flex-1 text-base font-medium text-foreground">{t(p.label)}</span>
                 <ChevronRight className="h-4 w-4 text-foreground/40" />

@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,10 @@ import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 import { useCartStore } from "@/stores/cartStore";
 import { PerLampPrice, StickyAddBar, TrustLine } from "@/components/product/BuyBox";
 import { ProductImageGallery } from "@/components/product/ProductImageGallery";
-import { BeforeAfterSlider } from "@/components/product/BeforeAfterSlider";
+import { BeforeAfterBlock } from "@/components/product/BeforeAfterBlock";
 import { InfoAccordion, PlainList, FaqList, Benefits, type InfoSection } from "@/components/product/InfoAccordion";
 import { ShippingInfo } from "@/components/product/ShippingInfo";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
-import { PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
@@ -62,10 +62,11 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
     <div className={`flex flex-col gap-3 bg-background md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
       {image && (
         <img
-          src={image.url}
+          {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
           alt={image.altText || product?.node.title || offer.label}
           className={`aspect-[4/3] w-full rounded-xl bg-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
-          loading={hideImage ? "eager" : "lazy"}
+          loading="lazy"
+          decoding="async"
         />
       )}
       <div>
@@ -141,7 +142,7 @@ const LandingPage = () => {
   const handles = [...new Set(page.offers.map((o) => o.handle))];
   const first = page.offers[0];
   const heroImage = first ? offerImage(first, products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? []) : null;
-  const pair = SLIDER_FIRST.has(page.path) ? getBeforeAfterPair(PRODUCT_HANDLE) : undefined;
+  const pair = first ? getBeforeAfterPair(first.handle) : undefined;
   const intro = page.intro.match(/^.*?[.!?](\s|$)/)?.[0].trim() ?? page.intro;
 
   const sections: InfoSection[] = [
@@ -189,13 +190,8 @@ const LandingPage = () => {
       <div className="container max-w-6xl space-y-8 pb-12 md:space-y-12 md:py-14">
         <section className="space-y-4 md:space-y-6">
           <div className="md:hidden">
-            {heroImage || pair ? (
-              <ProductImageGallery
-                images={heroImage ? [heroImage] : []}
-                productTitle={page.h1}
-                imageClassName="h-full w-full object-cover"
-                leadSlide={pair ? <BeforeAfterSlider beforeSrc={pair.off} afterSrc={pair.on} alt={pair.alt} className="h-full" /> : undefined}
-              />
+            {heroImage ? (
+              <ProductImageGallery images={[heroImage]} productTitle={page.h1} />
             ) : (
               <div className="-mx-6 aspect-[4/5] animate-pulse bg-secondary" />
             )}
@@ -209,6 +205,7 @@ const LandingPage = () => {
               <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} />
             ))}
           </div>
+          {pair && <div className="max-w-3xl"><BeforeAfterBlock pair={pair} /></div>}
           <div className="max-w-3xl border-t border-foreground/10 pt-4">
             <Benefits items={page.benefits} />
           </div>
@@ -222,8 +219,6 @@ const LandingPage = () => {
   );
 };
 
-/** Pagina's waar de voor/na-schuif van de Ambient Motion Bar het eerste beeld is. */
-const SLIDER_FIRST = new Set(["/gangverlichting", "/trapverlichting"]);
 
 function ExtraBlock({ page, products }: { page: NonNullable<ReturnType<typeof getLandingPage>>; products: Record<string, ShopifyProduct> }) {
   if (!page.extra) return null;

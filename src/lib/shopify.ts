@@ -56,6 +56,8 @@ export interface ShopifyProduct {
         node: {
           url: string;
           altText: string | null;
+          width?: number | null;
+          height?: number | null;
         };
       }>;
     };
@@ -92,7 +94,7 @@ const STOREFRONT_QUERY = `
           id title description handle
           priceRange { minVariantPrice { amount currencyCode } }
           featuredImage { url altText }
-          images(first: 20) { edges { node { url altText } } }
+          images(first: 20) { edges { node { url altText width height } } }
           variants(first: 30) {
             edges { node {
               id title
@@ -192,7 +194,7 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
           id title description handle
           priceRange { minVariantPrice { amount currencyCode } }
           featuredImage { url altText }
-          images(first: 20) { edges { node { url altText } } }
+          images(first: 20) { edges { node { url altText width height } } }
           variants(first: 30) {
             edges { node {
               id title

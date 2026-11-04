@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -60,7 +61,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
         {imageUrl ? (
           <img
-            src={imageUrl}
+            {...responsiveImg(imageUrl, "(min-width: 768px) 33vw, 50vw")}
             alt={product.node.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             loading="lazy"

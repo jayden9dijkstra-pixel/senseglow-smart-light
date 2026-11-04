@@ -3,11 +3,16 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ChevronLeft, ChevronRight, X, Play, Volume2, VolumeX } from "lucide-react";
 import { Dialog, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { preloadImage, responsiveImg, shopifySized } from "@/lib/shopifyImage";
 
 interface ProductImage {
   url: string;
   altText: string | null;
+  width?: number | null;
+  height?: number | null;
 }
+
+const MAIN_SIZES = "(min-width: 768px) 50vw, 100vw";
 
 interface ProductImageGalleryProps {
   images: ProductImage[];
@@ -24,7 +29,7 @@ export const ProductImageGallery = ({
   images,
   productTitle,
   videoUrl = "",
-  imageClassName = "w-full h-full object-contain",
+  imageClassName = "h-full w-full object-contain",
   activeImageUrl,
   leadSlide,
 }: ProductImageGalleryProps) => {
@@ -56,6 +61,13 @@ export const ProductImageGallery = ({
   const minSwipeDistance = 50;
 
   const hasImages = images && images.length > 0;
+  const firstUrl = images[0]?.url;
+  useEffect(() => {
+    if (firstUrl && !leadSlide) preloadImage(firstUrl, MAIN_SIZES);
+  }, [firstUrl, leadSlide]);
+  // Mobiel: elke foto in zijn eigen verhouding, nooit bijgesneden (max. 70% schermhoogte).
+  const current = images[selectedIndex - offset];
+  const ratio = current?.width && current?.height ? current.width / current.height : 1;
 
   const handlePrevious = useCallback(() => {
     setSelectedIndex((prev) => Math.max(0, prev - 1));
@@ -178,7 +190,7 @@ export const ProductImageGallery = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
         >
-          <div className="relative -mx-6 aspect-[4/5] overflow-hidden bg-secondary md:mx-0 md:aspect-square md:rounded-[2rem] md:border md:border-foreground/10">
+          <div style={{ ["--ar" as string]: ratio }} className="relative -mx-6 h-[min(calc(100vw/var(--ar)),70svh)] overflow-hidden bg-secondary/60 transition-[height] duration-300 md:mx-0 md:h-auto md:aspect-square md:rounded-[2rem] md:border md:border-foreground/10">
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
@@ -204,11 +216,15 @@ export const ProductImageGallery = ({
                     </div>
                   ) : (
                     <img
-                      src={image.url}
+                      {...responsiveImg(image.url, MAIN_SIZES)}
+                      width={image.width ?? undefined}
+                      height={image.height ?? undefined}
                       alt={image.altText || productTitle}
                       className={imageClassName}
                       draggable={false}
-                      loading={idx === 0 && !leadSlide ? "eager" : "lazy"}
+                      decoding="async"
+                      loading={Math.abs(idx + offset - selectedIndex) <= 1 ? "eager" : "lazy"}
+                      {...(idx === 0 && !leadSlide ? { fetchpriority: "high" } : {})}
                       onError={() => markImageBroken(idx)}
                     />
                   )}
@@ -340,7 +356,7 @@ export const ProductImageGallery = ({
                         <div className="flex h-1/2 w-1/2 items-center justify-center text-5xl">💡</div>
                       ) : (
                         <img
-                          src={image.url}
+                          src={shopifySized(image.url, 1200)}
                           alt={image.altText || productTitle}
                           className="max-h-full max-w-full object-contain"
                           draggable={false}
@@ -373,7 +389,7 @@ export const ProductImageGallery = ({
                           </div>
                         ) : (
                           <img
-                            src={image.url}
+                            src={shopifySized(image.url, 200)}
                             alt={image.altText || `${productTitle} ${index + 1}`}
                             className="h-full w-full object-cover"
                             loading="lazy"

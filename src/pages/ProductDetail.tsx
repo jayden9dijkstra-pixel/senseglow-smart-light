@@ -13,8 +13,8 @@ import { ProductHeroSection } from "@/components/product/ProductHeroSection";
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
 import { getProductFaqs } from "@/lib/productFaqs";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
-import { ARC_PRODUCT_HANDLE, PRODUCT_HANDLE } from "@/lib/productConfig";
-import { BeforeAfterSlider } from "@/components/product/BeforeAfterSlider";
+import { ARC_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { BeforeAfterBlock } from "@/components/product/BeforeAfterBlock";
 import { InfoAccordion, BeforeAfterRows, FaqList, type InfoSection } from "@/components/product/InfoAccordion";
 import { ShippingInfo } from "@/components/product/ShippingInfo";
 import { getAngle, getStoredAngle, variantIn } from "@/lib/angles";
@@ -178,10 +178,7 @@ const ProductDetail = () => {
   }
 
   const pair = handle ? getBeforeAfterPair(handle) : undefined;
-  const sliderFirst = handle === PRODUCT_HANDLE && pair;
-  const slider = pair && (
-    <BeforeAfterSlider beforeSrc={pair.off} afterSrc={pair.on} alt={pair.alt} className={sliderFirst ? "h-full" : "aspect-[4/3]"} />
-  );
+  const slider = pair && <BeforeAfterBlock pair={pair} />;
 
   const sections: InfoSection[] = [
     {
@@ -189,7 +186,6 @@ const ProductDetail = () => {
       title: "Zonder/met SenseGlow",
       body: (
         <div className="space-y-4">
-          {!sliderFirst && slider}
           {beforeAfter && <BeforeAfterRows rows={beforeAfter} beforeLabel={beforeLabel} afterLabel={afterLabel} />}
         </div>
       ),
@@ -234,7 +230,7 @@ const ProductDetail = () => {
           heroContent={hero}
           qty={qty}
           onQtyChange={setQty}
-          leadSlide={sliderFirst ? slider : undefined}
+          afterTrust={slider}
         />
 
         <div className="mx-auto max-w-3xl px-6 pb-12 md:px-8">

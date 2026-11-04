@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { Link } from "react-router-dom";
 import { Footprints, ChefHat, Baby, Sun, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
@@ -49,7 +50,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                    <div className="relative aspect-square overflow-hidden bg-muted/10">
                     {image?.url ? (
                       <img
-                        src={image.url}
+                        {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
                         alt={image.altText || product?.node.title || title}
                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                         loading="lazy"
