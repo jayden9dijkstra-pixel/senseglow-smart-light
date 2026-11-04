@@ -11,6 +11,25 @@ export interface OrderForExport {
   ad_consent: string | null;
   is_test: boolean;
   is_draft: boolean;
+  email_sha256?: string; // alleen de hash, nooit het e-mailadres zelf
+}
+
+/** Trim, kleine letters; bij gmail.com/googlemail.com ook punten voor de @ weg. */
+export function normalizeEmail(raw: string | null | undefined): string {
+  const e = String(raw ?? "").trim().toLowerCase();
+  if (!e) return "";
+  const at = e.lastIndexOf("@");
+  if (at < 1) return e;
+  const local = e.slice(0, at), domain = e.slice(at + 1);
+  return domain === "gmail.com" || domain === "googlemail.com" ? `${local.replace(/\./g, "")}@${domain}` : e;
+}
+
+/** SHA-256 hex (kleine letters) van het genormaliseerde e-mailadres; leeg bij geen adres. */
+export async function hashEmail(raw: string | null | undefined): Promise<string> {
+  const e = normalizeEmail(raw);
+  if (!e) return "";
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(e));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 /** ISO 8601 in Europe/Amsterdam met offset, bv. 2026-10-25T14:30:00+01:00 */
@@ -50,6 +69,7 @@ export function buildRow(o: OrderForExport): string[] {
     "EUR",
     orderNumber(o.order_number),
     "WEB",
+    o.email_sha256 ?? "",
   ];
 }
 

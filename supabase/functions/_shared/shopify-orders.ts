@@ -6,7 +6,7 @@
 const DOMAIN = Deno.env.get("SHOPIFY_STORE_DOMAIN") ?? "senseglow-smart-light-5jjoq.myshopify.com";
 const TOKEN = Deno.env.get("SHOPIFY_ADMIN_TOKEN") ?? Deno.env.get("SHOPIFY_ACCESS_TOKEN") ?? "";
 const VERSION = "2025-07";
-const FIELDS = "id,name,test,source_name,current_subtotal_price,subtotal_price,created_at,total_price,currency,financial_status,cart_token,checkout_token,line_items,shipping_address,billing_address";
+const FIELDS = "id,email,contact_email,name,test,source_name,current_subtotal_price,subtotal_price,created_at,total_price,currency,financial_status,cart_token,checkout_token,line_items,shipping_address,billing_address";
 
 export async function fetchShopifyOrders(sinceDays: number): Promise<any[]> {
   if (!TOKEN) throw new Error("Geen Shopify-toegang beschikbaar in de backend.");
@@ -29,8 +29,8 @@ export async function fetchShopifyOrders(sinceDays: number): Promise<any[]> {
   return out;
 }
 
-import { type OrderForExport, orderNumber, rowsToWrite } from "./conversion-row.ts";
-import { appendRows, existingOrderIds } from "./google-sheets.ts";
+import { hashEmail, type OrderForExport, orderNumber, rowsToWrite } from "./conversion-row.ts";
+import { appendRows, ensureEmailHeader, existingOrderIds } from "./google-sheets.ts";
 
 let lastCandidates: OrderForExport[] = [];
 
@@ -88,7 +88,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
       synced_at: new Date().toISOString(),
     };
   });
-  lastCandidates = orders.map((o) => {
+  lastCandidates = await Promise.all(orders.map(async (o) => {
     const token = o.cart_token || o.checkout_token || null;
     const found = token ? attr.get(token) : undefined;
     const prev = existing.get(Number(o.id)) ?? {};
@@ -102,8 +102,10 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
       ad_consent: found?.ad_consent ?? prev.ad_consent ?? null,
       is_test: o.test === true,
       is_draft: o.source_name === "shopify_draft_order",
+      // e-mail alleen in geheugen hashen; het adres zelf wordt nergens opgeslagen of gelogd
+      email_sha256: await hashEmail(o.email || o.contact_email),
     };
-  });
+  }));
   if (rows.length) {
     const { error } = await admin.from("shop_orders").upsert(rows, { onConflict: "shopify_order_id" });
     if (error) throw new Error("Opslaan van bestellingen mislukte.");
@@ -121,6 +123,7 @@ export async function exportConversions(admin: any): Promise<number> {
   const { ids, token } = await existingOrderIds();
   for (const id of ids) written.add(id);
   const rows = rowsToWrite(lastCandidates, written);
+  if (rows.length) await ensureEmailHeader(token);
   await appendRows(rows, token);
   if (rows.length) {
     await admin.from("ads_conversion_exports").upsert(rows.map((r) => ({ order_number: r[5], status: "written" })), { onConflict: "order_number" });

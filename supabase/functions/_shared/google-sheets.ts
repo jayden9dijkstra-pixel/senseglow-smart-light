@@ -64,10 +64,24 @@ export async function existingOrderIds(token?: string): Promise<{ ids: Set<strin
 
 export async function appendRows(rows: string[][], token: string): Promise<void> {
   if (!rows.length) return;
-  const res = await fetch(`${base()}/values/${RANGE}!A:G:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
+  const res = await fetch(`${base()}/values/${RANGE}!A:H:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({ values: rows }),
   });
   if (!res.ok) throw new Error(`Sheet schrijven [${res.status}]: ${await res.text()}`);
+}
+
+/** Zet kop 'Email' in H1 als die er nog niet staat; overige kopcellen blijven ongemoeid. */
+export async function ensureEmailHeader(token: string): Promise<void> {
+  const res = await fetch(`${base()}/values/${RANGE}!H1`, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) throw new Error(`Sheet-kop lezen [${res.status}]: ${await res.text()}`);
+  const body = await res.json();
+  if (String(body.values?.[0]?.[0] ?? "").trim() === "Email") return;
+  const put = await fetch(`${base()}/values/${RANGE}!H1?valueInputOption=RAW`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ values: [["Email"]] }),
+  });
+  if (!put.ok) throw new Error(`Sheet-kop schrijven [${put.status}]: ${await put.text()}`);
 }
