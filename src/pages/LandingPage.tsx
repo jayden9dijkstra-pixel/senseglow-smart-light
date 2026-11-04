@@ -35,14 +35,14 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
+  const [option, setOption] = useState<string | undefined>(offer.optionValue);
+  const want = useMemo(() => ({ ...offer, optionValue: option }), [offer, option]);
   const choices = useMemo(() => {
     const seen = new Set<string>();
     return variants
       .map((v) => variantIn(want, v, variants))
       .filter((v): v is Variant => !!v && !seen.has(v.id) && !!seen.add(v.id));
   }, [variants, want]);
-  const [option, setOption] = useState<string | undefined>(offer.optionValue);
-  const want = useMemo(() => ({ ...offer, optionValue: option }), [offer, option]);
   const [chosen, setChosen] = useState<Variant | null>(null);
   const [qty, setQty] = useState<OfferQty>(offer.qty ?? 1);
   // Bij een andere set blijft de gekozen kleur staan.
