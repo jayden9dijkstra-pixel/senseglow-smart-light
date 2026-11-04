@@ -127,8 +127,10 @@ export const ProductHeroSection = ({
     product.node.images?.edges?.map((edge) => ({
       url: edge.node.url,
       altText: edge.node.altText,
+      width: edge.node.width,
+      height: edge.node.height,
     })) || [];
-  const productImageClassName = "h-full w-full object-cover md:object-contain";
+  const productImageClassName = "h-full w-full object-contain";
 
   const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
   const count = offer ? qty : 1;
