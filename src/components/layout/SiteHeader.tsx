@@ -5,14 +5,6 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n/I18nProvider";
 import { MobileNav } from "@/components/layout/MobileNav";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import wordmark from "@/assets/logo-wordmark-sharp.png";
 import {
   PRODUCT_HANDLE,
@@ -58,19 +50,6 @@ const navItems: NavItem[] = [
       { label: "Contact", hint: "Stel je vraag", href: "/contact" },
     ],
   },
-];
-
-const productLinks: NavChild[] = [
-  { label: "SenseGlow Wave", hint: "Kast en keuken", href: `/product/${WAVE_PRODUCT_HANDLE}` },
-  { label: "Ambient Motion Bar", hint: "Hal en wand", href: `/product/${PRODUCT_HANDLE}` },
-  { label: "SenseGlow Wall Lamp", hint: "Woonkamer", href: `/product/${STEP_PRODUCT_HANDLE}` },
-  { label: "SenseGlow Solar Lantern", hint: "Tuin en pad", href: `/product/${LANTERN_PRODUCT_HANDLE}` },
-  { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
-];
-
-const mobileServiceLinks: NavChild[] = [
-  { label: "Bestelling volgen", href: "/volg-je-bestelling" },
-  { label: "Contact", href: "/contact" },
 ];
 
 const NavDropdown = ({ item }: { item: NavItem }) => {
