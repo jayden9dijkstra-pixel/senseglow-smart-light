@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -61,10 +62,11 @@ function OfferCard({ offer, product, sticky, hideImage }: { offer: LandingOffer;
     <div className={`flex flex-col gap-3 bg-background md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
       {image && (
         <img
-          src={image.url}
+          {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
           alt={image.altText || product?.node.title || offer.label}
           className={`aspect-[4/3] w-full rounded-xl bg-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
-          loading={hideImage ? "eager" : "lazy"}
+          loading="lazy"
+          decoding="async"
         />
       )}
       <div>

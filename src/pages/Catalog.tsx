@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { trackSelectItem, numericVariantId } from "@/lib/adsTracking";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -113,7 +114,7 @@ const Catalog = () => {
                       <div className="aspect-square overflow-hidden rounded-sm bg-muted/10 glass">
                         {img?.url ? (
                           <img
-                            src={img.url}
+                            {...responsiveImg(img.url, "(min-width: 768px) 33vw, 50vw")}
                             alt={img.altText || p.node.title}
                             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                             loading="lazy"

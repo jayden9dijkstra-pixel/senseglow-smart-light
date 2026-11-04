@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -61,7 +62,7 @@ export function ProductRelatedSection({ currentHandle }: ProductRelatedSectionPr
                   <div className="aspect-[4/3] overflow-hidden bg-muted">
                     {image && (
                       <img
-                        src={image.url}
+                        {...responsiveImg(image.url, "(min-width: 768px) 25vw, 50vw")}
                         alt={image.altText || product.node.title}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

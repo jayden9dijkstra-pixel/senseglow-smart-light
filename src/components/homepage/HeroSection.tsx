@@ -1,3 +1,4 @@
+import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import type { ShopifyProduct } from "@/lib/shopify";
@@ -56,7 +57,7 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
             <div className="aspect-[4/3] w-full overflow-hidden md:aspect-square">
               {image ? (
                 <img
-                  src={image.url}
+                  {...responsiveImg(image.url, "(min-width: 768px) 45vw, 100vw")}
                   alt={image.altText || product?.title || ""}
                   loading="eager"
                   {...{ fetchpriority: "high" }}
