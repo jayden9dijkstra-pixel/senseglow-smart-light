@@ -20,43 +20,6 @@ import { toast } from "sonner";
 import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
 
-/**
- * Schrijft een tussenscherm in het zojuist geopende tabblad. Zonder dit staart de
- * bezoeker naar een leeg tabblad terwijl de afrekenlink wordt opgehaald, en zou een
- * foutmelding onzichtbaar achterblijven in het tabblad erachter.
- */
-type InterstitialState = "wachten" | "wachten-lang" | "fout";
-
-function writeInterstitial(win: Window | null, state: InterstitialState): void {
-  if (!win || win.closed) return;
-  const isError = state === "fout";
-  const title = isError ? "Afrekenen lukte niet" : "Even geduld";
-  const body = isError
-    ? "Er ging iets mis bij het klaarzetten van je bestelling. Sluit dit tabblad en probeer het opnieuw vanuit je winkelwagen."
-    : state === "wachten-lang"
-    ? "Dit duurt iets langer dan gewoonlijk. Even geduld nog, we proberen het opnieuw…"
-    : "We zetten je bestelling klaar…";
-  try {
-    win.document.open();
-    win.document.write(
-      '<!doctype html><html lang="nl"><head><meta charset="utf-8">' +
-        '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-        "<title>" + title + " · SenseGlow</title></head>" +
-        '<body style="margin:0;min-height:100vh;display:flex;align-items:center;' +
-        "justify-content:center;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;" +
-        'background:#faf9f7;color:#1a1a1a">' +
-        '<div style="text-align:center;padding:24px;max-width:24rem">' +
-        '<p style="font-size:1.125rem;font-weight:600;margin:0 0 8px">' + title + "</p>" +
-        '<p style="margin:0;color:#555;line-height:1.5">' + body + "</p>" +
-        "</div></body></html>"
-    );
-    win.document.close();
-  } catch {
-    // Sommige browsers staan schrijven naar een ander venster niet toe; dan blijft
-    // het tabblad leeg, precies zoals het voorheen altijd was.
-  }
-}
-
 export function CartDrawer() {
   const [isOpen, setIsOpen] = React.useState(false);
   const {
@@ -127,48 +90,16 @@ export function CartDrawer() {
   const shownTotal = shopifyDiscounts && preview ? preview.total : totalPrice;
 
   const handleCheckout = async () => {
-    // Open het tabblad meteen bij de klik, zolang de browser de klik nog als
-    // handeling van de bezoeker ziet. De afrekenpagina wordt er daarna in geladen.
-    const checkoutWindow = window.open('', '_blank');
-    try {
-      if (checkoutWindow) checkoutWindow.opener = null;
-    } catch {
-      // sommige browsers staan dit niet toe
-    }
-    // Laat meteen zien dat er iets gebeurt; een leeg tabblad wordt weggeklikt.
-    writeInterstitial(checkoutWindow, "wachten");
-    // Bij een trage of haperende verbinding (retries in createCheckout kunnen
-    // samen bijna een minuut duren) laat "Even geduld" alleen zien dat er niets
-    // gebeurt. Na 5s tonen we dat het langer duurt, zodat het geen kapotte
-    // pagina lijkt.
-    let settled = false;
-    const slowTimer = window.setTimeout(() => {
-      if (!settled) writeInterstitial(checkoutWindow, "wachten-lang");
-    }, 5000);
     try {
       await createCheckout();
-      settled = true;
-      window.clearTimeout(slowTimer);
       const created = useCartStore.getState().checkoutUrl;
-      if (!created) {
-        writeInterstitial(checkoutWindow, "fout");
-        return;
-      }
-      // Laatste zekerheid: herkomstgegevens staan altijd in de afrekenlink.
+      if (!created) return;
+      // Behoud dezelfde herkomstgegevens; alleen de bestemming is dit tabblad.
       const checkoutUrl = await appendClickIdsToUrl(created);
       setIsOpen(false);
-      if (checkoutWindow && !checkoutWindow.closed) {
-        checkoutWindow.location.href = checkoutUrl;
-        return;
-      }
-      // Pop-up geblokkeerd: ga in dit tabblad verder zodat afrekenen altijd lukt.
       window.location.assign(checkoutUrl);
     } catch {
-      settled = true;
-      window.clearTimeout(slowTimer);
-      // Niet sluiten: de bezoeker kijkt naar dit tabblad, niet naar het vorige.
-      writeInterstitial(checkoutWindow, "fout");
-      // de winkelwagen toont zelf ook een foutmelding
+      // De centrale winkelwagenlogica toont de fout; blijf hier om opnieuw te proberen.
     }
   };
 

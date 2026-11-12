@@ -1,10 +1,11 @@
 # SenseGlow herstel — status
 
 ## Fixronde Jay (5 november 2026)
-- [ ] Gangfoto en exacte Shopify-volgorde op productpagina's en homepage controleren/herstellen.
-- [ ] Wall Lamp-setnaam in plakbalk, standaard één lamp in gang en afrekenen in hetzelfde tabblad.
-- [ ] Retourboodschap onder koopknoppen en eigenaarstekst boven product-FAQ en op /over.
-- [ ] Gerichte tests en mobiele koop-/checkoutcontrole; niet publiceren zonder verzoek.
+- [x] Productpagina's behouden de Shopify-volgorde, ook met scene; homepage-kaarten gebruiken featuredImage.
+- [ ] Gangfoto: opgegeven alt ontbreekt in de zeven actuele Shopify-foto's; wacht op toevoegen/publiceren van die foto in Shopify. De scènekeuze is al ingesteld en gebruikt de foto zodra die beschikbaar is.
+- [x] Wall Lamp-setnaam in plakbalk, standaard één lamp in gang en afrekenen in hetzelfde tabblad.
+- [x] Retourboodschap onder koopknoppen en eigenaarstekst boven product-FAQ en op /over.
+- [x] 22 gerichte tests en mobiele koop-/checkoutcontrole geslaagd; niet gepubliceerd.
 
 ## Klaar
 - Testreviews (vrienden/familie) verwijderd van alle openbare pagina's; intern gearchiveerd in `src/lib/_internal/legacy-testreviews.ts`. Geen sterren, scores of aantallen meer; geen Review/AggregateRating in structured data.

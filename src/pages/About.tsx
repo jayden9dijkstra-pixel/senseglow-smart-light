@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { BehindSenseGlow } from "@/components/product/BehindSenseGlow";
 
 const criteria = [
   {
@@ -85,17 +86,7 @@ const About = () => {
           </section>
 
           {/* Wie */}
-          <section className="space-y-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">Wie</h2>
-            <div className="space-y-5 text-base md:text-lg text-foreground/60 leading-relaxed">
-              <p>
-                SenseGlow is een handelsnaam van Jayden Ecom, een Nederlandse eenmanszaak gevestigd in Kimswerd, Friesland. Geregistreerd bij de Kamer van Koophandel onder nummer 99634929.
-              </p>
-              <p>
-                Bestellingen worden afgehandeld via een logistiek partner. Klantcontact, advies en garantie-afhandeling lopen rechtstreeks vanuit Nederland. Geen overzeese helpdesk, geen vertraging.
-              </p>
-            </div>
-          </section>
+          <BehindSenseGlow />
 
           {/* Contact CTA */}
           <section className="space-y-6 p-8 md:p-12 rounded-sm bg-background-secondary border border-foreground/10">

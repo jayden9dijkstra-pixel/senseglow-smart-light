@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate, Link } from "react-router-dom";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ArrowLeft, RotateCcw, Euro, FileText } from "lucide-react";
+import { RETURN_DAYS } from "@/lib/purchaseTrust";
 
 export const ReturnsContent = () => {
   const navigate = useNavigate();
@@ -20,14 +21,14 @@ export const ReturnsContent = () => {
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Retourneren</h1>
             <p className="text-lg text-foreground/60">
-              30 dagen bedenktijd, volledige terugbetaling, geen gedoe.
+              {RETURN_DAYS} dagen bedenktijd, volledige terugbetaling, geen gedoe.
             </p>
           </div>
 
           {/* 3 info cards */}
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { icon: RotateCcw, title: "30 dagen retour", sub: "Bovenop je wettelijke 14 dagen." },
+              { icon: RotateCcw, title: `${RETURN_DAYS} dagen retour`, sub: "Bovenop je wettelijke 14 dagen." },
               { icon: Euro, title: "Retourkosten door ons", sub: "Wij betalen de retourzending, ook zonder defect." },
               { icon: FileText, title: "Modelformulier beschikbaar", sub: "Verplicht volgens NL-recht." },
             ].map(({ icon: Icon, title, sub }) => (

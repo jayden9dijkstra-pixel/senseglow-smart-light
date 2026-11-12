@@ -45,6 +45,8 @@ import { ReturnsContent } from "../src/pages/content/ReturnsContent";
 import { ShippingContent } from "../src/pages/content/ShippingContent";
 import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
 import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
+import { BehindSenseGlow } from "../src/components/product/BehindSenseGlow";
+import { NEW_BRAND_TRUST } from "../src/lib/purchaseTrust";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -95,6 +97,7 @@ const PRODUCT_QUERY = `
     productByHandle(handle: $handle) {
       id title description handle
       priceRange { minVariantPrice { amount currencyCode } }
+      featuredImage { url altText }
       images(first: 20) { edges { node { url altText } } }
       variants(first: 30) {
         edges { node {
@@ -280,11 +283,13 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(locale === "en" ? parseFloat(price.amount).toFixed(2) : parseFloat(price.amount).toFixed(2).replace(".", ","))}</p>`);
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
   parts.push(whyMarkup([handle], locale));
+  parts.push(`<p><a href="${escapeAttr(`${SITE_URL}${locale === "nl" ? "" : `/${locale}`}/retourneren`)}">${t(NEW_BRAND_TRUST)}</a></p>`);
   if (product?.node.description) parts.push(descriptionMarkup(product.node.description, locale));
   if (isOfferProduct(handle)) parts.push(`<p>${t(OFFER_TEXT)}</p><p>${t(MIX_NOTE)}</p>`);
   const uses = USE_CASES[handle];
   if (uses?.length) parts.push(`<h2>${t(USE_CASE_HEADING)}</h2><ul>${uses.map((u) => `<li>${t(u)}</li>`).join("")}</ul>`);
   parts.push(`<h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
+  parts.push(renderToStaticMarkup(createElement(BehindSenseGlow)));
   parts.push(`<h2>${t("Veelgestelde vragen")}</h2>${(blueprintFor(handle)?.faqs ?? getProductFaqs(content?.faqs)).map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
   parts.push(`</article>`);
   return parts.join("");
@@ -368,6 +373,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
+  p.push(`<p><a href="${SITE_URL}/retourneren">${e(NEW_BRAND_TRUST)}</a></p>`);
   if (page.pickerNote) p.push(`<p>${e(page.pickerNote)}</p>`);
   if (page.offers.some((o) => isOfferProduct(o.handle))) p.push(`<p>${e(OFFER_TEXT)}</p><p>${e(MIX_NOTE)}</p>`);
   if (page.why) p.push(whyMarkup([...new Set(page.offers.map((o) => o.handle))], "nl"));
@@ -409,7 +415,11 @@ function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
     p.push(`<p><a href="${escapeAttr(`${SITE_URL}${prefix}/product/${heroProduct.handle}`)}">${escapeHtml(heroProduct.title)}</a>${v ? ` ${escapeHtml(translate(locale, "Vanaf"))} &euro;${v}` : ""}</p>`);
   }
   p.push(`<p>${t(OFFER_TEXT)}</p>`);
-  p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}"><h3>${t(x.title)}</h3></a><p>${t(x.body)}</p>${homeTilePrice(products, x.href, locale)}</li>`).join("")}</ul>`);
+  p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => {
+    const product = products.find((prod) => `/product/${prod.node.handle}` === x.href)?.node;
+    const image = product?.featuredImage ?? product?.images.edges[0]?.node;
+    return `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}">${image ? `<img src="${escapeAttr(image.url)}" alt="${escapeAttr(image.altText ?? product?.title ?? x.title)}" width="400" height="400" loading="lazy" />` : ""}<h3>${t(x.title)}</h3></a><p>${t(x.body)}</p>${homeTilePrice(products, x.href, locale)}</li>`;
+  }).join("")}</ul>`);
   p.push(`<h2>${t(HOME_PILLARS_HEADING)}</h2><ul>${HOME_PILLARS.map((x) => `<li><h3>${t(x.title)}</h3><p>${t(x.body)}</p></li>`).join("")}</ul>`);
   p.push(`<h2>${t(HOME_STORY.heading)}</h2>${HOME_STORY.paragraphs.map((x) => `<p>${t(x)}</p>`).join("")}`);
   p.push(`<h2>${t("Veelgestelde vragen")}</h2>${HOME_FAQS.map((f) => `<h3>${t(f.question)}</h3><p>${t(f.answer)}</p>`).join("")}`);
@@ -439,6 +449,7 @@ function translateMarkup(locale: Locale, html: string): string {
 }
 
 function legalFallback(path: string, locale: Locale): string | null {
+  if (path === "/over") return `<article id="prerendered-legal">${renderToStaticMarkup(createElement(BehindSenseGlow))}</article>`;
   const Comp = LEGAL_PAGES[path];
   if (!Comp) return null;
   try {
