@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import { getLandingPage } from "./landingPages";
 import { PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE, STEP_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE } from "./productConfig";
 import { offerImage } from "./landingPages";
-import { sceneAlt, withSceneFirst } from "./scenes";
 
 describe("nieuwe landingspagina's", () => {
   it("/kastverlichting: Ambient 30 cm, 2 lampen", () => {
@@ -47,9 +46,7 @@ describe("nieuwe landingspagina's", () => {
     const offer = getLandingPage("/gangverlichting")!.offers[0];
     expect(offerImage(offer, [{ url: "a", altText: "x" }])?.url).toBe("a");
   });
-  it("?scene= zet de scènefoto vooraan op de productpagina", () => {
-    const imgs = [{ altText: "bed" }, { altText: "SenseGlow Solar Lantern zwart brandt bij schemering" }];
-    expect(withSceneFirst(imgs, sceneAlt("buiten", LANTERN_PRODUCT_HANDLE))[0].altText).toContain("schemering");
-    expect(withSceneFirst(imgs, sceneAlt("onbekend", LANTERN_PRODUCT_HANDLE))[0].altText).toBe("bed");
+  it("/gangverlichting selecteert standaard één Ambient-lamp van 30 cm", () => {
+    expect(getLandingPage("/gangverlichting")?.offers[0]).toMatchObject({ handle: PRODUCT_HANDLE, qty: 1, sizeCm: 30 });
   });
 });
