@@ -34,7 +34,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     addItem(cartItem);
   };
 
-  const imageUrl = product.node.images?.edges?.[0]?.node?.url;
+  const imageUrl = product.node.featuredImage?.url ?? product.node.images?.edges?.[0]?.node?.url;
   const price = product.node.priceRange.minVariantPrice;
 
   const handleSelect = () => {

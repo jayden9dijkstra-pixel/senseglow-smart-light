@@ -204,10 +204,10 @@ export const LANDING_PAGES: LandingPage[] = [
     path: "/gangverlichting",
     title: "Gangverlichting met sensor, zonder boren | SenseGlow",
     description:
-      "Gangverlichting met bewegingssensor: 2 Ambient Motion Bars van 30 cm met 10% korting. Magnetisch bevestigen, opladen via USB-C. Gratis verzending NL/BE, 30 dagen retour.",
+      "Gangverlichting met bewegingssensor: Ambient Motion Bar van 30 cm. Kies 1 lamp of 2 lampen met 10% korting. Magnetisch bevestigen, opladen via USB-C. Gratis verzending NL/BE, 30 dagen retour.",
     h1: "Gangverlichting met sensor, zonder boren",
     intro: "Zacht licht in de gang, precies wanneer je erlangs loopt. Geen schakelaar zoeken in het donker.",
-    offers: [{ id: "ambient-gang", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", note: "2 lampen voor een gang", qty: 2, sizeCm: 30, scene: "gang" }],
+    offers: [{ id: "ambient-gang", handle: PRODUCT_HANDLE, label: "SenseGlow™ Ambient Motion Bar 30 cm", qty: 1, sizeCm: 30, scene: "gang" }],
     benefits: ANGLES[PRODUCT_HANDLE].gang.benefits,
     specs: [SPECS.ambient],
     why: true,

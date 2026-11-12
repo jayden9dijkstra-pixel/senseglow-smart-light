@@ -14,10 +14,12 @@ import { QuantityOfferPicker } from "./QuantityOfferPicker";
 import { Benefits } from "./InfoAccordion";
 import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { getAngle, getStoredAngle } from "@/lib/angles";
-import { sceneAlt, withSceneFirst } from "@/lib/scenes";
 import { blueprintFor, eightSetSaving } from "@/lib/productBlueprint";
 import { AnchorNav, IconBenefits } from "./Blueprint";
 import { formatPrice } from "@/lib/price";
+import { PurchaseReassurance } from "./PurchaseReassurance";
+import { parseVariantLabel } from "@/lib/productRegistry";
+import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 
 interface HeroContent {
   h1: string;
@@ -134,16 +136,13 @@ export const ProductHeroSection = ({
     });
   };
 
-  // Vanaf een landingspagina (?scene=trap|gang|kast|keuken|buiten) blijft die scènefoto vooraan.
-  const productImages = withSceneFirst(
-    product.node.images?.edges?.map((edge) => ({
+  // Product pages always retain the order returned by Shopify, including scene links.
+  const productImages = product.node.images?.edges?.map((edge) => ({
       url: edge.node.url,
       altText: edge.node.altText,
       width: edge.node.width,
       height: edge.node.height,
-    })) || [],
-    sceneAlt(searchParams.get("scene"), product.node.handle),
-  );
+    })) || [];
   const productImageClassName = "h-full w-full object-contain";
 
   onAddRef?.(handleAddToCart);
@@ -167,7 +166,7 @@ export const ProductHeroSection = ({
               videoUrl={getProductVideoUrl(product.node.handle)}
               imageClassName={productImageClassName}
               activeImageUrl={
-                (pickedByUser || !searchParams.get("scene")) &&
+                pickedByUser &&
                 selectedVariant?.image?.url &&
                 selectedVariant.image.url !== (product.node.featuredImage?.url ?? productImages[0]?.url)
                   ? selectedVariant.image.url
@@ -209,8 +208,6 @@ export const ProductHeroSection = ({
               <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
             </div>
 
-            <TrustLine />
-
             <Button
               ref={btnRef}
               onClick={handleAddToCart}
@@ -220,7 +217,8 @@ export const ProductHeroSection = ({
             >
               {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
             </Button>
-
+            <PurchaseReassurance />
+            <TrustLine />
             {afterTrust}
 
             <StickyAddBar
@@ -230,7 +228,9 @@ export const ProductHeroSection = ({
               disabled={!selectedVariant?.availableForSale}
               onAdd={handleAddToCart}
               image={productImages[0]?.url}
-          label={offer ? undefined : selectedVariant?.title}
+              label={product.node.handle === STEP_PRODUCT_HANDLE
+                ? parseVariantLabel("sconce", selectedVariant?.selectedOptions ?? []).setSize
+                : offer ? undefined : selectedVariant?.title}
             />
           </div>
         </div>

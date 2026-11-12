@@ -23,6 +23,9 @@ import { eightSetSaving } from "@/lib/productBlueprint";
 import { reviewsFor } from "@/data/reviews";
 import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
+import { PurchaseReassurance } from "@/components/product/PurchaseReassurance";
+import { parseVariantLabel } from "@/lib/productRegistry";
+import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
@@ -132,6 +135,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
+      <PurchaseReassurance />
       {sticky && <TrustLine />}
       {sticky && (
         <StickyAddBar
@@ -141,7 +145,9 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
           disabled={!product || !variant?.availableForSale}
           onAdd={add}
           image={image?.url}
-          label={picker ? undefined : variant?.title}
+          label={offer.handle === STEP_PRODUCT_HANDLE
+            ? parseVariantLabel("sconce", variant?.selectedOptions ?? []).setSize
+            : picker ? undefined : variant?.title}
         />
       )}
     </div>

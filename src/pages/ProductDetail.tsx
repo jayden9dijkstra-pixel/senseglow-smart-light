@@ -28,6 +28,7 @@ import { getProductContent } from "@/lib/productContent";
 import { buildPlaceholderContent } from "@/lib/placeholderContent";
 import { getProductSeo, DEFAULT_SEO } from "@/lib/seoContent";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
+import { BehindSenseGlow } from "@/components/product/BehindSenseGlow";
 
 
 const ProductDetail = () => {
@@ -204,6 +205,7 @@ const ProductDetail = () => {
           </div>
           <div id="reviews" className="scroll-mt-24"><CustomerReviews handle={handle} /></div>
           <SpecTiles rows={specs} />
+          <BehindSenseGlow />
           <FaqAccordion faqs={faqs} />
           <div className="space-y-3">
             <AskUs />
