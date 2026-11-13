@@ -34,6 +34,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Login = lazy(() => import("./pages/Login"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 const WhySenseGlow = lazy(() => import("./pages/WhySenseGlow"));
+const ProductPreview = lazy(() => import("./pages/ProductPreview"));
 const ReviewPolicy = lazy(() => import("./pages/ReviewPolicy"));
 import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
@@ -97,6 +98,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/product/:handle" element={<ProductDetail />} />
+            <Route path="/voorbeeld/:slug" element={<ProductPreview />} />
             <Route path="/producten" element={<Catalog />} />
             <Route path="/catalogus" element={<Catalog />} />
             <Route path="/contact" element={<Contact />} />
