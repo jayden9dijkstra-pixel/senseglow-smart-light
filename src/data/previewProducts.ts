@@ -60,6 +60,43 @@ export const PREVIEW_PRODUCTS: PreviewProduct[] = [
     quoteNote:
       "Please quote exactly this lamp (photos + specs on this page) for 1, 2, 3 and 4 pcs, shipping to NL + BE. The source listing mentions both 2700/4000/6500K and 3000/4500/6000K: please tell us which one you supply. Please also confirm CE marking and neutral packaging.",
   },
+  {
+    slug: "sunrise-5d837b08",
+    title: "Sunrise wake-up light met wekker en FM-radio",
+    titleEn: "Sunrise simulation wake-up light alarm clock with FM radio",
+    intro:
+      "Wekker met lamp die een zonsopgang nabootst, 7 sfeerkleuren, natuurgeluiden en FM-radio. Het display past zijn helderheid aan het licht in de kamer aan.",
+    variant: "Alarm clock zonder app, wit",
+    images: [
+      { src: "/voorbeeld/sunrise-5d837b08/1-front-orange.webp", alt: "Voorkant met oranje licht en klokdisplay" },
+      { src: "/voorbeeld/sunrise-5d837b08/2-front-yellow.webp", alt: "Voorkant met geel licht en bedieningsknoppen" },
+      { src: "/voorbeeld/sunrise-5d837b08/3-side-sounds-specs.webp", alt: "Zijkant, 7 natuurgeluiden, zonsopgang 10–60 min, 95 dB" },
+      { src: "/voorbeeld/sunrise-5d837b08/4-colours-brightness.webp", alt: "7 sfeerkleuren en 20 helderheidsstanden" },
+      { src: "/voorbeeld/sunrise-5d837b08/5-ports-usb-display.webp", alt: "Aansluitingen achter en USB-poort om een telefoon te laden" },
+    ],
+    specs: [
+      ["Wekken", "Zonsopgang-simulatie, 10–60 min"],
+      ["Alarmen", "2"],
+      ["Geluiden", "7 natuurgeluiden + FM-radio"],
+      ["Volume", "Tot 95 dB"],
+      ["Sfeerlicht", "7 kleuren"],
+      ["Helderheid", "20 standen"],
+      ["Display", "Past zich aan het omgevingslicht aan (hoog/laag/uit)"],
+      ["USB", "Poort om een telefoon te laden"],
+    ],
+    specsEn: [
+      ["Wake-up", "Sunrise simulation, 10–60 min"],
+      ["Alarms", "2"],
+      ["Sounds", "7 natural sounds + FM radio"],
+      ["Volume", "Up to 95 dB"],
+      ["Mood light", "7 colours"],
+      ["Brightness", "20 levels"],
+      ["Display", "Light sensor: high / low / off"],
+      ["USB", "USB port to charge a phone"],
+    ],
+    quoteNote:
+      "Please quote exactly this sunrise alarm clock (photos + specs on this page), version without app, for 1, 2, 3 and 4 pcs, shipping to NL + BE. Please include an EU plug/adapter and confirm CE marking and neutral packaging (no brand logo).",
+  },
 ];
 
 export const getPreviewProduct = (slug: string | undefined) =>

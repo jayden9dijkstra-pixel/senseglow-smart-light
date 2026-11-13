@@ -6,6 +6,7 @@ import { PREVIEW_PRODUCTS, getPreviewProduct } from "./previewProducts";
 describe("verborgen voorbeeldpagina's", () => {
   it("vindt alleen bekende slugs", () => {
     expect(getPreviewProduct("tafellamp-510502f6")?.variant).toContain("Zwart");
+    expect(getPreviewProduct("sunrise-5d837b08")?.specs.length).toBeGreaterThan(5);
     expect(getPreviewProduct("tafellamp")).toBeUndefined();
     expect(getPreviewProduct(undefined)).toBeUndefined();
   });
