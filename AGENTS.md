@@ -12,3 +12,5 @@
 - Landing-page photos are selected by Shopify alt text in src/lib/scenes.ts; product galleries preserve Shopify image order regardless of scene parameters and only navigate to variant images after a user selection; why: landing intent and catalog media ordering remain separate.
 - Purchase reassurance uses src/lib/purchaseTrust.ts and the owner block uses BehindSenseGlow in client and prerender; why: return-window and identity text stay consistent without invented reviews.
 - Customer reviews live only in src/data/reviews.ts and the section hides when it is empty; why: no sample or invented reviews may ever render.
+- Scheduled offer display uses explicit dates in quantityOffer plus the shared useOfferDate boundary clock; default rate calculations remain unchanged for tracking, and Shopify still calculates cart discounts; why: temporary presentation must not change checkout or measurement.
+- Landing buy buttons share canPurchaseVariant and the selected primary offer's availability; why: the repeated button must never bypass the main button's stock check.

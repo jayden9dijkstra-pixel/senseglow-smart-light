@@ -1,5 +1,10 @@
 # SenseGlow herstel — status
 
+## Black Friday-weergave (13 november 2026)
+- [x] Tijdgebonden bovenbalk, staffelweergave en winkelwagentekst; Wall Lamp en Shopify ongemoeid.
+- [x] Herhaalde landingskoopknop dezelfde voorraadcontrole als hoofdknop.
+- [x] 27 periode-, prijs- en voorraadtests plus mobiele controle vóór/tijdens/na en uitverkocht; niet gepubliceerd.
+
 ## Fixronde Jay (5 november 2026)
 - [x] Productpagina's behouden de Shopify-volgorde, ook met scene; homepage-kaarten gebruiken featuredImage.
 - [ ] Gangfoto: opgegeven alt ontbreekt in de zeven actuele Shopify-foto's; wacht op toevoegen/publiceren van die foto in Shopify. De scènekeuze is al ingesteld en gebruikt de foto zodra die beschikbaar is.

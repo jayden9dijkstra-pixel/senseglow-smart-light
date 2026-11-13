@@ -19,8 +19,11 @@ import { formatVariantLabel } from "@/lib/productRegistry";
 import { toast } from "sonner";
 import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
+import { BLACK_FRIDAY_CART, BLACK_FRIDAY_DELIVERY, isBlackFriday } from "@/lib/blackFriday";
+import { useOfferDate } from "@/hooks/useOfferDate";
 
 export function CartDrawer() {
+  const now = useOfferDate();
   const [isOpen, setIsOpen] = React.useState(false);
   const {
     items,
@@ -72,7 +75,9 @@ export function CartDrawer() {
     () => Math.round(items.reduce((t, i) => t + parseFloat(i.price.amount) * i.quantity, 0) * 100) / 100,
     [items],
   );
-  const upsell = cartUpsell(offerLampCount(items));
+  const lamps = offerLampCount(items);
+  const blackFriday = isBlackFriday(now) && lamps > 0;
+  const upsell = blackFriday ? BLACK_FRIDAY_CART : cartUpsell(lamps);
 
   // Shopify rekent de automatische korting 'Meer lampen' zelf uit; toon die
   // regels zodra de winkelwagen open staat.
@@ -217,6 +222,7 @@ export function CartDrawer() {
                     <span>{upsell}</span>
                   </div>
                 )}
+                {blackFriday && <p className="text-sm text-foreground" data-no-translate>{BLACK_FRIDAY_DELIVERY}</p>}
                 <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
                   <span>Gratis bezorgd. Levering in 7-14 werkdagen</span>

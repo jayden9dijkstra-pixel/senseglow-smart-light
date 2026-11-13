@@ -20,6 +20,7 @@ import { formatPrice } from "@/lib/price";
 import { PurchaseReassurance } from "./PurchaseReassurance";
 import { parseVariantLabel } from "@/lib/productRegistry";
 import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
+import { useOfferDate } from "@/hooks/useOfferDate";
 
 interface HeroContent {
   h1: string;
@@ -55,6 +56,7 @@ export const ProductHeroSection = ({
   anchorLinks,
   onAddRef,
 }: ProductHeroSectionProps) => {
+  const now = useOfferDate();
   const defaultContent: HeroContent = {
     h1: "Veilig licht. Precies wanneer jij beweegt.",
     subtitle: "Zachte nachtverlichting die je begeleidt zonder iemand wakker te maken.",
@@ -224,7 +226,7 @@ export const ProductHeroSection = ({
             <StickyAddBar
               watch={btnRef}
               qty={count}
-              total={unitPrice != null ? quoteQty(unitPrice, count).total : null}
+              total={unitPrice != null ? quoteQty(unitPrice, count, now).total : null}
               disabled={!selectedVariant?.availableForSale}
               onAdd={handleAddToCart}
               image={productImages[0]?.url}

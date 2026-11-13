@@ -9,6 +9,7 @@ import {
   LANTERN_PRODUCT_HANDLE,
   FLEX_PRODUCT_HANDLE,
 } from "./productConfig";
+import { isBlackFriday } from "./blackFriday";
 
 export const OFFER_HANDLES = new Set([
   PRODUCT_HANDLE,
@@ -26,23 +27,28 @@ export const MIX_NOTE = "Korting geldt ook als je verschillende SenseGlow-lampen
 export const isOfferProduct = (handle: string | undefined | null) => !!handle && OFFER_HANDLES.has(handle);
 
 /** Kortingspercentage bij een totaal aantal meedoende lampen. */
-export function offerRate(lamps: number): number {
+export function offerRate(lamps: number, displayDate?: Date): number {
+  if (displayDate && isBlackFriday(displayDate)) {
+    if (lamps >= 4) return 0.2;
+    if (lamps >= 2) return 0.15;
+    return 0;
+  }
   if (lamps >= 4) return 0.15;
   if (lamps >= 2) return 0.1;
   return 0;
 }
 
-export function qtyLabel(qty: number): string {
+export function qtyLabel(qty: number, displayDate?: Date): string {
   const base = qty === 1 ? "1 lamp" : `${qty} lampen`;
-  const rate = offerRate(qty);
+  const rate = offerRate(qty, displayDate);
   return rate ? `${base} (${Math.round(rate * 100)}% korting)` : base;
 }
 
 const round = (n: number) => Math.round(n * 100) / 100;
 
 /** Totaal en prijs per lamp voor een aantal, op basis van de Shopify-prijs van één lamp. */
-export function quoteQty(unitPrice: number, qty: number) {
-  const rate = offerRate(qty);
+export function quoteQty(unitPrice: number, qty: number, displayDate?: Date) {
+  const rate = offerRate(qty, displayDate);
   const gross = round(unitPrice * qty);
   // Shopify rondt de korting per lamp naar beneden af op hele centen.
   const discount = round((Math.floor(unitPrice * rate * 100 + 1e-6) / 100) * qty);

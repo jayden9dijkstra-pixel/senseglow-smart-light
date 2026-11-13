@@ -8,15 +8,17 @@ import { Truck, Package, RotateCcw } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { deliveryBetweenText } from "@/lib/delivery";
 import { shopifySized } from "@/lib/shopifyImage";
+import { useOfferDate } from "@/hooks/useOfferDate";
 
 /** Event dat de cookiebanner stuurt zodra een keuze is opgeslagen. */
 export const CONSENT_SAVED_EVENT = "sg:consent-saved";
 
 /** Prijs per lamp groot, totaal klein eronder. Rekent alleen met de Shopify-prijs en het bestaande aanbod. */
 export function PerLampPrice({ unitPrice, qty, offer }: { unitPrice: number | null; qty: number; offer: boolean }) {
+  const now = useOfferDate();
   if (unitPrice == null) return null;
   const count = offer ? qty : 1;
-  const q = quoteQty(unitPrice, count);
+  const q = quoteQty(unitPrice, count, now);
   if (!offer) return <p className="text-3xl font-bold text-primary">{formatPrice(unitPrice)}</p>;
   return (
     <div>

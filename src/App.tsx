@@ -40,6 +40,7 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
 import { LanguageChooser } from "@/components/LanguageChooser";
 import { CookieConsentBanner } from "@/components/CookieConsentBanner";
+import { BlackFridayBanner } from "@/components/BlackFridayBanner";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,7 @@ const App = () => (
           <DomTranslator />
           <LanguageChooser />
           <CookieConsentBanner />
+          <BlackFridayBanner />
           <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Index />} />
