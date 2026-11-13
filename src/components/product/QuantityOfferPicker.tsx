@@ -33,7 +33,7 @@ export function QuantityOfferPicker({
               aria-checked={active}
               aria-label={qtyLabel(qty, now)}
               onClick={() => onChange(qty)}
-              className={`flex flex-col items-center gap-0.5 min-h-12 rounded-xl border px-1 py-2 text-center transition-colors md:flex-row md:justify-between md:gap-3 md:px-4 md:py-3 md:text-left ${
+              className={`flex h-auto flex-col items-center gap-0.5 min-h-12 rounded-xl border px-1 py-2 text-center transition-colors md:flex-row md:justify-between md:gap-3 md:px-4 md:py-3 md:text-left ${
                 active ? "border-primary bg-primary/5" : "border-foreground/15 hover:border-primary/40"
               }`}
             >
