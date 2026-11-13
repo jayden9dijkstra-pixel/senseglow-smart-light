@@ -44,9 +44,8 @@ describe("Black Friday, Europe/Amsterdam", () => {
   });
   it("sluit Wall Lamp uit en omvat uitsluitend de vier losse lampen", () => {
     expect(isOfferProduct("senseglow_wall_lamp")).toBe(false);
-    for (const handle of ["senseglow-ambient", "senseglow_wave", "senseglow_lantern", "senseglow_flex"]) {
-      // Exact catalog handles are asserted in the existing product configuration below.
-      if (handle === "senseglow_flex") expect(isOfferProduct(handle)).toBe(true);
+    for (const handle of ["senseglow_ambient_motion_bar", "senseglow_wave", "senseglow_solar_lantern", "senseglow_flex"]) {
+      expect(isOfferProduct(handle)).toBe(true);
     }
   });
 });

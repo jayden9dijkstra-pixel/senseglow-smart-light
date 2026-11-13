@@ -283,13 +283,14 @@ const LandingPage = () => {
 
 
 function ExtraBlock({ page, products }: { page: NonNullable<ReturnType<typeof getLandingPage>>; products: Record<string, ShopifyProduct> }) {
+  const now = useOfferDate();
   if (!page.extra) return null;
   return (
     <div className="space-y-2">
       <p>{page.extra.text}</p>
       <ul className="space-y-1">
         {page.offers.map((o) => {
-          const q = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? []);
+          const q = landingOfferPrice(o, products[o.handle]?.node.variants.edges.map((e) => e.node) ?? [], now);
           const n = isOfferProduct(o.handle) ? o.qty ?? 1 : 1;
           return (
             <li key={o.id}>

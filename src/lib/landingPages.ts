@@ -423,10 +423,10 @@ export function landingOfferVariant<V extends PricedVariant>(offer: LandingOffer
 }
 
 /** Totaal en prijs per lamp van de voorgeselecteerde keuze, uit de Shopify-prijs. */
-export function landingOfferPrice(offer: LandingOffer, variants: PricedVariant[]) {
+export function landingOfferPrice(offer: LandingOffer, variants: PricedVariant[], displayDate?: Date) {
   const match = landingOfferVariant(offer, variants);
   if (!match) return null;
   const unit = parseFloat(match.price.amount);
   const qty = isOfferProduct(offer.handle) ? offer.qty ?? 1 : 1;
-  return quoteQty(unit, isOfferProduct(offer.handle) ? qty : 1);
+  return quoteQty(unit, isOfferProduct(offer.handle) ? qty : 1, displayDate);
 }
