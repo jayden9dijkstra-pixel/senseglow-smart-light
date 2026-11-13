@@ -27,6 +27,8 @@ import { PurchaseReassurance } from "@/components/product/PurchaseReassurance";
 import { parseVariantLabel } from "@/lib/productRegistry";
 import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
+import { useOfferDate } from "@/hooks/useOfferDate";
+import { canPurchaseVariant } from "@/lib/purchaseAvailability";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
 
@@ -37,7 +39,8 @@ const colorLabel = (v: Variant) => {
   return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
-function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; onAddRef?: (add: () => void) => void }) {
+function OfferCard({ offer, product, sticky, hideImage, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
+  const now = useOfferDate();
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
@@ -60,9 +63,11 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
   const unit = variant ? parseFloat(variant.price.amount) : null;
   const count = picker ? qty : 1;
   const saving = eightSetSaving(variant, variants);
+  const available = canPurchaseVariant(!!product, variant);
+  useEffect(() => { onAvailabilityChange?.(available); }, [available, onAvailabilityChange]);
 
   const add = () => {
-    if (!product || !variant) return;
+    if (!product || !variant || !available) return;
     addItem({
       product,
       variantId: variant.id,
@@ -129,7 +134,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
       <PerLampPrice unitPrice={unit} qty={count} offer={picker} />
       <Button
         ref={btnRef}
-        disabled={!product || !variant?.availableForSale}
+        disabled={!available}
         onClick={add}
         className="mt-auto h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
       >
@@ -141,8 +146,8 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef }: { offer: Lan
         <StickyAddBar
           watch={btnRef}
           qty={count}
-          total={unit != null ? quoteQty(unit, count).total : null}
-          disabled={!product || !variant?.availableForSale}
+          total={unit != null ? quoteQty(unit, count, now).total : null}
+          disabled={!available}
           onAdd={add}
           image={image?.url}
           label={offer.handle === STEP_PRODUCT_HANDLE
@@ -159,9 +164,12 @@ const LandingPage = () => {
   const page = getLandingPage(pathname.replace(/\/+$/, ""));
   const [products, setProducts] = useState<Record<string, ShopifyProduct>>({});
   const addRef = useRef<(() => void) | null>(null);
+  const [available, setAvailable] = useState(false);
 
   useEffect(() => {
     if (!page) return;
+    setAvailable(false);
+    addRef.current = null;
     const handles = [...new Set(page.offers.map((o) => o.handle))];
     Promise.all(handles.map((h) => fetchProductByHandle(h).catch(() => null))).then((list) => {
       const map: Record<string, ShopifyProduct> = {};
@@ -217,7 +225,7 @@ const LandingPage = () => {
           </div>
           <div className={`grid gap-4 ${cols}`}>
             {page.offers.map((o, i) => (
-              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} />
+              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
             ))}
           </div>
           <div className="max-w-3xl space-y-4">
@@ -264,8 +272,8 @@ const LandingPage = () => {
             <AskUs />
             <p className="text-base text-foreground/80">{TRADE_NAME_LINE}</p>
           </div>
-          <Button onClick={() => addRef.current?.()} className="h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90">
-            In winkelwagen
+          <Button disabled={!available} onClick={() => { if (available) addRef.current?.(); }} className="h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90">
+            {!products[first.handle] ? "Laden..." : available ? "In winkelwagen" : "Uitverkocht"}
           </Button>
         </div>
       </div>
