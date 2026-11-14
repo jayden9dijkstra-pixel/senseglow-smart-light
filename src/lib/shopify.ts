@@ -289,6 +289,7 @@ export async function createStorefrontCheckout(
     }
   `;
   const buyerCountry = await getBuyerCountry(locale);
+  const cartAttributes = attributionCartAttributes();
   const data = await storefrontApiRequest(mutation, {
     input: {
       lines: validatedItems.map((item) => ({
@@ -299,6 +300,9 @@ export async function createStorefrontCheckout(
       })),
       discountCodes,
       ...(buyerCountry ? { buyerIdentity: { countryCode: buyerCountry } } : {}),
+      // Herkomst ook op de order zelf (note_attributes), als reserve wanneer de
+      // eigen backend-opslag mislukt.
+      ...(cartAttributes.length ? { attributes: cartAttributes } : {}),
     },
   });
   const result = data as {
@@ -326,7 +330,12 @@ export async function createStorefrontCheckout(
   if (checkoutLocale) url.searchParams.set('locale', checkoutLocale);
   // Leg vast waar deze winkelwagen vandaan komt, zodat de bestelling later
   // alsnog aan de advertentieklik gekoppeld kan worden.
-  void storeCheckoutAttribution(url.pathname);
+  // Wacht kort tot dit is opgeslagen: een directe doorverwijzing kan het
+  // verzoek anders afbreken (order #1009 verloor zo zijn herkomst).
+  await Promise.race([
+    storeCheckoutAttribution(url.pathname),
+    new Promise<void>((resolve) => setTimeout(resolve, 1500)),
+  ]);
   // Neem de Google Ads klik-informatie mee zodat attributie blijft werken.
   return appendClickIdsToUrl(url.toString());
 }
@@ -400,6 +409,21 @@ function readAdConsent(): 'granted' | 'denied' | null {
     return adConsentStatus();
   } catch {
     return null;
+  }
+}
+
+/** Herkomst als Shopify cart-attributes (komen als note_attributes op de order). */
+export function attributionCartAttributes(): Array<{ key: string; value: string }> {
+  try {
+    const attribution = getStoredAttribution();
+    const consent = readAdConsent();
+    const out = Object.entries(attribution)
+      .filter(([, value]) => typeof value === 'string' && value.length > 0 && value.length <= 500)
+      .map(([key, value]) => ({ key: `_sg_${key}`, value }));
+    if (out.length && consent) out.push({ key: '_sg_ad_consent', value: consent });
+    return out;
+  } catch {
+    return [];
   }
 }
 

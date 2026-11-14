@@ -6,7 +6,7 @@
 const DOMAIN = Deno.env.get("SHOPIFY_STORE_DOMAIN") ?? "senseglow-smart-light-5jjoq.myshopify.com";
 const TOKEN = Deno.env.get("SHOPIFY_ADMIN_TOKEN") ?? Deno.env.get("SHOPIFY_ACCESS_TOKEN") ?? "";
 const VERSION = "2025-07";
-const FIELDS = "id,email,contact_email,name,test,source_name,current_subtotal_price,subtotal_price,created_at,total_price,currency,financial_status,cart_token,checkout_token,line_items,shipping_address,billing_address";
+const FIELDS = "id,email,contact_email,name,test,source_name,current_subtotal_price,subtotal_price,created_at,total_price,currency,financial_status,cart_token,checkout_token,note_attributes,line_items,shipping_address,billing_address";
 
 export async function fetchShopifyOrders(sinceDays: number): Promise<any[]> {
   if (!TOKEN) throw new Error("Geen Shopify-toegang beschikbaar in de backend.");
@@ -32,6 +32,20 @@ export async function fetchShopifyOrders(sinceDays: number): Promise<any[]> {
 import { hashEmail, type OrderForExport, orderNumber, rowsToWrite } from "./conversion-row.ts";
 import { appendRows, ensureEmailHeader, existingOrderIds } from "./google-sheets.ts";
 
+/** Herkomst uit de cart-attributes op de order (reserve voor checkout_attribution). */
+export function noteAttribution(o: any): Record<string, string | null> | undefined {
+  const notes: Array<{ name?: string; value?: string }> = Array.isArray(o?.note_attributes) ? o.note_attributes : [];
+  const get = (k: string) => {
+    const v = notes.find((n) => n?.name === `_sg_${k}`)?.value;
+    return typeof v === "string" && v.trim() ? v.trim().slice(0, 500) : null;
+  };
+  const rec: Record<string, string | null> = {};
+  for (const k of ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "ad_consent"]) rec[k] = get(k);
+  if (rec.ad_consent !== "granted" && rec.ad_consent !== "denied") rec.ad_consent = null;
+  rec.landing_path = null;
+  return Object.values(rec).some(Boolean) ? rec : undefined;
+}
+
 let lastCandidates: OrderForExport[] = [];
 
 export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
@@ -53,7 +67,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
   }
   const rows = orders.map((o) => {
     const token = o.cart_token || o.checkout_token || null;
-    const found = token ? attr.get(token) : undefined;
+    const found = (token ? attr.get(token) : undefined) ?? noteAttribution(o);
     const prev = existing.get(Number(o.id)) ?? {};
     const a = {
       gclid: found?.gclid ?? found?.gbraid ?? found?.wbraid ?? prev.gclid ?? null,
@@ -90,7 +104,7 @@ export async function syncOrders(admin: any, sinceDays = 90): Promise<number> {
   });
   lastCandidates = await Promise.all(orders.map(async (o) => {
     const token = o.cart_token || o.checkout_token || null;
-    const found = token ? attr.get(token) : undefined;
+    const found = (token ? attr.get(token) : undefined) ?? noteAttribution(o);
     const prev = existing.get(Number(o.id)) ?? {};
     return {
       order_number: o.name,
