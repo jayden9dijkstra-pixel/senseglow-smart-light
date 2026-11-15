@@ -167,6 +167,7 @@ export const ProductHeroSection = ({
               productTitle={product.node.title}
               videoUrl={getProductVideoUrl(product.node.handle)}
               imageClassName={productImageClassName}
+              mobileMaxHeight="55svh"
               activeImageUrl={
                 pickedByUser &&
                 selectedVariant?.image?.url &&
@@ -178,7 +179,6 @@ export const ProductHeroSection = ({
           </div>
 
           <div id="kopen" className="min-w-0 scroll-mt-24 space-y-4 pt-3 text-left md:pt-0">
-            {anchorLinks && <AnchorNav links={anchorLinks} />}
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-2xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">
                 {content.h1}
@@ -222,6 +222,7 @@ export const ProductHeroSection = ({
             <PurchaseReassurance />
             <TrustLine />
             {afterTrust}
+            {anchorLinks && <AnchorNav links={anchorLinks} />}
 
             <StickyAddBar
               watch={btnRef}
