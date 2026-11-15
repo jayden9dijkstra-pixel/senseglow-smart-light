@@ -19,7 +19,7 @@ import { ProductImageGallery } from "@/components/product/ProductImageGallery";
 import { BeforeAfterBlock } from "@/components/product/BeforeAfterBlock";
 import { InfoAccordion, PlainList, Benefits, type InfoSection } from "@/components/product/InfoAccordion";
 import { AnchorNav, SpecTiles, FaqAccordion } from "@/components/product/Blueprint";
-import { eightSetSaving } from "@/lib/productBlueprint";
+import { eightSetSaving, lampsInSet } from "@/lib/productBlueprint";
 import { reviewsFor } from "@/data/reviews";
 import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
@@ -131,7 +131,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef, onAvailability
       )}
       {saving != null && <p className="text-base font-medium text-foreground">{formatPrice(saving)} voordeliger dan 2 sets van 4</p>}
       {picker && <QuantityOfferPicker unitPrice={unit} value={qty} onChange={setQty} />}
-      <PerLampPrice unitPrice={unit} qty={count} offer={picker} />
+      <PerLampPrice unitPrice={unit} qty={count} offer={picker} setLamps={lampsInSet(variant)} />
       <Button
         ref={btnRef}
         disabled={!available}
@@ -214,9 +214,9 @@ const LandingPage = () => {
         <section id="kopen" className="scroll-mt-24 space-y-3 md:space-y-6">
           <div className="md:hidden">
             {heroImage ? (
-              <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="26svh" />
+              <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="32svh" imageClassName="h-full w-full object-cover" />
             ) : (
-              <div className="-mx-6 h-[26svh] animate-pulse bg-secondary" />
+              <div className="-mx-6 h-[32svh] animate-pulse bg-secondary" />
             )}
           </div>
           <div className="max-w-3xl space-y-1 md:space-y-3">

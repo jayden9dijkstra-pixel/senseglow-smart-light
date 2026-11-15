@@ -111,6 +111,9 @@ type V = { price: { amount: string }; selectedOptions: { name: string; value: st
 const setSize = (v: V) => Number(v.selectedOptions.map((o) => o.value).join(" ").match(/(\d+)[- ]?(?:delige|pack|set)/i)?.[1] ?? 0);
 const colorOf = (v: V) => v.selectedOptions.map((o) => o.value).join(" ").replace(/\d+[- ]?(?:delige|pack|set)\S*/gi, "").trim().toLowerCase();
 
+/** Aantal lampen in een set-variant ("4-delige set" → 4); 0 als het geen set is. */
+export const lampsInSet = (v: V | null | undefined) => (v ? setSize(v) : 0);
+
 /** Wall Lamp: hoeveel de 8-set goedkoper is dan 2 sets van 4 (zelfde kleur), uit de Shopify-prijzen. */
 export function eightSetSaving(variant: V | null | undefined, variants: V[]): number | null {
   if (!variant || setSize(variant) !== 8) return null;

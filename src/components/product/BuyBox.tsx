@@ -14,12 +14,23 @@ import { useOfferDate } from "@/hooks/useOfferDate";
 export const CONSENT_SAVED_EVENT = "sg:consent-saved";
 
 /** Prijs per lamp groot, totaal klein eronder. Rekent alleen met de Shopify-prijs en het bestaande aanbod. */
-export function PerLampPrice({ unitPrice, qty, offer }: { unitPrice: number | null; qty: number; offer: boolean }) {
+export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0 }: { unitPrice: number | null; qty: number; offer: boolean; setLamps?: number }) {
   const now = useOfferDate();
   if (unitPrice == null) return null;
   const count = offer ? qty : 1;
   const q = quoteQty(unitPrice, count, now);
-  if (!offer) return <p className="text-3xl font-bold text-primary">{formatPrice(unitPrice)}</p>;
+  if (!offer) {
+    return (
+      <div>
+        <p className="text-3xl font-bold leading-tight text-primary">{formatPrice(unitPrice)}</p>
+        {setLamps > 1 && (
+          <p className="text-base text-foreground/80">
+            {setLamps} lampen · {formatPrice(Math.round((unitPrice / setLamps) * 100) / 100)} per lamp
+          </p>
+        )}
+      </div>
+    );
+  }
   return (
     <div>
       <p className="text-3xl font-bold leading-tight text-primary">

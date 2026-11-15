@@ -14,7 +14,7 @@ import { QuantityOfferPicker } from "./QuantityOfferPicker";
 import { Benefits } from "./InfoAccordion";
 import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { getAngle, getStoredAngle } from "@/lib/angles";
-import { blueprintFor, eightSetSaving } from "@/lib/productBlueprint";
+import { blueprintFor, eightSetSaving, lampsInSet } from "@/lib/productBlueprint";
 import { AnchorNav, IconBenefits } from "./Blueprint";
 import { formatPrice } from "@/lib/price";
 import { PurchaseReassurance } from "./PurchaseReassurance";
@@ -207,7 +207,7 @@ export const ProductHeroSection = ({
             )}
 
             <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
-              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
+              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} setLamps={lampsInSet(selectedVariant)} />
             </div>
 
             <Button
