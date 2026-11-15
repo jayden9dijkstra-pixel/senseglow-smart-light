@@ -1,11 +1,11 @@
 import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { Link } from "react-router-dom";
-import { Footprints, ChefHat, Baby, Sun, Lamp } from "lucide-react";
+import { Footprints, ChefHat, Moon, Sun, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { formatPrice } from "@/lib/price";
-import { HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE } from "@/lib/homeContent";
+import { HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, tileHandle } from "@/lib/homeContent";
 
-const icons = [Footprints, ChefHat, Baby, Sun, Lamp];
+const icons = [Footprints, ChefHat, Moon, Sun, Lamp];
 const tiles = HOME_TILES.map((tile, i) => ({ ...tile, icon: icons[i] ?? Lamp }));
 
 interface UseCaseGridProps {
@@ -32,8 +32,8 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {tiles.map(({ icon: Icon, title, body, href }, i) => {
-              const handle = href.replace("/product/", "");
+            {tiles.map(({ icon: Icon, title, body, href, ...rest }, i) => {
+              const handle = tileHandle({ href, ...rest });
               const product = productsByHandle.get(handle);
               // Zelfde eerste foto als productpagina en /producten.
               const image = product?.node.featuredImage ?? product?.node.images?.edges?.[0]?.node;

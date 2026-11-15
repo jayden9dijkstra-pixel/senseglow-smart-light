@@ -30,6 +30,7 @@ export const HOME_TILES = [
     title: "Veilig de trap op, ook 's nachts",
     body: "Set van 4 wandlampjes met sensor, zelfklevend. Gaan aan als je de trap nadert, zonder boren of kabels.",
     href: "/trapverlichting",
+    handle: "senseglow_wall_lamp",
   },
   {
     title: "Buitenmuur verlicht zonder kabel",
@@ -42,6 +43,9 @@ export const HOME_TILES = [
     href: "/product/senseglow_flex",
   },
 ];
+
+/** Shopify-handle achter een tegel: expliciet `handle`, anders uit een /product/-link. */
+export const tileHandle = (tile: { href: string; handle?: string }) => tile.handle ?? tile.href.replace("/product/", "");
 
 export const HOME_PILLARS_HEADING = "Wat ze met elkaar gemeen hebben";
 export const HOME_PILLARS = [
