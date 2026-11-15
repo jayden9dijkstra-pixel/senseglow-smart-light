@@ -132,6 +132,11 @@ const DELIVERY_FAQ: ProductFaq = {
   answer: `${DELIVERY_TEXT}. Verzending naar Nederland en België is gratis en je krijgt een track-code per mail.`,
 };
 
+const CHRISTMAS_FAQ: ProductFaq = {
+  question: "Is mijn bestelling vóór kerst in huis?",
+  answer: `${DELIVERY_TEXT}. Bestel je uiterlijk 30 november, dan verwachten we levering vóór kerst. Bestel je later, dan kunnen we dat niet beloven.`,
+};
+
 const AMBIENT_CHARGE_FAQ: ProductFaq = {
   question: "Hoe vaak moet ik opladen?",
   answer: "Ongeveer één keer per paar weken, afhankelijk van hoe vaak de lamp aangaat. Je laadt hem op via USB-C; de kabel zit erbij.",
@@ -147,7 +152,7 @@ const AMBIENT_SENSOR_FAQ: ProductFaq = {
   answer: "De bewegingssensor, ook wel bewegingsmelder genoemd, ziet beweging binnen 120° en tot 5 meter. Loop je erlangs, dan gaat het licht vanzelf aan.",
 };
 
-const common = (...faqs: ProductFaq[]) => [...faqs, DELIVERY_FAQ, ...purchaseFaqs];
+const common = (...faqs: ProductFaq[]) => [...faqs, DELIVERY_FAQ, CHRISTMAS_FAQ, ...purchaseFaqs];
 
 export const LANDING_PAGES: LandingPage[] = [
   {
