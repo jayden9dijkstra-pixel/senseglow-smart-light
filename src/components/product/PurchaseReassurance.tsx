@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
+import { ShieldCheck } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { NEW_BRAND_TRUST } from "@/lib/purchaseTrust";
 
 export function PurchaseReassurance() {
   const { localizePath } = useI18n();
   return (
-    <p className="py-3 text-lg font-medium leading-relaxed text-foreground">
-      <Link to={localizePath("/retourneren")} className="underline decoration-primary underline-offset-4">
+    <p className="flex items-start gap-2 py-2 text-base leading-snug text-foreground/85">
+      <ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+      <Link to={localizePath("/retourneren")} className="hover:underline hover:underline-offset-4">
         {NEW_BRAND_TRUST}
       </Link>
     </p>

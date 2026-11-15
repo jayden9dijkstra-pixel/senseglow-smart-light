@@ -27,9 +27,9 @@ export const HOME_TILES = [
     href: "/product/senseglow_wave",
   },
   {
-    title: "Zacht nachtlicht in de kinderkamer",
-    body: "Wandlampjes met sensor, zelfklevend gemonteerd. Licht laag bij de vloer, voor kleine voetjes.",
-    href: "/product/senseglow_wall_lamp",
+    title: "Veilig de trap op, ook 's nachts",
+    body: "Set van 4 wandlampjes met sensor, zelfklevend. Gaan aan als je de trap nadert, zonder boren of kabels.",
+    href: "/trapverlichting",
   },
   {
     title: "Buitenmuur verlicht zonder kabel",
