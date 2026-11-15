@@ -39,7 +39,7 @@ const colorLabel = (v: Variant) => {
   return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
-function OfferCard({ offer, product, sticky, hideImage, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
+function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; solo?: boolean; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
   const now = useOfferDate();
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
@@ -81,7 +81,7 @@ function OfferCard({ offer, product, sticky, hideImage, onAddRef, onAvailability
 
   return (
     <div className={`flex flex-col gap-2 bg-background md:gap-3 md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
-      {image && (
+      {image && !solo && (
         <img
           {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
           alt={image.altText || product?.node.title || offer.label}
@@ -188,11 +188,14 @@ const LandingPage = () => {
     ]),
   ];
 
-  const cols = page.offers.length >= 3 ? "md:grid-cols-3" : page.offers.length === 2 ? "md:grid-cols-2" : "md:max-w-md";
+  const solo = page.offers.length === 1;
+  const cols = page.offers.length >= 3 ? "md:grid-cols-3" : page.offers.length === 2 ? "md:grid-cols-2" : "";
   const handles = [...new Set(page.offers.map((o) => o.handle))];
   const first = page.offers[0];
   const heroImage = first ? offerImage(first, products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? []) : null;
   const pair = first ? getBeforeAfterPair(first.handle) : undefined;
+  const firstImages = first ? products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? [] : [];
+  const desktopImages = heroImage ? [heroImage, ...firstImages.filter((im) => im.url !== heroImage.url)] : firstImages;
   const intro = page.intro.match(/^.*?[.!?](\s|$)/)?.[0].trim() ?? page.intro;
 
   const sections: InfoSection[] = [
@@ -219,18 +222,31 @@ const LandingPage = () => {
               <div className="-mx-6 h-[32svh] animate-pulse bg-secondary" />
             )}
           </div>
-          <div className="max-w-3xl space-y-1 md:space-y-3">
-            <h1 className="line-clamp-2 text-2xl font-bold leading-tight text-foreground md:text-5xl">{page.h1}</h1>
-            <p className="text-base text-foreground/80 md:text-lg">{intro}</p>
-          </div>
-          <div className={`grid gap-4 ${cols}`}>
-            {page.offers.map((o, i) => (
-              <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
-            ))}
-          </div>
-          <div className="max-w-3xl space-y-4">
-            <Benefits items={page.benefits} />
-            <AnchorNav links={anchorLinks} />
+          <div className={solo ? "md:grid md:grid-cols-2 md:items-start md:gap-12" : ""}>
+            {solo && (
+              <div className="hidden md:sticky md:top-24 md:block">
+                {desktopImages.length > 0 ? (
+                  <ProductImageGallery images={desktopImages} productTitle={page.h1} />
+                ) : (
+                  <div className="aspect-square animate-pulse rounded-[2rem] bg-secondary" />
+                )}
+              </div>
+            )}
+            <div className="space-y-3 md:space-y-6">
+              <div className="max-w-3xl space-y-1 md:space-y-3">
+                <h1 className={`line-clamp-2 text-2xl font-bold leading-tight text-foreground ${solo ? "md:text-4xl" : "md:text-5xl"}`}>{page.h1}</h1>
+                <p className="text-base text-foreground/80 md:text-lg">{intro}</p>
+              </div>
+              <div className={`grid gap-4 ${cols}`}>
+                {page.offers.map((o, i) => (
+                  <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} solo={solo} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
+                ))}
+              </div>
+              <div className="max-w-3xl space-y-4">
+                <Benefits items={page.benefits} />
+                <AnchorNav links={anchorLinks} />
+              </div>
+            </div>
           </div>
         </section>
 
