@@ -134,7 +134,7 @@ const DELIVERY_FAQ: ProductFaq = {
 
 const CHRISTMAS_FAQ: ProductFaq = {
   question: "Is mijn bestelling vóór kerst in huis?",
-  answer: `${DELIVERY_TEXT}. Bestel je uiterlijk 30 november, dan verwachten we levering vóór kerst. Bestel je later, dan kunnen we dat niet beloven.`,
+  answer: `${DELIVERY_TEXT}. Levering vóór kerst kunnen we niet garanderen. Wil je het als kerstcadeau geven, bestel dan zo vroeg mogelijk.`,
 };
 
 const AMBIENT_CHARGE_FAQ: ProductFaq = {
