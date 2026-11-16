@@ -58,7 +58,7 @@ export const getSalesSummary = defineTool({
 export const getFunnel = defineTool({
   name: "get_funnel",
   title: "Funnel (admin)",
-  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Also splits the funnel per landing page, referrer host, country and device (first event of each session). Admin only.",
+  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Engaged = at least 15 seconds on the site or half a page scrolled (recorded from 16 Nov 2026). Also splits the funnel per landing page, referrer host, country and device (first event of each session). Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -74,8 +74,8 @@ export const getFunnel = defineTool({
         if (page.length < 1000) break;
       }
       const sessions = new Set<string>();
-      const by: Record<string, Set<string>> = { view_item: new Set(), add_to_cart: new Set(), begin_checkout: new Set() };
-      const counts: Record<string, number> = { view_item: 0, add_to_cart: 0, begin_checkout: 0 };
+      const by: Record<string, Set<string>> = { engaged: new Set(), view_item: new Set(), add_to_cart: new Set(), begin_checkout: new Set() };
+      const counts: Record<string, number> = { engaged: 0, view_item: 0, add_to_cart: 0, begin_checkout: 0 };
       for (const ev of events) {
         sessions.add(ev.session_id);
         if (ev.event_type in by) { by[ev.event_type].add(ev.session_id); counts[ev.event_type]++; }
@@ -86,7 +86,7 @@ export const getFunnel = defineTool({
         range: r, internal_traffic_excluded: true,
         sessions: sessions.size,
         events: counts,
-        sessions_with: { view_item: by.view_item.size, add_to_cart: by.add_to_cart.size, begin_checkout: by.begin_checkout.size },
+        sessions_with: { engaged: by.engaged.size, view_item: by.view_item.size, add_to_cart: by.add_to_cart.size, begin_checkout: by.begin_checkout.size },
         purchases,
         abandoned_carts: abandoned,
         ...funnelBreakdown(events),

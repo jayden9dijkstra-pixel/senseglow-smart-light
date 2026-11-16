@@ -12,7 +12,8 @@ export type SiteEventType =
   | "view_item"
   | "add_to_cart"
   | "begin_checkout"
-  | "checkout_reached";
+  | "checkout_reached"
+  | "engaged";
 
 function sessionId(): string {
   try {
@@ -87,4 +88,42 @@ export async function trackSiteEvent(
   } catch {
     // meting mag de winkel nooit blokkeren
   }
+}
+
+let engagementStarted = false;
+
+/**
+ * Eén keer per sessie: "engaged" zodra de bezoeker 15 seconden op de site is
+ * of de helft van een pagina heeft gescrold. Scheidt "direct weer weg" van
+ * "gekeken maar niet gekocht". Geen persoonsgegevens.
+ */
+export function startEngagementTracking(): void {
+  if (typeof window === "undefined" || engagementStarted) return;
+  engagementStarted = true;
+  try {
+    if (sessionStorage.getItem("sg_engaged")) return;
+  } catch {
+    return;
+  }
+  let done = false;
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max > 0 && window.scrollY / max >= 0.5) fire();
+  };
+  const timer = window.setTimeout(() => {
+    if (document.visibilityState === "visible") fire();
+  }, 15000);
+  function fire() {
+    if (done) return;
+    done = true;
+    window.removeEventListener("scroll", onScroll);
+    window.clearTimeout(timer);
+    try {
+      sessionStorage.setItem("sg_engaged", "1");
+    } catch {
+      // meting mag de winkel nooit blokkeren
+    }
+    void trackSiteEvent("engaged");
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
 }

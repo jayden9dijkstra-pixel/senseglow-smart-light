@@ -15,17 +15,18 @@ export interface FunnelEvent {
 export interface FunnelRow {
   key: string;
   sessions: number;
+  engaged: number;
   view_item: number;
   add_to_cart: number;
   begin_checkout: number;
 }
 
-const STEPS = ["view_item", "add_to_cart", "begin_checkout"] as const;
+const STEPS = ["engaged", "view_item", "add_to_cart", "begin_checkout"] as const;
 
 function group(sessions: Map<string, { key: string; steps: Set<string> }>, limit: number): FunnelRow[] {
   const rows = new Map<string, FunnelRow>();
   for (const s of sessions.values()) {
-    const row = rows.get(s.key) ?? { key: s.key, sessions: 0, view_item: 0, add_to_cart: 0, begin_checkout: 0 };
+    const row = rows.get(s.key) ?? { key: s.key, sessions: 0, engaged: 0, view_item: 0, add_to_cart: 0, begin_checkout: 0 };
     row.sessions++;
     for (const step of STEPS) if (s.steps.has(step)) row[step]++;
     rows.set(s.key, row);

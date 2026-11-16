@@ -8,7 +8,7 @@ import { useEffect, useRef, lazy, Suspense } from "react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
 import { captureAngle } from "@/lib/angles";
-import { trackSiteEvent } from "@/lib/siteAnalytics";
+import { trackSiteEvent, startEngagementTracking } from "@/lib/siteAnalytics";
 // Kernpad blijft direct geladen: dit zijn de pagina's waar advertentieverkeer
 // op landt en waar geconverteerd wordt. Alles daarbuiten wordt pas opgehaald
 // zodra iemand er echt naartoe navigeert — dat houdt de eerste download klein
@@ -68,6 +68,7 @@ const AdsTracking = () => {
   useEffect(() => {
     // Eigen meting telt elke weergave, ook de eerste.
     void trackSiteEvent("page_view", { path: pathname });
+    startEngagementTracking();
     if (isFirst.current) {
       // De eerste weergave stuurt gtag zelf al vanuit de <head>.
       isFirst.current = false;
