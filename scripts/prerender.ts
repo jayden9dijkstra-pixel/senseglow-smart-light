@@ -370,7 +370,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   for (const o of page.offers) {
     const prod = products[o.handle];
     const img = offerImage(o, prod?.node.images?.edges?.map((x) => x.node) ?? []);
-    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
+    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.stepQuestion && o.stepChoices ? `<p>${e(o.stepQuestion)} ${e(o.stepChoices.map((c) => `${c.label}: ${c.optionValue}`).join(". "))}.</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
   p.push(`<p><a href="${SITE_URL}/retourneren">${e(NEW_BRAND_TRUST)}</a></p>`);

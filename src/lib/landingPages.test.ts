@@ -19,6 +19,16 @@ describe("nieuwe landingspagina's", () => {
     expect(json.toLowerCase()).not.toContain("sensor");
   });
 
+  it("/trapverlichting: tredenvraag kiest alleen bestaande sets en volgt de FAQ-regel", () => {
+    const o = getLandingPage("/trapverlichting")!.offers[0];
+    expect(o.stepQuestion).toBe("Hoeveel treden heeft je trap?");
+    expect(o.stepChoices).toEqual([
+      { label: "Tot 12 treden", optionValue: "4-delige set" },
+      { label: "13 of meer treden", optionValue: "8-delige set" },
+    ]);
+    for (const c of o.stepChoices!) expect(o.choices).toContain(c.optionValue);
+  });
+
   it("/trapverlichting: Wall Lamp, standaard 4-delige set, keuze 4- of 8-set", () => {
     const o = getLandingPage("/trapverlichting")!.offers;
     expect(o).toHaveLength(1);

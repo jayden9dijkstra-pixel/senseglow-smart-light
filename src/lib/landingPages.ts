@@ -34,6 +34,10 @@ export interface LandingOffer {
   choices?: string[];
   /** Korte hulpregel bij die keuze. */
   choiceNote?: string;
+  /** Vraag boven de setkeuze die de bezoeker naar de passende set leidt. */
+  stepQuestion?: string;
+  /** Antwoorden op die vraag; elk antwoord kiest een waarde uit `choices`. */
+  stepChoices?: { label: string; optionValue: string }[];
 }
 
 type OfferImage = { url: string; altText: string | null; width?: number | null; height?: number | null };
@@ -170,6 +174,11 @@ export const LANDING_PAGES: LandingPage[] = [
         optionValue: "4-delige set",
         choices: ["4-delige set", "8-delige set"],
         choiceNote: "Korte trap of overloop: 4-set. Langere trap: 8-set.",
+        stepQuestion: "Hoeveel treden heeft je trap?",
+        stepChoices: [
+          { label: "Tot 12 treden", optionValue: "4-delige set" },
+          { label: "13 of meer treden", optionValue: "8-delige set" },
+        ],
         scene: "trap",
       },
     ],

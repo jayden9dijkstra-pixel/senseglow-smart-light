@@ -45,6 +45,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvaila
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
   const [option, setOption] = useState<string | undefined>(offer.optionValue);
+  const [steps, setSteps] = useState<string | undefined>();
   const want = useMemo(() => ({ ...offer, optionValue: option }), [offer, option]);
   const choices = useMemo(() => {
     const seen = new Set<string>();
@@ -94,6 +95,26 @@ function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvaila
         <h2 className={`text-lg font-semibold text-foreground ${hideImage ? "sr-only md:not-sr-only" : ""}`}>{offer.label}</h2>
         {offer.note && <p className="text-base text-foreground/80">{offer.note}</p>}
       </div>
+      {offer.stepQuestion && offer.stepChoices && (
+        <div className="space-y-2">
+          <p className="text-base font-medium text-foreground">{offer.stepQuestion}</p>
+          <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={offer.stepQuestion}>
+            {offer.stepChoices.map((c) => (
+              <button
+                key={c.label}
+                type="button"
+                role="radio"
+                aria-checked={c.label === steps}
+                onClick={() => { setSteps(c.label); setOption(c.optionValue); }}
+                className={`min-h-12 rounded-xl border px-3 text-base font-medium ${c.label === steps ? "border-primary bg-primary/10 text-foreground" : "border-foreground/20 text-foreground"}`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+          {steps && option && <p className="text-base text-foreground" aria-live="polite">Ons advies voor jouw trap: de {option}.</p>}
+        </div>
+      )}
       {offer.choices && (
         <div className="space-y-2">
           <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Set">
@@ -103,7 +124,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvaila
                 type="button"
                 role="radio"
                 aria-checked={c === option}
-                onClick={() => setOption(c)}
+                onClick={() => { setOption(c); setSteps(undefined); }}
                 className={`min-h-12 rounded-xl border px-3 text-base font-medium ${c === option ? "border-primary bg-primary/10 text-foreground" : "border-foreground/20 text-foreground"}`}
               >
                 {c}
