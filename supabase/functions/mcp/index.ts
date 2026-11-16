@@ -306,6 +306,49 @@ async function loadOrders(read, fromIso, toIso, limit = MAX_ROWS) {
   });
 }
 
+// src/lib/mcp/funnel-breakdown.ts
+var STEPS = ["view_item", "add_to_cart", "begin_checkout"];
+function group(sessions, limit) {
+  const rows = /* @__PURE__ */ new Map();
+  for (const s of sessions.values()) {
+    const row = rows.get(s.key) ?? { key: s.key, sessions: 0, view_item: 0, add_to_cart: 0, begin_checkout: 0 };
+    row.sessions++;
+    for (const step of STEPS) if (s.steps.has(step)) row[step]++;
+    rows.set(s.key, row);
+  }
+  return [...rows.values()].sort((a, b) => b.sessions - a.sessions || a.key.localeCompare(b.key)).slice(0, limit);
+}
+function funnelBreakdown(events, limit = 12) {
+  const dims = {
+    landing_page: /* @__PURE__ */ new Map(),
+    referrer: /* @__PURE__ */ new Map(),
+    country: /* @__PURE__ */ new Map(),
+    device: /* @__PURE__ */ new Map()
+  };
+  for (const ev of events) {
+    const first = {
+      landing_page: ev.path || "(onbekend)",
+      referrer: ev.referrer || "(direct)",
+      country: ev.country || "(onbekend)",
+      device: ev.device || "(onbekend)"
+    };
+    for (const dim of Object.keys(dims)) {
+      let s = dims[dim].get(ev.session_id);
+      if (!s) {
+        s = { key: first[dim], steps: /* @__PURE__ */ new Set() };
+        dims[dim].set(ev.session_id, s);
+      }
+      s.steps.add(ev.event_type);
+    }
+  }
+  return {
+    by_landing_page: group(dims.landing_page, limit),
+    by_referrer: group(dims.referrer, limit),
+    by_country: group(dims.country, limit),
+    by_device: group(dims.device, limit)
+  };
+}
+
 // src/lib/mcp/tools/private-tools.ts
 var RO = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 var getOrders = defineTool4({
@@ -367,7 +410,7 @@ var getSalesSummary = defineTool4({
 var getFunnel = defineTool4({
   name: "get_funnel",
   title: "Funnel (admin)",
-  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Also splits the funnel per landing page, referrer host, country and device (first event of each session). Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -377,7 +420,7 @@ var getFunnel = defineTool4({
       const events = [];
       for (let offset = 0; offset < 5e4; offset += 1e3) {
         const page = await read(
-          `site_events?select=session_id,event_type&internal=eq.false&created_at=gte.${encodeURIComponent(r.fromIso)}&created_at=lt.${encodeURIComponent(r.toIso)}&order=created_at.asc&limit=1000&offset=${offset}`
+          `site_events?select=session_id,event_type,path,referrer,country,device&internal=eq.false&created_at=gte.${encodeURIComponent(r.fromIso)}&created_at=lt.${encodeURIComponent(r.toIso)}&order=created_at.asc&limit=1000&offset=${offset}`
         );
         events.push(...page);
         if (page.length < 1e3) break;
@@ -402,6 +445,7 @@ var getFunnel = defineTool4({
         sessions_with: { view_item: by.view_item.size, add_to_cart: by.add_to_cart.size, begin_checkout: by.begin_checkout.size },
         purchases,
         abandoned_carts: abandoned,
+        ...funnelBreakdown(events),
         note: "Abandoned carts are sessions that added to cart but never started checkout. Checkout abandonment inside Shopify is not stored."
       });
     } catch (e) {
@@ -420,7 +464,7 @@ var getAttribution = defineTool4({
       const read = await requireAdmin(ctx);
       const r = parseRange(date_from, date_to);
       const orders = (await loadOrders(read, r.fromIso, r.toIso)).filter((o) => !o.is_test && o.status !== "refunded");
-      const group = (key) => {
+      const group2 = (key) => {
         const out = {};
         for (const o of orders) {
           const k = key(o);
@@ -432,8 +476,8 @@ var getAttribution = defineTool4({
       };
       return ok({
         range: r,
-        per_campaign: group((o) => o.attribution.utm_campaign ?? "(none)"),
-        per_source: group((o) => o.attribution.has_gclid ? "google_ads (gclid)" : o.attribution.utm_source ?? "(unknown)")
+        per_campaign: group2((o) => o.attribution.utm_campaign ?? "(none)"),
+        per_source: group2((o) => o.attribution.has_gclid ? "google_ads (gclid)" : o.attribution.utm_source ?? "(unknown)")
       });
     } catch (e) {
       return fail(e);

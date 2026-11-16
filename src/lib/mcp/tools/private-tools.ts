@@ -1,6 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { fail, loadOrders, MAX_ROWS, ok, parseRange, rangeSchema, requireAdmin } from "../private-data";
+import { funnelBreakdown } from "../funnel-breakdown";
 
 const RO = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } as const;
 
@@ -57,7 +58,7 @@ export const getSalesSummary = defineTool({
 export const getFunnel = defineTool({
   name: "get_funnel",
   title: "Funnel (admin)",
-  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+  description: "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Also splits the funnel per landing page, referrer host, country and device (first event of each session). Admin only.",
   inputSchema: rangeSchema,
   annotations: RO,
   handler: async ({ date_from, date_to }, ctx) => {
@@ -67,7 +68,7 @@ export const getFunnel = defineTool({
       const events: any[] = [];
       for (let offset = 0; offset < 50_000; offset += 1000) {
         const page = await read(
-          `site_events?select=session_id,event_type&internal=eq.false&created_at=gte.${encodeURIComponent(r.fromIso)}&created_at=lt.${encodeURIComponent(r.toIso)}&order=created_at.asc&limit=1000&offset=${offset}`,
+          `site_events?select=session_id,event_type,path,referrer,country,device&internal=eq.false&created_at=gte.${encodeURIComponent(r.fromIso)}&created_at=lt.${encodeURIComponent(r.toIso)}&order=created_at.asc&limit=1000&offset=${offset}`,
         );
         events.push(...page);
         if (page.length < 1000) break;
@@ -88,6 +89,7 @@ export const getFunnel = defineTool({
         sessions_with: { view_item: by.view_item.size, add_to_cart: by.add_to_cart.size, begin_checkout: by.begin_checkout.size },
         purchases,
         abandoned_carts: abandoned,
+        ...funnelBreakdown(events),
         note: "Abandoned carts are sessions that added to cart but never started checkout. Checkout abandonment inside Shopify is not stored.",
       });
     } catch (e) { return fail(e); }
