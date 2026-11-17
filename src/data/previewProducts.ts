@@ -3,6 +3,7 @@
  * Nova (China) kan Amazon/Temu/Alibaba niet openen en levert 1-op-1 wat op deze pagina staat.
  * Alleen bereikbaar via /voorbeeld/<slug>: niet in menu, catalogus, sitemap of zoekmachines (noindex + robots.txt).
  * Specs komen uitsluitend van de bronlisting; niets verzinnen.
+ * Beelden staan in public/voorbeeld/<slug>/ of in de eigen Shopify-bestanden (cdn.shopify.com).
  */
 export interface PreviewProduct {
   slug: string;
@@ -96,6 +97,39 @@ export const PREVIEW_PRODUCTS: PreviewProduct[] = [
     ],
     quoteNote:
       "Please quote exactly this sunrise alarm clock (photos + specs on this page), version without app, for 1, 2, 3 and 4 pcs, shipping to NL + BE. Please include an EU plug/adapter and confirm CE marking and neutral packaging (no brand logo).",
+  },
+  {
+    slug: "antislipstrips-3ed7bd13",
+    title: "Antislipstrips voor de trap — transparant, set van 15",
+    titleEn: "Clear anti-slip stair strips — set of 15",
+    intro:
+      "Transparante, zelfklevende antislipstrips voor houten traptreden. Op maat te knippen en zonder resten te verwijderen.",
+    variant: "Transparant, 10 x 60 cm, 15 stuks",
+    images: [
+      { src: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/voorbeeld-antislipstrips-1-op-trap.jpg", alt: "15 transparante strips op een houten trap" },
+      { src: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/voorbeeld-antislipstrips-2-maten.jpg", alt: "Maten 10 x 60, 10 x 81, 15 x 60 en 15 x 81 cm op een trede" },
+      { src: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/voorbeeld-antislipstrips-3-maattabel.jpg", alt: "Maattabel per tredediepte en -breedte" },
+      { src: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/voorbeeld-antislipstrips-4-materiaal.jpg", alt: "PEVA-oppervlak en verwijderen zonder resten" },
+      { src: "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/voorbeeld-antislipstrips-5-knippen.jpg", alt: "Op maat te knippen" },
+    ],
+    specs: [
+      ["Materiaal", "PEVA"],
+      ["Kleur", "Transparant"],
+      ["Maat per strip", "10 x 60 cm (voor treden 20–24 cm diep, 60–81 cm breed)"],
+      ["Aantal", "15 strips"],
+      ["Bevestiging", "Zelfklevend"],
+      ["Overig", "Op maat te knippen, verwijderen zonder resten, waterbestendig"],
+    ],
+    specsEn: [
+      ["Material", "PEVA"],
+      ["Colour", "Clear / transparent"],
+      ["Size per strip", "10 x 60 cm (for steps 20–24 cm deep, 60–81 cm wide)"],
+      ["Quantity", "15 strips per set"],
+      ["Fixing", "Self-adhesive backing"],
+      ["Other", "Can be cut to size, removable without residue, waterproof"],
+    ],
+    quoteNote:
+      "Please quote exactly these strips (photos + specs on this page), size 10 x 60 cm, 15 pcs per set, for 1, 2 and 4 sets, shipping to NL + BE. Please tell us the weight per set and the price when one set ships in the same parcel as a SenseGlow Wall Lamp 4-set or 8-set. Neutral packaging please.",
   },
 ];
 
