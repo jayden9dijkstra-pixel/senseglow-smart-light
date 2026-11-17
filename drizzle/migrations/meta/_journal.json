@@ -36,6 +36,13 @@
       "when": 1792967629479,
       "tag": "0004_ads_conversion_exports",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794921355098,
+      "tag": "0005_allow_engaged_site_events",
+      "breakpoints": true
     }
   ]
 }
