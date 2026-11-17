@@ -165,7 +165,7 @@
       {
         "name": "get_funnel",
         "title": "Funnel (admin)",
-        "description": "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Admin only.",
+        "description": "Read-only. Returns no personal data. Sessions, view_item, add_to_cart, begin_checkout from own site events (internal traffic excluded) and purchases from Shopify orders. Abandoned carts = add_to_cart sessions without begin_checkout. Engaged = at least 15 seconds on the site or half a page scrolled (recorded from 16 Nov 2026). Also splits the funnel per landing page, referrer host, country and device (first event of each session). Admin only.",
         "annotations": {
           "readOnlyHint": true,
           "destructiveHint": false,
