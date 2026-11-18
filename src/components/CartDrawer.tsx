@@ -246,7 +246,7 @@ export function CartDrawer() {
 
                 <Button
                   onClick={handleCheckout}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="w-full bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta"
                   size="lg"
                   disabled={items.length === 0 || isLoading}
                 >

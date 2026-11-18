@@ -18,7 +18,7 @@ export const VoetCTA = () => {
             <Button
               onClick={() => navigate("/producten")}
               size="lg"
-              className="text-sm font-medium tracking-wide rounded-sm px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
+              className="text-sm font-medium tracking-wide rounded-sm px-8 py-6 bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta transition-all duration-500"
             >
               Bekijk alle producten
             </Button>

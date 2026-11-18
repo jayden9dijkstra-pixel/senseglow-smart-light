@@ -127,7 +127,7 @@ const WhySenseGlow = () => {
               Mail direct met support@senseglow.shop of bekijk de collectie.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild className="rounded-sm px-8">
+              <Button asChild className="rounded-sm bg-cta px-8 text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta">
                 <Link to="/producten">Bekijk de collectie</Link>
               </Button>
               <Button asChild variant="ghost" className="rounded-sm px-6">

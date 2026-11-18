@@ -28,7 +28,7 @@ export const FinalProductCTA = ({
           <Button
             onClick={scrollToTop}
             size="lg"
-            className="text-xl px-16 py-8 h-auto rounded-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
+            className="text-xl px-16 py-8 h-auto rounded-sm font-semibold bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta transition-all duration-500"
           >
             {ctaLabel}
           </Button>

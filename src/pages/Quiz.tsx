@@ -203,7 +203,7 @@ const Quiz = () => {
                 <Button
                   onClick={() => navigate(r.url)}
                   size="lg"
-                  className="w-full rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500"
+                  className="w-full rounded-sm bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta transition-all duration-500"
                 >
                   Bekijk dit product
                 </Button>

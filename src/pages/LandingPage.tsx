@@ -157,7 +157,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvaila
         ref={btnRef}
         disabled={!available}
         onClick={add}
-        className="mt-auto h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
+        className="mt-auto h-12 w-full rounded-full bg-cta text-base text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta"
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
@@ -309,7 +309,7 @@ const LandingPage = () => {
             <AskUs />
             <p className="text-base text-foreground/80">{TRADE_NAME_LINE}</p>
           </div>
-          <Button disabled={!available} onClick={() => { if (available) addRef.current?.(); }} className="h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90">
+          <Button disabled={!available} onClick={() => { if (available) addRef.current?.(); }} className="h-12 w-full rounded-full bg-cta text-base text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta">
             {!products[first.handle] ? "Laden..." : available ? "In winkelwagen" : "Uitverkocht"}
           </Button>
         </div>

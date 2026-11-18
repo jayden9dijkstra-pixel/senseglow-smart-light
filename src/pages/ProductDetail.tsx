@@ -214,7 +214,7 @@ const ProductDetail = () => {
           <Button
             onClick={() => addRef.current?.()}
             disabled={!selectedVariant?.availableForSale}
-            className="h-12 w-full rounded-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
+            className="h-12 w-full rounded-full bg-cta text-base text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta"
           >
             {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
           </Button>

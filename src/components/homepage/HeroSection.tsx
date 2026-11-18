@@ -41,7 +41,7 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
               <Button
                 onClick={scrollToProducts}
                 size="lg"
-                className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-500 w-full sm:w-auto"
+                className="text-sm font-medium tracking-wide rounded-full px-8 py-6 bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta transition-all duration-500 w-full sm:w-auto"
               >
                 Bekijk de lampen
               </Button>

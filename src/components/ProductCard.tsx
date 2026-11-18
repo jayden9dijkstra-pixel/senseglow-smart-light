@@ -108,7 +108,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <CardFooter className="p-5 pt-0">
         <Button 
           onClick={handleAddToCart}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium uppercase text-sm tracking-[0.15em] rounded-sm transition-all duration-500"
+          className="w-full bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta font-medium uppercase text-sm tracking-[0.15em] rounded-sm transition-all duration-500"
           disabled={!selectedVariant?.availableForSale}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />

@@ -215,7 +215,7 @@ export const ProductHeroSection = ({
               onClick={handleAddToCart}
               size="lg"
               disabled={!selectedVariant?.availableForSale}
-              className="w-full min-h-12 h-auto rounded-full bg-primary px-10 py-4 text-base font-medium tracking-wide text-primary-foreground transition-all duration-500 hover:bg-primary/90"
+              className="w-full min-h-12 h-auto rounded-full bg-cta px-10 py-4 text-base font-medium tracking-wide text-cta-foreground transition-all duration-500 hover:bg-cta-hover focus-visible:ring-cta"
             >
               {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
             </Button>

@@ -155,7 +155,7 @@ export function StickyAddBar({
           <p className="text-sm text-foreground/80">{label ?? (qty === 1 ? "1 lamp" : `${qty} lampen`)}</p>
           <p className="font-semibold text-primary">{formatPrice(total)}</p>
         </div>
-        <Button onClick={onAdd} disabled={disabled} className="h-12 flex-none rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
+        <Button onClick={onAdd} disabled={disabled} className="h-12 flex-none rounded-full bg-cta px-6 text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta">
           In winkelwagen
         </Button>
       </div>
