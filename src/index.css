@@ -44,9 +44,10 @@ html {
     --primary: 20 31% 31%; /* #67483A */
     --primary-foreground: 36 40% 98%;
 
-    --cta: 36 86% 65%; /* #F2B45A */
-    --cta-foreground: 33 68% 10%; /* #2A1A08 */
-    --cta-hover: 34 82% 58%;
+    /* Ambient oranje: dieper goud dan de vorige gele tint, contrasteert met het mokka bruin */
+    --cta: 33 64% 33%; /* #8A5A1E */
+    --cta-foreground: 36 40% 98%; /* roomwit, contrast 5,5:1 op #8A5A1E */
+    --cta-hover: 33 64% 26%; /* #6D4718 */
 
     --secondary: 34 32% 95%;
     --secondary-foreground: 20 30% 21%;
