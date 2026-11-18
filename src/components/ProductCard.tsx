@@ -58,7 +58,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Card className="overflow-hidden glass hover:shadow-lg hover:shadow-glow/5 transition-all duration-500 hover:-translate-y-1 group">
       <Link to={`/product/${product.node.handle}`} onClick={handleSelect}>
-        <div className="aspect-square bg-muted/10 overflow-hidden cursor-pointer">
+        <div className="aspect-square overflow-hidden rounded-lg border border-border/70 bg-background-secondary cursor-pointer">
         {imageUrl ? (
           <img
             {...responsiveImg(imageUrl, "(min-width: 768px) 33vw, 50vw")}

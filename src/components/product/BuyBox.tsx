@@ -150,7 +150,7 @@ export function StickyAddBar({
   return createPortal(
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-lg backdrop-blur-xl md:hidden">
       <div className="mx-auto flex max-w-md items-center gap-3">
-        {image && <img src={shopifySized(image, 120)} alt="" width={48} height={48} className="h-12 w-12 flex-none rounded-lg bg-secondary object-cover" />}
+        {image && <img src={shopifySized(image, 120)} alt="" width={48} height={48} className="h-12 w-12 flex-none rounded-lg border border-border/70 bg-background-secondary object-cover" />}
         <div className="min-w-0 flex-1">
           <p className="text-sm text-foreground/80">{label ?? (qty === 1 ? "1 lamp" : `${qty} lampen`)}</p>
           <p className="font-semibold text-primary">{formatPrice(total)}</p>

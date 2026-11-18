@@ -111,7 +111,7 @@ const Catalog = () => {
                       }
                       className="group bg-background p-8 flex flex-col gap-6 transition-all duration-500 hover:bg-foreground/[0.02]"
                     >
-                      <div className="aspect-square overflow-hidden rounded-sm bg-muted/10 glass">
+                      <div className="aspect-square overflow-hidden rounded-lg border border-border/70 bg-background-secondary">
                         {img?.url ? (
                           <img
                             {...responsiveImg(img.url, "(min-width: 768px) 33vw, 50vw")}

@@ -193,7 +193,7 @@ export const ProductImageGallery = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
         >
-          <div style={{ ["--ar" as string]: ratio, ["--mh" as string]: mobileMaxHeight }} className="relative -mx-6 h-[min(calc(100vw/var(--ar)),var(--mh))] overflow-hidden bg-secondary/60 transition-[height] duration-300 md:mx-0 md:h-auto md:aspect-square md:rounded-[2rem] md:border md:border-foreground/10">
+          <div style={{ ["--ar" as string]: ratio, ["--mh" as string]: mobileMaxHeight }} className="relative -mx-6 h-[min(calc(100vw/var(--ar)),var(--mh))] overflow-hidden bg-background-secondary transition-[height] duration-300 md:mx-0 md:h-auto md:aspect-square md:rounded-[2rem] md:border md:border-border/70">
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
@@ -287,7 +287,7 @@ export const ProductImageGallery = ({
                 onClick={() => setSelectedIndex(idx + offset)}
                 aria-label={`Foto ${idx + 1}`}
                 aria-current={selectedIndex === idx + offset}
-                className={`h-14 w-14 flex-none overflow-hidden rounded-lg border-2 bg-secondary md:h-16 md:w-16 ${selectedIndex === idx + offset ? "border-primary" : "border-transparent"}`}
+                className={`h-14 w-14 flex-none overflow-hidden rounded-lg border-2 bg-background-secondary md:h-16 md:w-16 ${selectedIndex === idx + offset ? "border-accent-ink" : "border-border/70"}`}
               >
                 <img src={shopifySized(image.url, 160)} alt="" width={56} height={56} loading="lazy" decoding="async" className="h-full w-full object-cover" />
               </button>

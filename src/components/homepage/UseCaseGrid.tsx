@@ -44,10 +44,10 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                   key={href}
                   id={i === 0 ? "first-product" : undefined}
                   to={href}
-                  className={`group text-left overflow-hidden rounded-sm border border-foreground/8 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow${i === 0 ? " scroll-mt-24" : ""}`}
+                  className={`group text-left overflow-hidden rounded-lg border border-border/70 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow${i === 0 ? " scroll-mt-24" : ""}`}
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
-                   <div className="relative aspect-square overflow-hidden bg-muted/10">
+                   <div className="relative aspect-square overflow-hidden rounded-lg bg-background-secondary">
                     {image?.url ? (
                       <img
                         {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}

@@ -46,7 +46,7 @@ import { ShippingContent } from "../src/pages/content/ShippingContent";
 import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
 import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
 import { BehindSenseGlow } from "../src/components/product/BehindSenseGlow";
-import { NEW_BRAND_TRUST } from "../src/lib/purchaseTrust";
+import { SUPPORT_TRUST } from "../src/lib/purchaseTrust";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -283,7 +283,7 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(locale === "en" ? parseFloat(price.amount).toFixed(2) : parseFloat(price.amount).toFixed(2).replace(".", ","))}</p>`);
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
   parts.push(whyMarkup([handle], locale));
-  parts.push(`<p><a href="${escapeAttr(`${SITE_URL}${locale === "nl" ? "" : `/${locale}`}/retourneren`)}">${t(NEW_BRAND_TRUST)}</a></p>`);
+  parts.push(`<p><a href="${escapeAttr(`${SITE_URL}${locale === "nl" ? "" : `/${locale}`}/retourneren`)}">${t(SUPPORT_TRUST)}</a></p>`);
   if (product?.node.description) parts.push(descriptionMarkup(product.node.description, locale));
   if (isOfferProduct(handle)) parts.push(`<p>${t(OFFER_TEXT)}</p><p>${t(MIX_NOTE)}</p>`);
   const uses = USE_CASES[handle];
@@ -373,7 +373,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.stepQuestion && o.stepChoices ? `<p>${e(o.stepQuestion)} ${e(o.stepChoices.map((c) => `${c.label}: ${c.optionValue}`).join(". "))}.</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
   }
   p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
-  p.push(`<p><a href="${SITE_URL}/retourneren">${e(NEW_BRAND_TRUST)}</a></p>`);
+  p.push(`<p><a href="${SITE_URL}/retourneren">${e(SUPPORT_TRUST)}</a></p>`);
   if (page.pickerNote) p.push(`<p>${e(page.pickerNote)}</p>`);
   if (page.offers.some((o) => isOfferProduct(o.handle))) p.push(`<p>${e(OFFER_TEXT)}</p><p>${e(MIX_NOTE)}</p>`);
   if (page.why) p.push(whyMarkup([...new Set(page.offers.map((o) => o.handle))], "nl"));

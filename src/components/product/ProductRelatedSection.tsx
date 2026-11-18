@@ -57,9 +57,9 @@ export function ProductRelatedSection({ currentHandle }: ProductRelatedSectionPr
                 <Link
                   key={product.node.id}
                   to={`/product/${product.node.handle}`}
-                  className="group overflow-hidden rounded-md border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg"
+                  className="group overflow-hidden rounded-lg border border-border/70 bg-card transition-all hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <div className="aspect-[4/3] overflow-hidden bg-background-secondary">
                     {image && (
                       <img
                         {...responsiveImg(image.url, "(min-width: 768px) 25vw, 50vw")}
