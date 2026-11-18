@@ -21,13 +21,13 @@ export const FAQSection = () => {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-5xl mx-auto animate-fade-in-slow">
           <div className="text-center mb-14 md:mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] text-foreground/55 font-medium mb-5">
+            <p className="text-xs uppercase tracking-[0.3em] text-foreground/75 font-medium mb-5">
               FAQ
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
               Veelgestelde vragen
             </h2>
-            <p className="text-base md:text-lg text-foreground/65">
+            <p className="text-base md:text-lg text-foreground/75">
               Alles wat je moet weten over SenseGlow
             </p>
           </div>
@@ -39,10 +39,10 @@ export const FAQSection = () => {
                 value={`item-${idx}`}
                 className="border-b border-foreground/10"
               >
-                <AccordionTrigger className="text-left text-lg md:text-xl font-medium py-6 md:py-7 hover:text-glow hover:no-underline transition-colors duration-500">
+                <AccordionTrigger className="text-left text-lg md:text-xl font-medium py-6 md:py-7 hover:text-accent-ink hover:no-underline transition-colors duration-500">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-base md:text-lg text-foreground/65 leading-relaxed pb-7 pr-8">
+                <AccordionContent className="text-base md:text-lg text-foreground/75 leading-relaxed pb-7 pr-8">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -54,8 +54,8 @@ export const FAQSection = () => {
               const Icon = item.icon;
               return (
                 <div key={idx} className="flex items-center gap-3">
-                   <Icon className="w-5 h-5 text-glow/75" />
-                   <span className="text-base text-foreground/60">{item.text}</span>
+                   <Icon className="w-5 h-5 text-accent-ink" />
+                   <span className="text-base text-foreground/75">{item.text}</span>
                 </div>
               );
             })}

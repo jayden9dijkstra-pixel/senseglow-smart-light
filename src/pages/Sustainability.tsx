@@ -43,7 +43,7 @@ const Sustainability = () => {
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
               Duurzaamheid bij SenseGlow
             </h1>
-            <p className="text-lg text-foreground/60 leading-relaxed">
+            <p className="text-lg text-foreground/75 leading-relaxed">
               We maken geen klimaat-claims die we niet kunnen onderbouwen. Wel een paar concrete keuzes die het verschil maken, vooral op de lange termijn.
             </p>
           </div>
@@ -53,10 +53,10 @@ const Sustainability = () => {
               <Card key={title} className="border-foreground/10 bg-background">
                 <CardContent className="p-6 space-y-4">
                   <div className="p-3 bg-glow/10 rounded-lg w-fit">
-                    <Icon className="h-6 w-6 text-glow" />
+                    <Icon className="h-6 w-6 text-accent-ink" />
                   </div>
                   <h3 className="font-semibold text-lg">{title}</h3>
-                  <p className="text-foreground/60 leading-relaxed text-sm">{body}</p>
+                  <p className="text-foreground/75 leading-relaxed text-sm">{body}</p>
                 </CardContent>
               </Card>
             ))}
@@ -64,7 +64,7 @@ const Sustainability = () => {
 
           <Card className="border-foreground/10 bg-background">
             <CardContent className="p-6">
-              <p className="text-foreground/60 leading-relaxed text-sm">
+              <p className="text-foreground/75 leading-relaxed text-sm">
                 We zijn niet perfect. Onze producten worden in Azië gemaakt en verscheept met DHL. Dat is een keuze tussen betaalbaarheid en lokale productie die we niet verbloemen. Wat we wel doen: producten ontwerpen die jaren meegaan in plaats van seizoenen.
               </p>
             </CardContent>

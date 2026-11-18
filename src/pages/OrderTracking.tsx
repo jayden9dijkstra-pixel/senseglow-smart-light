@@ -202,7 +202,7 @@ const OrderTracking = () => {
             }`}
           >
             <div className="rounded-[10px] border border-glow/15 bg-card/60 p-6 md:p-8 shadow-sm">
-              <div className="flex items-center gap-2 mb-6 text-glow">
+              <div className="flex items-center gap-2 mb-6 text-accent-ink">
                 <Package className="h-5 w-5" aria-hidden="true" />
                 <span className="text-[11px] uppercase tracking-[0.25em] font-medium">SenseGlow</span>
               </div>
@@ -216,7 +216,7 @@ const OrderTracking = () => {
                       <h1 className="text-3xl md:text-4xl font-semibold text-foreground">
                         Volg je bestelling
                       </h1>
-                      <p className="text-foreground/60 leading-relaxed">
+                      <p className="text-foreground/75 leading-relaxed">
                         Vul je ordernummer en e-mailadres in om de status van je pakket te bekijken.
                       </p>
                     </div>
@@ -225,7 +225,7 @@ const OrderTracking = () => {
                       <p className="rounded-[10px] border border-destructive/30 bg-destructive/5 p-4 text-sm text-foreground/80 leading-relaxed">
                         We kunnen deze bestelling niet vinden. Controleer je ordernummer en gebruik
                         het e-mailadres waarmee je hebt besteld. Nog steeds problemen? Mail{" "}
-                        <a className="text-glow underline" href="mailto:support@senseglow.shop">
+                        <a className="text-accent-ink underline" href="mailto:support@senseglow.shop">
                           support@senseglow.shop
                         </a>
                         .
@@ -281,7 +281,7 @@ const OrderTracking = () => {
                       <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
 
-                    <p className="text-sm text-foreground/50">
+                    <p className="text-sm text-foreground/75">
                       Geen ordernummer? Kijk in je bevestigingsmail van SenseGlow.
                     </p>
                   </form>
@@ -333,8 +333,8 @@ const OrderResult = ({
     status === "delivered" || status === "shipped" || status === "transit"
       ? "bg-[hsl(140_30%_42%/0.15)] text-[hsl(140_35%_45%)] border-[hsl(140_30%_42%/0.3)]"
       : status === "preparing"
-        ? "bg-glow/10 text-glow border-glow/30"
-        : "bg-foreground/5 text-foreground/60 border-foreground/15";
+        ? "bg-glow/10 text-accent-ink border-glow/30"
+        : "bg-foreground/5 text-foreground/75 border-foreground/15";
 
   return (
     <div className="space-y-8">
@@ -343,7 +343,7 @@ const OrderResult = ({
           <h1 className="text-2xl md:text-3xl font-semibold text-foreground tabular-nums">
             {order.name}
           </h1>
-          <p className="text-sm text-foreground/50">Besteld op {formatDate(order.createdAt)}</p>
+          <p className="text-sm text-foreground/75">Besteld op {formatDate(order.createdAt)}</p>
         </div>
         <div className="flex items-center gap-3">
           <span
@@ -357,7 +357,7 @@ const OrderResult = ({
             variant="ghost"
             size="sm"
             onClick={onRetry}
-            className="rounded-[6px] text-foreground/60"
+            className="rounded-[6px] text-foreground/75"
           >
             <RefreshCw className="h-4 w-4 mr-1" />
             Vernieuwen
@@ -384,14 +384,14 @@ const OrderResult = ({
               <span
                 className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border ${
                   done || current
-                    ? "border-glow bg-glow/15 text-glow"
-                    : "border-foreground/15 bg-background text-foreground/30"
+                    ? "border-glow bg-glow/15 text-accent-ink"
+                    : "border-foreground/15 bg-background text-foreground/75"
                 }`}
               >
                 <Icon className="h-4 w-4" />
               </span>
               <span
-                className={`mt-2 text-xs ${current ? "text-foreground" : "text-foreground/50"}`}
+                className={`mt-2 text-xs ${current ? "text-foreground" : "text-foreground/75"}`}
               >
                 {step.label}
               </span>
@@ -421,9 +421,9 @@ const OrderResult = ({
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-foreground">{item.title}</p>
                   {item.variantTitle && (
-                    <p className="text-sm text-foreground/50">{item.variantTitle}</p>
+                    <p className="text-sm text-foreground/75">{item.variantTitle}</p>
                   )}
-                  <p className="text-sm text-foreground/50 tabular-nums">Aantal: {item.quantity}</p>
+                  <p className="text-sm text-foreground/75 tabular-nums">Aantal: {item.quantity}</p>
                 </div>
                 <span className="text-sm tabular-nums text-foreground/70">
                   {formatMoney(item.total)}
@@ -445,18 +445,18 @@ const OrderResult = ({
           </h2>
           <dl className="space-y-4 text-sm">
             <div>
-              <dt className="text-foreground/50">Verzendmethode</dt>
+              <dt className="text-foreground/75">Verzendmethode</dt>
               <dd className="text-foreground">{order.fulfillment?.carrier ?? "DHL Standard"}</dd>
             </div>
             <div>
-              <dt className="text-foreground/50">Track en trace</dt>
+              <dt className="text-foreground/75">Track en trace</dt>
               <dd>
                 {order.fulfillment?.trackingUrl ? (
                   <a
                     href={order.fulfillment.trackingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-glow underline tabular-nums"
+                    className="inline-flex items-center gap-1 text-accent-ink underline tabular-nums"
                   >
                     {order.fulfillment.trackingNumber ?? "Volg je pakket"}
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -466,19 +466,19 @@ const OrderResult = ({
                     {order.fulfillment.trackingNumber}
                   </span>
                 ) : (
-                  <span className="text-foreground/60">Wordt binnenkort toegevoegd</span>
+                  <span className="text-foreground/75">Wordt binnenkort toegevoegd</span>
                 )}
               </dd>
             </div>
             <div>
-              <dt className="text-foreground/50">Geschatte levering</dt>
+              <dt className="text-foreground/75">Geschatte levering</dt>
               <dd className="text-foreground tabular-nums">
                 {formatShortDate(from)} tot {formatShortDate(to)}
               </dd>
             </div>
             {order.shippingAddress && (
               <div>
-                <dt className="text-foreground/50">Bezorgadres</dt>
+                <dt className="text-foreground/75">Bezorgadres</dt>
                 <dd className="text-foreground leading-relaxed">
                   {order.shippingAddress.name && <>{order.shippingAddress.name}<br /></>}
                   {order.shippingAddress.address1}
@@ -503,9 +503,9 @@ const OrderResult = ({
       </div>
 
       <div className="border-t border-foreground/10 pt-6 flex flex-wrap items-center justify-between gap-4">
-        <p className="text-sm text-foreground/60">
+        <p className="text-sm text-foreground/75">
           Vragen? Mail ons via{" "}
-          <a className="text-glow underline" href="mailto:support@senseglow.shop">
+          <a className="text-accent-ink underline" href="mailto:support@senseglow.shop">
             support@senseglow.shop
           </a>
           .
@@ -515,7 +515,7 @@ const OrderResult = ({
           variant="ghost"
           size="sm"
           onClick={onBack}
-          className="rounded-[6px] text-foreground/60"
+          className="rounded-[6px] text-foreground/75"
         >
           Andere bestelling zoeken
         </Button>

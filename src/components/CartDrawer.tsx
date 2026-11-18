@@ -228,7 +228,7 @@ export function CartDrawer() {
                   <span>Gratis bezorgd. Levering in 7-14 werkdagen</span>
                 </div>
                 {shopifyDiscounts?.map((d) => (
-                  <div key={d.title} className="flex justify-between items-center text-sm text-glow">
+                  <div key={d.title} className="flex justify-between items-center text-sm text-accent-ink">
                     <span data-no-translate>{d.title}</span>
                     <span>−{formatPrice(d.amount)}</span>
                   </div>
@@ -269,10 +269,10 @@ export function CartDrawer() {
                   <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow</span>
                 </div>
                 <div className="flex items-center gap-2 pb-1">
-                  <IdealIcon className="h-5 w-auto text-foreground/40" />
-                  <BancontactIcon className="h-5 w-auto text-foreground/40" />
-                  <PaypalIcon className="h-5 w-auto text-foreground/40" />
-                  <KlarnaIcon className="h-5 w-auto text-foreground/40" />
+                  <IdealIcon className="h-5 w-auto text-foreground/75" />
+                  <BancontactIcon className="h-5 w-auto text-foreground/75" />
+                  <PaypalIcon className="h-5 w-auto text-foreground/75" />
+                  <KlarnaIcon className="h-5 w-auto text-foreground/75" />
                 </div>
               </div>
             </>

@@ -78,7 +78,7 @@ export default function Login() {
         <h1 className="text-2xl font-semibold mb-1">
           {mode === "signin" ? "Inloggen" : "Account aanmaken"}
         </h1>
-        <p className="text-sm text-foreground/60 mb-6">
+        <p className="text-sm text-foreground/75 mb-6">
           {mode === "signin"
             ? "Log in om verder te gaan."
             : "Maak een account om verder te gaan."}
@@ -124,7 +124,7 @@ export default function Login() {
             setInfo(null);
             setMode(mode === "signin" ? "signup" : "signin");
           }}
-          className="mt-6 text-sm text-foreground/60 hover:text-foreground transition-colors w-full text-center"
+          className="mt-6 text-sm text-foreground/75 hover:text-foreground transition-colors w-full text-center"
         >
           {mode === "signin"
             ? "Nog geen account? Maak er een aan"

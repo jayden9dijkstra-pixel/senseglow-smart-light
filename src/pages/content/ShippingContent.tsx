@@ -17,7 +17,7 @@ export const ShippingContent = () => {
         <div className="space-y-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Verzending</h1>
-            <p className="text-lg text-foreground/60">
+            <p className="text-lg text-foreground/75">
               Alles wat je moet weten over hoe en wanneer je SenseGlow bij je voor de deur staat.
             </p>
           </div>
@@ -32,10 +32,10 @@ export const ShippingContent = () => {
               <Card key={title} className="border-foreground/10 bg-background">
                 <CardContent className="p-6 space-y-3">
                   <div className="p-3 bg-glow/10 rounded-lg w-fit">
-                    <Icon className="h-6 w-6 text-glow" />
+                    <Icon className="h-6 w-6 text-accent-ink" />
                   </div>
                   <h3 className="font-semibold text-lg">{title}</h3>
-                  <p className="text-sm text-foreground/60">{sub}</p>
+                  <p className="text-sm text-foreground/75">{sub}</p>
                 </CardContent>
               </Card>
             ))}
@@ -64,10 +64,10 @@ export const ShippingContent = () => {
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">
                   <CardContent className="p-6 flex gap-5">
-                    <div className="text-2xl font-bold text-glow w-10 flex-shrink-0">{n}</div>
+                    <div className="text-2xl font-bold text-accent-ink w-10 flex-shrink-0">{n}</div>
                     <div>
                       <h3 className="font-semibold text-lg mb-2">{title}</h3>
-                      <p className="text-foreground/60 leading-relaxed">{body}</p>
+                      <p className="text-foreground/75 leading-relaxed">{body}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -97,7 +97,7 @@ export const ShippingContent = () => {
             <Card key={title} className="border-foreground/10 bg-background">
               <CardContent className="p-6">
                 <h3 className="font-semibold text-lg mb-2">{title}</h3>
-                <p className="text-foreground/60 leading-relaxed">{body}</p>
+                <p className="text-foreground/75 leading-relaxed">{body}</p>
               </CardContent>
             </Card>
           ))}

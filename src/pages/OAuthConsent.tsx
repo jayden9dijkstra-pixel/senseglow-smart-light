@@ -113,7 +113,7 @@ export default function OAuthConsent() {
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center px-4 bg-background">
-        <p className="text-foreground/60">Laden…</p>
+        <p className="text-foreground/75">Laden…</p>
       </main>
     );
   }
@@ -151,7 +151,7 @@ export default function OAuthConsent() {
         </p>
 
         {userEmail && (
-          <div className="text-xs text-foreground/60 mb-4">
+          <div className="text-xs text-foreground/75 mb-4">
             Ingelogd als <span className="text-foreground">{userEmail}</span>
           </div>
         )}
@@ -167,7 +167,7 @@ export default function OAuthConsent() {
           </ul>
         )}
 
-        <p className="text-xs text-foreground/50 mb-6">
+        <p className="text-xs text-foreground/75 mb-6">
           Dit omzeilt de rechten of backend-regels van deze app niet.
         </p>
 

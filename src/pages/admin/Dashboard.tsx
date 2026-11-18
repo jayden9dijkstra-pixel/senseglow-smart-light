@@ -89,7 +89,7 @@ function Empty({ reason }: { reason: string }) {
 type Light = "green" | "amber" | "red";
 function Lamp({ state, title, text }: { state: Light; title: string; text: string }) {
   const Icon = state === "green" ? CheckCircle2 : state === "amber" ? AlertTriangle : XCircle;
-  const cls = state === "green" ? "text-[hsl(160_60%_35%)]" : state === "amber" ? "text-accent" : "text-destructive";
+  const cls = state === "green" ? "text-[hsl(160_60%_35%)]" : state === "amber" ? "text-accent-ink" : "text-destructive";
   return (
     <div className="flex gap-3 rounded-md border border-border/60 p-3">
       <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${cls}`} aria-label={state} />
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
       {data?.sources.orders.error && <p className="mb-4 text-sm text-destructive">Shopify: {data.sources.orders.error} (opgeslagen bestellingen worden getoond)</p>}
       {data && adsStale && (
         <div className="mb-4 flex items-start gap-2 rounded-md border border-accent/50 bg-accent/10 p-3 text-sm">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-accent-ink" />
           <span>Advertentiecijfers van het Google Ads Script {data.sources.adsScript.updatedAt ? `zijn sinds ${dateTime(data.sources.adsScript.updatedAt)} niet bijgewerkt (langer dan 3 uur)` : "zijn nog nooit ontvangen"}. Bron nu: {data.current.adsSource}.</span>
         </div>
       )}

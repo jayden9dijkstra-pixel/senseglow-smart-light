@@ -26,10 +26,10 @@ export function BeforeAfterRows({ rows, beforeLabel = "Zonder SenseGlow", afterL
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div>
-        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-foreground/50">{beforeLabel}</p>
+        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-foreground/75">{beforeLabel}</p>
         <ul className="space-y-1.5">
           {rows.map((r) => (
-            <li key={r.before} className="flex gap-2"><X className="mt-0.5 h-4 w-4 flex-shrink-0 text-foreground/30" />{r.before}</li>
+            <li key={r.before} className="flex gap-2"><X className="mt-0.5 h-4 w-4 flex-shrink-0 text-foreground/75" />{r.before}</li>
           ))}
         </ul>
       </div>

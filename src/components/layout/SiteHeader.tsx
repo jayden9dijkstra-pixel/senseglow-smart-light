@@ -74,7 +74,7 @@ const NavDropdown = ({ item }: { item: NavItem }) => {
             >
               <span className="block text-sm font-medium text-foreground">{t(child.label)}</span>
               {child.hint && (
-                <span className="block text-xs text-foreground/50 mt-0.5">{t(child.hint)}</span>
+                <span className="block text-xs text-foreground/75 mt-0.5">{t(child.hint)}</span>
               )}
             </Link>
           ))}

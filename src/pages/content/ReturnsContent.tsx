@@ -20,7 +20,7 @@ export const ReturnsContent = () => {
         <div className="space-y-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Retourneren</h1>
-            <p className="text-lg text-foreground/60">
+            <p className="text-lg text-foreground/75">
               {RETURN_DAYS} dagen bedenktijd, volledige terugbetaling, geen gedoe.
             </p>
           </div>
@@ -35,10 +35,10 @@ export const ReturnsContent = () => {
               <Card key={title} className="border-foreground/10 bg-background">
                 <CardContent className="p-6 space-y-3">
                   <div className="p-3 bg-glow/10 rounded-lg w-fit">
-                    <Icon className="h-6 w-6 text-glow" />
+                    <Icon className="h-6 w-6 text-accent-ink" />
                   </div>
                   <h3 className="font-semibold text-lg">{title}</h3>
-                  <p className="text-sm text-foreground/60">{sub}</p>
+                  <p className="text-sm text-foreground/75">{sub}</p>
                 </CardContent>
               </Card>
             ))}
@@ -56,10 +56,10 @@ export const ReturnsContent = () => {
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">
                   <CardContent className="p-6 flex gap-5">
-                    <div className="text-2xl font-bold text-glow w-10 flex-shrink-0">{n}</div>
+                    <div className="text-2xl font-bold text-accent-ink w-10 flex-shrink-0">{n}</div>
                     <div>
                       <h3 className="font-semibold text-lg mb-2">{title}</h3>
-                      <p className="text-foreground/60 leading-relaxed">{body}</p>
+                      <p className="text-foreground/75 leading-relaxed">{body}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -74,15 +74,15 @@ export const ReturnsContent = () => {
             <Card key={title} className="border-foreground/10 bg-background">
               <CardContent className="p-6">
                 <h3 className="font-semibold text-lg mb-2">{title}</h3>
-                <p className="text-foreground/60 leading-relaxed">{body}</p>
+                <p className="text-foreground/75 leading-relaxed">{body}</p>
               </CardContent>
             </Card>
           ))}
           <Card className="border-foreground/10 bg-background">
             <CardContent className="p-6">
               <h3 className="font-semibold text-lg mb-2">Wettelijke garantie</h3>
-              <p className="text-foreground/60 leading-relaxed">Je hebt altijd recht op een product dat werkt zoals je redelijkerwijs mag verwachten. De extra garantie van SenseGlow beperkt die rechten niet. Voor klanten in België geldt minimaal 2 jaar wettelijke garantie op nieuwe producten.</p>
-              <p className="text-foreground/60 leading-relaxed mt-2">Een defect meld je via onze <Link to={localizePath("/contact")} className="underline">contactpagina</Link>.</p>
+              <p className="text-foreground/75 leading-relaxed">Je hebt altijd recht op een product dat werkt zoals je redelijkerwijs mag verwachten. De extra garantie van SenseGlow beperkt die rechten niet. Voor klanten in België geldt minimaal 2 jaar wettelijke garantie op nieuwe producten.</p>
+              <p className="text-foreground/75 leading-relaxed mt-2">Een defect meld je via onze <Link to={localizePath("/contact")} className="underline">contactpagina</Link>.</p>
             </CardContent>
           </Card>
 
@@ -90,7 +90,7 @@ export const ReturnsContent = () => {
           <Card id="herroepingsrecht" className="border-foreground/10 bg-background">
             <CardContent className="p-6 space-y-2">
               <h2 className="font-semibold text-lg">Wettelijk herroepingsrecht van 14 dagen</h2>
-              <p className="text-foreground/60 leading-relaxed">
+              <p className="text-foreground/75 leading-relaxed">
                 Je hebt altijd het wettelijke recht om je aankoop binnen 14 dagen na ontvangst zonder opgave van reden te herroepen. Onze 30 dagen retour komt daar bovenop. Je kunt herroepen met een e-mail naar support@senseglow.shop of met het modelformulier.
               </p>
               <Link to={localizePath("/herroepingsformulier")} className="inline-block text-primary underline underline-offset-4">

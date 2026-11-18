@@ -53,6 +53,8 @@ html {
     /* Oranje accent */
     --accent: 33 62% 54%; /* #D4913F */
     --accent-foreground: 20 30% 21%;
+    /* Donkerder goud voor tekst en iconen: contrast >= 4.5 op warm wit */
+    --accent-ink: 33 64% 33%; /* #8A5A1E */
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 36 40% 98%;

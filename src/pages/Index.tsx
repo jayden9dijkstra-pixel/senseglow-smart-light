@@ -78,7 +78,7 @@ const Index = () => {
           <div className="text-center">
             {loading ? (
               <div className="flex justify-center items-center py-6">
-                <Loader2 className="w-5 h-5 animate-spin text-foreground/30" />
+                <Loader2 className="w-5 h-5 animate-spin text-foreground/75" />
               </div>
             ) : failed ? (
               <div>
@@ -89,7 +89,7 @@ const Index = () => {
                   variant="link"
                   type="button"
                   onClick={() => setAttempt((a) => a + 1)}
-                  className="text-[11px] uppercase tracking-[0.25em] text-glow"
+                  className="text-[11px] uppercase tracking-[0.25em] text-accent-ink"
                 >
                   Opnieuw proberen →
                 </Button>
@@ -97,10 +97,10 @@ const Index = () => {
             ) : (
               <>
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">Alles op een rij</h2>
-                <p className="text-base text-foreground/60 mb-8">
+                <p className="text-base text-foreground/75 mb-8">
                   Bekijk alle lampen met prijzen, maten en kleuren.
                 </p>
-                <Button asChild variant="link" className="text-[11px] uppercase tracking-[0.25em] text-glow">
+                <Button asChild variant="link" className="text-[11px] uppercase tracking-[0.25em] text-accent-ink">
                   <a href="/producten">Bekijk alle producten →</a>
                 </Button>
               </>

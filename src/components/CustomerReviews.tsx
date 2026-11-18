@@ -17,7 +17,7 @@ export function CustomerReviews({ handle, reviews = REVIEWS, className = "" }: {
           <li key={`${r.name}-${r.date}-${r.product}`} className="space-y-2 rounded-2xl border border-foreground/10 p-4">
             <span className="flex" aria-label={`${r.stars} van 5 sterren`}>
               {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} aria-hidden className={`h-5 w-5 ${i <= r.stars ? "fill-primary text-primary" : "text-foreground/30"}`} />
+                <Star key={i} aria-hidden className={`h-5 w-5 ${i <= r.stars ? "fill-primary text-primary" : "text-foreground/75"}`} />
               ))}
             </span>
             <p className="text-base text-foreground">{r.text}</p>

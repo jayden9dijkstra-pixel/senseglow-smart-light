@@ -186,7 +186,7 @@ const Quiz = () => {
 
           <div className="container py-16 max-w-2xl">
             <div className="text-center mb-10 animate-fade-in-slow">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-5">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium mb-5">
                 Jouw match
               </p>
               <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -221,7 +221,7 @@ const Quiz = () => {
             <div className="text-center mt-8">
               <button
                 onClick={() => navigate("/producten")}
-                className="text-sm text-foreground/60 hover:text-glow underline-offset-4 hover:underline transition-colors"
+                className="text-sm text-foreground/75 hover:text-accent-ink underline-offset-4 hover:underline transition-colors"
               >
                 Niet de juiste match? Bekijk alle producten →
               </button>
@@ -263,7 +263,7 @@ const Quiz = () => {
                 />
               ))}
             </div>
-            <p className="text-xs text-foreground/50 tracking-wide">
+            <p className="text-xs text-foreground/75 tracking-wide">
               Vraag {Math.min(stepNumber, totalSteps)} van {totalSteps}
             </p>
           </div>
@@ -288,7 +288,7 @@ const Quiz = () => {
             {stack.length > 1 && (
               <button
                 onClick={handleBack}
-                className="mt-8 inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-glow transition-colors"
+                className="mt-8 inline-flex items-center gap-2 text-sm text-foreground/75 hover:text-accent-ink transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Vorige vraag

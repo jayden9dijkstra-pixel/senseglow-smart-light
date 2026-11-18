@@ -23,7 +23,7 @@ export const HowItWorksSection = ({
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium mb-4">
               Setup
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
@@ -35,7 +35,7 @@ export const HowItWorksSection = ({
             {steps.map((step, i) => (
               <div key={i} className="text-left space-y-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-glow/10 border border-glow/30 text-glow flex items-center justify-center text-base font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-glow/10 border border-glow/30 text-accent-ink flex items-center justify-center text-base font-semibold">
                     {i + 1}
                   </div>
                   <h3 className="text-lg md:text-xl font-semibold text-foreground">

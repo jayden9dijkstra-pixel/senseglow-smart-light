@@ -262,7 +262,7 @@ export const ProductImageGallery = ({
                   className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none"
                   aria-label="Vorige afbeelding"
                 >
-                  <ChevronLeft className="h-6 w-6 text-foreground/40 hover:text-primary transition-colors" strokeWidth={1.5} />
+                  <ChevronLeft className="h-6 w-6 text-foreground/75 hover:text-primary transition-colors" strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleNext(); }}
@@ -270,7 +270,7 @@ export const ProductImageGallery = ({
                   className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none"
                   aria-label="Volgende afbeelding"
                 >
-                  <ChevronRight className="h-6 w-6 text-foreground/40 hover:text-primary transition-colors" strokeWidth={1.5} />
+                  <ChevronRight className="h-6 w-6 text-foreground/75 hover:text-primary transition-colors" strokeWidth={1.5} />
                 </button>
               </>
             )}
@@ -318,12 +318,12 @@ export const ProductImageGallery = ({
             >
               {/* Top bar */}
               <div className="flex flex-shrink-0 items-center justify-between px-4 py-3">
-                <span className="text-xs font-medium tracking-wide text-foreground/40">
+                <span className="text-xs font-medium tracking-wide text-foreground/75">
                   {lightboxIndex + 1} / {images.length}
                 </span>
                 <button
                   onClick={() => setIsLightboxOpen(false)}
-                  className="p-2 text-foreground/50 transition-colors hover:text-foreground"
+                  className="p-2 text-foreground/75 transition-colors hover:text-foreground"
                   aria-label="Sluiten"
                 >
                   <X className="h-5 w-5" strokeWidth={1.5} />
@@ -337,7 +337,7 @@ export const ProductImageGallery = ({
                     <button
                       onClick={lightboxPrevious}
                       disabled={lightboxIndex === 0}
-                      className="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/30 transition-all duration-300 hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
+                      className="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/75 transition-all duration-300 hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
                       aria-label="Vorige afbeelding"
                     >
                       <ChevronLeft className="h-7 w-7 md:h-9 md:w-9" strokeWidth={1.5} />
@@ -345,7 +345,7 @@ export const ProductImageGallery = ({
                     <button
                       onClick={lightboxNext}
                       disabled={lightboxIndex === images.length - 1}
-                      className="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/30 transition-all duration-300 hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
+                      className="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 p-3 z-20 text-foreground/75 transition-all duration-300 hover:text-primary disabled:opacity-0 disabled:pointer-events-none"
                       aria-label="Volgende afbeelding"
                     >
                       <ChevronRight className="h-7 w-7 md:h-9 md:w-9" strokeWidth={1.5} />

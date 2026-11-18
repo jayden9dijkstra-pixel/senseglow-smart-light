@@ -75,7 +75,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </Link>
       <CardContent className="p-5">
         <Link to={`/product/${product.node.handle}`} onClick={handleSelect}>
-          <h3 className="font-bold text-base mb-2 hover:text-glow transition-colors duration-300 uppercase tracking-[0.15em]">
+          <h3 className="font-bold text-base mb-2 hover:text-accent-ink transition-colors duration-300 uppercase tracking-[0.15em]">
             {product.node.title}
           </h3>
         </Link>

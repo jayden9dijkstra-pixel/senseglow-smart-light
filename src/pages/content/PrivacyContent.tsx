@@ -17,7 +17,7 @@ export const PrivacyContent = () => {
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">Privacyverklaring</h1>
-            <p className="text-sm text-foreground/50">
+            <p className="text-sm text-foreground/75">
               Laatst bijgewerkt: 15 juni 2026
             </p>
           </div>
@@ -36,7 +36,7 @@ export const PrivacyContent = () => {
               <p>KvK-nummer: 99634929</p>
               <p>BTW-nummer: NL005399692B39</p>
               <p>Vestigingsadres: Tolheksleane 4 A, 8821 MD Kimswerd</p>
-              <p>Contact: <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a></p>
+              <p>Contact: <a href="mailto:support@senseglow.shop" className="text-accent-ink hover:underline">support@senseglow.shop</a></p>
               <p className="pt-2">Voor vragen over deze privacyverklaring of het uitoefenen van je rechten, mail support@senseglow.shop.</p>
             </div>
           </section>

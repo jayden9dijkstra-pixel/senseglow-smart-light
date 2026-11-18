@@ -29,13 +29,13 @@ export const WhatTheyShare = () => {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div>
           <div className="text-center mb-16 animate-fade-in-slow">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-5">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium mb-5">
               Onze filosofie
             </p>
             <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight mb-4">
               Wat ze met elkaar gemeen hebben
             </h2>
-            <p className="text-base text-foreground/60">
+            <p className="text-base text-foreground/75">
               Eén filosofie achter elk product: licht zonder gedoe.
             </p>
           </div>
@@ -48,12 +48,12 @@ export const WhatTheyShare = () => {
                 style={{ animationDelay: `${i * 80}ms` }}
               >
                 <div className="p-3 bg-glow/10 rounded-sm w-fit mb-5">
-                  <Icon className="h-6 w-6 text-glow" />
+                  <Icon className="h-6 w-6 text-accent-ink" />
                 </div>
                 <h3 className="font-semibold text-lg text-foreground mb-3">
                   {title}
                 </h3>
-                <p className="text-sm text-foreground/60 leading-relaxed">
+                <p className="text-sm text-foreground/75 leading-relaxed">
                   {body}
                 </p>
               </div>

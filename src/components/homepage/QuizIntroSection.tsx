@@ -25,7 +25,7 @@ export const QuizIntroSection = () => {
 
             {/* Content - Right side */}
             <div className="space-y-8 order-2 md:text-right animate-fade-in-slow px-1">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium">
                 Lichtadvies
               </p>
 
@@ -33,7 +33,7 @@ export const QuizIntroSection = () => {
                 Niet zeker welk product?
               </h2>
 
-              <p className="text-base text-foreground/60 leading-relaxed md:max-w-md md:ml-auto">
+              <p className="text-base text-foreground/75 leading-relaxed md:max-w-md md:ml-auto">
                 Beantwoord 3 vragen. We vertellen je welke SenseGlow bij jouw situatie past.
               </p>
 

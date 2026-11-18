@@ -20,13 +20,13 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div>
           <div className="text-center mb-16 animate-fade-in-slow">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-5">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium mb-5">
               Onze producten
             </p>
             <h2 className="text-2xl md:text-3xl lg:text-[2.5rem] font-bold text-foreground leading-tight mb-4">
               {HOME_TILES_HEADING}
             </h2>
-            <p className="text-base text-foreground/60">
+            <p className="text-base text-foreground/75">
               {HOME_TILES_SUBTITLE}
             </p>
           </div>
@@ -57,10 +57,10 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <Icon className="h-8 w-8 text-glow/60" aria-hidden="true" />
+                        <Icon className="h-8 w-8 text-accent-ink" aria-hidden="true" />
                       </div>
                     )}
-                    <div className="absolute top-4 left-4 p-3 rounded-sm bg-background/80 text-glow backdrop-blur-sm">
+                    <div className="absolute top-4 left-4 p-3 rounded-sm bg-background/80 text-accent-ink backdrop-blur-sm">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                   </div>
@@ -68,7 +68,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                     <h3 className="font-semibold text-lg text-foreground mb-3 leading-snug">
                       {title}
                     </h3>
-                    <p className="text-sm text-foreground/60 leading-relaxed mb-5">
+                    <p className="text-sm text-foreground/75 leading-relaxed mb-5">
                       {body}
                     </p>
                     {fromPrice && (
@@ -76,7 +76,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                         Vanaf {formatPrice(fromPrice)}
                       </p>
                     )}
-                    <span className="text-[11px] uppercase tracking-[0.2em] text-glow group-hover:translate-x-1 inline-block transition-transform duration-500">
+                    <span className="text-[11px] uppercase tracking-[0.2em] text-accent-ink group-hover:translate-x-1 inline-block transition-transform duration-500">
                       Bekijken →
                     </span>
                   </div>

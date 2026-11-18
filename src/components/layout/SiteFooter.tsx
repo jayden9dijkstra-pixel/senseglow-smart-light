@@ -33,11 +33,11 @@ const FooterNewsletter = () => {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-2 text-sm text-foreground/70">
-          <Check className="h-4 w-4 text-glow" />
+          <Check className="h-4 w-4 text-accent-ink" />
            {t("Je staat op de lijst.")}
         </div>
-        <p className="text-sm text-foreground/50">
-          Gebruik <span className="text-glow font-medium">{DISCOUNT_CODE}</span> bij het afrekenen voor 10% korting.
+        <p className="text-sm text-foreground/75">
+          Gebruik <span className="text-accent-ink font-medium">{DISCOUNT_CODE}</span> bij het afrekenen voor 10% korting.
         </p>
       </div>
     );
@@ -45,7 +45,7 @@ const FooterNewsletter = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <p className="text-sm text-foreground/50">
+      <p className="text-sm text-foreground/75">
         Blijf op de hoogte door middel van onze nieuwsbrief.
       </p>
       <Input
@@ -65,9 +65,9 @@ const FooterNewsletter = () => {
       >
         {loading ? "Bezig..." : "Houd me op de hoogte"}
       </Button>
-      <p className="text-[11px] text-foreground/35 leading-relaxed">
+      <p className="text-[11px] text-foreground/75 leading-relaxed">
         Geen spam. Uitschrijven kan altijd. Liever mailen?{" "}
-        <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">
+        <a href="mailto:support@senseglow.shop" className="text-accent-ink hover:underline">
           support@senseglow.shop
         </a>
       </p>
@@ -76,7 +76,7 @@ const FooterNewsletter = () => {
 };
 
 const linkClass =
-  "text-foreground/50 hover:text-glow transition-colors duration-500";
+  "text-foreground/75 hover:text-accent-ink transition-colors duration-500";
 
 export const SiteFooter = () => {
   const { localizePath } = useI18n();
@@ -123,7 +123,7 @@ export const SiteFooter = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
               {paymentMethods.map(({ name, Icon }) => (
-                <Icon key={name} className="h-8 md:h-9 w-auto text-primary/80 transition-colors duration-300 hover:text-accent" />
+                <Icon key={name} className="h-8 md:h-9 w-auto text-primary/80 transition-colors duration-300 hover:text-accent-ink" />
               ))}
             </div>
           </div>
@@ -133,7 +133,7 @@ export const SiteFooter = () => {
             <p>{businessLine()}</p>
           </address>
 
-          <div className="text-[11px] text-foreground/30 pt-10 mt-10 border-t border-foreground/6">
+          <div className="text-[11px] text-foreground/75 pt-10 mt-10 border-t border-foreground/6">
             <p>© 2026 Jayden Ecom (SenseGlow™). Alle rechten voorbehouden.</p>
           </div>
         </div>

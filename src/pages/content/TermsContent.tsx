@@ -26,7 +26,7 @@ export const TermsContent = () => {
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">Algemene Voorwaarden</h1>
-            <p className="text-sm text-foreground/50">
+            <p className="text-sm text-foreground/75">
               Laatst bijgewerkt: 15 juni 2026
             </p>
           </div>

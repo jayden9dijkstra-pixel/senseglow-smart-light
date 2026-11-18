@@ -43,7 +43,7 @@ const Catalog = () => {
       <section className="bg-background pt-20 md:pt-28 pb-12">
         <div className="container">
           <div className="max-w-6xl mx-auto">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium mb-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium mb-4">
               Onze collectie
             </p>
             <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
@@ -51,7 +51,7 @@ const Catalog = () => {
               <br />
               Jij hoeft alleen maar te bewegen.
             </h1>
-            <p className="text-base md:text-lg text-foreground/60 max-w-2xl">
+            <p className="text-base md:text-lg text-foreground/75 max-w-2xl">
               Vijf slimme lichten, elk ontworpen voor een specifieke ruimte of moment.
               Kies wat past bij jouw huis.
             </p>
@@ -64,7 +64,7 @@ const Catalog = () => {
           <div className="max-w-6xl mx-auto">
             {loading ? (
               <div className="flex justify-center items-center py-32">
-                <Loader2 className="w-6 h-6 animate-spin text-foreground/30" />
+                <Loader2 className="w-6 h-6 animate-spin text-foreground/75" />
               </div>
             ) : failed ? (
               <div className="py-20 text-center space-y-4">
@@ -74,14 +74,14 @@ const Catalog = () => {
                 <button
                   type="button"
                   onClick={() => setAttempt((a) => a + 1)}
-                  className="text-[11px] uppercase tracking-[0.2em] text-glow hover:text-glow/80 transition-colors"
+                  className="text-[11px] uppercase tracking-[0.2em] text-accent-ink hover:text-accent-ink transition-colors"
                 >
                   Opnieuw proberen →
                 </button>
               </div>
             ) : products.length === 0 ? (
               <div className="py-20 text-center">
-                <p className="text-foreground/60">
+                <p className="text-foreground/75">
                   Er zijn op dit moment geen producten beschikbaar. Mail support@senseglow.shop als je iets zoekt.
                 </p>
               </div>
@@ -120,20 +120,20 @@ const Catalog = () => {
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-foreground/30">
+                          <div className="w-full h-full flex items-center justify-center text-foreground/75">
                             Geen afbeelding
                           </div>
                         )}
                       </div>
                       <div className="space-y-2">
-                        <h2 className="text-base font-semibold tracking-tight text-foreground group-hover:text-glow transition-colors duration-500">
+                        <h2 className="text-base font-semibold tracking-tight text-foreground group-hover:text-accent-ink transition-colors duration-500">
                           {p.node.title}
                         </h2>
-                        <p className="text-sm text-foreground/50">
+                        <p className="text-sm text-foreground/75">
                           Vanaf {formatPrice(price.amount)}
                         </p>
                       </div>
-                      <span className="text-[11px] uppercase tracking-[0.2em] text-glow mt-auto">
+                      <span className="text-[11px] uppercase tracking-[0.2em] text-accent-ink mt-auto">
                         Bekijk product →
                       </span>
                     </Link>

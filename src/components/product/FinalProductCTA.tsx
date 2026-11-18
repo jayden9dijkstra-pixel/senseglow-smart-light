@@ -35,15 +35,15 @@ export const FinalProductCTA = ({
 
           <div className="flex items-center justify-center gap-8 pt-8 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <span className="text-glow text-xl">✓</span>
+              <span className="text-accent-ink text-xl">✓</span>
               <span>Veilig betalen</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-glow text-xl">✓</span>
+              <span className="text-accent-ink text-xl">✓</span>
               <span>30 dagen retourrecht</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-glow text-xl">✓</span>
+              <span className="text-accent-ink text-xl">✓</span>
               <span>Nederlandse klantenservice</span>
             </div>
           </div>

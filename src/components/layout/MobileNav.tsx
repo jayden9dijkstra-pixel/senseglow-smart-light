@@ -63,7 +63,7 @@ export function MobileNav() {
       <DialogPrimitive.Portal>
         <DialogPrimitive.Content className="fixed inset-0 z-[60] flex flex-col bg-background px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] outline-none data-[state=open]:animate-in data-[state=open]:fade-in-0 lg:hidden">
           <div className="flex h-12 items-center justify-between">
-            <DialogPrimitive.Title className="text-sm font-medium text-foreground/60">{t("Menu")}</DialogPrimitive.Title>
+            <DialogPrimitive.Title className="text-sm font-medium text-foreground/75">{t("Menu")}</DialogPrimitive.Title>
             <DialogPrimitive.Close className="p-2 text-foreground/70" aria-label={t("Sluiten")}>
               <X className="h-6 w-6" />
             </DialogPrimitive.Close>
@@ -80,7 +80,7 @@ export function MobileNav() {
                   {images[p.handle] && <img src={shopifySized(images[p.handle], 200)} alt="" width={48} height={48} loading="lazy" className="h-full w-full object-cover" />}
                 </span>
                 <span className="flex-1 text-base font-medium text-foreground">{t(p.label)}</span>
-                <ChevronRight className="h-4 w-4 text-foreground/40" />
+                <ChevronRight className="h-4 w-4 text-foreground/75" />
               </Link>
             ))}
             <div className="mt-4 flex flex-col">

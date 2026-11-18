@@ -340,7 +340,7 @@ export const VariantPicker = ({
   }) => (
     <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
+        <label className="text-xs font-medium text-foreground/75 uppercase tracking-[0.2em]">{label}</label>
         {/* hint bewust niet getoond: kiezers zonder uitlegtekst */}
       </div>
       <div className="flex flex-wrap gap-3">
@@ -376,8 +376,8 @@ export const VariantPicker = ({
   }) => (
     <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center gap-3">
-        <label className="text-xs font-medium text-foreground/60 uppercase tracking-[0.2em]">{label}</label>
-        <span className="text-xs text-foreground/40 capitalize">{selected}</span>
+        <label className="text-xs font-medium text-foreground/75 uppercase tracking-[0.2em]">{label}</label>
+        <span className="text-xs text-foreground/75 capitalize">{selected}</span>
       </div>
       <div className="flex gap-4">
         {values.map((color) => {
@@ -402,7 +402,7 @@ export const VariantPicker = ({
               >
                 {isLight && <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 via-transparent to-black/10" />}
               </div>
-              <span className={cn("hidden md:block text-[10px] uppercase tracking-wider transition-colors duration-300", isSelected ? "text-foreground/80" : "text-foreground/40")}>
+              <span className={cn("hidden md:block text-[10px] uppercase tracking-wider transition-colors duration-300", isSelected ? "text-foreground/80" : "text-foreground/75")}>
                 {color}
               </span>
             </button>

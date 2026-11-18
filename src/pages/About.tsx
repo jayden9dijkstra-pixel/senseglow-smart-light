@@ -41,13 +41,13 @@ const About = () => {
         <div className="space-y-16 md:space-y-20">
           {/* Hero */}
           <section className="space-y-6">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium">
               Achter SenseGlow
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               Slimme verlichting,<br />zonder de gewone hindernissen
             </h1>
-            <p className="text-lg text-foreground/60 leading-relaxed max-w-2xl">
+            <p className="text-lg text-foreground/75 leading-relaxed max-w-2xl">
               SenseGlow brengt sensorverlichting naar Nederlandse huizen die werkt zonder elektricien, zonder app en zonder bekabeling. Vijf producten, vijf concrete problemen opgelost.
             </p>
           </section>
@@ -55,7 +55,7 @@ const About = () => {
           {/* Wat we doen */}
           <section className="space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground">Wat we doen</h2>
-            <div className="space-y-5 text-base md:text-lg text-foreground/60 leading-relaxed">
+            <div className="space-y-5 text-base md:text-lg text-foreground/75 leading-relaxed">
               <p>
                 Wij verkopen geen lampen. Wij verkopen opgeloste problemen. Een trap die 's nachts niet meer onveilig voelt. Een keuken die sfeer krijgt zonder smart-home installatie. Een gang waar je niet meer over je tenen struikelt op zoek naar het lichtknopje.
               </p>
@@ -77,7 +77,7 @@ const About = () => {
                   <h3 className="text-lg font-semibold text-foreground mb-3">
                     {c.title}
                   </h3>
-                  <p className="text-foreground/60 leading-relaxed text-sm md:text-base">
+                  <p className="text-foreground/75 leading-relaxed text-sm md:text-base">
                     {c.body}
                   </p>
                 </div>
@@ -93,7 +93,7 @@ const About = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-foreground">
               Vragen vóór je iets bestelt?
             </h2>
-            <p className="text-base md:text-lg text-foreground/60 leading-relaxed max-w-2xl">
+            <p className="text-base md:text-lg text-foreground/75 leading-relaxed max-w-2xl">
               Of advies welke lamp bij jouw situatie past? Stuur een mail of een bericht via de contactpagina. We reageren meestal binnen één werkdag.
             </p>
             <Button onClick={() => navigate("/contact")} className="rounded-sm">
@@ -104,7 +104,7 @@ const About = () => {
 
           {/* Handtekening */}
           <section className="pt-4 border-t border-foreground/10">
-            <p className="text-sm text-foreground/50 italic">
+            <p className="text-sm text-foreground/75 italic">
               J. Dijkstra<br />
               Eigenaar, Jayden Ecom (SenseGlow™)
             </p>

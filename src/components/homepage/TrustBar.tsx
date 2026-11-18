@@ -14,7 +14,7 @@ export const TrustBar = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 py-8 md:py-7">
           {items.map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center justify-center gap-3 text-center">
-              <Icon className="h-5 w-5 shrink-0 text-glow" aria-hidden="true" />
+              <Icon className="h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
               <span className="text-xs md:text-sm text-foreground/70 leading-snug">{label}</span>
             </div>
           ))}

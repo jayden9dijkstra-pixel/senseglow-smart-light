@@ -34,7 +34,7 @@ const WhySenseGlow = () => {
       <section className="py-20 md:py-28 bg-background">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center space-y-5">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium">
               Sfeer die vanzelf werkt
             </p>
             <h1 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">
@@ -52,11 +52,11 @@ const WhySenseGlow = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-foreground">
                 Het begon met een simpele frustratie
               </h2>
-              <p className="text-base text-foreground/60 leading-relaxed">
+              <p className="text-base text-foreground/75 leading-relaxed">
                 In elk huis liggen dozen met bedrade lampen en verlengsnoeren. Wij wilden licht
                 dat gewoon aangaat wanneer het moet.
               </p>
-              <p className="text-base text-foreground/60 leading-relaxed">
+              <p className="text-base text-foreground/75 leading-relaxed">
                 Zonder elektricien. In een paar minuten geplaatst, daarna doet de lamp
                 de rest.
               </p>
@@ -79,12 +79,12 @@ const WhySenseGlow = () => {
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
             {PILLARS.map(({ icon: Icon, title, body }) => (
               <div key={title} className="flex gap-5">
-                <div className="shrink-0 p-3 rounded-sm bg-background/70 text-glow h-fit">
+                <div className="shrink-0 p-3 rounded-sm bg-background/70 text-accent-ink h-fit">
                   <Icon className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
-                  <p className="text-sm text-foreground/60 leading-relaxed">{body}</p>
+                  <p className="text-sm text-foreground/75 leading-relaxed">{body}</p>
                 </div>
               </div>
             ))}
@@ -99,19 +99,19 @@ const WhySenseGlow = () => {
             <h2 className="text-lg font-semibold text-foreground mb-4">Wie zijn wij</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
               <div>
-                <dt className="text-foreground/40 mb-1">Bedrijf</dt>
+                <dt className="text-foreground/75 mb-1">Bedrijf</dt>
                 <dd className="text-foreground/80">SenseGlow (Jayden Ecom)</dd>
               </div>
               <div>
-                <dt className="text-foreground/40 mb-1">KVK</dt>
+                <dt className="text-foreground/75 mb-1">KVK</dt>
                 <dd className="text-foreground/80">99634929</dd>
               </div>
               <div>
-                <dt className="text-foreground/40 mb-1">BTW</dt>
+                <dt className="text-foreground/75 mb-1">BTW</dt>
                 <dd className="text-foreground/80">NL005399692B39</dd>
               </div>
             </dl>
-            <p className="text-xs text-foreground/40 mt-6">
+            <p className="text-xs text-foreground/75 mt-6">
               Ons retouradres staat in de footer. Dat is geen bezoekadres.
             </p>
           </div>
@@ -123,7 +123,7 @@ const WhySenseGlow = () => {
         <div className="container">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground">Meer weten?</h2>
-            <p className="text-base text-foreground/60">
+            <p className="text-base text-foreground/75">
               Mail direct met support@senseglow.shop of bekijk de collectie.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

@@ -21,7 +21,7 @@ export const StorytellingSection = () => {
 
             {/* Content - Right side */}
             <div className="space-y-8 md:text-right animate-fade-in-slow">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/40 font-medium">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/75 font-medium">
                 Achter SenseGlow
               </p>
 
@@ -29,7 +29,7 @@ export const StorytellingSection = () => {
                 Een huis hoort veilig en warm te voelen
               </h2>
 
-              <div className="space-y-5 text-base leading-relaxed text-foreground/60">
+              <div className="space-y-5 text-base leading-relaxed text-foreground/75">
                 <p>
                   Niet pas nadat je een installateur hebt gebeld. Niet pas na een aannemer of een wand opengebroken voor bekabeling. SenseGlow is gestart vanuit één observatie: de slimste verlichting die online verkocht wordt, komt te zelden in Nederlandse huizen terecht. Te ingewikkeld, slecht vertaald, of gewoon niet gemaakt voor de markt hier.
                 </p>
@@ -39,7 +39,7 @@ export const StorytellingSection = () => {
                 <p className="text-foreground font-medium">
                   Vanuit Friesland brengen we ze naar jou, met Nederlandse klantenservice en 30 dagen bedenktijd. Veiligheid en sfeer in één lamp. Dat is alles wat we doen.
                 </p>
-                <p className="text-sm text-foreground/50 italic pt-2">
+                <p className="text-sm text-foreground/75 italic pt-2">
                   J. Dijkstra, Jayden Ecom
                 </p>
               </div>

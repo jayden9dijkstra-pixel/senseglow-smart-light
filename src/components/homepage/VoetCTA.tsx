@@ -11,7 +11,7 @@ export const VoetCTA = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
             Klaar om te beginnen?
           </h2>
-          <p className="text-base text-foreground/60 max-w-md mx-auto">
+          <p className="text-base text-foreground/75 max-w-md mx-auto">
             Vijf producten. Eén plek. Gratis verzending, 30 dagen retour.
           </p>
           <div className="flex flex-col items-center gap-4">
@@ -24,7 +24,7 @@ export const VoetCTA = () => {
             </Button>
             <Link
               to="/contact"
-              className="text-sm text-foreground/60 hover:text-glow transition-colors duration-500"
+              className="text-sm text-foreground/75 hover:text-accent-ink transition-colors duration-500"
             >
               Nog vragen? Neem contact op →
             </Link>

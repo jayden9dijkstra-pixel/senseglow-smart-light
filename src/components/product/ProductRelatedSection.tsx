@@ -36,7 +36,7 @@ export function ProductRelatedSection({ currentHandle }: ProductRelatedSectionPr
     <section className="w-full overflow-hidden bg-background-secondary py-16 md:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="mb-10 max-w-2xl">
-          <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-foreground/40">
+          <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-foreground/75">
             Vaak samen gekocht
           </p>
           <h2 className="text-2xl font-bold leading-tight text-foreground md:text-3xl">

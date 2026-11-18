@@ -2,7 +2,7 @@ interface IconProps {
   className?: string;
 }
 
-const wrap = "h-7 w-auto text-foreground/40";
+const wrap = "h-7 w-auto text-foreground/75";
 
 const Frame = ({
   label,

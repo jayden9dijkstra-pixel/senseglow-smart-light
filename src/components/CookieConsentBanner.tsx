@@ -165,7 +165,7 @@ export function CookieConsentBanner() {
 
         {showSettings && (
           <div className="mt-5 space-y-3 text-sm">
-            <label className="flex items-start gap-3 text-foreground/60">
+            <label className="flex items-start gap-3 text-foreground/75">
               <input type="checkbox" checked disabled className="mt-1" />
               <span><strong className="text-foreground">Noodzakelijk</strong>. Winkelwagen, taal en je cookiekeuze. Altijd aan.</span>
             </label>

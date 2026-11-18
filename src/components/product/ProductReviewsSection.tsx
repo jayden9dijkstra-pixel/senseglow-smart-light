@@ -17,12 +17,12 @@ export const ReviewSummary = ({ className = "" }: { className?: string }) => {
         {[1, 2, 3, 4, 5].map((i) => (
           <Star
             key={i}
-            className={`h-4 w-4 ${i <= rounded ? "fill-primary text-primary" : "text-foreground/25"}`}
+            className={`h-4 w-4 ${i <= rounded ? "fill-primary text-primary" : "text-foreground/75"}`}
             aria-hidden="true"
           />
         ))}
       </span>
-      <span className="text-sm text-foreground/60">
+      <span className="text-sm text-foreground/75">
         {average.toFixed(1).replace(".", ",")} ({count} {count === 1 ? "review" : "reviews"})
       </span>
     </div>

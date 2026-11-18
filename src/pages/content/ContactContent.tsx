@@ -19,7 +19,7 @@ export const ContactContent = () => {
         <div className="space-y-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Contact</h1>
-            <p className="text-lg text-foreground/60">
+            <p className="text-lg text-foreground/75">
               Vraag over je bestelling, een product, of iets anders? We mailen binnen 24 uur op werkdagen terug.
             </p>
           </div>
@@ -29,13 +29,13 @@ export const ContactContent = () => {
             <Card className="border-foreground/10 bg-background">
               <CardContent className="p-6 space-y-4">
                 <div className="p-3 bg-glow/10 rounded-lg w-fit">
-                  <Mail className="h-6 w-6 text-glow" />
+                  <Mail className="h-6 w-6 text-accent-ink" />
                 </div>
                 <h3 className="font-semibold text-xl">E-mail</h3>
-                <a href="mailto:support@senseglow.shop" className="text-glow hover:underline font-semibold block">
+                <a href="mailto:support@senseglow.shop" className="text-accent-ink hover:underline font-semibold block">
                   support@senseglow.shop
                 </a>
-                <p className="text-sm text-foreground/60">
+                <p className="text-sm text-foreground/75">
                   Voor alle vragen, bestellingen, producten, retourzendingen, technische hulp. Reactietijd: binnen 24 uur op werkdagen (ma-vr, 09:00-17:00).
                 </p>
                 <Button
@@ -50,10 +50,10 @@ export const ContactContent = () => {
             <Card className="border-foreground/10 bg-background">
               <CardContent className="p-6 space-y-4">
                 <div className="p-3 bg-glow/10 rounded-lg w-fit">
-                  <Package className="h-6 w-6 text-glow" />
+                  <Package className="h-6 w-6 text-accent-ink" />
                 </div>
                 <h3 className="font-semibold text-xl">Bestelling volgen</h3>
-                <p className="text-sm text-foreground/60">
+                <p className="text-sm text-foreground/75">
                   Bestelnummer of track-code bij de hand? Volg je pakket direct via DHL.
                 </p>
                 <Button
@@ -82,9 +82,9 @@ export const ContactContent = () => {
                   onClick={() => navigate(to)}
                   className="w-full flex items-center gap-3 p-4 rounded-lg border border-foreground/10 bg-background hover:border-glow/40 hover:bg-glow/5 transition-colors text-left"
                 >
-                  <Icon className="h-5 w-5 text-glow flex-shrink-0" />
+                  <Icon className="h-5 w-5 text-accent-ink flex-shrink-0" />
                   <span className="flex-1">{label}</span>
-                  <span className="text-glow">→</span>
+                  <span className="text-accent-ink">→</span>
                 </button>
               ))}
             </div>
@@ -101,7 +101,7 @@ export const ContactContent = () => {
                 <p>KvK-nummer: 99634929</p>
                 <p>BTW-nummer: NL005399692B39</p>
                 <p>Vestigings- en retouradres: Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres, geen bezoekadres of winkel)</p>
-                <p>E-mail: <a href="mailto:support@senseglow.shop" className="text-glow hover:underline">support@senseglow.shop</a></p>
+                <p>E-mail: <a href="mailto:support@senseglow.shop" className="text-accent-ink hover:underline">support@senseglow.shop</a></p>
                 <p>Web: senseglow.shop</p>
               </div>
             </CardContent>

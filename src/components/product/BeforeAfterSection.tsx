@@ -47,7 +47,7 @@ export const BeforeAfterSection = ({
                 alt={imagePair.alt}
                 className="aspect-[4/3] md:aspect-[16/10]"
               />
-              <p className="mt-3 text-center text-xs text-foreground/50">
+              <p className="mt-3 text-center text-xs text-foreground/75">
                 Sleep de schuif om het verschil te zien
               </p>
             </div>
@@ -56,13 +56,13 @@ export const BeforeAfterSection = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {/* Before column */}
             <div className="rounded-sm border border-border bg-background p-6 md:p-8">
-              <h3 className="text-sm font-medium text-foreground/60 mb-5 uppercase tracking-wider">
+              <h3 className="text-sm font-medium text-foreground/75 mb-5 uppercase tracking-wider">
                 {beforeLabel}
               </h3>
               <ul className="space-y-4">
                 {rows.map((row, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <X className="w-4 h-4 mt-1 text-foreground/30 flex-shrink-0" />
+                    <X className="w-4 h-4 mt-1 text-foreground/75 flex-shrink-0" />
                     <span className="text-sm md:text-base text-foreground/70 leading-relaxed">
                       {row.before}
                     </span>
@@ -73,13 +73,13 @@ export const BeforeAfterSection = ({
 
             {/* After column */}
             <div className="rounded-sm border border-accent/40 bg-accent/5 p-6 md:p-8">
-              <h3 className="text-sm font-medium text-accent mb-5 uppercase tracking-wider">
+              <h3 className="text-sm font-medium text-accent-ink mb-5 uppercase tracking-wider">
                 {afterLabel}
               </h3>
               <ul className="space-y-4">
                 {rows.map((row, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <Check className="w-4 h-4 mt-1 text-accent flex-shrink-0" />
+                    <Check className="w-4 h-4 mt-1 text-accent-ink flex-shrink-0" />
                     <span className="text-sm md:text-base text-foreground leading-relaxed">
                       {row.after}
                     </span>
