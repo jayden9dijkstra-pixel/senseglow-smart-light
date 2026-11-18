@@ -209,6 +209,10 @@ export const LANDING_PAGES: LandingPage[] = [
         answer: "Voor 8-12 treden: de 4-delige set. Voor 13 of meer treden of een lange gang erbij: de 8-delige set.",
       },
       {
+        question: "Waar plak ik de lampen op mijn trap?",
+        answer: "Op de muur langs de trap, net boven de treden, ongeveer om de 3 treden. Bij 12 treden kom je zo op 4 lampen. Ze gaan vanzelf aan als je de trap op of af loopt.",
+      },
+      {
         question: "Beschadigt de plakstrip van de Wall Lamp de muur?",
         answer: "De montagestrip is residuvrij. Verwijder je hem voorzichtig, dan blijft de muur intact.",
       },
