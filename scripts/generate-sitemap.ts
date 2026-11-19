@@ -3,7 +3,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { ENABLED_PRODUCT_HANDLES } from "../src/lib/productConfig";
-import { LANDING_PATHS } from "../src/lib/landingPages";
+import { LANDING_PAGES } from "../src/lib/landingPages";
 
 const BASE_URL = "https://www.senseglow.shop";
 
@@ -59,7 +59,7 @@ function generateSitemap(list: SitemapEntry[]) {
 // Landingspagina's bestaan alleen in het Nederlands.
 const allEntries = [
   ...localizedEntries,
-  ...LANDING_PATHS.map((path) => ({ path, changefreq: "weekly" as const, priority: "0.8" })),
+  ...LANDING_PAGES.filter((page) => !page.noindex).map((page) => ({ path: page.path, changefreq: "weekly" as const, priority: "0.8" })),
   { path: "/reviews-beleid", changefreq: "yearly" as const, priority: "0.3" },
 ];
 

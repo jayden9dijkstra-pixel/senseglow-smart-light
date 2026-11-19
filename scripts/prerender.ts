@@ -165,15 +165,17 @@ interface HeadInput {
   ogType: string;
   ogImage?: string;
   dutchOnly?: boolean;
+  noindex?: boolean;
 }
 
-function buildHead({ path, seo, schemas, ogType, ogImage, dutchOnly }: HeadInput): string {
+function buildHead({ path, seo, schemas, ogType, ogImage, dutchOnly, noindex }: HeadInput): string {
   const cleanPath = path.replace(/^\/(en|fr)(?=\/|$)/, "") || "/";
   const url = `${SITE_URL}${path === "/" ? "/" : path}`;
   const lines = [
     `<title>${escapeHtml(seo.title)}</title>`,
     `<meta name="description" content="${escapeAttr(seo.description)}" />`,
     `<link rel="canonical" href="${escapeAttr(url)}" />`,
+    ...(noindex ? [`<meta name="robots" content="noindex, nofollow" />`] : []),
     ...(dutchOnly
       ? []
       : [
@@ -340,7 +342,7 @@ function productsPageFallback(products: ShopifyProduct[], locale: Locale): strin
     p.push(`<p><a href="${escapeAttr(url)}">${escapeHtml(n.title)}</a></p></li>`);
   }
   p.push(`</ul><h2>${t("Meer lampen, lagere prijs")}</h2><p>${t(OFFER_TEXT)}</p><p>${t(MIX_NOTE)}</p><ul>`);
-  for (const lp of LANDING_PAGES) p.push(`<li><a href="${escapeAttr(`${SITE_URL}${lp.path}`)}">${escapeHtml(lp.h1)}</a></li>`);
+  for (const lp of LANDING_PAGES.filter((page) => !page.noindex)) p.push(`<li><a href="${escapeAttr(`${SITE_URL}${lp.path}`)}">${escapeHtml(lp.h1)}</a></li>`);
   p.push(`</ul><h2>${t("Verzending en retour")}</h2><ul>${SHIPPING_RETURNS.map((x) => `<li>${t(x)}</li>`).join("")}</ul>`);
   p.push(`</article>`);
   return p.join("");
@@ -366,14 +368,32 @@ function offerLine(o: LandingPage["offers"][number], prod: ShopifyProduct | unde
 function landingFallback(page: LandingPage, products: Record<string, ShopifyProduct>): string {
   const e = escapeHtml;
   const p: string[] = [`<article id="prerendered-landing" style="max-width:60rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5">`];
-  p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p><ul>`);
-  for (const o of page.offers) {
-    const prod = products[o.handle];
-    const img = offerImage(o, prod?.node.images?.edges?.map((x) => x.node) ?? []);
-    p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.stepQuestion && o.stepChoices ? `<p>${e(o.stepQuestion)} ${e(o.stepChoices.map((c) => `${c.label}: ${c.optionValue}`).join(". "))}.</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
+  const pushSteps = () => {
+    if (!page.steps) return;
+    p.push(`<h2>${e(page.steps.heading)}</h2><ol>${page.steps.items.map((step) => `<li>${e(step.text)}</li>`).join("")}</ol>`);
+  };
+  const pushOffers = () => {
+    p.push(`<ul>`);
+    for (const o of page.offers) {
+      const prod = products[o.handle];
+      const img = offerImage(o, prod?.node.images?.edges?.map((x) => x.node) ?? []);
+      p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.stepQuestion && o.stepChoices ? `<p>${e(o.stepQuestion)} ${e(o.stepChoices.map((c) => `${c.label}: ${c.optionValue}`).join(". "))}.</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
+    }
+    p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
+    p.push(`<p><a href="${SITE_URL}/retourneren">${e(SUPPORT_TRUST)}</a></p>`);
+  };
+  const pushFaqs = () => p.push(`<h2>Veelgestelde vragen</h2>${page.faqs.map((f) => `<h3>${e(f.question)}</h3><p>${e(f.answer)}</p>`).join("")}`);
+
+  p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p>`);
+  if (page.layout === "steps-first") pushSteps();
+  pushOffers();
+  if (page.layout === "steps-after-buy") pushSteps();
+  if (page.layout) {
+    pushFaqs();
+    p.push(`</article>`);
+    return p.join("");
   }
-  p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
-  p.push(`<p><a href="${SITE_URL}/retourneren">${e(SUPPORT_TRUST)}</a></p>`);
+
   if (page.pickerNote) p.push(`<p>${e(page.pickerNote)}</p>`);
   if (page.offers.some((o) => isOfferProduct(o.handle))) p.push(`<p>${e(OFFER_TEXT)}</p><p>${e(MIX_NOTE)}</p>`);
   if (page.why) p.push(whyMarkup([...new Set(page.offers.map((o) => o.handle))], "nl"));
@@ -388,7 +408,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   for (const t of page.specs) {
     p.push(`<table><caption>${e(t.product)}</caption><tbody>${t.rows.map(([k, v]) => `<tr><th scope="row">${e(k)}</th><td>${e(v)}</td></tr>`).join("")}</tbody></table>`);
   }
-  p.push(`<h2>Veelgestelde vragen</h2>${page.faqs.map((f) => `<h3>${e(f.question)}</h3><p>${e(f.answer)}</p>`).join("")}`);
+  pushFaqs();
   if (page.alternative) p.push(`<h2>${e(page.alternative.heading)}</h2><p>${e(page.alternative.text)}</p><p><a href="${escapeAttr(`${SITE_URL}${page.alternative.href}`)}">${e(page.alternative.label)}</a></p>`);
   p.push(`</article>`);
   return p.join("");
@@ -587,7 +607,7 @@ async function main() {
       console.warn(`[prerender] ${page.path}: niet alle producten opgehaald, Product-schema onvolledig.`);
     }
     schemas.push(breadcrumbSchema([{ name: "Home", path: "/" }, { name: page.h1, path: page.path }]));
-    const html = render({ path: page.path, seo: { title: page.title, description: page.description }, schemas, ogType: "website", dutchOnly: true })
+    const html = render({ path: page.path, seo: { title: page.title, description: page.description }, schemas, ogType: "website", dutchOnly: true, noindex: page.noindex })
       .replace(
         /<\/head>/i,
         `    <style>.js-on #prerendered-landing{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,

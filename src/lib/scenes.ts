@@ -5,12 +5,15 @@
  */
 import { PRODUCT_HANDLE, STEP_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE } from "./productConfig";
 
-export type Scene = "trap" | "gang" | "kast" | "keuken" | "buiten";
+export type Scene = "trap" | "trap-avond" | "gang" | "kast" | "keuken" | "buiten";
 
 export const SCENE_ALTS: Record<Scene, Record<string, string>> = {
   trap: {
     [STEP_PRODUCT_HANDLE]: "SenseGlow Wall Lamp zwart langs de trap",
     [PRODUCT_HANDLE]: "SenseGlow Ambient Motion Bar zwart aan de muur boven de trap, licht op de traptreden",
+  },
+  "trap-avond": {
+    [STEP_PRODUCT_HANDLE]: "SenseGlow Wall Lamp zwart langs de trap, avondsfeer",
   },
   gang: { [PRODUCT_HANDLE]: "SenseGlow Ambient Motion Bar zwart in de gang, licht op de vloer" },
   kast: { [PRODUCT_HANDLE]: "SenseGlow Ambient Motion Bar zilver in de kledingkast" },

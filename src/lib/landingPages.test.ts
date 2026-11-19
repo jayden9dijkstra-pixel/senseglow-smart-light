@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getLandingPage } from "./landingPages";
+import { getLandingPage, LANDING_PATHS } from "./landingPages";
 import { PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE, STEP_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE } from "./productConfig";
 import { offerImage } from "./landingPages";
 
@@ -58,5 +58,29 @@ describe("nieuwe landingspagina's", () => {
   });
   it("/gangverlichting selecteert standaard één Ambient-lamp van 30 cm", () => {
     expect(getLandingPage("/gangverlichting")?.offers[0]).toMatchObject({ handle: PRODUCT_HANDLE, qty: 1, sizeCm: 30 });
+  });
+});
+
+describe("trap-advertentiepagina's", () => {
+  it.each(["/trap-in-het-donker", "/trap-zonder-klussen"])("%s bestaat, is noindex en heeft exact hetzelfde aanbod", (path) => {
+    const page = getLandingPage(path);
+    const original = getLandingPage("/trapverlichting");
+    expect(page).not.toBeNull();
+    expect(LANDING_PATHS).toContain(path);
+    expect(page?.noindex).toBe(true);
+    expect(page?.offers).toHaveLength(1);
+
+    const { id: _id, scene: _scene, ...offer } = page!.offers[0];
+    const { id: _originalId, scene: _originalScene, ...originalOffer } = original!.offers[0];
+    expect(offer).toEqual(originalOffer);
+  });
+
+  it("/trap-in-het-donker gebruikt de bestaande avondscène", () => {
+    const offer = getLandingPage("/trap-in-het-donker")!.offers[0];
+    const images = [
+      { url: "dag", altText: "SenseGlow Wall Lamp zwart langs de trap" },
+      { url: "avond", altText: "SenseGlow Wall Lamp zwart langs de trap, avondsfeer" },
+    ];
+    expect(offerImage(offer, images)?.url).toBe("avond");
   });
 });

@@ -1,11 +1,12 @@
 import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Activity, BatteryCharging, Footprints, Lightbulb, StickyNote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
-import { getLandingPage, landingOfferPrice, offerImage, offerProductHref, type LandingOffer } from "@/lib/landingPages";
+import { getLandingPage, landingOfferPrice, offerImage, offerProductHref, type LandingOffer, type LandingPage as LandingPageData, type LandingStepIcon } from "@/lib/landingPages";
 import { HowItWorksSteps } from "@/components/product/HowItWorksSteps";
 import { AskUs } from "@/components/product/AskUs";
 import { CustomerReviews } from "@/components/CustomerReviews";
@@ -29,6 +30,8 @@ import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
 import { useOfferDate } from "@/hooks/useOfferDate";
 import { canPurchaseVariant } from "@/lib/purchaseAvailability";
+import { numericVariantId, trackViewItem } from "@/lib/adsTracking";
+import { trackSiteEvent } from "@/lib/siteAnalytics";
 
 type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
 
@@ -39,7 +42,40 @@ const colorLabel = (v: Variant) => {
   return raw.replace(/\s*\d+\s*cm.*$/i, "").replace(/[\s-]+$/, "").trim();
 };
 
-function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; solo?: boolean; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
+const LANDING_STEP_ICONS: Record<LandingStepIcon, typeof Activity> = {
+  walk: Footprints,
+  sensor: Activity,
+  light: Lightbulb,
+  usb: BatteryCharging,
+  stick: StickyNote,
+  motion: Activity,
+};
+
+function LandingSteps({ steps }: { steps: NonNullable<LandingPageData["steps"]> }) {
+  return (
+    <section aria-labelledby="landing-steps" className="space-y-3">
+      <h2 id="landing-steps" className="text-xl font-semibold text-foreground">{steps.heading}</h2>
+      <ol className="grid gap-3 sm:grid-cols-3">
+        {steps.items.map((step, index) => {
+          const Icon = LANDING_STEP_ICONS[step.icon];
+          return (
+            <li key={step.text} className="flex items-center gap-3 rounded-2xl bg-secondary/60 p-4">
+              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-primary/15 text-primary" aria-hidden>
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="text-[17px] font-medium text-foreground">
+                <span className="mr-1 font-semibold">{index + 1}.</span>
+                {step.text}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
+function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; solo?: boolean; viewPath?: string; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
   const now = useOfferDate();
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
@@ -65,7 +101,26 @@ function OfferCard({ offer, product, sticky, hideImage, solo, onAddRef, onAvaila
   const count = picker ? qty : 1;
   const saving = eightSetSaving(variant, variants);
   const available = canPurchaseVariant(!!product, variant);
+  const viewedRef = useRef<string | null>(null);
   useEffect(() => { onAvailabilityChange?.(available); }, [available, onAvailabilityChange]);
+  useEffect(() => {
+    if (!viewPath || !product || !variant) return;
+    const key = `${viewPath}::${variant.id}`;
+    if (viewedRef.current === key) return;
+    viewedRef.current = key;
+    trackViewItem([{
+      item_id: numericVariantId(variant.id),
+      item_name: product.node.title,
+      item_variant: variant.title,
+      price: parseFloat(variant.price.amount),
+      quantity: 1,
+    }]);
+    void trackSiteEvent("view_item", {
+      path: viewPath,
+      itemName: product.node.title,
+      value: parseFloat(variant.price.amount),
+    });
+  }, [viewPath, product, variant]);
 
   const add = () => {
     if (!product || !variant || !available) return;
@@ -214,6 +269,11 @@ const LandingPage = () => {
   const handles = [...new Set(page.offers.map((o) => o.handle))];
   const first = page.offers[0];
   const heroImage = first ? offerImage(first, products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? []) : null;
+
+  if (page.layout) {
+    return <AdLandingLayout page={page} products={products} jsonLd={jsonLd} />;
+  }
+
   const pair = first ? getBeforeAfterPair(first.handle) : undefined;
   const firstImages = first ? products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? [] : [];
   const desktopImages = heroImage ? [heroImage, ...firstImages.filter((im) => im.url !== heroImage.url)] : firstImages;
@@ -318,6 +378,33 @@ const LandingPage = () => {
   );
 };
 
+function AdLandingLayout({ page, products, jsonLd }: { page: LandingPageData; products: Record<string, ShopifyProduct>; jsonLd: Record<string, unknown>[] }) {
+  const first = page.offers[0];
+  const product = products[first.handle];
+  const heroImage = offerImage(first, product?.node.images?.edges?.map((edge) => edge.node) ?? []);
+
+  return (
+    <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true, noindex: page.noindex }}>
+      <div className="container max-w-3xl space-y-8 pb-12 md:py-14">
+        <section id="kopen" className="scroll-mt-24 space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl">{page.h1}</h1>
+            <p className="text-[17px] leading-relaxed text-foreground/80 md:text-lg">{page.intro}</p>
+          </div>
+          {page.layout === "steps-first" && page.steps && <LandingSteps steps={page.steps} />}
+          {heroImage ? (
+            <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="28svh" imageClassName="h-full w-full object-cover" />
+          ) : (
+            <div className="h-[28svh] animate-pulse rounded-lg bg-secondary" />
+          )}
+          <OfferCard offer={first} product={product} sticky hideImage solo viewPath={page.path} />
+          {page.layout === "steps-after-buy" && page.steps && <LandingSteps steps={page.steps} />}
+        </section>
+        <FaqAccordion faqs={page.faqs} />
+      </div>
+    </PageLayout>
+  );
+}
 
 function ExtraBlock({ page, products }: { page: NonNullable<ReturnType<typeof getLandingPage>>; products: Record<string, ShopifyProduct> }) {
   const now = useOfferDate();

@@ -58,12 +58,22 @@ export interface SpecTable {
   rows: Array<[string, string]>;
 }
 
+export type LandingStepIcon = "walk" | "sensor" | "light" | "usb" | "stick" | "motion";
+
 export interface LandingPage {
   path: string;
   title: string;
   description: string;
   h1: string;
   intro: string;
+  /** Advertentievariant met een eigen volgorde; standaard blijft de bestaande opbouw. */
+  layout?: "steps-after-buy" | "steps-first";
+  /** Advertentiepagina's zijn niet voor zoekmachines of de sitemap bedoeld. */
+  noindex?: boolean;
+  steps?: {
+    heading: string;
+    items: Array<{ text: string; icon: LandingStepIcon }>;
+  };
   offers: LandingOffer[];
   benefits: string[];
   specs: SpecTable[];
@@ -157,6 +167,42 @@ const AMBIENT_SENSOR_FAQ: ProductFaq = {
 };
 
 const common = (...faqs: ProductFaq[]) => [...faqs, DELIVERY_FAQ, CHRISTMAS_FAQ, ...purchaseFaqs];
+
+/** Hetzelfde Wall Lamp-aanbod als /trapverlichting, met een eigen scène per advertentiepagina. */
+const trapAdOffer = (id: string, scene: Scene = "trap"): LandingOffer => ({
+  id,
+  handle: STEP_PRODUCT_HANDLE,
+  label: "SenseGlow Wall Lamp™",
+  optionValue: "4-delige set",
+  choices: ["4-delige set", "8-delige set"],
+  choiceNote: "Korte trap of overloop: 4-set. Langere trap: 8-set.",
+  stepQuestion: "Hoeveel treden heeft je trap?",
+  stepChoices: [
+    { label: "Tot 12 treden", optionValue: "4-delige set" },
+    { label: "13 of meer treden", optionValue: "8-delige set" },
+  ],
+  scene,
+});
+
+/** Bestaande trap-FAQ's, zonder nieuwe productclaims. */
+const trapAdFaqs = () => common(
+  {
+    question: "Werkt de trapverlichting met een bewegingsmelder?",
+    answer: "Ja. De Wall Lamp heeft een bewegingssensor, ook wel bewegingsmelder genoemd. Hij gaat aan als je nadert en uit na inactiviteit.",
+  },
+  {
+    question: "Hoeveel lampen heb ik nodig voor mijn trap?",
+    answer: "Voor 8-12 treden: de 4-delige set. Voor 13 of meer treden of een lange gang erbij: de 8-delige set.",
+  },
+  {
+    question: "Waar plak ik de lampen op mijn trap?",
+    answer: "Op de muur langs de trap, net boven de treden, ongeveer om de 3 treden. Bij 12 treden kom je zo op 4 lampen. Ze gaan vanzelf aan als je de trap op of af loopt.",
+  },
+  {
+    question: "Beschadigt de plakstrip van de Wall Lamp de muur?",
+    answer: "De montagestrip is residuvrij. Verwijder je hem voorzichtig, dan blijft de muur intact.",
+  },
+);
 
 export const LANDING_PAGES: LandingPage[] = [
   {
@@ -420,6 +466,50 @@ export const LANDING_PAGES: LandingPage[] = [
         answer: "Eén tik is aan, nog een tik is uit. Vasthouden dimt langzaam op of af tot je loslaat.",
       },
     ),
+  },
+  {
+    path: "/trap-in-het-donker",
+    title: "Trap in het donker: licht zonder lichtknopje | SenseGlow",
+    description:
+      "De SenseGlow Wall Lamp gaat vanzelf aan zodra je de trap nadert. Zelfklevend, zonder boren of kabels en oplaadbaar via USB-C. Kies een 4- of 8-delige set.",
+    h1: "Nooit meer in het donker de trap af",
+    intro: "Het licht gaat vanzelf aan zodra je de trap nadert, ook midden in de nacht. Je hoeft geen knopje te zoeken.",
+    layout: "steps-after-buy",
+    noindex: true,
+    offers: [trapAdOffer("wall-trap-night", "trap-avond")],
+    steps: {
+      heading: "Zo werkt het 's nachts",
+      items: [
+        { text: "Je loopt naar de trap", icon: "walk" },
+        { text: "De bewegingssensor ziet je", icon: "sensor" },
+        { text: "Het licht gaat aan en later vanzelf uit", icon: "light" },
+      ],
+    },
+    benefits: [],
+    specs: [],
+    faqs: trapAdFaqs(),
+  },
+  {
+    path: "/trap-zonder-klussen",
+    title: "Trapverlichting zonder klussen of boren | SenseGlow",
+    description:
+      "Plak de SenseGlow Wall Lamp op de muur langs je trap. Geen boren, kabels of stopcontact nodig. Opladen via USB-C. Kies een 4- of 8-delige set.",
+    h1: "Trapverlichting zonder klussen",
+    intro: "Geen elektricien, geen boren, geen stopcontact: je plakt de lampen op de muur langs de trap.",
+    layout: "steps-first",
+    noindex: true,
+    offers: [trapAdOffer("wall-trap-install")],
+    steps: {
+      heading: "In 3 stappen geplaatst",
+      items: [
+        { text: "Laad de lampen op via USB-C", icon: "usb" },
+        { text: "Haal de strip eraf en plak de lampen op de muur", icon: "stick" },
+        { text: "Klaar: het licht gaat vanzelf aan bij beweging", icon: "motion" },
+      ],
+    },
+    benefits: [],
+    specs: [],
+    faqs: trapAdFaqs(),
   },
 ];
 
