@@ -21,9 +21,12 @@ import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsT
 import { formatPrice } from "@/lib/price";
 import { BLACK_FRIDAY_CART, BLACK_FRIDAY_DELIVERY, isBlackFriday } from "@/lib/blackFriday";
 import { useOfferDate } from "@/hooks/useOfferDate";
+import { useI18n } from "@/i18n/I18nProvider";
+import { freeDeliveryBetweenText } from "@/lib/delivery";
 
 export function CartDrawer() {
   const now = useOfferDate();
+  const { locale } = useI18n();
   const [isOpen, setIsOpen] = React.useState(false);
   const {
     items,
@@ -225,7 +228,7 @@ export function CartDrawer() {
                 {blackFriday && <p className="text-sm text-foreground" data-no-translate>{BLACK_FRIDAY_DELIVERY}</p>}
                 <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
-                  <span>Gratis bezorgd. Levering in 7-14 werkdagen</span>
+                  <span>{freeDeliveryBetweenText(new Date(), locale)}</span>
                 </div>
                 {shopifyDiscounts?.map((d) => (
                   <div key={d.title} className="flex justify-between items-center text-sm text-accent-ink">

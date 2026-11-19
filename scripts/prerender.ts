@@ -33,7 +33,7 @@ import { USE_CASES, USE_CASE_HEADING } from "../src/lib/angles";
 import { OFFER_TEXT, MIX_NOTE, isOfferProduct } from "../src/lib/quantityOffer";
 import { getProductFaqs, SHIPPING_RETURNS } from "../src/lib/productFaqs";
 import { blueprintFor } from "../src/lib/productBlueprint";
-import { HOME_HERO, HOME_HERO_PRODUCT, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS, tileHandle } from "../src/lib/homeContent";
+import { HOME_HERO, HOME_HERO_PRODUCT, HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, HOME_PILLARS, HOME_PILLARS_HEADING, HOME_STORY, HOME_FAQS, homeTileImage, tileHandle } from "../src/lib/homeContent";
 import React, { createElement, type ComponentType } from "react";
 (globalThis as { React?: typeof React }).React = React;
 import { renderToStaticMarkup } from "react-dom/server";
@@ -442,7 +442,7 @@ function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
   p.push(`<section><h2>${locale === "en" ? "Customer experience" : "Ervaring van onze klant"}</h2><p>★★★★★</p><p>${GOOGLE_REVIEW.count} ${GOOGLE_REVIEW.count === 1 ? "review" : "reviews"}</p><blockquote>${escapeHtml(googleReviewText(locale))}</blockquote><p>${escapeHtml(googleReviewAttribution(locale))}</p>${locale === "nl" ? "<p><small>(vertaald uit het Engels)</small></p>" : ""}</section>`);
   p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => {
     const product = products.find((prod) => prod.node.handle === tileHandle(x))?.node;
-    const image = product?.featuredImage ?? product?.images.edges[0]?.node;
+    const image = homeTileImage(x, product?.images.edges.map((edge) => edge.node) ?? [], product?.featuredImage);
     return `<li><a href="${escapeAttr(`${SITE_URL}${prefix}${x.href}`)}">${image ? `<img src="${escapeAttr(image.url)}" alt="${escapeAttr(image.altText ?? product?.title ?? x.title)}" width="400" height="400" loading="lazy" />` : ""}<h3>${t(x.title)}</h3></a><p>${t(x.body)}</p>${homeTilePrice(products, `/product/${tileHandle(x)}`, locale)}</li>`;
   }).join("")}</ul>`);
   p.push(`<h2>${t(HOME_PILLARS_HEADING)}</h2><ul>${HOME_PILLARS.map((x) => `<li><h3>${t(x.title)}</h3><p>${t(x.body)}</p></li>`).join("")}</ul>`);

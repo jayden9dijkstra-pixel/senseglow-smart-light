@@ -20,32 +20,47 @@ export const HOME_TILES = [
     title: "Nooit meer struikelen 's nachts",
     body: "Bewegingssensor-balk onder het bed, zacht licht dat partners niet wakker maakt.",
     href: "/product/senseglow_ambient_motion_bar",
+    imageAlt: "SenseGlow Ambient Motion Bar zwart onder het bed als nachtlicht",
   },
   {
     title: "Een keuken die eindelijk áf voelt",
     body: "Sfeerverlichting met golfeffect, reageert als je langsloopt, geen elektricien nodig.",
     href: "/product/senseglow_wave",
+    imageAlt: "SenseGlow Wave zwart onder keukenkastje met golvend licht",
   },
   {
     title: "Veilig de trap op, ook 's nachts",
     body: "Set van 4 wandlampjes met sensor, zelfklevend. Gaan aan als je de trap nadert, zonder boren of kabels.",
     href: "/trapverlichting",
     handle: "senseglow_wall_lamp",
+    imageAlt: "SenseGlow Wall Lamp zwart langs de trap",
   },
   {
     title: "Buitenmuur verlicht zonder kabel",
     body: "Solar buitenlamp met sensor, IP65, twee schroeven en klaar.",
     href: "/product/senseglow_solar_lantern",
+    imageAlt: "SenseGlow Solar Lantern zwart brandt bij schemering",
   },
   {
     title: "Bureau dat niet als studentenkamer aanvoelt",
     body: "Touch-dimbare lamp voor late studie-sessies, magnetisch, verhuist mee.",
     href: "/product/senseglow_flex",
+    imageAlt: "SenseGlow Flex wit boven houten bureau",
   },
 ];
 
 /** Shopify-handle achter een tegel: expliciet `handle`, anders uit een /product/-link. */
 export const tileHandle = (tile: { href: string; handle?: string }) => tile.handle ?? tile.href.replace("/product/", "");
+
+/** Kies de bestaande Shopify-foto die bij de kaart hoort; zonder treffer blijft de huidige foto staan. */
+export function homeTileImage<T extends { altText: string | null }>(
+  tile: { imageAlt?: string },
+  images: T[],
+  fallback?: T | null,
+): T | undefined {
+  const wanted = tile.imageAlt?.trim().toLowerCase();
+  return images.find((image) => wanted && image.altText?.trim().toLowerCase() === wanted) ?? fallback ?? images[0];
+}
 
 export const HOME_PILLARS_HEADING = "Wat ze met elkaar gemeen hebben";
 export const HOME_PILLARS = [

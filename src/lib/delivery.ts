@@ -40,3 +40,9 @@ export function deliveryBetweenText(today: Date = new Date(), locale = "nl"): st
   if (locale === "fr") return `Livré entre le ${a} et le ${b}`;
   return `Bezorgd tussen ${a} en ${b}`;
 }
+
+/** Dezelfde concrete datumrange in compacte koopbalken en de winkelwagen. */
+export function freeDeliveryBetweenText(today: Date = new Date(), locale = "nl"): string {
+  const free = locale === "en" ? "Free shipping" : locale === "fr" ? "Livraison gratuite" : "Gratis verzending";
+  return `${free} · ${deliveryBetweenText(today, locale)}`;
+}

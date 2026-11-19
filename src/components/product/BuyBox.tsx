@@ -6,7 +6,7 @@ import { quoteQty, qtyLabel } from "@/lib/quantityOffer";
 import { readStoredConsent } from "@/lib/consent";
 import { Truck, Package, RotateCcw, ShieldCheck } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { deliveryBetweenText } from "@/lib/delivery";
+import { deliveryBetweenText, freeDeliveryBetweenText } from "@/lib/delivery";
 import { shopifySized } from "@/lib/shopifyImage";
 import { useOfferDate } from "@/hooks/useOfferDate";
 
@@ -122,6 +122,7 @@ export function StickyAddBar({
 }) {
   const [outOfView, setOutOfView] = useState(false);
   const consentPending = useConsentPending();
+  const { locale } = useI18n();
 
   useEffect(() => {
     const update = () => {
@@ -159,7 +160,7 @@ export function StickyAddBar({
           In winkelwagen
         </Button>
       </div>
-      <p className="mx-auto mt-1 max-w-md text-center text-sm text-foreground/80">Gratis verzending · Levering 7-14 werkdagen</p>
+      <p className="mx-auto mt-1 max-w-md text-center text-sm text-foreground/80">{freeDeliveryBetweenText(new Date(), locale)}</p>
     </div>,
     document.body,
   );

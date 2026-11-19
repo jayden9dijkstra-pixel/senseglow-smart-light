@@ -1,13 +1,16 @@
 import { Truck, Clock, Shield, Package } from "lucide-react";
-
-const items = [
-  { icon: Truck, label: "Gratis verzending NL/BE" },
-  { icon: Clock, label: "30 dagen retour" },
-  { icon: Shield, label: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow" },
-  { icon: Package, label: "Levering in 7-14 werkdagen" },
-];
+import { useI18n } from "@/i18n/I18nProvider";
+import { deliveryBetweenText } from "@/lib/delivery";
 
 export const TrustBar = () => {
+  const { locale } = useI18n();
+  const items = [
+    { icon: Truck, label: "Gratis verzending NL/BE" },
+    { icon: Clock, label: "30 dagen retour" },
+    { icon: Shield, label: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow" },
+    { icon: Package, label: deliveryBetweenText(new Date(), locale) },
+  ];
+
   return (
     <section className="w-full border-b border-foreground/8 bg-background-secondary">
       <div className="container">

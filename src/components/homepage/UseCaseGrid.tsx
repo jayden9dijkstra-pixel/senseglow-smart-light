@@ -1,9 +1,9 @@
-import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
+import { responsiveImg } from "@/lib/shopifyImage";
 import { Link } from "react-router-dom";
 import { Footprints, ChefHat, Moon, Sun, Lamp } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { formatPrice } from "@/lib/price";
-import { HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, tileHandle } from "@/lib/homeContent";
+import { HOME_TILES, HOME_TILES_HEADING, HOME_TILES_SUBTITLE, homeTileImage, tileHandle } from "@/lib/homeContent";
 
 const icons = [Footprints, ChefHat, Moon, Sun, Lamp];
 const tiles = HOME_TILES.map((tile, i) => ({ ...tile, icon: icons[i] ?? Lamp }));
@@ -31,28 +31,32 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
             {tiles.map(({ icon: Icon, title, body, href, ...rest }, i) => {
               const handle = tileHandle({ href, ...rest });
               const product = productsByHandle.get(handle);
-              // Zelfde eerste foto als productpagina en /producten.
-              const image = product?.node.featuredImage ?? product?.node.images?.edges?.[0]?.node;
+              const image = homeTileImage(
+                rest,
+                product?.node.images?.edges?.map((edge) => edge.node) ?? [],
+                product?.node.featuredImage,
+              );
               const fromPrice = product?.node.priceRange?.minVariantPrice?.amount;
+              const desktopPosition = i === 3 ? " lg:col-start-2" : i === 4 ? " lg:col-start-4" : "";
 
               return (
                 <Link
                   key={href}
                   id={i === 0 ? "first-product" : undefined}
                   to={href}
-                  className={`group text-left overflow-hidden rounded-lg border border-border/70 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow${i === 0 ? " scroll-mt-24" : ""}`}
+                  className={`group text-left overflow-hidden rounded-lg border border-border/70 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow lg:col-span-2${desktopPosition}${i === 0 ? " scroll-mt-24" : ""}`}
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
-                   <div className="relative aspect-square overflow-hidden rounded-lg bg-background-secondary">
+                  <div className="relative aspect-square overflow-hidden rounded-lg bg-background-secondary">
                     {image?.url ? (
                       <img
                         {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
                         alt={image.altText || product?.node.title || title}
-                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                         loading="lazy"
                       />
                     ) : (
