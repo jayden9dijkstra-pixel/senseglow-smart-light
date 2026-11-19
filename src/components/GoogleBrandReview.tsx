@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { GOOGLE_REVIEW, googleRatingLabel, googleReviewText } from "@/lib/googleReviews";
+import { GOOGLE_REVIEW, googleRatingLabel, googleReviewAttribution, googleReviewText } from "@/lib/googleReviews";
 
 /** Compacte merkreviewscore bij de koopknop, altijd inclusief aantal. */
 export function GoogleReviewLine() {
@@ -37,7 +37,7 @@ export function GoogleHomeReview() {
           <blockquote className="text-[17px] leading-relaxed text-foreground">
             “{googleReviewText(locale)}”
           </blockquote>
-          <p className="text-base font-medium text-foreground">— {GOOGLE_REVIEW.name}, via {GOOGLE_REVIEW.source}</p>
+          <p className="text-base font-medium text-foreground">{googleReviewAttribution(locale)}</p>
           {locale === "nl" && <p className="text-sm text-foreground/75">(vertaald uit het Engels)</p>}
         </div>
       </div>

@@ -47,7 +47,7 @@ import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
 import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
 import { BehindSenseGlow } from "../src/components/product/BehindSenseGlow";
 import { SUPPORT_TRUST } from "../src/lib/purchaseTrust";
-import { GOOGLE_REVIEW, googleRatingLabel, googleReviewText } from "../src/lib/googleReviews";
+import { GOOGLE_REVIEW, googleRatingLabel, googleReviewAttribution, googleReviewText } from "../src/lib/googleReviews";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -439,7 +439,7 @@ function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
     p.push(`<p><a href="${escapeAttr(`${SITE_URL}${prefix}/product/${heroProduct.handle}`)}">${escapeHtml(heroProduct.title)}</a>${v ? ` ${escapeHtml(translate(locale, "Vanaf"))} &euro;${v}` : ""}</p>`);
   }
   p.push(`<p>${t(OFFER_TEXT)}</p>`);
-  p.push(`<section><h2>${locale === "en" ? "Customer experience" : "Ervaring van onze klant"}</h2><p>★★★★★</p><p>${GOOGLE_REVIEW.count} ${GOOGLE_REVIEW.count === 1 ? "review" : "reviews"}</p><blockquote>${escapeHtml(googleReviewText(locale))}</blockquote><p>— ${escapeHtml(GOOGLE_REVIEW.name)}, via ${GOOGLE_REVIEW.source}</p>${locale === "nl" ? "<p><small>(vertaald uit het Engels)</small></p>" : ""}</section>`);
+  p.push(`<section><h2>${locale === "en" ? "Customer experience" : "Ervaring van onze klant"}</h2><p>★★★★★</p><p>${GOOGLE_REVIEW.count} ${GOOGLE_REVIEW.count === 1 ? "review" : "reviews"}</p><blockquote>${escapeHtml(googleReviewText(locale))}</blockquote><p>${escapeHtml(googleReviewAttribution(locale))}</p>${locale === "nl" ? "<p><small>(vertaald uit het Engels)</small></p>" : ""}</section>`);
   p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => {
     const product = products.find((prod) => prod.node.handle === tileHandle(x))?.node;
     const image = product?.featuredImage ?? product?.images.edges[0]?.node;
