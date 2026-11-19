@@ -47,6 +47,7 @@ import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
 import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
 import { BehindSenseGlow } from "../src/components/product/BehindSenseGlow";
 import { SUPPORT_TRUST } from "../src/lib/purchaseTrust";
+import { GOOGLE_REVIEW, googleRatingLabel, googleReviewText } from "../src/lib/googleReviews";
 import en from "../src/i18n/en.json";
 import fr from "../src/i18n/fr.json";
 
@@ -286,6 +287,7 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
   parts.push(whyMarkup([handle], locale));
   parts.push(`<p><a href="${escapeAttr(`${SITE_URL}${locale === "nl" ? "" : `/${locale}`}/retourneren`)}">${t(SUPPORT_TRUST)}</a></p>`);
+  parts.push(googleRatingMarkup());
   if (product?.node.description) parts.push(descriptionMarkup(product.node.description, locale));
   if (isOfferProduct(handle)) parts.push(`<p>${t(OFFER_TEXT)}</p><p>${t(MIX_NOTE)}</p>`);
   const uses = USE_CASES[handle];
@@ -356,6 +358,7 @@ function whyMarkup(handles: string[], locale: Locale): string {
 }
 
 const euro = (n: number) => `€${n.toFixed(2).replace(".", ",")}`;
+const googleRatingMarkup = () => `<p>★★★★★ ${escapeHtml(googleRatingLabel())}</p>`;
 /** Voorgeselecteerde keuze met totaal en prijs per lamp, uit de Shopify-prijs. */
 function offerLine(o: LandingPage["offers"][number], prod: ShopifyProduct | undefined): string {
   const q = landingOfferPrice(o, prod?.node.variants.edges.map((x) => x.node) ?? []);
@@ -381,6 +384,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     }
     p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
     p.push(`<p><a href="${SITE_URL}/retourneren">${e(SUPPORT_TRUST)}</a></p>`);
+    p.push(googleRatingMarkup());
   };
   const pushFaqs = () => p.push(`<h2>Veelgestelde vragen</h2>${page.faqs.map((f) => `<h3>${e(f.question)}</h3><p>${e(f.answer)}</p>`).join("")}`);
 
@@ -435,6 +439,7 @@ function homeFallback(locale: Locale, products: ShopifyProduct[] = []): string {
     p.push(`<p><a href="${escapeAttr(`${SITE_URL}${prefix}/product/${heroProduct.handle}`)}">${escapeHtml(heroProduct.title)}</a>${v ? ` ${escapeHtml(translate(locale, "Vanaf"))} &euro;${v}` : ""}</p>`);
   }
   p.push(`<p>${t(OFFER_TEXT)}</p>`);
+  p.push(`<section><h2>${locale === "en" ? "Customer experience" : "Ervaring van onze klant"}</h2><p>★★★★★</p><p>${GOOGLE_REVIEW.count} ${GOOGLE_REVIEW.count === 1 ? "review" : "reviews"}</p><blockquote>${escapeHtml(googleReviewText(locale))}</blockquote><p>— ${escapeHtml(GOOGLE_REVIEW.name)}, via ${GOOGLE_REVIEW.source}</p>${locale === "nl" ? "<p><small>(vertaald uit het Engels)</small></p>" : ""}</section>`);
   p.push(`<h2>${t(HOME_TILES_HEADING)}</h2><p>${t(HOME_TILES_SUBTITLE)}</p><ul>${HOME_TILES.map((x) => {
     const product = products.find((prod) => prod.node.handle === tileHandle(x))?.node;
     const image = product?.featuredImage ?? product?.images.edges[0]?.node;

@@ -1,28 +1,30 @@
 /**
- * Google-reviews van het bedrijfsprofiel.
- *
- * BELANGRIJK: hier komen uitsluitend echte, door klanten geschreven reviews in.
- * Nooit verzonnen teksten, namen of scores toevoegen.
- *
- * 1. Zet hieronder de deel-link van je Google-bedrijfsprofiel
- *    (Google Bedrijfsprofiel > Reviews > "Meer reviews vragen" > link kopiëren).
- * 2. Zodra een klant een review heeft geplaatst, neem je die hier letterlijk over.
+ * Echte merkreview uit het Google-bedrijfsprofiel van SenseGlow.
+ * Niet aan een product koppelen en geen Review- of aggregateRating-markup maken.
  */
-
 export const GOOGLE_REVIEW_URL = "";
 
-export interface GoogleReview {
-  author: string;
-  rating: 1 | 2 | 3 | 4 | 5;
-  text: string;
-  /** Datum zoals op Google getoond, bijvoorbeeld "september 2026" */
-  date: string;
+export interface GoogleBrandReview {
+  source: "Google";
+  rating: number;
+  count: number;
+  name: string;
+  textNl: string;
+  textEn: string;
 }
 
-export const GOOGLE_REVIEWS: GoogleReview[] = [];
+export const GOOGLE_REVIEW: GoogleBrandReview = {
+  source: "Google",
+  rating: 5,
+  count: 1,
+  name: "Kordian N.",
+  textNl: "Erg blij met mijn SenseGlow-lamp! De bewegingssensor werkt top en hij is superhandig 's nachts als ik het grote licht niet aan wil doen. Hij ziet er mooi uit, was makkelijk te plaatsen en doet precies wat ik wilde. Echt een aanrader!",
+  textEn: "Really happy with my SenseGlow lamp! The motion sensor works great and it's super useful at night when I don't want to turn on the main lights. It looks nice, was easy to set up, and does exactly what I wanted. Definitely recommend!",
+};
 
-export function getAverageRating(reviews: GoogleReview[]): number | null {
-  if (reviews.length === 0) return null;
-  const total = reviews.reduce((sum, r) => sum + r.rating, 0);
-  return +(total / reviews.length).toFixed(1);
-}
+export const googleReviewText = (locale: "nl" | "en" | "fr") =>
+  locale === "nl" ? GOOGLE_REVIEW.textNl : GOOGLE_REVIEW.textEn;
+
+/** Bij een score hoor je altijd het echte aantal Google-reviews te tonen. */
+export const googleRatingLabel = () =>
+  `${GOOGLE_REVIEW.rating.toFixed(1).replace(".", ",")} op ${GOOGLE_REVIEW.source} (${GOOGLE_REVIEW.count} ${GOOGLE_REVIEW.count === 1 ? "review" : "reviews"})`;

@@ -1,0 +1,46 @@
+import { Star } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
+import { GOOGLE_REVIEW, googleRatingLabel, googleReviewText } from "@/lib/googleReviews";
+
+/** Compacte merkreviewscore bij de koopknop, altijd inclusief aantal. */
+export function GoogleReviewLine() {
+  return (
+    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base text-foreground/80">
+      <span className="text-cta" aria-label={`${GOOGLE_REVIEW.rating} van 5 sterren`}>
+        <span aria-hidden>★★★★★</span>
+      </span>
+      <span>{googleRatingLabel()}</span>
+    </p>
+  );
+}
+
+/** Rustig homepageblok voor de enkele echte Google-merkreview. */
+export function GoogleHomeReview() {
+  const { locale } = useI18n();
+  return (
+    <section aria-labelledby="google-review-heading" className="w-full bg-background py-10 md:py-14">
+      <div className="container max-w-3xl">
+        <div className="space-y-4 rounded-2xl border border-foreground/10 bg-background-secondary p-6 text-center md:p-8">
+          <h2 id="google-review-heading" className="text-xl font-semibold text-foreground">
+            {locale === "en" ? "Customer experience" : "Ervaring van onze klant"}
+          </h2>
+          <div className="flex justify-center gap-1" aria-label={`${GOOGLE_REVIEW.rating} van 5 sterren`}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                aria-hidden
+                className={`h-5 w-5 ${star <= GOOGLE_REVIEW.rating ? "fill-cta text-cta" : "text-foreground/30"}`}
+              />
+            ))}
+          </div>
+          <p className="text-sm text-foreground/75">{GOOGLE_REVIEW.count} {GOOGLE_REVIEW.count === 1 ? "review" : "reviews"}</p>
+          <blockquote className="text-[17px] leading-relaxed text-foreground">
+            “{googleReviewText(locale)}”
+          </blockquote>
+          <p className="text-base font-medium text-foreground">— {GOOGLE_REVIEW.name}, via {GOOGLE_REVIEW.source}</p>
+          {locale === "nl" && <p className="text-sm text-foreground/75">(vertaald uit het Engels)</p>}
+        </div>
+      </div>
+    </section>
+  );
+}

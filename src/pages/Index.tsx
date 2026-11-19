@@ -14,6 +14,7 @@ import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
 import { VoetCTA } from "@/components/homepage/VoetCTA";
 import { FAQSection } from "@/components/FAQSection";
 import { CustomerReviews } from "@/components/CustomerReviews";
+import { GoogleHomeReview } from "@/components/GoogleBrandReview";
 
 const Index = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -51,6 +52,8 @@ const Index = () => {
 
       {/* Trust bar */}
       <TrustBar />
+
+      <GoogleHomeReview />
 
       {/* 2. UseCaseGrid, 5 products */}
       <div id="products" className="scroll-mt-24">
