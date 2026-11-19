@@ -18,6 +18,7 @@ import { blueprintFor, eightSetSaving, lampsInSet } from "@/lib/productBlueprint
 import { AnchorNav, IconBenefits } from "./Blueprint";
 import { formatPrice } from "@/lib/price";
 import { PurchaseReassurance } from "./PurchaseReassurance";
+import { PlacementGuideBonus } from "./PlacementGuideBonus";
 import { parseVariantLabel } from "@/lib/productRegistry";
 import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 import { useOfferDate } from "@/hooks/useOfferDate";
@@ -219,6 +220,7 @@ export const ProductHeroSection = ({
             >
               {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
             </Button>
+            <PlacementGuideBonus productHandle={product.node.handle} />
             <PurchaseReassurance />
             <TrustLine />
             {afterTrust}

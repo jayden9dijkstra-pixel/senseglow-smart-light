@@ -25,6 +25,7 @@ import { reviewsFor } from "@/data/reviews";
 import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { PurchaseReassurance } from "@/components/product/PurchaseReassurance";
+import { PlacementGuideBonus } from "@/components/product/PlacementGuideBonus";
 import { parseVariantLabel } from "@/lib/productRegistry";
 import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
@@ -216,6 +217,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, onAddRef
       >
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
+      <PlacementGuideBonus productHandle={offer.handle} />
       <PurchaseReassurance />
       {sticky && <TrustLine />}
       {sticky && (

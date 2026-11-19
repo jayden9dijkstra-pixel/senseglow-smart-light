@@ -204,6 +204,12 @@ const trapAdFaqs = () => common(
   },
 );
 
+/** Alleen de bestaande trap-FAQ's die ook in de gratis plaatsingsgids staan. */
+export const placementGuideFaqs = () => trapAdFaqs().filter((faq) =>
+  faq.question === "Hoeveel lampen heb ik nodig voor mijn trap?" ||
+  faq.question === "Beschadigt de plakstrip van de Wall Lamp de muur?"
+);
+
 export const LANDING_PAGES: LandingPage[] = [
   {
     path: "/trapverlichting",

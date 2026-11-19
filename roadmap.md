@@ -1,5 +1,11 @@
 # SenseGlow herstel — status
 
+## Plaatsingsgids Wall Lamp (19 november 2026)
+- [x] Nieuwe indexeerbare gids /plaatsingsgids-trap met vier stappen, SVG, FAQ, sitemap en prerender.
+- [x] Printweergave en knop voor afdrukken of bewaren als PDF; geverifieerd op één A4.
+- [x] Identieke bonusregel alleen bij de vier Wall Lamp-aanbiedingen.
+- [x] 96 tests, build en mobiele/printcontrole geslaagd; niet gepubliceerd.
+
 ## Black Friday-weergave (13 november 2026)
 - [x] Tijdgebonden bovenbalk, staffelweergave en winkelwagentekst; Wall Lamp en Shopify ongemoeid.
 - [x] Herhaalde landingskoopknop dezelfde voorraadcontrole als hoofdknop.

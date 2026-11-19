@@ -36,6 +36,8 @@ const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 const WhySenseGlow = lazy(() => import("./pages/WhySenseGlow"));
 const ProductPreview = lazy(() => import("./pages/ProductPreview"));
 const ReviewPolicy = lazy(() => import("./pages/ReviewPolicy"));
+const PlacementGuide = lazy(() => import("./pages/PlacementGuide"));
+import { PLACEMENT_GUIDE_PATH } from "@/lib/placementGuide";
 import { LegacyRedirect, DutchPrefixRedirect } from "@/components/LegacyRedirect";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { DomTranslator } from "@/i18n/DomTranslator";
@@ -119,6 +121,7 @@ const App = () => (
             <Route path="/duurzaamheid" element={<Sustainability />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/reviews-beleid" element={<ReviewPolicy />} />
+            <Route path={PLACEMENT_GUIDE_PATH} element={<PlacementGuide />} />
             <Route path="/voorwaarden" element={<Terms />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

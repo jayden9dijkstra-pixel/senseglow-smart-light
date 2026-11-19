@@ -3,6 +3,7 @@ import { Globe2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConsentPending } from "@/components/product/BuyBox";
 import { LANGUAGE_CHOICE_KEY, type Locale, useI18n } from "@/i18n/I18nProvider";
+import { PLACEMENT_GUIDE_PATH } from "@/lib/placementGuide";
 
 /**
  * Nederlandse bezoekers zien niets: de winkel staat al in het Nederlands.
@@ -39,7 +40,7 @@ export function LanguageChooser() {
     }
   };
 
-  if (!open || consentPending || window.location.pathname.startsWith("/admin")) return null;
+  if (!open || consentPending || window.location.pathname.startsWith("/admin") || window.location.pathname === PLACEMENT_GUIDE_PATH) return null;
 
   const choose = (locale: Locale) => {
     setOpen(false);

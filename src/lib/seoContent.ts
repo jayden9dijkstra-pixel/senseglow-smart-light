@@ -88,6 +88,11 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
     description:
       "Reviews op SenseGlow komen van klanten die het product kochten en gebruikten. We plaatsen positieve en negatieve reviews, zonder beloning.",
   },
+  "/plaatsingsgids-trap": {
+    title: "Plaatsingsgids trapverlichting: Wall Lamp in 4 stappen | SenseGlow",
+    description:
+      "Plaats je Wall Lamps op de muur langs de trap. Kies de 4- of 8-delige set, laad via USB-C en plak ongeveer om de 3 treden.",
+  },
   "/voorwaarden": {
     title: "Algemene voorwaarden van SenseGlow webshop | SenseGlow",
     description:

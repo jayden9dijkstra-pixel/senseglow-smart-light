@@ -245,3 +245,44 @@ html {
 @media (max-width: 767px) {
   body.has-sticky-buy { padding-bottom: calc(112px + env(safe-area-inset-bottom)); }
 }
+
+/* Alleen de plaatsingsgids: compacte, rustige A4 zonder winkelinterface. */
+@media print {
+  body.print-placement-guide {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  body.print-placement-guide header,
+  body.print-placement-guide footer,
+  body.print-placement-guide button,
+  body.print-placement-guide .print-hidden,
+  body.print-placement-guide [data-print-hidden],
+  body.print-placement-guide .fixed {
+    display: none !important;
+  }
+  body.print-placement-guide main {
+    padding: 0 !important;
+  }
+  body.print-placement-guide .placement-guide {
+    max-width: none !important;
+    padding: 0 !important;
+    font-size: 11pt;
+    line-height: 1.35;
+  }
+  body.print-placement-guide .placement-guide h1 {
+    font-size: 23pt;
+  }
+  body.print-placement-guide .placement-guide h2 {
+    font-size: 16pt;
+  }
+  body.print-placement-guide .placement-guide h3 {
+    font-size: 13pt;
+  }
+  body.print-placement-guide .placement-guide-step {
+    break-inside: avoid;
+    padding: 12px !important;
+  }
+  body.print-placement-guide .placement-guide svg {
+    max-height: 82mm;
+  }
+}

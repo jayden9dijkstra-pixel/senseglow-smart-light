@@ -44,6 +44,8 @@ import { PrivacyContent } from "../src/pages/content/PrivacyContent";
 import { ReturnsContent } from "../src/pages/content/ReturnsContent";
 import { ShippingContent } from "../src/pages/content/ShippingContent";
 import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
+import { PlacementGuideContent } from "../src/pages/content/PlacementGuideContent";
+import { hasPlacementGuideBonus, PLACEMENT_GUIDE_BONUS, PLACEMENT_GUIDE_PATH } from "../src/lib/placementGuide";
 import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
 import { BehindSenseGlow } from "../src/components/product/BehindSenseGlow";
 import { SUPPORT_TRUST } from "../src/lib/purchaseTrust";
@@ -83,6 +85,7 @@ const BASE_STATIC_ROUTES = [
 const STATIC_ROUTES = [
   ...BASE_STATIC_ROUTES.flatMap((path) => [path, `/en${path === "/" ? "/" : path}`, `/fr${path === "/" ? "/" : path}`]),
   "/reviews-beleid",
+  PLACEMENT_GUIDE_PATH,
 ];
 
 /* ---------------------------------------------------------------- Shopify */
@@ -275,6 +278,12 @@ function catalogSchema(products: ShopifyProduct[], path: string): unknown {
  * Leesbare productinhoud in de server-HTML. Zichtbaar zonder JavaScript;
  * met JavaScript verbergt een klasse op <html> hem tot React de pagina toont.
  */
+function placementGuideBonusMarkup(handle: string): string {
+  return hasPlacementGuideBonus(handle)
+    ? `<p><a href="${escapeAttr(`${SITE_URL}${PLACEMENT_GUIDE_PATH}`)}">${escapeHtml(PLACEMENT_GUIDE_BONUS)}</a></p>`
+    : "";
+}
+
 function productFallback(handle: string, product: ShopifyProduct | null, locale: Locale): string {
   const t = (x: string) => escapeHtml(translate(locale, x));
   const content = getProductContent(handle);
@@ -284,6 +293,7 @@ function productFallback(handle: string, product: ShopifyProduct | null, locale:
   if (content?.hero.subtitle) parts.push(`<p>${t(content.hero.subtitle)}</p>`);
   const price = product?.node.priceRange?.minVariantPrice;
   if (price) parts.push(`<p>${locale === "nl" ? "Vanaf" : locale === "fr" ? "Dès" : "From"} &euro;${escapeHtml(locale === "en" ? parseFloat(price.amount).toFixed(2) : parseFloat(price.amount).toFixed(2).replace(".", ","))}</p>`);
+  parts.push(placementGuideBonusMarkup(handle));
   if (content?.hero.bullets?.length) parts.push(`<ul>${content.hero.bullets.map((b) => `<li>${t(b)}</li>`).join("")}</ul>`);
   parts.push(whyMarkup([handle], locale));
   parts.push(`<p><a href="${escapeAttr(`${SITE_URL}${locale === "nl" ? "" : `/${locale}`}/retourneren`)}">${t(SUPPORT_TRUST)}</a></p>`);
@@ -380,7 +390,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
     for (const o of page.offers) {
       const prod = products[o.handle];
       const img = offerImage(o, prod?.node.images?.edges?.map((x) => x.node) ?? []);
-      p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.stepQuestion && o.stepChoices ? `<p>${e(o.stepQuestion)} ${e(o.stepChoices.map((c) => `${c.label}: ${c.optionValue}`).join(". "))}.</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a></li>`);
+      p.push(`<li>${img ? `<img src="${escapeAttr(img.url)}" alt="${escapeAttr(img.altText || o.label)}" width="400" height="400" />` : ""}<h2>${e(o.label)}</h2>${o.note ? `<p>${e(o.note)}</p>` : ""}${o.choices ? `<p>${e(o.choices.join(" of "))}</p>` : ""}${o.stepQuestion && o.stepChoices ? `<p>${e(o.stepQuestion)} ${e(o.stepChoices.map((c) => `${c.label}: ${c.optionValue}`).join(". "))}.</p>` : ""}${o.choiceNote ? `<p>${e(o.choiceNote)}</p>` : ""}<p>${e(offerLine(o, prod))}</p><a href="${escapeAttr(`${SITE_URL}${offerProductHref(o)}`)}">In winkelwagen</a>${placementGuideBonusMarkup(o.handle)}</li>`);
     }
     p.push(`</ul><p>${e(DELIVERY_TEXT)}</p>`);
     p.push(`<p><a href="${SITE_URL}/retourneren">${e(SUPPORT_TRUST)}</a></p>`);
@@ -459,6 +469,7 @@ const LEGAL_PAGES: Record<string, ComponentType> = {
   "/retourneren": ReturnsContent,
   "/verzending": ShippingContent,
   "/reviews-beleid": ReviewPolicyContent,
+  [PLACEMENT_GUIDE_PATH]: PlacementGuideContent,
 };
 
 /** Vertaal losse tekstknopen in statische markup met het woordenboek. */
