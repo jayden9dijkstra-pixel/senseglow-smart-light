@@ -4,6 +4,7 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { ENABLED_PRODUCT_HANDLES } from "../src/lib/productConfig";
 import { LANDING_PAGES } from "../src/lib/landingPages";
+import { PLACEMENT_GUIDE_PATH } from "../src/lib/placementGuide";
 
 const BASE_URL = "https://www.senseglow.shop";
 
@@ -60,6 +61,7 @@ function generateSitemap(list: SitemapEntry[]) {
 const allEntries = [
   ...localizedEntries,
   ...LANDING_PAGES.filter((page) => !page.noindex).map((page) => ({ path: page.path, changefreq: "weekly" as const, priority: "0.8" })),
+  { path: PLACEMENT_GUIDE_PATH, changefreq: "monthly" as const, priority: "0.6" },
   { path: "/reviews-beleid", changefreq: "yearly" as const, priority: "0.3" },
 ];
 

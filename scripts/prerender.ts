@@ -401,7 +401,7 @@ function landingFallback(page: LandingPage, products: Record<string, ShopifyProd
   p.push(`<h1>${e(page.h1)}</h1><p>${e(page.intro)}</p>`);
   if (page.layout === "steps-first") pushSteps();
   pushOffers();
-  if (page.layout === "steps-after-buy") pushSteps();
+  if (page.layout === "steps-after-buy" || (!page.layout && page.steps)) pushSteps();
   if (page.layout) {
     pushFaqs();
     p.push(`</article>`);

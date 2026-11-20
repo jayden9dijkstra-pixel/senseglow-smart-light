@@ -256,11 +256,6 @@
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.senseglow.shop/plaatsingsgids-trap</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.senseglow.shop/trapverlichting</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -299,6 +294,16 @@
     <loc>https://www.senseglow.shop/oplaadbare-wandlamp</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/tuinhuis-verlichting</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senseglow.shop/plaatsingsgids-trap</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.senseglow.shop/reviews-beleid</loc>

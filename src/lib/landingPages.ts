@@ -87,6 +87,10 @@ export interface LandingPage {
   layout?: "steps-after-buy" | "steps-first";
   /** Compact direct koopblok; alleen ingeschakeld voor /trapverlichting. */
   directBuy?: boolean;
+  /** Meet view_item voor alle aanbiedingen op deze pagina. */
+  trackOffers?: boolean;
+  /** Toon de bestaande uitleg over het combineren van lampen. */
+  showMixNote?: boolean;
   /** Advertentiepagina's zijn niet voor zoekmachines of de sitemap bedoeld. */
   noindex?: boolean;
   steps?: {
@@ -492,6 +496,69 @@ export const LANDING_PAGES: LandingPage[] = [
         answer: "Eén tik is aan, nog een tik is uit. Vasthouden dimt langzaam op of af tot je loslaat.",
       },
     ),
+  },
+  {
+    path: "/tuinhuis-verlichting",
+    title: "Tuinhuis- en schuurverlichting zonder stroom | SenseGlow",
+    description:
+      "Verlichting voor tuinhuis, schuur, hok of berging zonder bedrading: buiten een Solar Lantern met bewegingssensor, binnen een USB-C oplaadbare sensorlamp. Gratis verzending NL/BE, 30 dagen retour.",
+    h1: "Licht in je tuinhuis of schuur, zonder stroom",
+    intro: "Geen bedrading nodig: hang buiten een solarlamp met bewegingssensor en plaats binnen een oplaadbare sensorlamp. De Ambient Motion Bar laad je op via USB-C.",
+    trackOffers: true,
+    showMixNote: true,
+    steps: {
+      heading: "In 3 stappen licht zonder bedrading",
+      items: [
+        { text: "Hang de Solar Lantern buiten bij de deur, waar overdag daglicht komt", icon: "light" },
+        { text: "Plak of plaats de Ambient Motion Bar binnen", icon: "stick" },
+        { text: "Klaar: het licht gaat aan bij beweging", icon: "motion" },
+      ],
+    },
+    offers: [
+      {
+        id: "solar-tuinhuis",
+        handle: LANTERN_PRODUCT_HANDLE,
+        label: "Buiten: SenseGlow Solar Lantern™",
+        note: "Hang hem op een plek waar overdag daglicht komt.",
+        qty: 1,
+        scene: "buiten",
+      },
+      {
+        id: "ambient-tuinhuis",
+        handle: PRODUCT_HANDLE,
+        label: "Binnen: SenseGlow™ Ambient Motion Bar 30 cm",
+        note: "Oplaadbaar via USB-C, gaat aan bij beweging.",
+        qty: 1,
+        sizeCm: 30,
+      },
+      {
+        id: "wall-tuinhuis-alternatief",
+        handle: STEP_PRODUCT_HANDLE,
+        label: "Alternatief binnen: SenseGlow Wall Lamp™ 4-delige set",
+        note: "Oplaadbaar via USB-C, gaat aan bij beweging.",
+        optionValue: "4-delige set",
+      },
+    ],
+    benefits: [
+      "Geen bedrading nodig in tuinhuis, schuur, hok of berging",
+      "De Solar Lantern laadt op via de zon en is IP65-waterdicht",
+      "De Ambient Motion Bar en Wall Lamp laad je op via USB-C",
+      "De verlichting gaat aan bij beweging",
+    ],
+    specs: [SPECS.solar, SPECS.ambient, SPECS.wall],
+    why: true,
+    faqs: [
+      AMBIENT_SENSOR_FAQ,
+      AMBIENT_MOUNT_FAQ,
+      {
+        question: "Hoe monteer ik de solar lantaarn?",
+        answer: "Met twee schroeven aan de muur, bij de voordeur, oprit, schuur of tuinpad. Er is geen kabel of stopcontact nodig.",
+      },
+      {
+        question: "Waar hang ik de Solar Lantern?",
+        answer: "Hang hem bij de deur op een plek waar overdag daglicht komt. De ingebouwde batterij laadt op via de zon.",
+      },
+    ],
   },
   {
     path: "/trap-in-het-donker",

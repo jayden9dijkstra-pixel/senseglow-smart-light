@@ -11,7 +11,7 @@ import { HowItWorksSteps } from "@/components/product/HowItWorksSteps";
 import { AskUs } from "@/components/product/AskUs";
 import { CustomerReviews } from "@/components/CustomerReviews";
 import { variantIn } from "@/lib/angles";
-import { isOfferProduct, quoteQty, type OfferQty } from "@/lib/quantityOffer";
+import { isOfferProduct, MIX_NOTE, quoteQty, type OfferQty } from "@/lib/quantityOffer";
 import { formatPrice } from "@/lib/price";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 import { useCartStore } from "@/stores/cartStore";
@@ -274,7 +274,7 @@ const LandingPage = () => {
   ];
 
   const solo = page.offers.length === 1;
-  const cols = page.offers.length >= 3 ? "md:grid-cols-3" : page.offers.length === 2 ? "md:grid-cols-2" : "";
+  const cols = page.offers.length >= 2 ? "md:grid-cols-2" : "";
   const handles = [...new Set(page.offers.map((o) => o.handle))];
   const first = page.offers[0];
   const heroImage = first ? offerImage(first, products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? []) : null;
@@ -331,9 +331,10 @@ const LandingPage = () => {
               </div>
               <div className={`grid gap-4 ${cols}`}>
                 {page.offers.map((o, i) => (
-                  <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} solo={solo} viewPath={page.directBuy ? page.path : undefined} directCompact={page.directBuy && i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
+                  <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} solo={solo} viewPath={page.directBuy || page.trackOffers ? page.path : undefined} directCompact={page.directBuy && i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
                 ))}
               </div>
+              {page.showMixNote && <p className="text-base text-foreground/80">{MIX_NOTE}</p>}
               <div className="max-w-3xl space-y-4">
                 <Benefits items={page.benefits} />
                 <AnchorNav links={anchorLinks} />
@@ -344,7 +345,7 @@ const LandingPage = () => {
 
         <div className="max-w-3xl space-y-10">
           <div id="zo-werkt-het" className="scroll-mt-24 space-y-6">
-            <HowItWorksSteps handle={first.handle} />
+            {page.steps ? <LandingSteps steps={page.steps} /> : <HowItWorksSteps handle={first.handle} />}
             {pair && <BeforeAfterBlock pair={pair} />}
           </div>
           <div id="reviews" className="scroll-mt-24"><CustomerReviews handle={first.handle} /></div>

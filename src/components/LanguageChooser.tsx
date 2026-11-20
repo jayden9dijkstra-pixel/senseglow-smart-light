@@ -40,7 +40,7 @@ export function LanguageChooser() {
     }
   };
 
-  if (!open || consentPending || window.location.pathname.startsWith("/admin") || window.location.pathname === PLACEMENT_GUIDE_PATH || window.location.pathname === "/trapverlichting") return null;
+  if (!open || consentPending || window.location.pathname.startsWith("/admin") || window.location.pathname === PLACEMENT_GUIDE_PATH || window.location.pathname === "/trapverlichting" || window.location.pathname === "/tuinhuis-verlichting") return null;
 
   const choose = (locale: Locale) => {
     setOpen(false);

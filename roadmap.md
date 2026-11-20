@@ -1,5 +1,11 @@
 # SenseGlow herstel — status
 
+## Nieuwe landingspagina /tuinhuis-verlichting (20 november 2026)
+- [x] Nieuwe indexeerbare NL-pagina via LANDING_PAGES, met Solar Lantern buiten en Ambient Motion Bar 30 cm binnen; Wall Lamp 4-set als alternatief.
+- [x] Bestaande prijzen, kortingen, tracking, attributie en vertrouwenselementen hergebruikt; sitemap en prerender met alle aanbiedingen en drie stappen gecontroleerd.
+- [x] Gerichte test toegevoegd; 100 tests en build geslaagd, 67 routes vooraf gerenderd.
+- [x] Op 375 px en desktop beide hoofdaanbiedingen en het alternatief in de winkelwagen gecontroleerd; knoppen 48–51 px, geen horizontale scroll of taalbalk-overlap; bestaande pagina's ongemoeid.
+
 ## Direct kopen op /trapverlichting (20 november 2026)
 - [x] Alleen /trapverlichting: compact koopblok met variantfoto, 4-set standaard, 8-set en kleurkeuze.
 - [x] Bestaande Shopify-prijzen, cart, view_item/add_to_cart en attributie behouden en in de browser geverifieerd.
