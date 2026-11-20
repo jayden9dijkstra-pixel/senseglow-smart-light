@@ -1,5 +1,11 @@
 # SenseGlow herstel — status
 
+## Direct kopen op /trapverlichting (20 november 2026)
+- [x] Alleen /trapverlichting: compact koopblok met variantfoto, 4-set standaard, 8-set en kleurkeuze.
+- [x] Bestaande Shopify-prijzen, cart, view_item/add_to_cart en attributie behouden en in de browser geverifieerd.
+- [x] Knop op 375 px op y=667 en 51 px hoog; 4-set echt toegevoegd aan CartDrawer; desktop zonder horizontale scroll.
+- [x] 99 tests en build geslaagd; andere landingspagina's en productpagina's ongemoeid; niet gepubliceerd.
+
 ## Plaatsingsgids Wall Lamp (19 november 2026)
 - [x] Nieuwe indexeerbare gids /plaatsingsgids-trap met vier stappen, SVG, FAQ, sitemap en prerender.
 - [x] Printweergave en knop voor afdrukken of bewaren als PDF; geverifieerd op één A4.

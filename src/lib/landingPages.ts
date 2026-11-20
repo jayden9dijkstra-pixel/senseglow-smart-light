@@ -6,7 +6,7 @@
 import { ANGLES } from "./angles";
 import { isOfferProduct, quoteQty } from "./quantityOffer";
 import { purchaseFaqs, type ProductFaq } from "./productFaqs";
-import { DELIVERY_TEXT } from "./delivery";
+import { DELIVERY_TEXT, deliveryWindow } from "./delivery";
 import { sceneAlt, type Scene } from "./scenes";
 import {
   PRODUCT_HANDLE,
@@ -49,6 +49,23 @@ export function offerImage(offer: LandingOffer, images: OfferImage[]): OfferImag
   return (alt && images.find((i) => norm(i.altText) === norm(alt))) || images[0];
 }
 
+/** In het directe koopblok volgt de foto de gekozen variant; zonder variantfoto blijft Shopify's eerste foto leidend. */
+export function directOfferImage(
+  variantImage: OfferImage | null | undefined,
+  productImages: OfferImage[],
+  fallback?: OfferImage,
+): OfferImage | undefined {
+  return variantImage ?? productImages[0] ?? fallback;
+}
+
+/** Eén korte vertrouwensregel met dezelfde 7–14 werkdagen-berekening als elders. */
+export function trapDirectTrust(today: Date = new Date()): string {
+  const { from, to } = deliveryWindow(today);
+  const month = (date: Date) => date.toLocaleDateString("nl-NL", { month: "short" });
+  const start = from.getMonth() === to.getMonth() ? `${from.getDate()}` : `${from.getDate()} ${month(from)}`;
+  return `Bezorgd ${start}–${to.getDate()} ${month(to)} · 30 dagen retour`;
+}
+
 /** Link naar de productpagina die dezelfde scènefoto vooraan houdt. */
 export const offerProductHref = (offer: LandingOffer) =>
   `/product/${offer.handle}${offer.scene ? `?scene=${offer.scene}` : ""}`;
@@ -68,6 +85,8 @@ export interface LandingPage {
   intro: string;
   /** Advertentievariant met een eigen volgorde; standaard blijft de bestaande opbouw. */
   layout?: "steps-after-buy" | "steps-first";
+  /** Compact direct koopblok; alleen ingeschakeld voor /trapverlichting. */
+  directBuy?: boolean;
   /** Advertentiepagina's zijn niet voor zoekmachines of de sitemap bedoeld. */
   noindex?: boolean;
   steps?: {
@@ -218,6 +237,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "Trapverlichting met bewegingssensor die je zonder boren plakt: de SenseGlow Wall Lamp als 4- of 8-delige set. Opladen via USB-C. Gratis verzending NL/BE.",
     h1: "Trapverlichting met sensor, zonder boren",
     intro: "Licht dat vanzelf aangaat zodra je de trap nadert. Je plakt de lampen op hun plek en laadt ze op via USB-C.",
+    directBuy: true,
     offers: [
       {
         id: "wall-trap",

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
-import { getLandingPage, landingOfferPrice, offerImage, offerProductHref, type LandingOffer, type LandingPage as LandingPageData, type LandingStepIcon } from "@/lib/landingPages";
+import { getLandingPage, landingOfferPrice, directOfferImage, offerImage, offerProductHref, trapDirectTrust, type LandingOffer, type LandingPage as LandingPageData, type LandingStepIcon } from "@/lib/landingPages";
 import { HowItWorksSteps } from "@/components/product/HowItWorksSteps";
 import { AskUs } from "@/components/product/AskUs";
 import { CustomerReviews } from "@/components/CustomerReviews";
@@ -76,7 +76,7 @@ function LandingSteps({ steps }: { steps: NonNullable<LandingPageData["steps"]> 
   );
 }
 
-function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; solo?: boolean; viewPath?: string; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
+function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, directCompact, onAddRef, onAvailabilityChange }: { offer: LandingOffer; product: ShopifyProduct | undefined; sticky?: boolean; hideImage?: boolean; solo?: boolean; viewPath?: string; directCompact?: boolean; onAddRef?: (add: () => void) => void; onAvailabilityChange?: (available: boolean) => void }) {
   const now = useOfferDate();
   const btnRef = useRef<HTMLButtonElement>(null);
   const addItem = useCartStore((s) => s.addItem);
@@ -93,10 +93,12 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, onAddRef
   const [chosen, setChosen] = useState<Variant | null>(null);
   const [qty, setQty] = useState<OfferQty>(offer.qty ?? 1);
   // Bij een andere set blijft de gekozen kleur staan.
-  const image = offerImage(offer, product?.node.images?.edges?.map((e) => e.node) ?? []);
-  // Standaard de kleur die op de eerste foto staat.
-  const photoColor = choices.find((v) => (image?.altText ?? "").toLowerCase().includes(` ${colorLabel(v).toLowerCase()} `));
+  const productImages = product?.node.images?.edges?.map((e) => e.node) ?? [];
+  const sceneImage = offerImage(offer, productImages);
+  // Standaard de kleur die op de scènefoto staat; de directe koopfoto volgt daarna de variant.
+  const photoColor = choices.find((v) => (sceneImage?.altText ?? "").toLowerCase().includes(` ${colorLabel(v).toLowerCase()} `));
   const variant = (chosen && choices.find((v) => colorLabel(v) === colorLabel(chosen))) ?? photoColor ?? choices[0] ?? null;
+  const image = directCompact ? directOfferImage(variant?.image, productImages, sceneImage) : sceneImage;
   const picker = isOfferProduct(offer.handle);
   const unit = variant ? parseFloat(variant.price.amount) : null;
   const count = picker ? qty : 1;
@@ -137,21 +139,22 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, onAddRef
   onAddRef?.(add);
 
   return (
-    <div className={`flex flex-col gap-2 bg-background md:gap-3 md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
-      {image && !solo && (
+    <div data-direct-buy={directCompact ? "" : undefined} className={directCompact ? "flex flex-col gap-2 rounded-2xl border border-foreground/10 bg-background p-3 md:gap-3 md:p-4" : `flex flex-col gap-2 bg-background md:gap-3 md:rounded-2xl md:border md:border-foreground/10 md:p-4 ${hideImage ? "" : "rounded-2xl border border-foreground/10 p-3"}`}>
+      {image && (!solo || directCompact) && (
         <img
           {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
           alt={image.altText || product?.node.title || offer.label}
-          className={`aspect-[4/3] w-full rounded-xl border border-border/70 bg-background-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
-          loading="lazy"
+          className={directCompact ? "h-32 w-full rounded-lg border border-border/70 bg-background-secondary object-contain md:h-40" : `aspect-[4/3] w-full rounded-xl border border-border/70 bg-background-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
+          loading={directCompact ? "eager" : "lazy"}
+          fetchPriority={directCompact ? "high" : "auto"}
           decoding="async"
         />
       )}
       <div>
-        <h2 className={`text-lg font-semibold text-foreground ${hideImage ? "sr-only md:not-sr-only" : ""}`}>{offer.label}</h2>
+        <h2 className={directCompact ? "text-xl font-semibold text-foreground" : `text-lg font-semibold text-foreground ${hideImage ? "sr-only md:not-sr-only" : ""}`}>{offer.label}</h2>
         {offer.note && <p className="text-base text-foreground/80">{offer.note}</p>}
       </div>
-      {offer.stepQuestion && offer.stepChoices && (
+      {!directCompact && offer.stepQuestion && offer.stepChoices && (
         <div className="space-y-2">
           <p className="text-base font-medium text-foreground">{offer.stepQuestion}</p>
           <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={offer.stepQuestion}>
@@ -218,8 +221,12 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, onAddRef
         {!product ? "Laden..." : variant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
       </Button>
       <PlacementGuideBonus productHandle={offer.handle} />
-      <PurchaseReassurance />
-      {sticky && <TrustLine />}
+      {directCompact ? (
+        <p className="whitespace-nowrap text-center text-sm text-foreground/80">{trapDirectTrust()}</p>
+      ) : (
+        <PurchaseReassurance />
+      )}
+      {sticky && !directCompact && <TrustLine />}
       {sticky && (
         <StickyAddBar
           watch={btnRef}
@@ -298,15 +305,17 @@ const LandingPage = () => {
     <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
       <div className="container max-w-6xl space-y-8 pb-12 md:space-y-12 md:py-14">
         <section id="kopen" className="scroll-mt-24 space-y-3 md:space-y-6">
-          <div className="md:hidden">
-            {heroImage ? (
-              <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="32svh" imageClassName="h-full w-full object-cover" />
-            ) : (
-              <div className="-mx-6 h-[32svh] animate-pulse bg-secondary" />
-            )}
-          </div>
-          <div className={solo ? "md:grid md:grid-cols-2 md:items-start md:gap-12" : ""}>
-            {solo && (
+          {!page.directBuy && (
+            <div className="md:hidden">
+              {heroImage ? (
+                <ProductImageGallery images={[heroImage]} productTitle={page.h1} mobileMaxHeight="32svh" imageClassName="h-full w-full object-cover" />
+              ) : (
+                <div className="-mx-6 h-[32svh] animate-pulse bg-secondary" />
+              )}
+            </div>
+          )}
+          <div className={solo && !page.directBuy ? "md:grid md:grid-cols-2 md:items-start md:gap-12" : ""}>
+            {solo && !page.directBuy && (
               <div className="hidden md:sticky md:top-24 md:block">
                 {desktopImages.length > 0 ? (
                   <ProductImageGallery images={desktopImages} productTitle={page.h1} />
@@ -315,14 +324,14 @@ const LandingPage = () => {
                 )}
               </div>
             )}
-            <div className="space-y-3 md:space-y-6">
+            <div className={page.directBuy ? "mx-auto max-w-3xl space-y-3" : "space-y-3 md:space-y-6"}>
               <div className="max-w-3xl space-y-1 md:space-y-3">
                 <h1 className={`line-clamp-2 text-2xl font-bold leading-tight text-foreground ${solo ? "md:text-4xl" : "md:text-5xl"}`}>{page.h1}</h1>
                 <p className="text-base text-foreground/80 md:text-lg">{intro}</p>
               </div>
               <div className={`grid gap-4 ${cols}`}>
                 {page.offers.map((o, i) => (
-                  <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} solo={solo} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
+                  <OfferCard key={o.id} offer={o} product={products[o.handle]} sticky={i === 0} hideImage={i === 0} solo={solo} viewPath={page.directBuy ? page.path : undefined} directCompact={page.directBuy && i === 0} onAddRef={i === 0 ? (fn) => (addRef.current = fn) : undefined} onAvailabilityChange={i === 0 ? setAvailable : undefined} />
                 ))}
               </div>
               <div className="max-w-3xl space-y-4">

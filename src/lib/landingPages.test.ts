@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getLandingPage, LANDING_PATHS } from "./landingPages";
 import { PRODUCT_HANDLE, FLEX_PRODUCT_HANDLE, STEP_PRODUCT_HANDLE, LANTERN_PRODUCT_HANDLE } from "./productConfig";
-import { offerImage } from "./landingPages";
+import { directOfferImage, offerImage, trapDirectTrust } from "./landingPages";
 
 describe("nieuwe landingspagina's", () => {
   it("/kastverlichting: Ambient 30 cm, 2 lampen", () => {
@@ -33,6 +33,22 @@ describe("nieuwe landingspagina's", () => {
     const o = getLandingPage("/trapverlichting")!.offers;
     expect(o).toHaveLength(1);
     expect(o[0]).toMatchObject({ handle: STEP_PRODUCT_HANDLE, optionValue: "4-delige set", choices: ["4-delige set", "8-delige set"] });
+  });
+  it("alleen /trapverlichting gebruikt het compacte directe koopblok", () => {
+    expect(getLandingPage("/trapverlichting")?.directBuy).toBe(true);
+    for (const path of LANDING_PATHS.filter((path) => path !== "/trapverlichting")) {
+      expect(getLandingPage(path)?.directBuy).toBeUndefined();
+    }
+  });
+  it("de directe koopfoto volgt de variant en valt terug op de eerste Shopify-foto", () => {
+    const variant = { url: "variant", altText: "Variant" };
+    const first = { url: "eerste", altText: "Eerste" };
+    expect(directOfferImage(variant, [first])).toBe(variant);
+    expect(directOfferImage(null, [first])).toBe(first);
+  });
+  it("de compacte vertrouwensregel gebruikt dezelfde concrete bezorgdatums", () => {
+    expect(trapDirectTrust(new Date(2026, 10, 4))).toBe("Bezorgd 13–24 nov · 30 dagen retour");
+    expect(trapDirectTrust(new Date(2026, 10, 13))).toBe("Bezorgd 24 nov–3 dec · 30 dagen retour");
   });
   it("/keukenverlichting bestaat met Ambient Motion Bar", () => {
     expect(getLandingPage("/keukenverlichting")!.offers[0].handle).toBe(PRODUCT_HANDLE);
