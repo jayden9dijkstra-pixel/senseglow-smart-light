@@ -3,7 +3,7 @@
 ## Ambient Motion Bar-productpagina herbouwd (22 november 2026)
 - [x] Alleen de Ambient-pagina: koopblok met USB-C-regel, belofte, vinkjes, lengte/kleur, 'Bundel en bespaar' (bestaande staffel), knop, levertijd en retour.
 - [x] Inklapblokken, Hoe werkt het, 3 beeldblokken, Waarom SenseGlow, vergelijkingstabel, 4 tegels, FAQ (daglichtvraag weggelaten: staat niet in Shopify).
-- [x] Knop boven de vouw met open cookiebalk op 360x800 en 390x844; plakbalk, winkelwagen en add_to_cart gecontroleerd; EN-vertaling; 108 tests geslaagd.
+- [x] Knop boven de vouw met open cookiebalk op 360x800 en 390x844; plakbalk, winkelwagen en add_to_cart gecontroleerd; EN-vertaling; 104 tests geslaagd.
 
 ## Mobiele optimalisatie cookiebalk (22 november 2026)
 - [x] Cookiebalk mobiel 109 px (13-14% van scherm), één regel en knoppen naast elkaar; paginaruimte onderaan zolang open; plakbalk schuift erboven. Consent-logica ongemoeid.
