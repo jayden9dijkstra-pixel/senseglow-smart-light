@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -44,6 +45,15 @@ interface ProductHeroSectionProps {
   anchorLinks?: { id: string; label: string }[];
   /** Ref naar de koopknop, voor een herhaalde knop onderaan. */
   onAddRef?: (add: () => void) => void;
+  /** Eigen opbouw (Ambient): kleine regel boven de titel, belofte, vinkjes, kiezer en blok onder de knop. */
+  layout?: {
+    eyebrow: string;
+    promise: string;
+    checks: string[];
+    qtyPicker: (unitPrice: number | null) => ReactNode;
+    belowButton: ReactNode;
+    mobileGalleryHeight: string;
+  };
 }
 
 export const ProductHeroSection = ({
@@ -56,6 +66,7 @@ export const ProductHeroSection = ({
   afterTrust,
   anchorLinks,
   onAddRef,
+  layout,
 }: ProductHeroSectionProps) => {
   const now = useOfferDate();
   const defaultContent: HeroContent = {
@@ -152,6 +163,7 @@ export const ProductHeroSection = ({
   const blueprint = blueprintFor(product.node.handle);
   const saving = eightSetSaving(selectedVariant, product.node.variants.edges.map((e) => e.node));
   const unitPrice = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
+  const compareAt = selectedVariant?.compareAtPrice ? parseFloat(selectedVariant.compareAtPrice.amount) : null;
   const count = offer ? qty : 1;
   const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -168,7 +180,8 @@ export const ProductHeroSection = ({
               productTitle={product.node.title}
               videoUrl={getProductVideoUrl(product.node.handle)}
               imageClassName={productImageClassName}
-              mobileMaxHeight="55svh"
+              mobileMaxHeight={layout?.mobileGalleryHeight ?? "55svh"}
+              hideMobileThumbs={!!layout}
               activeImageUrl={
                 pickedByUser &&
                 selectedVariant?.image?.url &&
@@ -179,7 +192,49 @@ export const ProductHeroSection = ({
             />
           </div>
 
-          <div id="kopen" className="min-w-0 scroll-mt-24 space-y-4 pt-3 text-left md:pt-0">
+          <div id="kopen" className={`min-w-0 scroll-mt-24 text-left md:space-y-4 md:pt-0 ${layout ? "space-y-1 pt-2" : "space-y-4 pt-3"}`}>
+            {layout ? (
+              <>
+                <p className="text-sm font-semibold leading-snug text-primary md:text-base">{layout.eyebrow}</p>
+                <h1 className="line-clamp-2 text-xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">{content.h1}</h1>
+                <div key={priceKey} className="flex flex-wrap items-baseline gap-x-3" style={{ animation: "fade-in 0.4s ease-out" }}>
+                  <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
+                  {compareAt != null && unitPrice != null && compareAt > unitPrice && (
+                    <s className="text-base text-foreground/70">{formatPrice(compareAt)}</s>
+                  )}
+                </div>
+                <p className="text-[15px] leading-snug text-foreground/85 md:text-base">{layout.promise}</p>
+                <ul className="flex flex-col gap-0.5 md:gap-1">
+                  {layout.checks.map((c) => (
+                    <li key={c} className="flex items-center gap-1.5 text-[15px] leading-tight text-foreground md:text-base"><Check aria-hidden className="h-4 w-4 flex-none text-primary" />{c}</li>
+                  ))}
+                </ul>
+                {product.node.variants.edges.length > 1 && (
+                  <div className="max-md:[&>div]:grid max-md:[&>div]:grid-cols-[minmax(0,1fr)_auto] max-md:[&>div]:items-start max-md:[&>div]:gap-3 max-md:[&>div>*]:!mt-0 max-md:[&_.flex-wrap]:flex-nowrap max-md:[&_.flex-wrap]:gap-1.5 max-md:[&_.flex-wrap>button]:min-w-0 max-md:[&_.flex-wrap>button]:px-1 max-md:[&_.gap-4]:gap-1">
+                  <VariantPicker
+                    product={product}
+                    selectedVariant={selectedVariant}
+                    onVariantChange={(v) => {
+                      setPickedByUser(true);
+                      handleVariantChange(v);
+                    }}
+                  />
+                  </div>
+                )}
+                {offer && layout.qtyPicker(unitPrice)}
+                <Button
+                  ref={btnRef}
+                  onClick={handleAddToCart}
+                  size="lg"
+                  disabled={!selectedVariant?.availableForSale}
+                  className="w-full min-h-12 h-auto rounded-full bg-cta px-10 py-3.5 text-base font-medium tracking-wide text-cta-foreground transition-all duration-500 hover:bg-cta-hover focus-visible:ring-cta"
+                >
+                  {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
+                </Button>
+                {layout.belowButton}
+              </>
+            ) : (
+            <>
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-2xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">
                 {content.h1}
@@ -225,6 +280,9 @@ export const ProductHeroSection = ({
             <TrustLine />
             {afterTrust}
             {anchorLinks && <AnchorNav links={anchorLinks} />}
+
+            </>
+            )}
 
             <StickyAddBar
               watch={btnRef}

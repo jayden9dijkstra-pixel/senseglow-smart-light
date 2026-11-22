@@ -25,6 +25,8 @@ interface ProductImageGalleryProps {
   leadSlide?: ReactNode;
   /** Maximale fotohoogte op mobiel (CSS-lengte), standaard 70svh. */
   mobileMaxHeight?: string;
+  /** Verberg de thumbnails op mobiel (teller en swipen blijven). */
+  hideMobileThumbs?: boolean;
 }
 
 export const ProductImageGallery = ({
@@ -35,6 +37,7 @@ export const ProductImageGallery = ({
   activeImageUrl,
   leadSlide,
   mobileMaxHeight = "70svh",
+  hideMobileThumbs = false,
 }: ProductImageGalleryProps) => {
   const offset = leadSlide ? 1 : 0;
   const total = images.length + offset;
@@ -279,7 +282,7 @@ export const ProductImageGallery = ({
 
         {/* Kleine thumbnails onder de foto, in de Shopify-volgorde */}
         {images.length > 1 && (
-          <div className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 md:mx-0 md:px-0" aria-label="Alle foto's">
+          <div className={`-mx-6 gap-2 overflow-x-auto px-6 pb-1 md:mx-0 md:flex md:px-0 ${hideMobileThumbs ? "hidden" : "flex"}`} aria-label="Alle foto's">
             {images.map((image, idx) => (
               <button
                 key={image.url}

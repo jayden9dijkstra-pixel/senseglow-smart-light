@@ -70,6 +70,7 @@ export interface ShopifyProduct {
             amount: string;
             currencyCode: string;
           };
+          compareAtPrice?: { amount: string; currencyCode: string } | null;
           availableForSale: boolean;
           image?: { url: string; altText: string | null } | null;
           selectedOptions: Array<{
@@ -99,6 +100,7 @@ const STOREFRONT_QUERY = `
             edges { node {
               id title
               price { amount currencyCode }
+              compareAtPrice { amount currencyCode }
               availableForSale
               image { url altText }
               selectedOptions { name value }
@@ -199,6 +201,7 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
             edges { node {
               id title
               price { amount currencyCode }
+              compareAtPrice { amount currencyCode }
               availableForSale
               image { url altText }
               selectedOptions { name value }

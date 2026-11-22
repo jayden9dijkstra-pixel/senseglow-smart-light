@@ -29,6 +29,11 @@ import { buildPlaceholderContent } from "@/lib/placeholderContent";
 import { getProductSeo, DEFAULT_SEO } from "@/lib/seoContent";
 import { productSchema, breadcrumbSchema } from "@/lib/structuredData";
 import { BehindSenseGlow } from "@/components/product/BehindSenseGlow";
+import { PRODUCT_HANDLE } from "@/lib/productConfig";
+import { AMBIENT_CHECKS, AMBIENT_EYEBROW, AMBIENT_FAQS, AMBIENT_PROMISE } from "@/lib/ambientPage";
+import {
+  AmbientBelowButton, AmbientCompare, AmbientFeatureBlocks, AmbientSteps, AmbientTiles, AmbientWhySenseGlow, BundleCards,
+} from "@/components/product/ambient/AmbientSections";
 
 
 const ProductDetail = () => {
@@ -183,6 +188,52 @@ const ProductDetail = () => {
     ...(specs.length ? [{ id: "specificaties", label: "Specificaties" }] : []),
     { id: "vragen", label: "Vragen" },
   ];
+
+  if (handle === PRODUCT_HANDLE) {
+    const images = product.node.images?.edges?.map((e) => e.node) ?? [];
+    return (
+      <PageLayout seo={seo}>
+        <div className="w-full overflow-hidden">
+          <ProductHeroSection
+            product={product}
+            selectedVariant={selectedVariant}
+            onVariantChange={setSelectedVariant}
+            heroContent={hero}
+            qty={qty}
+            onQtyChange={setQty}
+            onAddRef={(fn) => (addRef.current = fn)}
+            layout={{
+              eyebrow: AMBIENT_EYEBROW,
+              promise: AMBIENT_PROMISE,
+              checks: AMBIENT_CHECKS,
+              qtyPicker: (unitPrice) => <BundleCards unitPrice={unitPrice} value={qty} onChange={setQty} />,
+              belowButton: <AmbientBelowButton />,
+              mobileGalleryHeight: "110px",
+            }}
+          />
+          <div className="mx-auto max-w-5xl space-y-14 px-6 pb-12 md:px-8">
+            <AmbientSteps />
+            <AmbientFeatureBlocks images={images} />
+            <AmbientWhySenseGlow />
+            <AmbientCompare />
+            <AmbientTiles />
+            <div className="mx-auto max-w-3xl space-y-10">
+              <FaqAccordion faqs={AMBIENT_FAQS} />
+              <AskUs />
+              <Button
+                onClick={() => addRef.current?.()}
+                disabled={!selectedVariant?.availableForSale}
+                className="h-12 w-full rounded-full bg-cta text-base text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta"
+              >
+                {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
+              </Button>
+            </div>
+          </div>
+          <ProductRelatedSection currentHandle={handle} />
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout seo={seo}>
