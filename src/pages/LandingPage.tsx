@@ -144,7 +144,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, directCo
         <img
           {...responsiveImg(image.url, "(min-width: 768px) 33vw, 100vw")}
           alt={image.altText || product?.node.title || offer.label}
-          className={directCompact ? "h-32 w-full rounded-lg border border-border/70 bg-background-secondary object-contain md:h-40" : `aspect-[4/3] w-full rounded-xl border border-border/70 bg-background-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
+          className={directCompact ? "h-24 w-full rounded-lg border border-border/70 bg-background-secondary object-cover md:h-40 md:object-contain" : `aspect-[4/3] w-full rounded-xl border border-border/70 bg-background-secondary object-cover md:aspect-square ${hideImage ? "hidden md:block" : ""}`}
           loading={directCompact ? "eager" : "lazy"}
           fetchPriority={directCompact ? "high" : "auto"}
           decoding="async"

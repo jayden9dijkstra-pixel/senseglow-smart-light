@@ -67,7 +67,7 @@ const FooterNewsletter = () => {
       </Button>
       <p className="text-[11px] text-foreground/75 leading-relaxed">
         Geen spam. Uitschrijven kan altijd. Liever mailen?{" "}
-        <a href="mailto:support@senseglow.shop" className="text-accent-ink hover:underline">
+        <a href="mailto:support@senseglow.shop" className="inline-flex min-h-11 items-center text-accent-ink hover:underline">
           support@senseglow.shop
         </a>
       </p>
@@ -76,7 +76,7 @@ const FooterNewsletter = () => {
 };
 
 const linkClass =
-  "text-foreground/75 hover:text-accent-ink transition-colors duration-500";
+  "inline-flex min-h-11 items-center text-foreground/75 hover:text-accent-ink transition-colors duration-500";
 
 export const SiteFooter = () => {
   const { localizePath } = useI18n();
@@ -87,7 +87,7 @@ export const SiteFooter = () => {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div>
               <h3 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Klantenservice</h3>
-              <ul className="space-y-3 text-sm">
+              <ul className="space-y-0 text-sm">
                 <li><Link to={localizePath("/contact")} className={linkClass}>Contact</Link></li>
                 <li><Link to={localizePath("/verzending")} className={linkClass}>Verzending</Link></li>
                 <li><Link to={localizePath("/retourneren")} className={linkClass}>Retourneren</Link></li>
@@ -96,7 +96,7 @@ export const SiteFooter = () => {
             </div>
             <div>
               <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Over ons</h4>
-              <ul className="space-y-3 text-sm">
+              <ul className="space-y-0 text-sm">
                 
                 <li><Link to={localizePath("/over")} className={linkClass}>Over SenseGlow</Link></li>
                 <li><Link to={localizePath("/duurzaamheid")} className={linkClass}>Duurzaamheid</Link></li>
@@ -104,7 +104,7 @@ export const SiteFooter = () => {
             </div>
             <div>
               <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Juridisch</h4>
-              <ul className="space-y-3 text-sm">
+              <ul className="space-y-0 text-sm">
                 <li><Link to={localizePath("/privacy")} className={linkClass}>Privacybeleid</Link></li>
                 <li><Link to={localizePath("/voorwaarden")} className={linkClass}>Algemene voorwaarden</Link></li>
                 <li><button type="button" onClick={openCookieSettings} className={linkClass}>Cookie-instellingen</button></li>

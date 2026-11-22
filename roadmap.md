@@ -1,5 +1,10 @@
 # SenseGlow herstel — status
 
+## Mobiele optimalisatie cookiebalk (22 november 2026)
+- [x] Cookiebalk mobiel 109 px (13-14% van scherm), één regel en knoppen naast elkaar; paginaruimte onderaan zolang open; plakbalk schuift erboven. Consent-logica ongemoeid.
+- [x] /trapverlichting koopknop vrij op 360x800 en 390x844 met open balk; foto vult volle breedte.
+- [x] Tikdoelen (kleur, set, footerlinks) min. 44 px, kleine teksten in koopblok naar 14 px; 100 tests en build geslaagd.
+
 ## Nieuwe landingspagina /tuinhuis-verlichting (20 november 2026)
 - [x] Nieuwe indexeerbare NL-pagina via LANDING_PAGES, met Solar Lantern buiten en Ambient Motion Bar 30 cm binnen; Wall Lamp 4-set als alternatief.
 - [x] Bestaande prijzen, kortingen, tracking, attributie en vertrouwenselementen hergebruikt; sitemap en prerender met alle aanbiedingen en drie stappen gecontroleerd.

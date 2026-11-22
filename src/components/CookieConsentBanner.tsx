@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   SHOPIFY_CHECKOUT_DOMAIN,
@@ -104,6 +104,29 @@ export function CookieConsentBanner() {
   const [showSettings, setShowSettings] = useState(false);
   const [draft, setDraft] = useState<ConsentChoice>(NONE);
   const [busy, setBusy] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Alleen opmaak: op mobiel ruimte onderaan de pagina zolang de balk open is.
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!visible || !el) return;
+    const body = document.body;
+    const sync = () => {
+      const h = window.innerWidth < 768 ? `${el.offsetHeight}px` : "";
+      body.style.paddingBottom = h;
+      document.documentElement.style.setProperty("--consent-bar-h", h || "0px");
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    window.addEventListener("resize", sync);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", sync);
+      body.style.paddingBottom = "";
+      document.documentElement.style.removeProperty("--consent-bar-h");
+    };
+  }, [visible, showSettings]);
 
   useEffect(() => {
     let cancelled = false;
@@ -145,16 +168,21 @@ export function CookieConsentBanner() {
 
   if (!visible || window.location.pathname.startsWith("/admin")) return null;
 
-  const btn = "h-auto min-h-9 whitespace-normal rounded-full px-2 py-2 text-xs leading-tight sm:min-w-[9rem] sm:flex-1 sm:px-3 sm:text-sm";
+  const btn = "h-auto min-h-11 whitespace-normal rounded-full px-2 py-1.5 text-sm leading-tight sm:min-w-[9rem] sm:flex-1 sm:px-3 sm:text-sm";
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[95] flex items-end justify-center sm:items-center sm:px-4">
       <div
+        ref={panelRef}
         role="dialog"
         aria-label="Cookie-instellingen"
-        className={`pointer-events-auto mx-auto w-full max-w-lg overflow-y-auto rounded-t-2xl border border-foreground/10 bg-card/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl backdrop-blur-md sm:rounded-2xl sm:p-8 ${showSettings ? "max-h-[80vh]" : "max-h-[35vh]"} sm:max-h-none`}
+        className={`pointer-events-auto mx-auto w-full max-w-lg overflow-y-auto rounded-t-2xl border border-foreground/10 bg-card/95 px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl backdrop-blur-md sm:rounded-2xl sm:p-8 ${showSettings ? "max-h-[80vh]" : "max-h-[25vh]"} sm:max-h-none`}
       >
-        <p className="text-xs text-foreground/70 leading-relaxed sm:text-sm">
+        <p className="text-sm text-foreground md:hidden">
+          Wij gebruiken cookies.{" "}
+          <a href="/privacy" className="underline underline-offset-2">privacybeleid</a>
+        </p>
+        <p className="hidden text-sm text-foreground/70 leading-relaxed md:block">
           Deze site gebruikt cookies om een betere browsingervaring aan u te
           geven. Voor meer informatie lees ons{" "}
           <a href="/privacy" className="underline underline-offset-2 hover:text-foreground">
@@ -190,7 +218,7 @@ export function CookieConsentBanner() {
           </div>
         )}
 
-        <div className="mt-3 grid grid-cols-3 gap-2 sm:mt-5 sm:flex sm:flex-wrap">
+        <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-5 sm:flex sm:flex-wrap">
           <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => respond(ALL)} className={btn}>
             Alles accepteren
           </Button>

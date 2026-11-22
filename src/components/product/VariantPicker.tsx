@@ -340,7 +340,7 @@ export const VariantPicker = ({
   }) => (
     <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-foreground/75 uppercase tracking-[0.2em]">{label}</label>
+        <label className="text-sm md:text-xs font-medium text-foreground/75 uppercase tracking-[0.2em]">{label}</label>
         {/* hint bewust niet getoond: kiezers zonder uitlegtekst */}
       </div>
       <div className="flex flex-wrap gap-3">
@@ -352,7 +352,7 @@ export const VariantPicker = ({
               key={v}
               onClick={() => onChange(v)}
               className={cn(
-                "relative flex-1 min-w-[60px] py-2 md:py-3 px-3 rounded-lg border transition-all duration-500 ease-out",
+                "relative flex-1 min-w-[60px] min-h-11 py-2 md:py-3 px-3 rounded-lg border transition-all duration-500 ease-out",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-glow/50",
                 isSelected
                   ? "border-glow bg-glow/5 shadow-[0_10px_26px_-22px_hsl(var(--foreground)/0.5)]"
@@ -376,8 +376,8 @@ export const VariantPicker = ({
   }) => (
     <div className="space-y-1.5 md:space-y-2">
       <div className="flex items-center gap-3">
-        <label className="text-xs font-medium text-foreground/75 uppercase tracking-[0.2em]">{label}</label>
-        <span className="text-xs text-foreground/75 capitalize">{selected}</span>
+        <label className="text-sm md:text-xs font-medium text-foreground/75 uppercase tracking-[0.2em]">{label}</label>
+        <span className="text-sm md:text-xs text-foreground/75 capitalize">{selected}</span>
       </div>
       <div className="flex gap-4">
         {values.map((color) => {
@@ -388,7 +388,7 @@ export const VariantPicker = ({
             <button
               key={color}
               onClick={() => onChange(color)}
-              className="group flex flex-col items-center gap-2 p-0.5 focus:outline-none"
+              className="group flex min-h-11 min-w-11 flex-col items-center justify-center gap-2 p-0.5 focus:outline-none"
               aria-label={`Selecteer kleur ${color}`}
             >
               <div

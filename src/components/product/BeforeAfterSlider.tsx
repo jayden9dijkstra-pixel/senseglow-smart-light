@@ -67,10 +67,10 @@ export const BeforeAfterSlider = ({
         />
       </div>
 
-      <span className="pointer-events-none absolute left-4 top-4 bg-background/90 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-foreground">
+      <span className="pointer-events-none absolute left-4 top-4 bg-background/90 px-3 py-1 text-sm md:text-[11px] uppercase tracking-[0.2em] text-foreground">
         {beforeLabel ?? t("Lamp uit")}
       </span>
-      <span className="pointer-events-none absolute right-4 top-4 bg-background/90 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-foreground">
+      <span className="pointer-events-none absolute right-4 top-4 bg-background/90 px-3 py-1 text-sm md:text-[11px] uppercase tracking-[0.2em] text-foreground">
         {afterLabel ?? t("Lamp aan")}
       </span>
 
