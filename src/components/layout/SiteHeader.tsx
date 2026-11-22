@@ -101,6 +101,8 @@ export const SiteHeader = () => {
             <img
               src={wordmark}
               alt="SenseGlow logo"
+              width={1684}
+              height={308}
               loading="eager"
               {...{ fetchpriority: "high" }}
               className="h-7 md:h-9 w-auto object-contain"

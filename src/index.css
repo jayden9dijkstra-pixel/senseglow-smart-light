@@ -201,6 +201,15 @@ html {
       scroll-behavior: auto;
     }
 
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
     .animate-fade-in,
     .animate-fade-in-slow,
     .animate-page-enter,
@@ -284,5 +293,22 @@ html {
   }
   body.print-placement-guide .placement-guide svg {
     max-height: 82mm;
+  }
+}
+
+/* Zichtbare toetsenbordfocus op alle bedienbare elementen. */
+@layer base {
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  summary:focus-visible,
+  [role="button"]:focus-visible,
+  [role="radio"]:focus-visible,
+  [role="tab"]:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 2px;
   }
 }
