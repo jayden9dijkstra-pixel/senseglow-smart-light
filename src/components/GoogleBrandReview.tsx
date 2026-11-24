@@ -19,9 +19,23 @@ export function GoogleHomeReview() {
   const { locale } = useI18n();
   return (
     <section aria-labelledby="google-review-heading" className="w-full bg-background py-10 md:py-14">
-      <div className="container max-w-3xl">
-        <div className="space-y-4 rounded-2xl border border-foreground/10 bg-background-secondary p-6 text-center md:p-8">
-          <h2 id="google-review-heading" className="text-xl font-semibold text-foreground">
+      <div className="container grid max-w-5xl gap-6 md:grid-cols-[2fr_3fr] md:items-center">
+        <figure className="lift overflow-hidden rounded-3xl bg-white">
+          <img
+            src="/images/senseglow-ambient-koffiekast.jpg"
+            alt={locale === "en" ? "SenseGlow Ambient Motion Bar lighting a coffee cabinet at night" : "SenseGlow Ambient Motion Bar verlicht 's avonds een koffiekast"}
+            width={375}
+            height={500}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[3/4] w-full object-cover"
+          />
+          <figcaption className="px-4 py-3 text-sm text-foreground/75">
+            {locale === "en" ? "Real photo: the Ambient Motion Bar in a kitchen cabinet" : "Echte foto: de Ambient Motion Bar in een keukenkast"}
+          </figcaption>
+        </figure>
+        <div className="lift space-y-4 rounded-3xl bg-white p-6 text-center md:p-8">
+          <h2 id="google-review-heading" className="text-2xl text-foreground md:text-3xl">
             {locale === "en" ? "Customer experience" : "Ervaring van onze klant"}
           </h2>
           <div className="flex justify-center gap-1" aria-label={`${GOOGLE_REVIEW.rating} van 5 sterren`}>
@@ -29,7 +43,7 @@ export function GoogleHomeReview() {
               <Star
                 key={star}
                 aria-hidden
-                className={`h-5 w-5 ${star <= GOOGLE_REVIEW.rating ? "fill-cta text-cta" : "text-foreground/30"}`}
+                className={`h-5 w-5 ${star <= GOOGLE_REVIEW.rating ? "fill-[#FFB074] text-[#FFB074]" : "text-foreground/30"}`}
               />
             ))}
           </div>
