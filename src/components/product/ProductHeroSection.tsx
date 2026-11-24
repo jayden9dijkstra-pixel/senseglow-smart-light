@@ -198,8 +198,8 @@ export const ProductHeroSection = ({
                 <p className="text-sm font-semibold leading-snug text-primary md:text-base">{layout.eyebrow}</p>
                 <h1 className="line-clamp-2 text-xl font-bold leading-[1.1] text-foreground md:text-4xl lg:text-5xl">{content.h1}</h1>
                 <div key={priceKey} className="flex flex-wrap items-baseline gap-x-3" style={{ animation: "fade-in 0.4s ease-out" }}>
-                  <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} />
-                  {compareAt != null && unitPrice != null && compareAt > unitPrice && (
+                  <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} compareAt={offer ? null : compareAt} />
+                  {offer && compareAt != null && unitPrice != null && compareAt > unitPrice && (
                     <s className="text-base text-foreground/70">{formatPrice(compareAt)}</s>
                   )}
                 </div>
@@ -263,7 +263,7 @@ export const ProductHeroSection = ({
             )}
 
             <div key={priceKey} style={{ animation: "fade-in 0.4s ease-out" }}>
-              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} setLamps={lampsInSet(selectedVariant)} />
+              <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} setLamps={lampsInSet(selectedVariant)} compareAt={offer ? null : compareAt} />
             </div>
 
             <Button

@@ -9,19 +9,30 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { deliveryBetweenText, freeDeliveryBetweenText } from "@/lib/delivery";
 import { shopifySized } from "@/lib/shopifyImage";
 import { useOfferDate } from "@/hooks/useOfferDate";
+import { isBlackFriday } from "@/lib/blackFriday";
 
 /** Event dat de cookiebanner stuurt zodra een keuze is opgeslagen. */
 export const CONSENT_SAVED_EVENT = "sg:consent-saved";
 
 /** Prijs per lamp groot, totaal klein eronder. Rekent alleen met de Shopify-prijs en het bestaande aanbod. */
-export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0 }: { unitPrice: number | null; qty: number; offer: boolean; setLamps?: number }) {
+export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0, compareAt = null }: { unitPrice: number | null; qty: number; offer: boolean; setLamps?: number; compareAt?: number | null }) {
   const now = useOfferDate();
   if (unitPrice == null) return null;
   const count = offer ? qty : 1;
   const q = quoteQty(unitPrice, count, now);
   if (!offer) {
+    // Shopify's compare-at price is the only source for a reduced price (no codes on the site).
+    const was = compareAt != null && compareAt > unitPrice ? compareAt : null;
     return (
       <div>
+        {was != null && (
+          <p className="text-base font-semibold text-foreground">
+            <span className="mr-2 rounded bg-primary px-1.5 py-0.5 text-sm text-primary-foreground">
+              {isBlackFriday(now) ? "Black Friday" : "Actie"} −{Math.round((1 - unitPrice / was) * 100)}%
+            </span>
+            <s className="text-foreground/70">{formatPrice(was)}</s>
+          </p>
+        )}
         <p className="text-3xl font-bold leading-tight text-primary">{formatPrice(unitPrice)}</p>
         {setLamps > 1 && (
           <p className="text-base text-foreground/80">

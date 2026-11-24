@@ -1,7 +1,8 @@
 import { responsiveImg, shopifySized } from "@/lib/shopifyImage";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Activity, BatteryCharging, Footprints, Lightbulb, StickyNote } from "lucide-react";
+import { Activity, BatteryCharging, Check, Footprints, Lightbulb, StickyNote } from "lucide-react";
+import { GoogleReviewLine } from "@/components/GoogleBrandReview";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
@@ -211,7 +212,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, directCo
       )}
       {saving != null && <p className="text-base font-medium text-foreground">{formatPrice(saving)} voordeliger dan 2 sets van 4</p>}
       {picker && <QuantityOfferPicker unitPrice={unit} value={qty} onChange={setQty} />}
-      <PerLampPrice unitPrice={unit} qty={count} offer={picker} setLamps={lampsInSet(variant)} />
+      <PerLampPrice unitPrice={unit} qty={count} offer={picker} setLamps={lampsInSet(variant)} compareAt={!picker && variant?.compareAtPrice ? parseFloat(variant.compareAtPrice.amount) : null} />
       <Button
         ref={btnRef}
         disabled={!available}
@@ -222,7 +223,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, directCo
       </Button>
       <PlacementGuideBonus productHandle={offer.handle} />
       {directCompact ? (
-        <p className="whitespace-nowrap text-center text-sm text-foreground/80">{trapDirectTrust()}</p>
+        <DirectRiskReversal />
       ) : (
         <PurchaseReassurance />
       )}
@@ -443,3 +444,17 @@ function ExtraBlock({ page, products }: { page: NonNullable<ReturnType<typeof ge
 }
 
 export default LandingPage;
+
+/** Risico weg direct onder de koopknop van /trapverlichting; alleen bestaand beleid (retour, Klarna, bezorgvenster). */
+function DirectRiskReversal() {
+  return (
+    <div className="space-y-1">
+      <ul className="space-y-1 text-[15px] leading-snug text-foreground">
+        <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span><span className="mr-1 rounded bg-[#FFB3C7] px-1 text-xs font-bold text-[#0B051D]">Klarna</span>Achteraf betalen, of met iDEAL</span></li>
+        <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span>Niet tevreden? 30 dagen geld terug, retour op onze kosten</span></li>
+        <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span>{trapDirectTrust().replace(" · 30 dagen retour", "")}, gratis verzending in NL en BE</span></li>
+      </ul>
+      <GoogleReviewLine />
+    </div>
+  );
+}
