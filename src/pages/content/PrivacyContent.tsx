@@ -102,7 +102,6 @@ export const PrivacyContent = () => {
             <ul className="space-y-2 text-foreground/70 list-disc pl-6">
               <li><strong>Shopify</strong> (Canada/VS), onze webshop-platform en betaalverwerking. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
               <li><strong>DHL</strong> (Nederland/EU), bezorging van pakketten. Ontvangt NAW + telefoonnummer.</li>
-              <li><strong>17TRACK</strong> (China), pakkettracking. Ontvangt alleen track-code, geen persoonsgegevens.</li>
               <li><strong>Betaalprovider</strong> (Mollie, Stripe, of vergelijkbaar, EU), verwerkt betalingen.</li>
               <li><strong>E-mailprovider</strong>, ontvangt e-mailadres + naam voor transactionele en marketing-mails.</li>
               <li><strong>Google</strong> (VS), advertentiemeting en website-analyse. Alleen na cookie-toestemming. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
@@ -115,7 +114,7 @@ export const PrivacyContent = () => {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold">6. Doorgifte buiten de EU</h2>
             <p className="text-foreground/70 leading-relaxed">
-              Sommige van onze verwerkers (Shopify, 17TRACK, Meta, TikTok) zijn gevestigd buiten de Europese Economische Ruimte (EER). We hebben passende waarborgen getroffen door middel van EU-Standard Contractual Clauses (SCC's) en/of bestaande adequaatheidsbesluiten.
+              Sommige van onze verwerkers (Shopify, Meta, TikTok) zijn gevestigd buiten de Europese Economische Ruimte (EER). We hebben passende waarborgen getroffen door middel van EU-Standard Contractual Clauses (SCC's) en/of bestaande adequaatheidsbesluiten.
             </p>
           </section>
 
