@@ -40,7 +40,7 @@ export function Lamp3D({ src, alt }: { src: string; alt: string }) {
           "rotation-per-second": "24deg",
           "interaction-prompt": "none",
           "shadow-intensity": "1",
-          exposure: "1.15",
+          exposure: "1.7",
           "environment-image": "neutral",
           "touch-action": "pan-y",
           style: { width: "100%", height: "100%", background: "transparent", "--poster-color": "transparent" },

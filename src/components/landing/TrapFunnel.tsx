@@ -12,6 +12,9 @@ import { trackSiteEvent } from "@/lib/siteAnalytics";
 import { responsiveImg } from "@/lib/shopifyImage";
 import { GoogleReviewLine } from "@/components/GoogleBrandReview";
 import { useOfferDate } from "@/hooks/useOfferDate";
+import { Lamp3D } from "@/components/product/Lamp3D";
+
+const WALL_LAMP_3D = "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/senseglow-wall-lamp-3d.glb";
 import { isBlackFriday } from "@/lib/blackFriday";
 import idealLogo from "@/assets/pay/ideal.svg";
 import visaLogo from "@/assets/pay/visa.svg";
@@ -265,6 +268,14 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
                 ))}
               </li>
             </ul>
+          </div>
+        </section>
+
+        <section aria-labelledby="in-3d" className="mt-16 grid gap-6 md:mt-24 md:grid-cols-2 md:items-center md:gap-12">
+          <Lamp3D src={WALL_LAMP_3D} alt="SenseGlow Wall Lamp in 3D, set van 4" />
+          <div className="space-y-3">
+            <h2 id="in-3d" className="text-3xl text-foreground md:text-5xl">Klein, plat en overal te plakken</h2>
+            <p className="text-lg text-foreground/80">Bekijk de Wall Lamp van alle kanten. Het lampje zit op de trapmuur, de sensor kijkt mee en het licht valt naar beneden op de treden.</p>
           </div>
         </section>
 
