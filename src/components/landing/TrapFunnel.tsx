@@ -44,12 +44,12 @@ function Gallery({ images, title }: { images: Img[]; title: string }) {
   const main = images[active];
   if (!main) return <div className="aspect-square w-full animate-pulse rounded-2xl bg-secondary" />;
   return (
-    <div className="space-y-2">
+    <div className="min-w-0 space-y-2">
       <div className="relative overflow-hidden rounded-2xl bg-[#0F1B2D]">
         <img
           {...responsiveImg(main.url, "(min-width: 768px) 50vw, 100vw")}
           alt={main.altText || title}
-          className="aspect-square w-full object-cover"
+          className="aspect-[4/3] w-full object-cover md:aspect-square"
           loading="eager"
           fetchPriority="high"
           decoding="async"
@@ -146,7 +146,7 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
   return (
     <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
       <div className="border-b border-border bg-secondary">
-        <p className="container flex max-w-6xl flex-wrap items-center justify-center gap-x-5 gap-y-1 py-2 text-sm font-semibold text-foreground">
+        <p className="container flex max-w-6xl items-center justify-center gap-x-4 whitespace-nowrap py-2 text-[13px] font-semibold text-foreground md:text-sm">
           <span className="flex items-center gap-1.5"><Truck aria-hidden className="h-4 w-4" />Gratis verzending NL en BE</span>
           <span className="flex items-center gap-1.5"><RotateCcw aria-hidden className="h-4 w-4" />30 dagen geld terug</span>
         </p>
@@ -154,11 +154,11 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
 
       <div className="container max-w-6xl pb-16 pt-4 md:pt-10">
         <section id="kopen" className="grid gap-6 md:grid-cols-2 md:items-start md:gap-12">
-          <div className="md:sticky md:top-24">
+          <div className="min-w-0 md:sticky md:top-24">
             <Gallery images={images} title={page.h1} />
           </div>
 
-          <div className="space-y-5">
+          <div className="min-w-0 space-y-5">
             <div className="space-y-2">
               <GoogleReviewLine />
               <h1 className="text-[28px] font-extrabold leading-[1.1] tracking-tight text-foreground md:text-5xl">{page.h1}</h1>
