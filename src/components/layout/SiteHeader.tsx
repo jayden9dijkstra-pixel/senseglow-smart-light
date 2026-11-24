@@ -5,7 +5,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n/I18nProvider";
 import { MobileNav } from "@/components/layout/MobileNav";
-import { BrandLogo } from "@/components/brand/BrandLogo";
+import wordmark from "@/assets/logo-wordmark-sharp.png";
 import {
   PRODUCT_HANDLE,
   WAVE_PRODUCT_HANDLE,
@@ -98,7 +98,15 @@ export const SiteHeader = () => {
             className="flex items-center shrink-0"
             aria-label={t("Ga naar homepage")}
           >
-            <BrandLogo />
+            <img
+              src={wordmark}
+              alt="SenseGlow logo"
+              width={1684}
+              height={308}
+              loading="eager"
+              {...{ fetchpriority: "high" }}
+              className="h-7 md:h-9 w-auto object-contain"
+            />
           </button>
 
           {/* Midden: navigatie */}
