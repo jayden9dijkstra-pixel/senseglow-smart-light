@@ -8,7 +8,7 @@ import { trackSiteEvent } from "@/lib/siteAnalytics";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ShopifyProduct, fetchProductByHandle } from "@/lib/shopify";
-import { ProductHeroSection } from "@/components/product/ProductHeroSection";
+import { ProductFunnelHero } from "@/components/product/ProductFunnelHero";
 
 import { ProductRelatedSection } from "@/components/product/ProductRelatedSection";
 import { getProductFaqs } from "@/lib/productFaqs";
@@ -194,22 +194,14 @@ const ProductDetail = () => {
     return (
       <PageLayout seo={seo}>
         <div className="w-full overflow-hidden">
-          <ProductHeroSection
+          <ProductFunnelHero
             product={product}
-            selectedVariant={selectedVariant}
+            variant={selectedVariant}
             onVariantChange={setSelectedVariant}
-            heroContent={hero}
             qty={qty}
             onQtyChange={setQty}
             onAddRef={(fn) => (addRef.current = fn)}
-            layout={{
-              eyebrow: AMBIENT_EYEBROW,
-              promise: AMBIENT_PROMISE,
-              checks: AMBIENT_CHECKS,
-              qtyPicker: (unitPrice) => <BundleCards unitPrice={unitPrice} value={qty} onChange={setQty} />,
-              belowButton: <AmbientBelowButton />,
-              mobileGalleryHeight: "110px",
-            }}
+            subtitle={hero?.subtitle}
           />
           <div className="mx-auto max-w-5xl space-y-14 px-6 pb-12 md:px-8">
             <AmbientSteps />
@@ -223,7 +215,7 @@ const ProductDetail = () => {
               <Button
                 onClick={() => addRef.current?.()}
                 disabled={!selectedVariant?.availableForSale}
-                className="h-12 w-full rounded-full bg-cta text-base text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta"
+                className="btn-glow h-14 w-full rounded-full text-base font-extrabold"
               >
                 {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
               </Button>
@@ -238,15 +230,14 @@ const ProductDetail = () => {
   return (
     <PageLayout seo={seo}>
       <div className="w-full overflow-hidden">
-        <ProductHeroSection
+        <ProductFunnelHero
           product={product}
-          selectedVariant={selectedVariant}
+          variant={selectedVariant}
           onVariantChange={setSelectedVariant}
-          heroContent={hero}
           qty={qty}
           onQtyChange={setQty}
-          anchorLinks={anchorLinks}
           onAddRef={(fn) => (addRef.current = fn)}
+          subtitle={hero?.subtitle}
         />
 
         <div className="mx-auto max-w-3xl space-y-10 px-6 pb-12 md:px-8">
@@ -265,7 +256,7 @@ const ProductDetail = () => {
           <Button
             onClick={() => addRef.current?.()}
             disabled={!selectedVariant?.availableForSale}
-            className="h-12 w-full rounded-full bg-cta text-base text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta"
+            className="btn-glow h-14 w-full rounded-full text-base font-extrabold"
           >
             {selectedVariant?.availableForSale ? "In winkelwagen" : "Uitverkocht"}
           </Button>

@@ -36,7 +36,7 @@ export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0, compareAt = 
         <p className="text-3xl font-bold leading-tight text-primary">{formatPrice(unitPrice)}</p>
         {setLamps > 1 && (
           <p className="text-base text-foreground/80">
-            {setLamps} lampen · {formatPrice(Math.round((unitPrice / setLamps) * 100) / 100)} per lamp
+            {setLamps} lampen
           </p>
         )}
       </div>
@@ -45,11 +45,11 @@ export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0, compareAt = 
   return (
     <div>
       <p className="text-3xl font-bold leading-tight text-primary">
-        {formatPrice(q.perLamp)} <span className="text-base font-semibold">per lamp</span>
+        {formatPrice(q.total)}
       </p>
       {count > 1 && (
         <p className="text-base text-foreground/80">
-          {formatPrice(q.total)} voor {qtyLabel(count).replace(/\s*\(.*\)$/, "")}
+          {qtyLabel(count)}
         </p>
       )}
     </div>

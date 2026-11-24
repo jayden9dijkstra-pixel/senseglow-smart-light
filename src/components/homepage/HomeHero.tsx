@@ -29,7 +29,7 @@ export function HomeHero({ products }: { products: ShopifyProduct[] }) {
             <p className="flex flex-wrap items-baseline gap-3">
               <span className="text-base text-[#FFF8EF]/70">4 lampen</span>
               {was != null && was > price && <s className="text-lg text-[#FFF8EF]/50">{formatPrice(was)}</s>}
-              <span className="text-3xl font-extrabold text-[#FFC24D]">{formatPrice(price)}</span>
+              <span className="text-3xl font-extrabold text-[#FFD89C]">{formatPrice(price)}</span>
             </p>
           )}
           <div className="flex flex-col gap-3 sm:flex-row">

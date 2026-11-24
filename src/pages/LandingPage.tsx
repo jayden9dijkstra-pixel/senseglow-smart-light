@@ -439,7 +439,7 @@ function ExtraBlock({ page, products }: { page: NonNullable<ReturnType<typeof ge
               {o.label}
               {n > 1 ? `, ${n} lampen` : ""}
               {q && <span className="font-semibold text-foreground"> {formatPrice(q.total)}</span>}
-              {q && n > 1 && <span> ({formatPrice(q.perLamp)} per lamp)</span>}
+              
             </li>
           );
         })}

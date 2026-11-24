@@ -49,7 +49,7 @@ export function QuantityOfferPicker({
               {q && (
                 <span className="md:text-right">
                   <span className="block text-base font-semibold text-foreground">{formatPrice(q.total)}</span>
-                  {qty > 1 && <span className="hidden text-sm text-foreground/80 md:block">{formatPrice(q.perLamp)} per lamp</span>}
+                  
                 </span>
               )}
             </Button>

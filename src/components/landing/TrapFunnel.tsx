@@ -1,83 +1,112 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Truck, RotateCcw, ShieldCheck, BatteryCharging, Hand, Footprints } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { useCartStore } from "@/stores/cartStore";
 import type { ShopifyProduct } from "@/lib/shopify";
 import type { LandingPage } from "@/lib/landingPages";
 import { formatPrice } from "@/lib/price";
-import { deliveryWindow, formatDeliveryDate } from "@/lib/delivery";
 import { canPurchaseVariant } from "@/lib/purchaseAvailability";
 import { numericVariantId, trackViewItem } from "@/lib/adsTracking";
 import { trackSiteEvent } from "@/lib/siteAnalytics";
-import { responsiveImg } from "@/lib/shopifyImage";
-import { GoogleReviewLine } from "@/components/GoogleBrandReview";
 import { useOfferDate } from "@/hooks/useOfferDate";
+import { isBlackFriday } from "@/lib/blackFriday";
 import { Lamp3D } from "@/components/product/Lamp3D";
+import { ChoiceCards, FunnelGallery, FunnelTitle, GlowButton, Highlights, Pills, PriceRow, RiskBlock, partsOf, type Img, type Variant } from "@/components/product/FunnelBuy";
 
 const WALL_LAMP_3D = "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/senseglow-wall-lamp-3d.glb";
-import { isBlackFriday } from "@/lib/blackFriday";
-import idealLogo from "@/assets/pay/ideal.svg";
-import visaLogo from "@/assets/pay/visa.svg";
-import masterLogo from "@/assets/pay/master.svg";
-import paypalLogo from "@/assets/pay/paypal.svg";
-
-type Variant = ShopifyProduct["node"]["variants"]["edges"][0]["node"];
-type Img = { url: string; altText: string | null; width?: number | null; height?: number | null };
 
 const SETS = [
   { value: "4-delige set", lamps: 4, title: "4 lampen", fit: "Trap tot 12 treden" },
   { value: "8-delige set", lamps: 8, title: "8 lampen", fit: "Trap vanaf 13 treden, of trap plus overloop" },
 ] as const;
 
-const opt = (v: Variant, re: RegExp) => v.selectedOptions.find((o) => re.test(o.value))?.value;
-const colorOf = (v: Variant) => v.selectedOptions.find((o) => !/delige/i.test(o.value))?.value ?? "";
+const HIGHLIGHTS = [
+  { icon: "stick" as const, text: "Plakken op de muur: geen boren, geen stroomkabel" },
+  { icon: "motion" as const, text: "Gaat vanzelf aan als je de trap nadert" },
+  { icon: "usb" as const, text: "Oplaadbaar via USB-C: nooit meer batterijen kopen" },
+];
+
 const money = (v: Variant | undefined, key: "price" | "compareAtPrice") => {
   const m = v?.[key];
   return m ? parseFloat(m.amount) : null;
 };
 
-/** Volgorde van de galerij: trapfoto's eerst, daarna de rest zoals in Shopify. */
+/** Trapfoto's eerst, daarna de rest zoals in Shopify. */
 function orderImages(images: Img[]): Img[] {
   const score = (im: Img) => (/trap/i.test(im.altText ?? "") ? 0 : /set van 4|zwart en wit|wit en zwart/i.test(im.altText ?? "") ? 1 : 2);
   return [...images].sort((a, b) => score(a) - score(b));
 }
 
-function Gallery({ images, title }: { images: Img[]; title: string }) {
-  const [active, setActive] = useState(0);
-  const main = images[active];
-  if (!main) return <div className="aspect-square w-full animate-pulse rounded-2xl bg-secondary" />;
+/**
+ * Koopblok van de Wall Lamp: setkaarten (4 of 8), kleur, rode prijs uit Shopify (compare-at), één gloedknop.
+ * Gebruikt op de trap-advertentiepagina's en op de Wall Lamp-productpagina.
+ */
+export function TrapFunnelPanel({ product, title, sub, buttonRef, path }: { product: ShopifyProduct | undefined; title: string; sub?: string; buttonRef?: React.RefObject<HTMLButtonElement>; path?: string }) {
+  const now = useOfferDate();
+  const addItem = useCartStore((s) => s.addItem);
+  const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
+  const colors = useMemo(() => [...new Set(variants.map((v) => partsOf(v).color))].filter(Boolean), [variants]);
+  const [color, setColor] = useState<string | null>(null);
+  const [set, setSet] = useState<string>(SETS[1].value);
+  const activeColor = color ?? (colors.includes("Zwart") ? "Zwart" : colors[0]) ?? "";
+  const variantFor = (s: string) => variants.find((v) => partsOf(v).size === s && partsOf(v).color === activeColor);
+  const variant = variantFor(set);
+  const available = canPurchaseVariant(!!product, variant);
+  const price = money(variant, "price");
+  const was = money(variant, "compareAtPrice");
+  const ownRef = useRef<HTMLButtonElement>(null);
+  const btnRef = buttonRef ?? ownRef;
+  const [showSticky, setShowSticky] = useState(false);
+  const viewed = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!path || !product || !variant || viewed.current === variant.id) return;
+    viewed.current = variant.id;
+    trackViewItem([{ item_id: numericVariantId(variant.id), item_name: product.node.title, item_variant: variant.title, price: parseFloat(variant.price.amount), quantity: 1 }]);
+    void trackSiteEvent("view_item", { path, itemName: product.node.title, value: parseFloat(variant.price.amount) });
+  }, [product, variant, path]);
+
+  useEffect(() => {
+    const el = btnRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setShowSticky(!e.isIntersecting && e.boundingClientRect.top < 0));
+    io.observe(el);
+    return () => io.disconnect();
+  }, [product, btnRef]);
+
+  const add = () => {
+    if (!product || !variant || !available) return;
+    addItem({ product, variantId: variant.id, variantTitle: variant.title, price: { amount: variant.price.amount, currencyCode: variant.price.currencyCode }, quantity: 1, selectedOptions: variant.selectedOptions });
+  };
+
+  const label = !product ? "Laden..." : !variant?.availableForSale ? "Uitverkocht" : `In winkelwagen · ${price != null ? formatPrice(price) : ""}`;
+
   return (
-    <div className="min-w-0 space-y-2">
-      <div className="night-glow lift relative overflow-hidden rounded-3xl">
-        <img
-          {...responsiveImg(main.url, "(min-width: 768px) 50vw, 100vw")}
-          alt={main.altText || title}
-          className="aspect-[4/3] w-full object-cover md:aspect-square"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-        />
-        <div className="pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap gap-2" aria-hidden>
-          <span className="rounded-full bg-[#1C120C]/75 px-3 py-1.5 text-xs font-bold text-[#FFD48A] backdrop-blur-md">Oplaadbaar via USB-C</span>
-          <span className="rounded-full bg-[#1C120C]/75 px-3 py-1.5 text-xs font-bold text-[#FFD48A] backdrop-blur-md">Plakken, geen boren</span>
+    <div className="min-w-0 space-y-5">
+      <FunnelTitle title={title} sub={sub} />
+      <PriceRow price={price} was={was} label={isBlackFriday(now) ? "Black Friday" : undefined} />
+      <Highlights items={HIGHLIGHTS} />
+      <Pills label="Kleur" value={activeColor} options={colors} swatch onChange={setColor} />
+      <ChoiceCards
+        legend="Kies je set"
+        value={set}
+        onChange={setSet}
+        cards={SETS.map((s) => {
+          const v = variantFor(s.value);
+          const p = money(v, "price");
+          const w = money(v, "compareAtPrice");
+          const save = p != null && w != null && w > p ? Math.round(w - p) : 0;
+          return { key: s.value, title: s.title, sub: s.fit, price: p, was: w, badge: s.lamps === 8 && save > 0 ? `Je bespaart €${save}` : undefined };
+        })}
+      />
+      <GlowButton innerRef={btnRef} onClick={add} disabled={!available}>{label}</GlowButton>
+      <RiskBlock />
+      {showSticky && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 p-3 backdrop-blur md:hidden" data-print-hidden>
+          <button type="button" disabled={!available} onClick={add} className="btn-glow h-12 w-full rounded-full text-base font-extrabold disabled:opacity-50">
+            {SETS.find((s) => s.value === set)?.title} {activeColor.toLowerCase()} · {price != null ? formatPrice(price) : ""} · In winkelwagen
+          </button>
         </div>
-      </div>
-      {images.length > 1 && (
-        <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Meer foto's">
-          {images.map((im, i) => (
-            <li key={im.url} className="flex-none">
-              <button
-                type="button"
-                onClick={() => setActive(i)}
-                aria-label={`Foto ${i + 1}: ${im.altText ?? title}`}
-                aria-current={i === active}
-                className={`block h-16 w-16 overflow-hidden rounded-lg border-2 md:h-20 md:w-20 ${i === active ? "border-[#FF9A1F]" : "border-transparent opacity-80"}`}
-              >
-                <img {...responsiveImg(im.url, "80px")} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
-              </button>
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   );
@@ -95,180 +124,17 @@ function Faq({ q, a }: { q: string; a: string }) {
   );
 }
 
-/**
- * Eén-product-funnel voor de trap-advertentiepagina's (opbouw zoals de beste NL-dropshipwinkels):
- * galerij, prijs met Shopify compare-at, setkeuze als kaarten, één grote knop, risico weg eronder.
- * Alle prijzen komen uit Shopify; geen verzonnen reviews of specs.
- */
+/** Eén-product-funnel voor de trap-advertentiepagina's. Alle prijzen uit Shopify; geen verzonnen reviews of specs. */
 export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; product: ShopifyProduct | undefined; jsonLd: Record<string, unknown>[] }) {
-  const now = useOfferDate();
-  const addItem = useCartStore((s) => s.addItem);
-  const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
-  const colors = useMemo(() => [...new Set(variants.map(colorOf))].filter(Boolean), [variants]);
-  const [color, setColor] = useState<string | null>(null);
-  const [set, setSet] = useState<string>(SETS[1].value);
-  const activeColor = color ?? (colors.includes("Zwart") ? "Zwart" : colors[0]) ?? "";
-  const variantFor = (setValue: string) => variants.find((v) => opt(v, /delige/i) === setValue && colorOf(v) === activeColor);
-  const variant = variantFor(set);
-  const available = canPurchaseVariant(!!product, variant);
-  const price = money(variant, "price");
-  const was = money(variant, "compareAtPrice");
   const images = useMemo(() => orderImages(product?.node.images?.edges?.map((e) => e.node) ?? []), [product]);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const [showSticky, setShowSticky] = useState(false);
-  const viewed = useRef<string | null>(null);
-  const { from, to } = deliveryWindow(now);
-  const bf = isBlackFriday(now);
-
-  useEffect(() => {
-    if (!product || !variant || viewed.current === variant.id) return;
-    viewed.current = variant.id;
-    trackViewItem([{ item_id: numericVariantId(variant.id), item_name: product.node.title, item_variant: variant.title, price: parseFloat(variant.price.amount), quantity: 1 }]);
-    void trackSiteEvent("view_item", { path: page.path, itemName: product.node.title, value: parseFloat(variant.price.amount) });
-  }, [product, variant, page.path]);
-
-  useEffect(() => {
-    const el = btnRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([e]) => setShowSticky(!e.isIntersecting && e.boundingClientRect.top < 0));
-    io.observe(el);
-    return () => io.disconnect();
-  }, [product]);
-
-  const add = () => {
-    if (!product || !variant || !available) return;
-    addItem({
-      product,
-      variantId: variant.id,
-      variantTitle: variant.title,
-      price: { amount: variant.price.amount, currencyCode: variant.price.currencyCode },
-      quantity: 1,
-      selectedOptions: variant.selectedOptions,
-    });
-  };
-
-  const off = price != null && was != null && was > price ? Math.round((1 - price / was) * 100) : 0;
-  const buttonLabel = !product ? "Laden..." : !variant?.availableForSale ? "Uitverkocht" : `In winkelwagen · ${price != null ? formatPrice(price) : ""}`;
-
   return (
     <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
-      <div className="bg-[#2B1C14]">
-        <p className="container flex max-w-6xl items-center justify-center gap-x-4 whitespace-nowrap py-2 text-[13px] font-semibold text-[#FFD48A] md:text-sm">
-          <span className="flex items-center gap-1.5"><Truck aria-hidden className="h-4 w-4" />Gratis verzending NL en BE</span>
-          <span className="flex items-center gap-1.5"><RotateCcw aria-hidden className="h-4 w-4" />30 dagen geld terug</span>
-        </p>
-      </div>
-
       <div className="container max-w-6xl pb-16 pt-4 md:pt-10">
         <section id="kopen" className="grid gap-6 md:grid-cols-2 md:items-start md:gap-12">
           <div className="min-w-0 md:sticky md:top-24">
-            <Gallery images={images} title={page.h1} />
+            <FunnelGallery images={images} title={page.h1} chips={["Oplaadbaar via USB-C", "Plakken, geen boren"]} mobileAspect="aspect-[4/3]" />
           </div>
-
-          <div className="min-w-0 space-y-5">
-            <div className="space-y-2">
-              <GoogleReviewLine />
-              <h1 className="text-[32px] font-extrabold leading-[1.02] text-foreground md:text-6xl">{page.h1}</h1>
-              <p className="text-base text-foreground/75">SenseGlow Wall Lamp, oplaadbaar via USB-C</p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3" aria-live="polite">
-              {was != null && off > 0 && <s className="text-xl text-foreground/50">{formatPrice(was)}</s>}
-              <span className="text-4xl font-extrabold tracking-tight text-[#E0362C]">{price != null ? formatPrice(price) : "…"}</span>
-              {off > 0 && (
-                <span className="rounded-full bg-[#E0362C] px-3 py-1 text-sm font-bold text-white">
-                  {bf ? "Black Friday " : ""}−{off}%
-                </span>
-              )}
-            </div>
-
-            <ul className="space-y-2 text-[17px] text-foreground">
-              <li className="flex gap-3"><Hand aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#E07A00]" />Plakken op de muur: geen boren, geen stroomkabel</li>
-              <li className="flex gap-3"><Footprints aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#E07A00]" />Gaat vanzelf aan als je de trap nadert</li>
-              <li className="flex gap-3"><BatteryCharging aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#E07A00]" />Oplaadbaar via USB-C: nooit meer batterijen kopen</li>
-            </ul>
-
-            {colors.length > 1 && (
-              <fieldset className="space-y-2">
-                <legend className="text-base font-bold text-foreground">Kleur: <span className="font-medium">{activeColor}</span></legend>
-                <div className="flex gap-2">
-                  {colors.map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      role="radio"
-                      aria-checked={c === activeColor}
-                      onClick={() => setColor(c)}
-                      className={`flex min-h-12 items-center gap-2 rounded-full border-2 px-5 text-base font-semibold ${c === activeColor ? "border-foreground" : "border-border"}`}
-                    >
-                      <span aria-hidden className={`h-4 w-4 rounded-full border border-foreground/30 ${/zwart/i.test(c) ? "bg-[#1a1a1a]" : "bg-white"}`} />
-                      {c}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-            )}
-
-            <fieldset className="space-y-2">
-              <legend className="text-base font-bold text-foreground">Kies je set</legend>
-              <div className="space-y-4 pt-2" role="radiogroup" aria-label="Kies je set">
-                {SETS.map((s) => {
-                  const v = variantFor(s.value);
-                  const p = money(v, "price");
-                  const w = money(v, "compareAtPrice");
-                  const selected = s.value === set;
-                  const best = s.lamps === 8;
-                  return (
-                    <button
-                      key={s.value}
-                      type="button"
-                      role="radio"
-                      aria-checked={selected}
-                      onClick={() => setSet(s.value)}
-                      className={`relative flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-colors ${selected ? "lift border-[#FF9A1F] bg-white" : "border-border bg-white/60"}`}
-                    >
-                      {best && <span className="absolute -top-3 right-4 rounded-full bg-gradient-to-r from-[#FFC24D] to-[#FF9A1F] px-3 py-1 text-xs font-extrabold text-[#1C120C] shadow-md">Laagste prijs per lamp</span>}
-                      <span aria-hidden className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border-2 ${selected ? "border-[#FF9A1F]" : "border-foreground/30"}`}>
-                        {selected && <span className="h-3 w-3 rounded-full bg-[#FF9A1F]" />}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-lg font-extrabold text-foreground">{s.title}</span>
-                        <span className="block text-sm text-foreground/70">{s.fit}</span>
-                      </span>
-                      <span className="flex-none text-right">
-                        <span className="block text-lg font-extrabold text-foreground">{p != null ? formatPrice(p) : "…"}</span>
-                        {w != null && p != null && w > p && <s className="block text-sm text-foreground/50">{formatPrice(w)}</s>}
-                        {p != null && <span className="block text-xs font-semibold text-foreground/70">{formatPrice(Math.round((p / s.lamps) * 100) / 100)} per lamp</span>}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </fieldset>
-
-            <button
-              ref={btnRef}
-              type="button"
-              disabled={!available}
-              onClick={add}
-              className="btn-glow h-[60px] w-full rounded-full text-lg font-extrabold transition-transform active:scale-[0.98] disabled:opacity-50 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#1C120C]"
-            >
-              {buttonLabel}
-            </button>
-
-            <ul className="lift space-y-2 rounded-3xl bg-white p-5 text-base text-foreground">
-              <li className="flex gap-3"><Truck aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Bezorgd tussen <strong>{formatDeliveryDate(from)}</strong> en <strong>{formatDeliveryDate(to)}</strong>, gratis</span></li>
-              <li className="flex gap-3"><RotateCcw aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Niet tevreden? 30 dagen geld terug, retour op onze kosten</span></li>
-              <li className="flex gap-3"><ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>1 jaar extra garantie bovenop je wettelijke garantie</span></li>
-              <li className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                <span className="rounded bg-[#FFB3C7] px-1.5 py-0.5 text-sm font-bold text-[#0B051D]">Klarna</span>
-                <span className="mr-1">Achteraf betalen</span>
-                {[{ n: "iDEAL", s: idealLogo }, { n: "Visa", s: visaLogo }, { n: "Mastercard", s: masterLogo }, { n: "PayPal", s: paypalLogo }].map((m) => (
-                  <img key={m.n} src={m.s} alt={m.n} width={36} height={23} className="h-[23px] w-[36px]" loading="lazy" />
-                ))}
-              </li>
-            </ul>
-          </div>
+          <TrapFunnelPanel product={product} title={page.h1} sub="SenseGlow Wall Lamp, oplaadbaar via USB-C" path={page.path} />
         </section>
 
         <section aria-labelledby="in-3d" className="mt-16 grid gap-6 md:mt-24 md:grid-cols-2 md:items-center md:gap-12">
@@ -341,19 +207,6 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
           </button>
         </section>
       </div>
-
-      {showSticky && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 p-3 backdrop-blur md:hidden" data-print-hidden>
-          <button
-            type="button"
-            disabled={!available}
-            onClick={add}
-            className="btn-glow h-12 w-full rounded-full text-base font-extrabold disabled:opacity-50"
-          >
-            {SETS.find((s) => s.value === set)?.title} {activeColor.toLowerCase()} · {price != null ? formatPrice(price) : ""} · In winkelwagen
-          </button>
-        </div>
-      )}
     </PageLayout>
   );
 }
