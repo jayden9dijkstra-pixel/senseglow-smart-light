@@ -29,67 +29,67 @@ html {
 @layer base {
   :root {
     /* Warm open wit */
-    --background: 36 40% 98%; /* #FCFAF6 */
-    --background-secondary: 34 32% 95%; /* #F6F1EA */
-    --foreground: 20 30% 21%; /* #46332A mokka */
-    --foreground-muted: 22 14% 42%; /* #7A6A5E */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --background-secondary: 216 33% 96%; /* #F3F5F8 */
+    --foreground: 215 50% 12%; /* #0F1B2D nachtblauw */
+    --foreground-muted: 215 17% 39%; /* #536175 */
 
     --card: 0 0% 100%;
-    --card-foreground: 20 30% 21%;
+    --card-foreground: 215 50% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 30% 21%;
+    --popover-foreground: 215 50% 12%;
 
     /* Mokka als hoofdkleur voor knoppen en vlakken */
-    --primary: 20 31% 31%; /* #67483A */
-    --primary-foreground: 36 40% 98%;
+    --primary: 215 50% 12%; /* #0F1B2D */
+    --primary-foreground: 0 0% 100%;
 
     /* Ambient oranje: dieper goud dan de vorige gele tint, contrasteert met het mokka bruin */
-    --cta: 33 64% 33%; /* #8A5A1E */
-    --cta-foreground: 36 40% 98%; /* roomwit, contrast 5,5:1 op #8A5A1E */
-    --cta-hover: 33 64% 26%; /* #6D4718 */
+    --cta: 39 100% 56%; /* #FFB020 lampgloed */
+    --cta-foreground: 215 50% 12%; /* nachtblauw op amber, contrast > 9:1 */
+    --cta-hover: 39 100% 50%; /* #FFA500 */
 
-    --secondary: 34 32% 95%;
-    --secondary-foreground: 20 30% 21%;
+    --secondary: 216 33% 96%;
+    --secondary-foreground: 215 50% 12%;
 
-    --muted: 34 26% 94%;
-    --muted-foreground: 22 14% 32%;
+    --muted: 216 33% 96%;
+    --muted-foreground: 215 17% 35%;
 
     /* Oranje accent */
-    --accent: 33 62% 54%; /* #D4913F */
-    --accent-foreground: 20 30% 21%;
+    --accent: 39 100% 56%; /* #FFB020 */
+    --accent-foreground: 215 50% 12%;
     /* Donkerder goud voor tekst en iconen: contrast >= 4.5 op warm wit */
-    --accent-ink: 33 64% 33%; /* #8A5A1E */
+    --accent-ink: 35 100% 30%; /* #9A5B00 */
 
     --destructive: 0 62% 45%;
-    --destructive-foreground: 36 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
     /* Rustige warme lijnen */
-    --border: 28 22% 88%;
-    --border-strong: 26 20% 78%;
-    --input: 28 22% 88%;
-    --ring: 33 62% 54%;
+    --border: 216 22% 90%;
+    --border-strong: 216 16% 78%;
+    --input: 216 22% 90%;
+    --ring: 215 50% 12%;
 
-    --hero-foreground: 36 40% 98%;
+    --hero-foreground: 0 0% 100%;
 
     /* Accent-aliassen zodat bestaande klassen mee veranderen */
-    --glow: 33 62% 54%;
-    --glow-light: 33 62% 72%;
-    --brand-amber: 33 62% 54%;
-    --brand-amber-light: 33 62% 88%;
+    --glow: 39 100% 56%;
+    --glow-light: 39 100% 75%;
+    --brand-amber: 39 100% 56%;
+    --brand-amber-light: 39 100% 92%;
 
-    --radius: 0.25rem;
+    --radius: 0.75rem;
 
     --section-curve: 0px;
 
-    --sidebar-background: 34 32% 95%;
-    --sidebar-foreground: 20 30% 21%;
-    --sidebar-primary: 20 31% 31%;
-    --sidebar-primary-foreground: 36 40% 98%;
-    --sidebar-accent: 34 26% 92%;
-    --sidebar-accent-foreground: 20 30% 21%;
-    --sidebar-border: 28 22% 88%;
-    --sidebar-ring: 33 62% 54%;
+    --sidebar-background: 216 33% 96%;
+    --sidebar-foreground: 215 50% 12%;
+    --sidebar-primary: 215 50% 12%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 33% 94%;
+    --sidebar-accent-foreground: 215 50% 12%;
+    --sidebar-border: 216 22% 90%;
+    --sidebar-ring: 215 50% 12%;
   }
 }
 
@@ -104,7 +104,7 @@ html {
 
   body {
     @apply bg-background text-foreground antialiased overflow-x-hidden;
-    font-family: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "kern" 1;
   }
 
@@ -112,14 +112,14 @@ html {
   h2,
   h3,
   .font-display {
-    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    line-height: 1.08;
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
   }
 
   h1 {
-    font-weight: 500;
+    font-weight: 800;
   }
 }
 

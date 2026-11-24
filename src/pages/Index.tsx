@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { HeroSection } from "@/components/homepage/HeroSection";
+import { HomeHero } from "@/components/homepage/HomeHero";
 import { TrustBar } from "@/components/homepage/TrustBar";
 import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
 
@@ -48,7 +48,7 @@ const Index = () => {
   return (
     <PageLayout>
       {/* 1. Hero */}
-      <HeroSection products={products} />
+      <HomeHero products={products} />
 
       {/* Trust bar */}
       <TrustBar />

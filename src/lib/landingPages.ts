@@ -87,6 +87,8 @@ export interface LandingPage {
   layout?: "steps-after-buy" | "steps-first";
   /** Compact direct koopblok; alleen ingeschakeld voor /trapverlichting. */
   directBuy?: boolean;
+  /** Eén-product-funnel (Wall Lamp): galerij, setkaarten, één grote knop. */
+  funnel?: boolean;
   /** Meet view_item voor alle aanbiedingen op deze pagina. */
   trackOffers?: boolean;
   /** Toon de bestaande uitleg over het combineren van lampen. */
@@ -237,6 +239,7 @@ export const placementGuideFaqs = () => trapAdFaqs().filter((faq) =>
 export const LANDING_PAGES: LandingPage[] = [
   {
     path: "/trapverlichting",
+    funnel: true,
     title: "Trapverlichting met sensor, zonder boren | SenseGlow",
     description:
       "Trapverlichting met bewegingssensor die je zonder boren plakt: de SenseGlow Wall Lamp als 4- of 8-delige set. Opladen via USB-C. Gratis verzending NL/BE.",
@@ -564,6 +567,7 @@ export const LANDING_PAGES: LandingPage[] = [
   },
   {
     path: "/trap-in-het-donker",
+    funnel: true,
     title: "Trap in het donker: licht zonder lichtknopje | SenseGlow",
     description:
       "De SenseGlow Wall Lamp gaat vanzelf aan zodra je de trap nadert. Zelfklevend, zonder boren of kabels en oplaadbaar via USB-C. Kies een 4- of 8-delige set.",
@@ -586,6 +590,7 @@ export const LANDING_PAGES: LandingPage[] = [
   },
   {
     path: "/trap-zonder-klussen",
+    funnel: true,
     title: "Trapverlichting zonder klussen of boren | SenseGlow",
     description:
       "Plak de SenseGlow Wall Lamp op de muur langs je trap. Geen boren, kabels of stopcontact nodig. Opladen via USB-C. Kies een 4- of 8-delige set.",

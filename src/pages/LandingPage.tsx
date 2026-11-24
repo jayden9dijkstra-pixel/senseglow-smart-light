@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Activity, BatteryCharging, Check, Footprints, Lightbulb, StickyNote } from "lucide-react";
 import { GoogleReviewLine } from "@/components/GoogleBrandReview";
+import { TrapFunnel } from "@/components/landing/TrapFunnel";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { QuantityOfferPicker } from "@/components/product/QuantityOfferPicker";
@@ -279,6 +280,10 @@ const LandingPage = () => {
   const handles = [...new Set(page.offers.map((o) => o.handle))];
   const first = page.offers[0];
   const heroImage = first ? offerImage(first, products[first.handle]?.node.images?.edges?.map((e) => e.node) ?? []) : null;
+
+  if (page.funnel && first) {
+    return <TrapFunnel page={page} product={products[first.handle]} jsonLd={jsonLd} />;
+  }
 
   if (page.layout) {
     return <AdLandingLayout page={page} products={products} jsonLd={jsonLd} />;
