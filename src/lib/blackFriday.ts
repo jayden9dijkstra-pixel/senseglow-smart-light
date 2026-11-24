@@ -7,6 +7,6 @@ export function isBlackFriday(now: Date): boolean {
   return time >= BLACK_FRIDAY_START && time < BLACK_FRIDAY_END;
 }
 
-export const BLACK_FRIDAY_BANNER = "Black Friday: Wall Lamp-sets 20% korting, t/m 30 nov";
+export const BLACK_FRIDAY_BANNER = "Black Friday: Wall Lamp-sets −20% t/m 30 nov";
 export const BLACK_FRIDAY_CART = "Black Friday: 15% vanaf 2 lampen, 20% vanaf 4";
 export const BLACK_FRIDAY_DELIVERY = "Geef je het als kerstcadeau? Bestel op tijd.";

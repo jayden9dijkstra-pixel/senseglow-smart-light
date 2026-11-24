@@ -60,7 +60,7 @@ function Gallery({ images, title }: { images: Img[]; title: string }) {
         </div>
       </div>
       {images.length > 1 && (
-        <ul className="flex gap-2 overflow-x-auto pb-1" aria-label="Meer foto's">
+        <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Meer foto's">
           {images.map((im, i) => (
             <li key={im.url} className="flex-none">
               <button
@@ -208,7 +208,7 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
 
             <fieldset className="space-y-2">
               <legend className="text-base font-bold text-foreground">Kies je set</legend>
-              <div className="space-y-2" role="radiogroup" aria-label="Kies je set">
+              <div className="space-y-4 pt-2" role="radiogroup" aria-label="Kies je set">
                 {SETS.map((s) => {
                   const v = variantFor(s.value);
                   const p = money(v, "price");
@@ -224,14 +224,12 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
                       onClick={() => setSet(s.value)}
                       className={`relative flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-colors ${selected ? "lift border-[#FF9A1F] bg-white" : "border-border bg-white/60"}`}
                     >
+                      {best && <span className="absolute -top-3 right-4 rounded-full bg-gradient-to-r from-[#FFC24D] to-[#FF9A1F] px-3 py-1 text-xs font-extrabold text-[#1C120C] shadow-md">Laagste prijs per lamp</span>}
                       <span aria-hidden className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border-2 ${selected ? "border-[#FF9A1F]" : "border-foreground/30"}`}>
                         {selected && <span className="h-3 w-3 rounded-full bg-[#FF9A1F]" />}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="flex flex-wrap items-center gap-2 text-lg font-extrabold text-foreground">
-                          {s.title}
-                          {best && <span className="rounded-full bg-gradient-to-r from-[#FFC24D] to-[#FF9A1F] px-2 py-0.5 text-xs font-bold text-[#1C120C]">Laagste prijs per lamp</span>}
-                        </span>
+                        <span className="block text-lg font-extrabold text-foreground">{s.title}</span>
                         <span className="block text-sm text-foreground/70">{s.fit}</span>
                       </span>
                       <span className="flex-none text-right">
