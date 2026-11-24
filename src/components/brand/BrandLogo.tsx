@@ -3,11 +3,11 @@ export function BrandLogo({ className = "", inverted = false }: { className?: st
   return (
     <span className={`inline-flex items-center gap-2 ${className}`}>
       <svg viewBox="0 0 40 40" className="h-8 w-8 flex-none md:h-9 md:w-9" aria-hidden>
-        <rect width="40" height="40" rx="10" fill={inverted ? "#FFFFFF" : "#0F1B2D"} />
-        <circle cx="31" cy="9" r="3.5" fill="#FFB020" />
-        <text x="19" y="27.5" textAnchor="middle" fontFamily="Manrope, system-ui, sans-serif" fontWeight="800" fontSize="17" letterSpacing="-0.5" fill={inverted ? "#0F1B2D" : "#FFFFFF"}>SG</text>
+        <defs><radialGradient id="sgGlow" cx="0.78" cy="0.22" r="0.7"><stop offset="0" stopColor="#FFB238" stopOpacity="0.55" /><stop offset="1" stopColor="#FFB238" stopOpacity="0" /></radialGradient></defs><rect width="40" height="40" rx="11" fill={inverted ? "#FFF8EF" : "#1C120C"} /><rect width="40" height="40" rx="11" fill="url(#sgGlow)" />
+        <circle cx="31" cy="9" r="3.5" fill="#FFB238" />
+        <text x="19" y="27.5" textAnchor="middle" fontFamily="Fraunces, Georgia, serif" fontWeight="800" fontSize="18" letterSpacing="-0.5" fill={inverted ? "#1C120C" : "#FFFFFF"}>SG</text>
       </svg>
-      <span className={`text-[22px] font-extrabold leading-none tracking-[-0.03em] md:text-2xl ${inverted ? "text-white" : "text-[#0F1B2D]"}`} style={{ fontFamily: "Manrope, system-ui, sans-serif" }}>
+      <span className={`text-[22px] font-extrabold leading-none tracking-[-0.03em] md:text-2xl ${inverted ? "text-[#FFF8EF]" : "text-[#1C120C]"}`} style={{ fontFamily: "Fraunces, Georgia, serif", fontVariationSettings: '"SOFT" 100, "opsz" 72' }}>
         SenseGlow
       </span>
     </span>

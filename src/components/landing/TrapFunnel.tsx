@@ -45,7 +45,7 @@ function Gallery({ images, title }: { images: Img[]; title: string }) {
   if (!main) return <div className="aspect-square w-full animate-pulse rounded-2xl bg-secondary" />;
   return (
     <div className="min-w-0 space-y-2">
-      <div className="relative overflow-hidden rounded-2xl bg-[#0F1B2D]">
+      <div className="night-glow lift relative overflow-hidden rounded-3xl">
         <img
           {...responsiveImg(main.url, "(min-width: 768px) 50vw, 100vw")}
           alt={main.altText || title}
@@ -54,6 +54,10 @@ function Gallery({ images, title }: { images: Img[]; title: string }) {
           fetchPriority="high"
           decoding="async"
         />
+        <div className="pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap gap-2" aria-hidden>
+          <span className="rounded-full bg-[#1C120C]/75 px-3 py-1.5 text-xs font-bold text-[#FFD48A] backdrop-blur-md">Oplaadbaar via USB-C</span>
+          <span className="rounded-full bg-[#1C120C]/75 px-3 py-1.5 text-xs font-bold text-[#FFD48A] backdrop-blur-md">Plakken, geen boren</span>
+        </div>
       </div>
       {images.length > 1 && (
         <ul className="flex gap-2 overflow-x-auto pb-1" aria-label="Meer foto's">
@@ -64,7 +68,7 @@ function Gallery({ images, title }: { images: Img[]; title: string }) {
                 onClick={() => setActive(i)}
                 aria-label={`Foto ${i + 1}: ${im.altText ?? title}`}
                 aria-current={i === active}
-                className={`block h-16 w-16 overflow-hidden rounded-lg border-2 md:h-20 md:w-20 ${i === active ? "border-foreground" : "border-transparent opacity-80"}`}
+                className={`block h-16 w-16 overflow-hidden rounded-lg border-2 md:h-20 md:w-20 ${i === active ? "border-[#FF9A1F]" : "border-transparent opacity-80"}`}
               >
                 <img {...responsiveImg(im.url, "80px")} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
               </button>
@@ -99,7 +103,7 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
   const colors = useMemo(() => [...new Set(variants.map(colorOf))].filter(Boolean), [variants]);
   const [color, setColor] = useState<string | null>(null);
-  const [set, setSet] = useState<string>(SETS[0].value);
+  const [set, setSet] = useState<string>(SETS[1].value);
   const activeColor = color ?? (colors.includes("Zwart") ? "Zwart" : colors[0]) ?? "";
   const variantFor = (setValue: string) => variants.find((v) => opt(v, /delige/i) === setValue && colorOf(v) === activeColor);
   const variant = variantFor(set);
@@ -145,8 +149,8 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
 
   return (
     <PageLayout seo={{ title: page.title, description: page.description, path: page.path, jsonLd, dutchOnly: true }}>
-      <div className="border-b border-border bg-secondary">
-        <p className="container flex max-w-6xl items-center justify-center gap-x-4 whitespace-nowrap py-2 text-[13px] font-semibold text-foreground md:text-sm">
+      <div className="bg-[#2B1C14]">
+        <p className="container flex max-w-6xl items-center justify-center gap-x-4 whitespace-nowrap py-2 text-[13px] font-semibold text-[#FFD48A] md:text-sm">
           <span className="flex items-center gap-1.5"><Truck aria-hidden className="h-4 w-4" />Gratis verzending NL en BE</span>
           <span className="flex items-center gap-1.5"><RotateCcw aria-hidden className="h-4 w-4" />30 dagen geld terug</span>
         </p>
@@ -161,24 +165,24 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
           <div className="min-w-0 space-y-5">
             <div className="space-y-2">
               <GoogleReviewLine />
-              <h1 className="text-[28px] font-extrabold leading-[1.1] tracking-tight text-foreground md:text-5xl">{page.h1}</h1>
+              <h1 className="text-[32px] font-extrabold leading-[1.02] text-foreground md:text-6xl">{page.h1}</h1>
               <p className="text-base text-foreground/75">SenseGlow Wall Lamp, oplaadbaar via USB-C</p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3" aria-live="polite">
               {was != null && off > 0 && <s className="text-xl text-foreground/50">{formatPrice(was)}</s>}
-              <span className="text-4xl font-extrabold tracking-tight text-[#D92D20]">{price != null ? formatPrice(price) : "…"}</span>
+              <span className="text-4xl font-extrabold tracking-tight text-[#E0362C]">{price != null ? formatPrice(price) : "…"}</span>
               {off > 0 && (
-                <span className="rounded-full bg-[#D92D20] px-3 py-1 text-sm font-bold text-white">
+                <span className="rounded-full bg-[#E0362C] px-3 py-1 text-sm font-bold text-white">
                   {bf ? "Black Friday " : ""}−{off}%
                 </span>
               )}
             </div>
 
             <ul className="space-y-2 text-[17px] text-foreground">
-              <li className="flex gap-3"><Hand aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#9A5B00]" />Plakken op de muur: geen boren, geen stroomkabel</li>
-              <li className="flex gap-3"><Footprints aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#9A5B00]" />Gaat vanzelf aan als je de trap nadert</li>
-              <li className="flex gap-3"><BatteryCharging aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#9A5B00]" />Oplaadbaar via USB-C: nooit meer batterijen kopen</li>
+              <li className="flex gap-3"><Hand aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#E07A00]" />Plakken op de muur: geen boren, geen stroomkabel</li>
+              <li className="flex gap-3"><Footprints aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#E07A00]" />Gaat vanzelf aan als je de trap nadert</li>
+              <li className="flex gap-3"><BatteryCharging aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#E07A00]" />Oplaadbaar via USB-C: nooit meer batterijen kopen</li>
             </ul>
 
             {colors.length > 1 && (
@@ -218,15 +222,15 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
                       role="radio"
                       aria-checked={selected}
                       onClick={() => setSet(s.value)}
-                      className={`relative flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-colors ${selected ? "border-foreground bg-[#FFF6E5]" : "border-border bg-background"}`}
+                      className={`relative flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-colors ${selected ? "lift border-[#FF9A1F] bg-white" : "border-border bg-white/60"}`}
                     >
-                      <span aria-hidden className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border-2 ${selected ? "border-foreground" : "border-foreground/30"}`}>
-                        {selected && <span className="h-3 w-3 rounded-full bg-foreground" />}
+                      <span aria-hidden className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border-2 ${selected ? "border-[#FF9A1F]" : "border-foreground/30"}`}>
+                        {selected && <span className="h-3 w-3 rounded-full bg-[#FF9A1F]" />}
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="flex flex-wrap items-center gap-2 text-lg font-extrabold text-foreground">
                           {s.title}
-                          {best && <span className="rounded-full bg-[#FFB020] px-2 py-0.5 text-xs font-bold text-[#0F1B2D]">Laagste prijs per lamp</span>}
+                          {best && <span className="rounded-full bg-gradient-to-r from-[#FFC24D] to-[#FF9A1F] px-2 py-0.5 text-xs font-bold text-[#1C120C]">Laagste prijs per lamp</span>}
                         </span>
                         <span className="block text-sm text-foreground/70">{s.fit}</span>
                       </span>
@@ -246,12 +250,12 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
               type="button"
               disabled={!available}
               onClick={add}
-              className="h-14 w-full rounded-full bg-[#FFB020] text-lg font-extrabold text-[#0F1B2D] shadow-[0_6px_0_#C98500] transition-transform hover:bg-[#FFA500] active:translate-y-1 active:shadow-[0_2px_0_#C98500] disabled:opacity-50 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#0F1B2D]"
+              className="btn-glow h-[60px] w-full rounded-full text-lg font-extrabold transition-transform active:scale-[0.98] disabled:opacity-50 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#1C120C]"
             >
               {buttonLabel}
             </button>
 
-            <ul className="space-y-2 rounded-2xl bg-secondary p-4 text-base text-foreground">
+            <ul className="lift space-y-2 rounded-3xl bg-white p-5 text-base text-foreground">
               <li className="flex gap-3"><Truck aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Bezorgd tussen <strong>{formatDeliveryDate(from)}</strong> en <strong>{formatDeliveryDate(to)}</strong>, gratis</span></li>
               <li className="flex gap-3"><RotateCcw aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Niet tevreden? 30 dagen geld terug, retour op onze kosten</span></li>
               <li className="flex gap-3"><ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>1 jaar extra garantie bovenop je wettelijke garantie</span></li>
@@ -274,8 +278,8 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
               ["Plakken", "Plak ze op de muur langs de trap, ongeveer om de 3 treden. Geen boren."],
               ["Lopen", "Loop de trap op of af: de lampen gaan vanzelf aan en daarna weer uit."],
             ].map(([t, d], i) => (
-              <li key={t} className="rounded-2xl border border-border p-5">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-lg font-extrabold text-background">{i + 1}</span>
+              <li key={t} className="lift rounded-3xl bg-white p-6">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full btn-glow text-lg font-extrabold">{i + 1}</span>
                 <h3 className="mt-3 text-xl font-extrabold text-foreground">{t}</h3>
                 <p className="mt-1 text-base text-foreground/80">{d}</p>
               </li>
@@ -285,9 +289,9 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
 
         <section aria-labelledby="vergelijk" className="mt-16 md:mt-24">
           <h2 id="vergelijk" className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">Waarom oplaadbaar beter werkt</h2>
-          <div className="mt-6 overflow-hidden rounded-2xl border border-border">
+          <div className="lift mt-6 overflow-hidden rounded-3xl bg-white">
             <table className="w-full text-left text-base">
-              <thead className="bg-foreground text-background">
+              <thead className="bg-[#1C120C] text-[#FFF8EF]">
                 <tr><th className="p-3 font-bold" scope="col"><span className="sr-only">Kenmerk</span></th><th className="p-3 font-bold" scope="col">SenseGlow</th><th className="p-3 font-bold" scope="col">Lampjes op batterijen</th></tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -316,13 +320,13 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
           </section>
         )}
 
-        <section className="mt-16 rounded-3xl bg-[#0F1B2D] p-6 text-center text-white md:mt-24 md:p-12">
+        <section className="night-glow mt-16 rounded-3xl p-8 text-center text-[#FFF8EF] md:mt-24 md:p-14">
           <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">Nooit meer in het donker de trap op</h2>
           <p className="mx-auto mt-2 max-w-md text-base text-white/80">Bestel vandaag, betaal achteraf met Klarna en probeer het 30 dagen.</p>
           <button
             type="button"
             onClick={() => document.getElementById("kopen")?.scrollIntoView({ behavior: "smooth" })}
-            className="mt-6 h-14 rounded-full bg-[#FFB020] px-8 text-lg font-extrabold text-[#0F1B2D] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="btn-glow mt-6 h-14 rounded-full px-8 text-lg font-extrabold focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Kies je set
           </button>
@@ -335,7 +339,7 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
             type="button"
             disabled={!available}
             onClick={add}
-            className="h-12 w-full rounded-full bg-[#FFB020] text-base font-extrabold text-[#0F1B2D] disabled:opacity-50"
+            className="btn-glow h-12 w-full rounded-full text-base font-extrabold disabled:opacity-50"
           >
             {SETS.find((s) => s.value === set)?.title} {activeColor.toLowerCase()} · {price != null ? formatPrice(price) : ""} · In winkelwagen
           </button>

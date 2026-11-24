@@ -29,35 +29,35 @@ html {
 @layer base {
   :root {
     /* Warm open wit */
-    --background: 0 0% 100%; /* #FFFFFF */
-    --background-secondary: 216 33% 96%; /* #F3F5F8 */
-    --foreground: 215 50% 12%; /* #0F1B2D nachtblauw */
-    --foreground-muted: 215 17% 39%; /* #536175 */
+    --background: 33 100% 97%; /* #FFF8EF crème */
+    --background-secondary: 33 62% 92%; /* #F6EBDD zand */
+    --foreground: 24 45% 11%; /* #2A1A10 espresso-inkt */
+    --foreground-muted: 24 18% 38%; /* #725A4C */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 50% 12%;
+    --card-foreground: 24 45% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 50% 12%;
+    --popover-foreground: 24 45% 11%;
 
     /* Mokka als hoofdkleur voor knoppen en vlakken */
-    --primary: 215 50% 12%; /* #0F1B2D */
-    --primary-foreground: 0 0% 100%;
+    --primary: 24 40% 9%; /* #1C120C espresso */
+    --primary-foreground: 33 100% 97%;
 
     /* Ambient oranje: dieper goud dan de vorige gele tint, contrasteert met het mokka bruin */
-    --cta: 39 100% 56%; /* #FFB020 lampgloed */
-    --cta-foreground: 215 50% 12%; /* nachtblauw op amber, contrast > 9:1 */
-    --cta-hover: 39 100% 50%; /* #FFA500 */
+    --cta: 36 100% 61%; /* #FFB238 lampgloed */
+    --cta-foreground: 24 40% 9%; /* espresso op amber, contrast > 9:1 */
+    --cta-hover: 28 100% 56%; /* #FF8A1F */
 
-    --secondary: 216 33% 96%;
-    --secondary-foreground: 215 50% 12%;
+    --secondary: 33 62% 92%;
+    --secondary-foreground: 24 45% 11%;
 
-    --muted: 216 33% 96%;
-    --muted-foreground: 215 17% 35%;
+    --muted: 33 62% 92%;
+    --muted-foreground: 24 18% 34%;
 
     /* Oranje accent */
-    --accent: 39 100% 56%; /* #FFB020 */
-    --accent-foreground: 215 50% 12%;
+    --accent: 36 100% 61%; /* #FFB238 */
+    --accent-foreground: 24 40% 9%;
     /* Donkerder goud voor tekst en iconen: contrast >= 4.5 op warm wit */
     --accent-ink: 35 100% 30%; /* #9A5B00 */
 
@@ -65,31 +65,31 @@ html {
     --destructive-foreground: 0 0% 100%;
 
     /* Rustige warme lijnen */
-    --border: 216 22% 90%;
-    --border-strong: 216 16% 78%;
-    --input: 216 22% 90%;
-    --ring: 215 50% 12%;
+    --border: 30 35% 85%;
+    --border-strong: 28 25% 72%;
+    --input: 30 35% 85%;
+    --ring: 28 100% 56%;
 
-    --hero-foreground: 0 0% 100%;
+    --hero-foreground: 33 100% 97%;
 
     /* Accent-aliassen zodat bestaande klassen mee veranderen */
-    --glow: 39 100% 56%;
+    --glow: 36 100% 61%;
     --glow-light: 39 100% 75%;
-    --brand-amber: 39 100% 56%;
+    --brand-amber: 36 100% 61%;
     --brand-amber-light: 39 100% 92%;
 
     --radius: 0.75rem;
 
     --section-curve: 0px;
 
-    --sidebar-background: 216 33% 96%;
-    --sidebar-foreground: 215 50% 12%;
-    --sidebar-primary: 215 50% 12%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 216 33% 94%;
-    --sidebar-accent-foreground: 215 50% 12%;
-    --sidebar-border: 216 22% 90%;
-    --sidebar-ring: 215 50% 12%;
+    --sidebar-background: 33 62% 92%;
+    --sidebar-foreground: 24 45% 11%;
+    --sidebar-primary: 24 40% 9%;
+    --sidebar-primary-foreground: 33 100% 97%;
+    --sidebar-accent: 33 62% 90%;
+    --sidebar-accent-foreground: 24 45% 11%;
+    --sidebar-border: 30 35% 85%;
+    --sidebar-ring: 28 100% 56%;
   }
 }
 
@@ -112,10 +112,11 @@ html {
   h2,
   h3,
   .font-display {
-    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Fraunces", Georgia, serif;
     font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
+    font-variation-settings: "SOFT" 100, "opsz" 72;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
   }
 
   h1 {
@@ -124,6 +125,24 @@ html {
 }
 
 @layer utilities {
+  /* Lampgloed-knop: verloop van amber naar oranje met warme gloed eronder */
+  .btn-glow {
+    background: linear-gradient(180deg, #FFC24D 0%, #FF9A1F 100%);
+    color: #1C120C;
+    box-shadow: 0 10px 28px -6px rgba(255, 138, 31, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+  .btn-glow:hover { background: linear-gradient(180deg, #FFB238 0%, #FF8A1F 100%); }
+  /* Donker vlak met lichtbron: zoals de lamp in een donkere trapgang */
+  .night-glow {
+    background:
+      radial-gradient(60% 55% at 70% 35%, rgba(255, 170, 60, 0.35) 0%, rgba(255, 170, 60, 0) 70%),
+      radial-gradient(40% 40% at 15% 90%, rgba(255, 120, 30, 0.18) 0%, rgba(255, 120, 30, 0) 70%),
+      #1C120C;
+  }
+  .lift {
+    box-shadow: 0 1px 2px rgba(42, 26, 16, 0.06), 0 12px 32px -12px rgba(42, 26, 16, 0.28);
+  }
+
   /* Rustige dwarsstreep onder kleine kopjes */
   .eyebrow {
     @apply text-[11px] uppercase tracking-[0.28em] text-foreground/45;
