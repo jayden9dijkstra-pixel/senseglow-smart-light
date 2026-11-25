@@ -20,7 +20,7 @@ export const VoetCTA = () => {
               size="lg"
               className="text-sm font-medium tracking-wide rounded-sm px-8 py-6 bg-cta text-cta-foreground hover:bg-cta-hover focus-visible:ring-cta transition-all duration-500"
             >
-              Bekijk alle producten
+              Alle producten
             </Button>
             <Link
               to="/contact"

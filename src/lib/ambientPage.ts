@@ -24,7 +24,7 @@ export const AMBIENT_SPECS: [string, string][] = [
   ["Lichtstanden", "Aan bij beweging, altijd aan of uit"],
   ["Sensor", "Tot 5 meter, 120°"],
   ["Voeding", "USB-C oplaadbaar (kabel inbegrepen)"],
-  ["Opladen", "Eén keer per paar weken"],
+  ["Opladen", "Via USB-C"],
   ["Bevestiging", "Magneet + plakstrip (inbegrepen)"],
   ["Licht", "Warm, zacht licht"],
 ];

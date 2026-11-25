@@ -1,4 +1,4 @@
-import { businessLine, TRADE_NAME_LINE } from "@/lib/businessInfo";
+import { FOOTER_BUSINESS_LINE } from "@/lib/businessInfo";
 import { openCookieSettings } from "@/lib/consent";
 import { useState } from "react";
 import { SGMonogram } from "@/components/brand/SGMonogram";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { paymentMethods } from "@/components/layout/PaymentIcons";
-import { subscribeToNewsletter, DISCOUNT_CODE } from "@/lib/klaviyo";
+import { subscribeToNewsletter } from "@/lib/klaviyo";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const FooterNewsletter = () => {
@@ -37,9 +37,6 @@ const FooterNewsletter = () => {
           <Check className="h-4 w-4 text-accent-ink" />
            {t("Je staat op de lijst.")}
         </div>
-        <p className="text-sm text-foreground/75">
-          Gebruik <span className="text-accent-ink font-medium">{DISCOUNT_CODE}</span> bij het afrekenen voor 10% korting.
-        </p>
       </div>
     );
   }
@@ -96,7 +93,7 @@ export const SiteFooter = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Over ons</h4>
+              <h3 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Over ons</h3>
               <ul className="space-y-0 text-sm">
                 <li><Link to={localizePath("/waarom-senseglow")} className={linkClass}>Waarom SenseGlow</Link></li>
                 <li><Link to={localizePath("/over")} className={linkClass}>Over SenseGlow</Link></li>
@@ -104,7 +101,7 @@ export const SiteFooter = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Juridisch</h4>
+              <h3 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Juridisch</h3>
               <ul className="space-y-0 text-sm">
                 <li><Link to={localizePath("/privacy")} className={linkClass}>Privacybeleid</Link></li>
                 <li><Link to={localizePath("/voorwaarden")} className={linkClass}>Algemene voorwaarden</Link></li>
@@ -112,7 +109,7 @@ export const SiteFooter = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Blijf op de hoogte</h4>
+              <h3 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Blijf op de hoogte</h3>
               <FooterNewsletter />
             </div>
           </div>
@@ -134,8 +131,7 @@ export const SiteFooter = () => {
           </div>
 
           <address className="not-italic space-y-1 text-sm text-foreground/80 pt-10 mt-10 border-t border-foreground/6">
-            <p className="text-base text-foreground">{TRADE_NAME_LINE}</p>
-            <p>{businessLine()}</p>
+            <p>{FOOTER_BUSINESS_LINE}</p>
           </address>
 
           <div className="text-[11px] text-foreground/75 pt-10 mt-10 border-t border-foreground/6">

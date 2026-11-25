@@ -41,7 +41,7 @@
 - [x] 22 gerichte tests en mobiele koop-/checkoutcontrole geslaagd; niet gepubliceerd.
 
 ## Klaar
-- Testreviews (vrienden/familie) verwijderd van alle openbare pagina's; intern gearchiveerd in `src/lib/_internal/legacy-testreviews.ts`. Geen sterren, scores of aantallen meer; geen Review/AggregateRating in structured data.
+- Testreviews (vrienden/familie) verwijderd van alle openbare pagina's; Geen sterren, scores of aantallen meer; geen Review/AggregateRating in structured data.
 - Productenpagina en homepage: laden, technische fout (met "opnieuw proberen") en werkelijk lege catalogus zijn nu drie aparte toestanden. `fetchProducts` slikt fouten niet meer.
 - Catalogus wordt bij de build vooraf gerenderd (echte namen, prijzen, afbeeldingen, links + ItemList-schema) op `/` en `/producten`, zodat crawlers dezelfde inhoud zien als bezoekers.
 - Verzending: overal 7-14 dagen totaal inclusief verwerking; gratis naar Nederland en België.

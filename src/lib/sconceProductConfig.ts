@@ -8,7 +8,7 @@ export const SCONCE_HERO_CONTENT = {
     "Een set van 2 draadloze wandlampen op batterij. Geen bedrading, geen elektricien, gewoon ophangen en genieten.",
   bullets: [
     "Volledig draadloos op accu (12.000mAh)",
-    "Tot ±30 dagen licht per lading",
+    "Oplaadbare accu",
     "Touch-bediening: aan, uit en dimmen",
   ],
 };
@@ -17,7 +17,7 @@ export const SCONCE_OUTCOME_HEADLINE = "Sfeervolle wandverlichting, zonder geree
 
 export const SCONCE_OUTCOMES = [
   { icon: "🪛", title: "Geen boren, geen schade", description: "Ideaal voor huurders en perfectionisten, beugel zonder gaten in de muur." },
-  { icon: "🔋", title: "Tot 30 dagen per lading", description: "12.000mAh accu houdt het wekenlang vol bij normaal gebruik." },
+  { icon: "🔋", title: "Oplaadbare accu", description: "Oplaadbare accu van 12.000mAh." },
   { icon: "✋", title: "Touch-bediening", description: "Tik voor aan/uit, houd vast om te dimmen. Eindeloos veel mogelijkheden." },
 ];
 
@@ -41,7 +41,7 @@ export const SCONCE_USE_CASES = [
 ];
 
 export const SCONCE_TECH_BENEFITS = [
-  { icon: "🔋", tech: "12.000mAh accu", benefit: "Tot ±30 dagen brandtijd op één volle lading" },
+  { icon: "🔋", tech: "12.000mAh accu", benefit: "Oplaadbaar, geen wegwerpbatterijen" },
   { icon: "✋", tech: "Touch-bediening", benefit: "Tik voor aan/uit, houd vast om te dimmen" },
   { icon: "🪝", tech: "Magnetische beugel", benefit: "Ophangen zonder boren, of met schroeven, jij kiest" },
   { icon: "🏠", tech: "Indoor design", benefit: "Premium afwerking in zilver, zwart of goud" },
@@ -49,7 +49,7 @@ export const SCONCE_TECH_BENEFITS = [
 
 export const SCONCE_FAQS = [
   { question: "Moet ik boren?", answer: "Nee. De meegeleverde beugel hangt zonder boren, geen gaten in de muur. Schroeven zitten er wel bij voor wie dat wil." },
-  { question: "Hoe lang gaan de lampen mee per lading?", answer: "Bij normaal gebruik ongeveer 30 dagen op één volle lading. Opladen via USB." },
+  { question: "Hoe vaak moet ik opladen?", answer: "Dat hangt af van hoe vaak de lampen aangaan. Opladen via USB." },
   { question: "Wat zit er in de set?", answer: "Twee wandlampen, voor symmetrische plaatsing aan beide kanten van een bed of bank." },
   { question: "Mag dit buiten?", answer: "Nee, de Sconce is uitsluitend geschikt voor binnen, niet waterdicht." },
 ];

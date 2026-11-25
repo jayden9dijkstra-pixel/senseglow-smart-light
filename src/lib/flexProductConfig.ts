@@ -67,7 +67,7 @@ export const FLEX_USE_CASES = [
   {
     icon: "💻",
     title: "Bureau / study setup",
-    description: "Perfect gericht licht op je werkplek",
+    description: "Gericht licht op je werkplek",
   },
   {
     icon: "📖",
@@ -145,7 +145,7 @@ export const FLEX_FAQS = [
       "Nee, je bevestigt de SenseGlow Flex™ met de ingebouwde magneet of de meegeleverde 3M strip. Geen gereedschap nodig.",
   },
   {
-    question: "Hoe lang gaat de batterij mee?",
+    question: "Hoe vaak moet ik opladen?",
     answer:
       "3 tot 20 uur afhankelijk van het ingestelde helderheidsniveau. Volledig opladen duurt 4-5 uur via USB-C.",
   },

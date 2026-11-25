@@ -40,7 +40,7 @@ export function HomeHero({ products }: { products: ShopifyProduct[] }) {
               Bekijk de Wall Lamp-set
             </Link>
             <a href="#products" className="inline-flex h-14 items-center justify-center rounded-full border-2 border-white/30 px-8 text-base font-bold text-[#FFF8EF] hover:border-white">
-              Alle lampen
+              Alle producten
             </a>
           </div>
           <p className="text-sm font-semibold text-[#FFF8EF]/70">Gratis verzending in NL en BE · 30 dagen geld terug · Achteraf betalen met Klarna</p>

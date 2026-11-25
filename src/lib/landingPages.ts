@@ -148,7 +148,6 @@ const SPECS: Record<string, SpecTable> = {
       ["Vermogen", "2W LED"],
       ["Batterij", "3.7V 1200mAh, ingebouwd, laadt op via de zon"],
       ["Laadtijd", "±6 uur in direct zonlicht"],
-      ["Licht per lading", "Tot 8-12 uur"],
       ["Waterdicht", "IP65"],
       ["Materiaal", "PC + ABS"],
       ["Montage", "Twee schroeven"],
@@ -178,7 +177,7 @@ const CHRISTMAS_FAQ: ProductFaq = {
 
 const AMBIENT_CHARGE_FAQ: ProductFaq = {
   question: "Hoe vaak moet ik opladen?",
-  answer: "Ongeveer één keer per paar weken, afhankelijk van hoe vaak de lamp aangaat. Je laadt hem op via USB-C; de kabel zit erbij.",
+  answer: "Dat hangt af van hoe vaak de lamp aangaat. Je laadt hem op via USB-C; de kabel zit erbij.",
 };
 
 const AMBIENT_MOUNT_FAQ: ProductFaq = {
@@ -364,10 +363,6 @@ export const LANDING_PAGES: LandingPage[] = [
         answer: "Ja. De PIR-bewegingssensor, ook wel bewegingsmelder genoemd, ziet beweging tot 6 meter binnen 120°. Je kiest uit alleen bij beweging, altijd aan (dim) of altijd uit.",
       },
       {
-        question: "Hoeveel uur licht geeft de buitenlamp op één lading?",
-        answer: "Tot 8-12 uur op een volle accu. Opladen duurt ongeveer 6 uur in direct zonlicht.",
-      },
-      {
         question: "Hoe monteer ik de solar lantaarn?",
         answer: "Met twee schroeven aan de muur, bij de voordeur, oprit, schuur of tuinpad. Er is geen kabel of stopcontact nodig.",
       },
@@ -419,7 +414,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "Bewegingssensor tot 5 meter, 120°",
       "3 lichtmodi: aan bij beweging / altijd aan / altijd uit",
       "Magneet + plakstrip inbegrepen, geen boren of kabels",
-      "USB-C oplaadbaar, één keer per paar weken laden",
+      "USB-C oplaadbaar",
     ],
     sections: [
       {
@@ -448,7 +443,7 @@ export const LANDING_PAGES: LandingPage[] = [
       "Bewegingssensor tot 5 meter, 120°",
       "3 lichtmodi: aan bij beweging / altijd aan / altijd uit",
       "Magneet + plakstrip inbegrepen, geen boren of kabels",
-      "USB-C oplaadbaar, één keer per paar weken laden",
+      "USB-C oplaadbaar",
     ],
     sections: [
       {

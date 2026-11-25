@@ -9,7 +9,7 @@ const items = [
   {
     icon: BatteryCharging,
     title: "USB-C oplaadbaar of solar",
-    body: "Geen AA-batterijen, geen wegwerp. Eens per maand bijladen, of laat de zon het werk doen.",
+    body: "Geen AA-batterijen, geen wegwerp. Opladen via USB-C, of laat de zon het werk doen.",
   },
   {
     icon: Magnet,

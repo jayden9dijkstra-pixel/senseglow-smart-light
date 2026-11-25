@@ -10,7 +10,7 @@ interface HowItWorksSectionProps {
 
 const defaultSteps: Step[] = [
   { title: "Plak 'm op", description: "Magneet en plakstrip zitten erin, geen schroef nodig." },
-  { title: "Laad op via USB-C", description: "Kabel inbegrepen, één keer per paar weken." },
+  { title: "Laad op via USB-C", description: "Kabel inbegrepen." },
   { title: "Loop er voorbij", description: "Het licht doet de rest." },
 ];
 

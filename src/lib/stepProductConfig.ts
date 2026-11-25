@@ -54,14 +54,14 @@ export const STEP_USE_CASES = [
 
 export const STEP_TECH_BENEFITS = [
   { icon: "📡", tech: "PIR bewegingssensor", benefit: "Detecteert beweging tot enkele meters" },
-  { icon: "🔋", tech: "USB-C oplaadbaar", benefit: "Eén keer per maand opladen, geen wegwerpbatterijen" },
+  { icon: "🔋", tech: "USB-C oplaadbaar", benefit: "Opladen via USB-C, geen wegwerpbatterijen" },
   { icon: "🧲", tech: "Zelfklevende montage", benefit: "Geen boren, geen schade aan de muur" },
   { icon: "💡", tech: "Zacht warm licht", benefit: "Niet verblindend, ook geschikt voor kinderen" },
 ];
 
 export const STEP_FAQS = [
   { question: "Moet ik boren?", answer: "Nee, de Step lampen plakken zelf op de muur of trap met een zelfklevende strip." },
-  { question: "Hoe lang gaat de batterij mee?", answer: "Bij normaal nachtelijk gebruik gaat een lamp ongeveer een maand mee op één lading via USB-C." },
+  { question: "Hoe vaak moet ik opladen?", answer: "Dat hangt af van hoe vaak de lamp aangaat. Je laadt hem op via USB-C." },
   { question: "Werkt het overdag ook?", answer: "De ingebouwde lichtsensor zorgt dat de lamp alleen aangaat in het donker, overdag blijft hij uit." },
   { question: "Welke set heb ik nodig?", answer: "Een 4-pack volstaat voor een korte trap of gang. Voor langere trappen of meerdere ruimtes raden we de 8-pack aan." },
 ];

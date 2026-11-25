@@ -46,7 +46,7 @@ import { ShippingContent } from "../src/pages/content/ShippingContent";
 import { ReviewPolicyContent } from "../src/pages/content/ReviewPolicyContent";
 import { PlacementGuideContent } from "../src/pages/content/PlacementGuideContent";
 import { hasPlacementGuideBonus, PLACEMENT_GUIDE_BONUS, PLACEMENT_GUIDE_PATH } from "../src/lib/placementGuide";
-import { businessLine, TRADE_NAME_LINE } from "../src/lib/businessInfo";
+import { FOOTER_BUSINESS_LINE } from "../src/lib/businessInfo";
 import { BehindSenseGlow } from "../src/components/product/BehindSenseGlow";
 import { SUPPORT_TRUST } from "../src/lib/purchaseTrust";
 import { GOOGLE_REVIEW, googleRatingLabel, googleReviewAttribution, googleReviewText } from "../src/lib/googleReviews";
@@ -497,7 +497,7 @@ function legalFallback(path: string, locale: Locale): string | null {
   }
 }
 
-const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal"><p>${escapeHtml(TRADE_NAME_LINE)}</p><p>${escapeHtml(businessLine())}</p></address></footer>`;
+const FOOTER_MARKUP = `<footer id="prerendered-footer" style="max-width:48rem;margin:0 auto;padding:24px;font-family:system-ui,sans-serif;font-size:12px"><address style="font-style:normal"><p>${escapeHtml(FOOTER_BUSINESS_LINE)}</p></address></footer>`;
 
 function writeRoute(path: string, html: string) {
   html = html

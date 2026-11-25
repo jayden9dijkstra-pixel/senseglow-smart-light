@@ -16,7 +16,7 @@ export const LANTERN_HERO_CONTENT = {
   bullets: [
     "Solar powered, geen stroom nodig",
     "Automatische sensor (dag/nacht + beweging)",
-    "IP65 waterproof, perfect voor buiten",
+    "IP65, geschikt voor buiten",
   ],
 };
 
@@ -105,7 +105,7 @@ export const LANTERN_TECH_BENEFITS = [
   {
     icon: "🔋",
     tech: "1200mAh batterij",
-    benefit: "6-12 uur opladen in de zon = 8-12 uur licht 's nachts",
+    benefit: "Overdag opladen in de zon, 's nachts licht",
   },
   {
     icon: "📡",

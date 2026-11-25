@@ -17,32 +17,36 @@ export const HOME_TILES_HEADING = "Voor elke kamer een ander licht";
 export const HOME_TILES_SUBTITLE = "Vijf producten. Vijf concrete problemen opgelost.";
 export const HOME_TILES = [
   {
+    productName: "Ambient Motion Bar",
     title: "Nooit meer struikelen 's nachts",
     body: "Bewegingssensor-balk onder het bed, zacht licht dat partners niet wakker maakt.",
     href: "/product/senseglow_ambient_motion_bar",
     imageAlt: "SenseGlow Ambient Motion Bar zwart onder het bed als nachtlicht",
   },
   {
+    productName: "SenseGlow Wave",
     title: "Een keuken die eindelijk áf voelt",
     body: "Sfeerverlichting met golfeffect, reageert als je langsloopt, geen elektricien nodig.",
     href: "/product/senseglow_wave",
     imageAlt: "SenseGlow Wave zwart onder keukenkastje met golvend licht",
   },
   {
+    productName: "SenseGlow Wall Lamp",
     title: "Veilig de trap op, ook 's nachts",
     body: "Set van 4 wandlampjes met sensor, zelfklevend. Gaan aan als je de trap nadert, zonder boren of kabels.",
-    href: "/trapverlichting",
-    handle: "senseglow_wall_lamp",
+    href: "/product/senseglow_wall_lamp",
     imageAlt: "SenseGlow Wall Lamp zwart langs de trap",
   },
   {
+    productName: "SenseGlow Solar Lantern",
     title: "Buitenmuur verlicht zonder kabel",
     body: "Solar buitenlamp met sensor, IP65, twee schroeven en klaar.",
     href: "/product/senseglow_solar_lantern",
     imageAlt: "SenseGlow Solar Lantern zwart brandt bij schemering",
   },
   {
-    title: "Bureau dat niet als studentenkamer aanvoelt",
+    productName: "SenseGlow Flex",
+    title: "Rustig, gericht licht op je bureau",
     body: "Touch-dimbare lamp voor late studie-sessies, magnetisch, verhuist mee.",
     href: "/product/senseglow_flex",
     imageAlt: "SenseGlow Flex wit boven houten bureau",
@@ -70,7 +74,7 @@ export const HOME_PILLARS = [
   },
   {
     title: "USB-C oplaadbaar of solar",
-    body: "Geen AA-batterijen, geen wegwerp. Eens per maand bijladen, of laat de zon het werk doen.",
+    body: "Geen AA-batterijen, geen wegwerp. Opladen via USB-C, of laat de zon het werk doen.",
   },
   {
     title: "Verhuist mee",
@@ -98,9 +102,9 @@ export const HOME_FAQS = [
       "Niet één van onze producten heeft een elektricien nodig. Vier producten zijn magnetisch of zelfklevend, alleen de Solar Lantern krijgt twee schroeven mee. Elk product is in een paar minuten geplaatst.",
   },
   {
-    question: "Hoe lang gaat de batterij mee?",
+    question: "Hoe vaak moet ik opladen?",
     answer:
-      "Tussen de 3 weken (Ambient bij intensief nachtgebruik) en 8 weken (Flex bij studie-gebruik). De Solar Lantern hoef je niet op te laden, die doet het zonnepaneel zelf.",
+      "Dat hangt af van hoe vaak de lamp aangaat. Alle lampen laad je op met een USB-C-kabel, dus je koopt nooit meer batterijen. De Solar Lantern laadt zichzelf op via het zonnepaneel.",
   },
   {
     question: "Krijg ik korting als ik meer lampen koop?",
@@ -115,7 +119,7 @@ export const HOME_FAQS = [
   {
     question: "Hoe snel wordt mijn bestelling geleverd?",
     answer:
-      "Tussen de 7 en 14 dagen in totaal, inclusief verwerking. Je krijgt een track-code per mail zodra het pakket onderweg is. Track via senseglow.shop/volg-je-bestelling.",
+      "Binnen 7–14 werkdagen, inclusief verwerking, gratis met DHL. Je krijgt een track-code per mail zodra het pakket onderweg is.",
   },
   {
     question: "Mag ik retourneren als het niet bevalt?",

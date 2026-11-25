@@ -69,7 +69,7 @@ const Index = () => {
             </div>
           ) : (
             <a href="/producten" className="inline-flex min-h-11 items-center text-base font-semibold text-accent-ink hover:underline">
-              Bekijk alle producten →
+              Alle producten →
             </a>
           )}
         </div>
@@ -78,7 +78,7 @@ const Index = () => {
       {/* 3. Reviews + FAQ */}
       <div id="faq" className="w-full bg-background">
         <CustomerReviews className="container max-w-5xl pt-16 md:pt-24" />
-        <FAQSection />
+        <FAQSection showTrust={false} />
       </div>
 
       {/* 9. VoetCTA */}

@@ -22,7 +22,7 @@ const defaultUseCases: UseCase[] = [
 ];
 
 export const UseCaseSection = ({
-  headline = "Perfect voor elke donkere plek",
+  headline = "Voor elke donkere plek",
   subtitle = "Bekijk waar SenseGlow™ het verschil maakt in jouw huis",
   useCases = defaultUseCases,
 }: UseCaseSectionProps) => {

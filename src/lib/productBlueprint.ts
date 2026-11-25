@@ -28,7 +28,7 @@ export const BLUEPRINT: Record<string, { benefits: Benefit[]; faqs: Faq[] }> = {
     ],
     faqs: [
       { question: "Moet ik boren?", answer: "Nee. Bevestiging met magneet en plakstrip (inbegrepen)." },
-      { question: "Hoe laad ik hem op?", answer: "Via USB-C, kabel inbegrepen. Eén keer per paar weken laden." },
+      { question: "Hoe laad ik hem op?", answer: "Via USB-C, kabel inbegrepen." },
       { question: "Wanneer gaat hij aan?", answer: "Hij gaat aan als jij eraan komt en uit als je weg bent. Er zijn 3 lichtmodi: aan bij beweging, altijd aan of altijd uit." },
       DELIVERY,
       RETURNS,

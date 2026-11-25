@@ -15,7 +15,7 @@ const trustIcons = [
   { icon: RotateCcw, text: "30 dagen gratis retour" },
 ];
 
-export const FAQSection = () => {
+export const FAQSection = ({ showTrust = true }: { showTrust?: boolean }) => {
   return (
     <section className="w-full bg-background py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
@@ -49,7 +49,7 @@ export const FAQSection = () => {
             ))}
           </Accordion>
 
-          <div className="flex flex-wrap justify-center gap-10 pt-10 border-t border-foreground/6">
+          {showTrust && <div className="flex flex-wrap justify-center gap-10 pt-10 border-t border-foreground/6">
             {trustIcons.map((item, idx) => {
               const Icon = item.icon;
               return (
@@ -59,7 +59,7 @@ export const FAQSection = () => {
                 </div>
               );
             })}
-          </div>
+          </div>}
         </div>
       </div>
     </section>

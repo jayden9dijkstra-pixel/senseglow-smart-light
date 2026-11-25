@@ -8,7 +8,7 @@ const points = [
   {
     icon: BatteryCharging,
     title: "USB-C, geen wegwerpbatterijen",
-    body: "Standaard sensor-lampen verbruiken 4-6 AA-batterijen per jaar. Onze Ambient-, Wave-, en Wall Lamp-producten zijn USB-C oplaadbaar, eens per 3-6 weken. Geen lege batterijen in de afvalbak, geen nieuwe aanschaffen, geen plastic verpakkingen.",
+    body: "Standaard sensor-lampen verbruiken 4-6 AA-batterijen per jaar. Onze Ambient-, Wave-, en Wall Lamp-producten zijn USB-C oplaadbaar. Geen lege batterijen in de afvalbak, geen nieuwe aanschaffen, geen plastic verpakkingen.",
   },
   {
     icon: Sun,
@@ -65,7 +65,7 @@ const Sustainability = () => {
           <Card className="border-foreground/10 bg-background">
             <CardContent className="p-6">
               <p className="text-foreground/75 leading-relaxed text-sm">
-                We zijn niet perfect. Onze producten worden in Azië gemaakt en verscheept met DHL. Dat is een keuze tussen betaalbaarheid en lokale productie die we niet verbloemen. Wat we wel doen: producten ontwerpen die jaren meegaan in plaats van seizoenen.
+                We zijn eerlijk: onze producten worden in Azië gemaakt en verscheept met DHL. Dat is een keuze tussen betaalbaarheid en lokale productie die we niet verbloemen. Wat we wel doen: producten ontwerpen die jaren meegaan in plaats van seizoenen.
               </p>
             </CardContent>
           </Card>

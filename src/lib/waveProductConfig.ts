@@ -117,9 +117,9 @@ export const WAVE_FAQS = [
       "Met een magnetische strip, geen gereedschap nodig. Plak de metalen strip op de gewenste plek en klik de lamp erop.",
   },
   {
-    question: "Hoe lang gaat de batterij mee?",
+    question: "Hoe vaak moet ik opladen?",
     answer:
-      "Meerdere dagen afhankelijk van gebruik. Bij normaal gebruik (10-15 activeringen per dag) gaat de batterij gemakkelijk een week mee.",
+      "Dat hangt af van hoe vaak de lamp aangaat. Je laadt hem op via USB-C.",
   },
   {
     question: "Kan ik de lichtkleur aanpassen?",

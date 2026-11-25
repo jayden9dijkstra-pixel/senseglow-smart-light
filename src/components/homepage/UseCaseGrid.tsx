@@ -32,7 +32,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
-            {tiles.map(({ icon: Icon, title, body, href, ...rest }, i) => {
+            {tiles.map(({ icon: Icon, productName, title, body, href, ...rest }, i) => {
               const handle = tileHandle({ href, ...rest });
               const product = productsByHandle.get(handle);
               const image = homeTileImage(
@@ -69,6 +69,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                     </div>
                   </div>
                   <div className="p-7">
+                    <p className="mb-2 text-sm font-medium text-accent-ink">{productName}</p>
                     <h3 className="font-semibold text-lg text-foreground mb-3 leading-snug">
                       {title}
                     </h3>
@@ -80,7 +81,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                         Vanaf {formatPrice(fromPrice)}
                       </p>
                     )}
-                    <span className="text-[11px] uppercase tracking-[0.2em] text-accent-ink group-hover:translate-x-1 inline-block transition-transform duration-500">
+                    <span className="text-sm font-medium text-accent-ink group-hover:translate-x-1 inline-block transition-transform duration-500">
                       Bekijken →
                     </span>
                   </div>

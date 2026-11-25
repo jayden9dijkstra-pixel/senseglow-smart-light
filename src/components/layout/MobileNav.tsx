@@ -45,17 +45,18 @@ export function MobileNav() {
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
+          className="text-primary hover:text-primary/80 hover:bg-transparent h-10 w-10"
           aria-label={t("Menu openen")}
         >
           <Menu className="h-6 w-6" />
         </Button>
       </DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Content className="fixed inset-0 z-[60] flex flex-col bg-background px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] outline-none data-[state=open]:animate-in data-[state=open]:fade-in-0 lg:hidden">
+        <DialogPrimitive.Overlay className="fixed inset-0 z-[60] hidden bg-foreground/50 lg:block motion-safe:data-[state=open]:animate-in motion-safe:data-[state=open]:fade-in-0" />
+        <DialogPrimitive.Content className="fixed inset-0 z-[60] flex flex-col bg-background px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] outline-none motion-safe:data-[state=open]:animate-in motion-safe:data-[state=open]:fade-in-0 lg:left-auto lg:w-[420px] lg:border-l lg:border-border lg:shadow-xl motion-safe:lg:data-[state=open]:slide-in-from-right">
           <div className="flex h-12 items-center justify-between">
-            <DialogPrimitive.Title className="text-sm font-medium text-foreground/75">{t("Menu")}</DialogPrimitive.Title>
-            <DialogPrimitive.Close className="p-2 text-foreground/70" aria-label={t("Sluiten")}>
+            <DialogPrimitive.Title className="text-base font-medium text-foreground/75">{t("Menu")}</DialogPrimitive.Title>
+            <DialogPrimitive.Close className="flex h-11 w-11 items-center justify-center text-foreground/70" aria-label={t("Sluiten")}>
               <X className="h-6 w-6" />
             </DialogPrimitive.Close>
           </div>
@@ -73,21 +74,21 @@ export function MobileNav() {
                 </Link>
               ) : (
                 <div key={g.title} className="mt-4 flex flex-col first:mt-0">
-                  <p className="pb-1 text-sm font-semibold uppercase tracking-wide text-foreground/75">{t(g.title)}</p>
+                  <p className="pb-1 text-base font-semibold uppercase tracking-wide text-foreground/75">{t(g.title)}</p>
                   {g.items.map((p) =>
                     p.handle ? (
                       <Link
                         key={p.href}
                         to={localizePath(p.href)}
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 border-b border-foreground/10 py-2.5"
+                        className="flex min-h-11 items-center gap-3 border-b border-foreground/10 py-2.5"
                       >
                         <span className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
                           {images[p.handle] && <img src={shopifySized(images[p.handle], 200)} alt="" width={48} height={48} loading="lazy" className="h-full w-full object-cover" />}
                         </span>
                         <span className="flex-1">
                           <span className="block text-base font-medium text-foreground">{t(p.label)}</span>
-                          {p.hint && <span className="block text-sm text-foreground/75">{t(p.hint)}</span>}
+                          {p.hint && <span className="block text-base text-foreground/75">{t(p.hint)}</span>}
                         </span>
                         <ChevronRight className="h-4 w-4 text-foreground/75" />
                       </Link>
