@@ -16,7 +16,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
   const productsByHandle = new Map(products.map((product) => [product.node.handle, product]));
 
   return (
-    <section className="w-full bg-background py-16 md:py-24 lg:py-32">
+    <section className="w-full bg-background-secondary py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div>
           <div className="text-center mb-16 animate-fade-in-slow">
@@ -48,7 +48,7 @@ export const UseCaseGrid = ({ products = [] }: UseCaseGridProps) => {
                   key={href}
                   id={i === 0 ? "first-product" : undefined}
                   to={href}
-                  className={`group text-left overflow-hidden rounded-lg border border-border/70 bg-background-secondary/40 backdrop-blur-sm hover:border-glow/40 hover:bg-background-secondary/70 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow lg:col-span-2${desktopPosition}${i === 0 ? " scroll-mt-24" : ""}`}
+                  className={`group text-left overflow-hidden rounded-lg border border-border/70 bg-background hover:border-glow/40 hover:-translate-y-1 hover:shadow-[0_10px_40px_-15px_hsl(var(--glow)/0.3)] transition-all duration-500 animate-fade-in-slow lg:col-span-2${desktopPosition}${i === 0 ? " scroll-mt-24" : ""}`}
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
                   <div className="relative aspect-square overflow-hidden rounded-lg bg-background-secondary">

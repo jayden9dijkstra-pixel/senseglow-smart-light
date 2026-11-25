@@ -1,6 +1,7 @@
 import { businessLine, TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { openCookieSettings } from "@/lib/consent";
 import { useState } from "react";
+import { SGMonogram } from "@/components/brand/SGMonogram";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -97,7 +98,7 @@ export const SiteFooter = () => {
             <div>
               <h4 className="text-[11px] uppercase tracking-[0.25em] font-medium mb-6 text-foreground/70">Over ons</h4>
               <ul className="space-y-0 text-sm">
-                
+                <li><Link to={localizePath("/waarom-senseglow")} className={linkClass}>Waarom SenseGlow</Link></li>
                 <li><Link to={localizePath("/over")} className={linkClass}>Over SenseGlow</Link></li>
                 <li><Link to={localizePath("/duurzaamheid")} className={linkClass}>Duurzaamheid</Link></li>
               </ul>
@@ -126,6 +127,10 @@ export const SiteFooter = () => {
                 <Icon key={name} className="h-8 md:h-9 w-auto text-primary/80 transition-colors duration-300 hover:text-accent-ink" />
               ))}
             </div>
+          </div>
+
+          <div className="flex justify-center pt-10 mt-10 border-t border-foreground/6">
+            <SGMonogram className="h-10 w-auto" />
           </div>
 
           <address className="not-italic space-y-1 text-sm text-foreground/80 pt-10 mt-10 border-t border-foreground/6">

@@ -168,3 +168,5 @@
 - [x] Rechtsvorm eenmanszaak door Jay bevestigd: in footerregel (businessLine), /contact-kaart en artikel 1 van /voorwaarden
 - [x] Vijf NL-landingspagina's in sitemap: /trapverlichting, /gangverlichting, /verlichting-vakantiewoning, /solar-buitenlamp, /lamp-studentenkamer
 - [ ] Publiceren (rechtsvorm en landingspagina's staan nog niet op het openbare domein)
+
+- [x] 26 nov: SG-monogram, favicons, cookiebalk onderaan, homepage opgeschoond, menu Binnen/Buiten/Alle producten/Service

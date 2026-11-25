@@ -18,7 +18,7 @@ export function GoogleReviewLine() {
 export function GoogleHomeReview() {
   const { locale } = useI18n();
   return (
-    <section aria-labelledby="google-review-heading" className="w-full bg-background py-10 md:py-14">
+    <section aria-labelledby="google-review-heading" className="w-full bg-background py-16 md:py-24">
       <div className="container grid max-w-5xl gap-6 md:grid-cols-[2fr_3fr] md:items-center">
         <figure className="lift overflow-hidden rounded-3xl bg-white">
           <img

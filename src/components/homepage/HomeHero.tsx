@@ -34,10 +34,10 @@ export function HomeHero({ products }: { products: ShopifyProduct[] }) {
           )}
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
-              to={localizePath("/trapverlichting")}
+              to={localizePath(`/product/${STEP_PRODUCT_HANDLE}`)}
               className="btn-glow inline-flex h-14 items-center justify-center rounded-full px-8 text-lg font-extrabold focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              Bekijk de trapverlichting
+              Bekijk de Wall Lamp-set
             </Link>
             <a href="#products" className="inline-flex h-14 items-center justify-center rounded-full border-2 border-white/30 px-8 text-base font-bold text-[#FFF8EF] hover:border-white">
               Alle lampen

@@ -14,3 +14,4 @@
 - Customer reviews live only in src/data/reviews.ts and the section hides when it is empty; why: no sample or invented reviews may ever render.
 - Scheduled offer display uses explicit dates in quantityOffer plus the shared useOfferDate boundary clock; default rate calculations remain unchanged for tracking, and Shopify still calculates cart discounts; why: temporary presentation must not change checkout or measurement.
 - Landing buy buttons share canPurchaseVariant and the selected primary offer's availability; why: the repeated button must never bypass the main button's stock check.
+- Header and mobile menu read one menu structure from src/components/layout/navItems.ts; the only logo is SGMonogram (BrandLogo wraps it); why: both menus and every logo stay identical.

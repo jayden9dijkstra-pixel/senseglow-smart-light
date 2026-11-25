@@ -106,13 +106,13 @@ export function CookieConsentBanner() {
   const [busy, setBusy] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Alleen opmaak: op mobiel ruimte onderaan de pagina zolang de balk open is.
+  // Alleen opmaak: ruimte onderaan de pagina zolang de balk open is.
   useEffect(() => {
     const el = panelRef.current;
     if (!visible || !el) return;
     const body = document.body;
     const sync = () => {
-      const h = window.innerWidth < 768 ? `${el.offsetHeight}px` : "";
+      const h = `${el.offsetHeight}px`;
       body.style.paddingBottom = h;
       document.documentElement.style.setProperty("--consent-bar-h", h || "0px");
     };
@@ -168,15 +168,15 @@ export function CookieConsentBanner() {
 
   if (!visible || window.location.pathname.startsWith("/admin")) return null;
 
-  const btn = "h-auto min-h-11 whitespace-normal rounded-full px-2 py-1.5 text-sm leading-tight sm:min-w-[9rem] sm:flex-1 sm:px-3 sm:text-sm";
+  const btn = "h-auto min-h-11 whitespace-normal rounded-full px-2 py-1.5 text-sm leading-tight sm:px-4 sm:text-sm md:min-w-[9rem] md:flex-none";
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[95] flex items-end justify-center sm:items-center sm:px-4">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[95]">
       <div
         ref={panelRef}
         role="dialog"
         aria-label="Cookie-instellingen"
-        className={`pointer-events-auto mx-auto w-full max-w-lg overflow-y-auto rounded-t-2xl border border-foreground/10 bg-card/95 px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl backdrop-blur-md sm:rounded-2xl sm:p-8 ${showSettings ? "max-h-[80vh]" : "max-h-[25vh]"} sm:max-h-none`}
+        className={`pointer-events-auto w-full overflow-y-auto rounded-t-2xl border-t border-foreground/10 bg-card/95 px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl backdrop-blur-md md:rounded-none md:px-8 md:py-3 ${showSettings ? "max-h-[80vh]" : "max-h-[25vh] md:flex md:items-center md:justify-center md:gap-6"}`}
       >
         <p className="text-sm text-foreground md:hidden">
           Wij gebruiken cookies.{" "}
@@ -218,7 +218,7 @@ export function CookieConsentBanner() {
           </div>
         )}
 
-        <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-5 sm:flex sm:flex-wrap">
+        <div className={`mt-2 grid grid-cols-3 gap-2 md:flex md:flex-nowrap ${showSettings ? "md:mt-4" : "md:mt-0"}`}>
           <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => respond(ALL)} className={btn}>
             Alles accepteren
           </Button>

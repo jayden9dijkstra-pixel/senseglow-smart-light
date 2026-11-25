@@ -5,52 +5,9 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n/I18nProvider";
 import { MobileNav } from "@/components/layout/MobileNav";
-import wordmark from "@/assets/logo-wordmark-sharp.png";
-import {
-  PRODUCT_HANDLE,
-  WAVE_PRODUCT_HANDLE,
-  STEP_PRODUCT_HANDLE,
-  LANTERN_PRODUCT_HANDLE,
-  FLEX_PRODUCT_HANDLE,
-} from "@/lib/productConfig";
+import { SGMonogram } from "@/components/brand/SGMonogram";
 
-type NavChild = { label: string; hint?: string; href: string };
-type NavItem = { label: string; href: string; children?: NavChild[] };
-
-const navItems: NavItem[] = [
-  {
-    label: "Voor thuis",
-    href: "/producten",
-    children: [
-      { label: "SenseGlow Wave", hint: "Kast en keuken", href: `/product/${WAVE_PRODUCT_HANDLE}` },
-      { label: "Ambient Motion Bar", hint: "Hal en wand", href: `/product/${PRODUCT_HANDLE}` },
-      { label: "SenseGlow Wall Lamp", hint: "Woonkamer", href: `/product/${STEP_PRODUCT_HANDLE}` },
-    ],
-  },
-  {
-    label: "Voor buiten",
-    href: "/producten",
-    children: [
-      { label: "SenseGlow Solar Lantern", hint: "Tuin en pad", href: `/product/${LANTERN_PRODUCT_HANDLE}` },
-    ],
-  },
-  {
-    label: "Voor werk",
-    href: "/producten",
-    children: [
-      { label: "SenseGlow Flex", hint: "Bureau en werkplek", href: `/product/${FLEX_PRODUCT_HANDLE}` },
-    ],
-  },
-  { label: "Waarom SenseGlow", href: "/waarom-senseglow" },
-  {
-    label: "Service",
-    href: "/contact",
-    children: [
-      { label: "Bestelling volgen", hint: "Je pakket traceren", href: "/volg-je-bestelling" },
-      { label: "Contact", hint: "Stel je vraag", href: "/contact" },
-    ],
-  },
-];
+import { NAV_ITEMS as navItems, type NavItem } from "@/components/layout/navItems";
 
 const NavDropdown = ({ item }: { item: NavItem }) => {
   const { t, localizePath } = useI18n();
@@ -96,17 +53,10 @@ export const SiteHeader = () => {
           <button
             onClick={() => navigate(localizePath("/"))}
             className="flex items-center shrink-0"
-            aria-label={t("Ga naar homepage")}
+            aria-label="SenseGlow – naar de homepage"
           >
-            <img
-              src={wordmark}
-              alt="SenseGlow logo"
-              width={1684}
-              height={308}
-              loading="eager"
-              {...{ fetchpriority: "high" }}
-              className="h-7 md:h-9 w-auto object-contain"
-            />
+            <SGMonogram className="h-9 md:h-11 w-auto" />
+            <span className="sr-only">SenseGlow</span>
           </button>
 
           {/* Midden: navigatie */}

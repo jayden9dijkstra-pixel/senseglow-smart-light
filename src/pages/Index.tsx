@@ -8,9 +8,6 @@ import { HomeHero } from "@/components/homepage/HomeHero";
 import { TrustBar } from "@/components/homepage/TrustBar";
 import { UseCaseGrid } from "@/components/homepage/UseCaseGrid";
 
-import { WhatTheyShare } from "@/components/homepage/WhatTheyShare";
-import { StorytellingSection } from "@/components/homepage/StorytellingSection";
-import { QuizIntroSection } from "@/components/homepage/QuizIntroSection";
 import { VoetCTA } from "@/components/homepage/VoetCTA";
 import { FAQSection } from "@/components/FAQSection";
 import { CustomerReviews } from "@/components/CustomerReviews";
@@ -55,67 +52,32 @@ const Index = () => {
 
       <GoogleHomeReview />
 
-      {/* 2. UseCaseGrid, 5 products */}
-      <div id="products" className="scroll-mt-24">
+      {/* 2. Productgrid met link naar alle producten */}
+      <div id="products" className="scroll-mt-24 bg-background-secondary">
         <UseCaseGrid products={products} />
-      </div>
-
-      
-
-      {/* 3. WhatTheyShare */}
-      <WhatTheyShare />
-
-      <div className="w-full bg-background-secondary">
-        {/* 4. Storytelling */}
-        <StorytellingSection />
-      </div>
-
-      {/* 5. QuizIntro */}
-      <div className="w-full bg-background-secondary">
-        <QuizIntroSection />
-      </div>
-
-      {/* 7. Naar de volledige collectie */}
-      <section className="w-full bg-background py-16 md:py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-6 md:px-8">
-          <div className="text-center">
-            {loading ? (
-              <div className="flex justify-center items-center py-6">
-                <Loader2 className="w-5 h-5 animate-spin text-foreground/75" />
-              </div>
-            ) : failed ? (
-              <div>
-                <p className="text-foreground/70 mb-3">
-                  De collectie kon nu niet geladen worden. Dit is een tijdelijke storing.
-                </p>
-                <Button
-                  variant="link"
-                  type="button"
-                  onClick={() => setAttempt((a) => a + 1)}
-                  className="text-[11px] uppercase tracking-[0.25em] text-accent-ink"
-                >
-                  Opnieuw proberen →
-                </Button>
-              </div>
-            ) : (
-              <>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">Alles op een rij</h2>
-                <p className="text-base text-foreground/75 mb-8">
-                  Bekijk alle lampen met prijzen, maten en kleuren.
-                </p>
-                <Button asChild variant="link" className="text-[11px] uppercase tracking-[0.25em] text-accent-ink">
-                  <a href="/producten">Bekijk alle producten →</a>
-                </Button>
-              </>
-            )}
-          </div>
+        <div className="-mt-8 pb-16 text-center md:-mt-12 md:pb-24">
+          {loading ? (
+            <Loader2 className="mx-auto h-5 w-5 animate-spin text-foreground/75" />
+          ) : failed ? (
+            <div>
+              <p className="mb-3 text-foreground/70">
+                De collectie kon nu niet geladen worden. Dit is een tijdelijke storing.
+              </p>
+              <Button variant="link" type="button" onClick={() => setAttempt((a) => a + 1)} className="text-base text-accent-ink">
+                Opnieuw proberen →
+              </Button>
+            </div>
+          ) : (
+            <a href="/producten" className="inline-flex min-h-11 items-center text-base font-semibold text-accent-ink hover:underline">
+              Bekijk alle producten →
+            </a>
+          )}
         </div>
-      </section>
+      </div>
 
-
-      {/* 8. FAQ */}
-      <div id="faq" className="w-full bg-background-secondary">
-        <CustomerReviews className="container max-w-5xl py-12" />
+      {/* 3. Reviews + FAQ */}
+      <div id="faq" className="w-full bg-background">
+        <CustomerReviews className="container max-w-5xl pt-16 md:pt-24" />
         <FAQSection />
       </div>
 
