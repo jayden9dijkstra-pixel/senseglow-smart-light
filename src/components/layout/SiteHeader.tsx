@@ -55,7 +55,7 @@ export const SiteHeader = () => {
             className="flex items-center shrink-0"
             aria-label="SenseGlow – naar de homepage"
           >
-            <SGMonogram className="h-9 md:h-11 w-auto" />
+            <SGMonogram className="h-8 md:h-10 w-auto" />
             <span className="sr-only">SenseGlow</span>
           </button>
 
