@@ -100,9 +100,9 @@ export function PriceRow({ price, was, label }: { price: number | null; was: num
   const off = price != null && was != null && was > price ? Math.round((1 - price / was) * 100) : 0;
   return (
     <div className="flex flex-wrap items-center gap-3" aria-live="polite">
-      {off > 0 && <s className="text-xl text-foreground/50">{formatPrice(was!)}</s>}
-      <span className="text-4xl font-extrabold tracking-tight text-[#E0362C]">{price != null ? formatPrice(price) : "…"}</span>
-      {off > 0 && <span className="rounded-full bg-[#E0362C] px-3 py-1 text-sm font-bold text-white">{label ? `${label} ` : ""}−{off}%</span>}
+      {off > 0 && <s className="text-xl text-muted-foreground">{formatPrice(was!)}</s>}
+      <span className={`text-4xl font-extrabold tracking-tight ${off > 0 ? "text-sale" : "text-foreground"}`}>{price != null ? formatPrice(price) : "…"}</span>
+      {off > 0 && <span className="rounded-full bg-sale px-3 py-1 text-sm font-bold text-white">{label ? `${label} ` : ""}−{off}%</span>}
     </div>
   );
 }
@@ -176,8 +176,8 @@ export function ChoiceCards({ legend, cards, value, onChange }: { legend: string
                 {c.sub && <span className="block text-sm text-foreground/70">{c.sub}</span>}
               </span>
               <span className="flex-none text-right">
-                <span className={`block text-lg font-extrabold ${off > 0 ? "text-[#E0362C]" : "text-foreground"}`}>{c.price != null ? formatPrice(c.price) : "…"}</span>
-                {off > 0 && <s className="block text-sm text-foreground/50">{formatPrice(c.was!)}</s>}
+                <span className={`block text-lg font-extrabold ${off > 0 ? "text-sale" : "text-foreground"}`}>{c.price != null ? formatPrice(c.price) : "…"}</span>
+                {off > 0 && <s className="block text-sm text-muted-foreground">{formatPrice(c.was!)}</s>}
               </span>
             </button>
           );
@@ -260,7 +260,8 @@ export function ProductFunnelPanel({
   const count = offer ? qty : 1;
   const q = quoteQty(unit, count, now);
   const price = offer ? q.total : unit;
-  const was = offer && q.rate > 0 ? Math.round(unit * count * 100) / 100 : compareAt;
+  // Doorgestreept alleen met een Shopify compare-at hoger dan de prijs.
+  const was = compareAt != null && compareAt > unit ? Math.round(compareAt * count * 100) / 100 : null;
   const bf = isBlackFriday(now);
   const sizePrice = (s: string) => {
     const v = variants.find((x) => partsOf(x).size === s && (partsOf(x).color === color || !color));
@@ -281,7 +282,7 @@ export function ProductFunnelPanel({
           onChange={(k) => onQtyChange(Number(k) as OfferQty)}
           cards={QTY_OPTIONS.map((n) => {
             const t = quoteQty(unit, n, now);
-            return { key: String(n), ...QTY_TEXT[n], price: t.total, was: t.rate > 0 ? Math.round(unit * n * 100) / 100 : null };
+            return { key: String(n), ...QTY_TEXT[n], price: t.total, was: compareAt != null && compareAt > unit ? Math.round(compareAt * n * 100) / 100 : null };
           })}
         />
       )}

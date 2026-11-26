@@ -27,13 +27,13 @@ export const HeroSection = ({ products = [] }: { products?: ShopifyProduct[] }) 
       <div className="container">
         <div className="grid items-center gap-5 pb-10 pt-4 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:py-28 animate-fade-in-slow">
           <div className="order-2 max-w-2xl md:order-1">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-hero-foreground/50 font-medium mb-6 hidden md:block">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-hero-foreground/80 font-medium mb-6 hidden md:block">
               {HOME_HERO.eyebrow}
             </p>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-hero-foreground">
               {HOME_HERO.h1}
             </h1>
-            <p className="mt-3 text-base md:mt-6 md:text-lg leading-relaxed text-hero-foreground/70 max-w-xl">
+            <p className="mt-3 text-base md:mt-6 md:text-lg leading-relaxed text-hero-foreground/85 max-w-xl">
               {HOME_HERO.subtitle.split(". ")[0].replace(/\.?$/, ".")}
             </p>
 

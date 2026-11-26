@@ -27,13 +27,13 @@ export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0, compareAt = 
       <div>
         {was != null && (
           <p className="text-base font-semibold text-foreground">
-            <span className="mr-2 rounded bg-primary px-1.5 py-0.5 text-sm text-primary-foreground">
-              {isBlackFriday(now) ? "Black Friday" : "Actie"} −{Math.round((1 - unitPrice / was) * 100)}%
+            <span className="mr-2 rounded bg-sale px-1.5 py-0.5 text-sm text-white">
+              {isBlackFriday(now) ? "Black Friday " : ""}−{Math.round((1 - unitPrice / was) * 100)}%
             </span>
-            <s className="text-foreground/70">{formatPrice(was)}</s>
+            <s className="text-muted-foreground">{formatPrice(was)}</s>
           </p>
         )}
-        <p className="text-3xl font-bold leading-tight text-primary">{formatPrice(unitPrice)}</p>
+        <p className={`text-3xl font-bold leading-tight ${was != null ? "text-sale" : "text-foreground"}`}>{formatPrice(unitPrice)}</p>
         {setLamps > 1 && (
           <p className="text-base text-foreground/80">
             {setLamps} lampen
@@ -44,7 +44,7 @@ export function PerLampPrice({ unitPrice, qty, offer, setLamps = 0, compareAt = 
   }
   return (
     <div>
-      <p className="text-3xl font-bold leading-tight text-primary">
+      <p className="text-3xl font-bold leading-tight text-foreground">
         {formatPrice(q.total)}
       </p>
       {count > 1 && (

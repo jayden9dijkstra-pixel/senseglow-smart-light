@@ -200,7 +200,7 @@ export const ProductHeroSection = ({
                 <div key={priceKey} className="flex flex-wrap items-baseline gap-x-3" style={{ animation: "fade-in 0.4s ease-out" }}>
                   <PerLampPrice unitPrice={unitPrice} qty={count} offer={offer} compareAt={offer ? null : compareAt} />
                   {offer && compareAt != null && unitPrice != null && compareAt > unitPrice && (
-                    <s className="text-base text-foreground/70">{formatPrice(compareAt)}</s>
+                    <s className="text-base text-muted-foreground">{formatPrice(compareAt)}</s>
                   )}
                 </div>
                 <p className="text-[15px] leading-snug text-foreground/85 md:text-base">{layout.promise}</p>
