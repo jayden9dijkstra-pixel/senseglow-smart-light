@@ -10,7 +10,9 @@ import { numericVariantId, trackViewItem } from "@/lib/adsTracking";
 import { trackSiteEvent } from "@/lib/siteAnalytics";
 import { useOfferDate } from "@/hooks/useOfferDate";
 import { isBlackFriday } from "@/lib/blackFriday";
-import { Lamp3D } from "@/components/product/Lamp3D";
+import { DeferredLamp3D } from "@/components/product/DeferredLamp3D";
+import { SetUnitPrice } from "@/components/product/SetUnitPrice";
+import { lampsInSet } from "@/lib/productBlueprint";
 import { ChoiceCards, FunnelGallery, FunnelTitle, GlowButton, Highlights, Pills, PriceRow, RiskBlock, partsOf, type Img, type Variant } from "@/components/product/FunnelBuy";
 
 const WALL_LAMP_3D = "https://cdn.shopify.com/s/files/1/0964/9497/7322/files/senseglow-wall-lamp-3d.glb";
@@ -92,6 +94,7 @@ export function TrapFunnelPanel({ product, title, sub, buttonRef, path, onVarian
     <div className="min-w-0 space-y-5">
       <FunnelTitle title={title} sub={sub} />
       <PriceRow price={price} was={was} label={isBlackFriday(now) ? "Black Friday" : undefined} />
+      <SetUnitPrice price={price} lamps={lampsInSet(variant)} />
       <Highlights items={HIGHLIGHTS} />
       <Pills label="Kleur" value={activeColor} options={colors} swatch onChange={setColor} />
       <ChoiceCards
@@ -139,13 +142,13 @@ export function TrapFunnel({ page, product, jsonLd }: { page: LandingPage; produ
       <div className="container max-w-6xl pb-16 pt-4 md:pt-10">
         <section id="kopen" className="grid gap-6 md:grid-cols-2 md:items-start md:gap-12">
           <div className="min-w-0 md:sticky md:top-24">
-            <FunnelGallery images={images} title={page.h1} chips={["Oplaadbaar via USB-C", "Plakken, geen boren"]} mobileAspect="aspect-[4/3]" />
+            <FunnelGallery images={images} title={page.h1} chips={["Oplaadbaar via USB-C", "Plakken, geen boren"]} compact mobileAspect="aspect-[5/2]" />
           </div>
           <TrapFunnelPanel product={product} title={page.h1} sub="SenseGlow Wall Lamp, oplaadbaar via USB-C" path={page.path} />
         </section>
 
         <section aria-labelledby="in-3d" className="mt-16 grid gap-6 md:mt-24 md:grid-cols-2 md:items-center md:gap-12">
-          <Lamp3D src={WALL_LAMP_3D} alt="SenseGlow Wall Lamp in 3D, set van 4" />
+          <DeferredLamp3D src={WALL_LAMP_3D} alt="SenseGlow Wall Lamp in 3D, set van 4" poster={images[0]?.url} />
           <div className="space-y-3">
             <h2 id="in-3d" className="text-3xl text-foreground md:text-5xl">Klein, plat en overal te plakken</h2>
             <p className="text-lg text-foreground/80">Bekijk de Wall Lamp van alle kanten. Het lampje zit op de trapmuur, de sensor kijkt mee en het licht valt naar beneden op de treden.</p>

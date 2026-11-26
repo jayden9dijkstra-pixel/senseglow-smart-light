@@ -10,22 +10,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Check, RotateCcw, Shield, Truck, Lightbulb } from "lucide-react";
-import { IdealIcon, PaypalIcon, KlarnaIcon, BancontactIcon } from "@/components/layout/PaymentIcons";
-import { useCartStore, mergeCheckoutLines, offerLampCount } from "@/stores/cartStore";
-import { cartUpsell } from "@/lib/quantityOffer";
+import { ShoppingCart, Minus, Plus, Trash2, Lock, Loader2, Check } from "lucide-react";
+import { useCartStore, mergeCheckoutLines } from "@/stores/cartStore";
 import { previewCart, type CartPreview } from "@/lib/shopify";
 import { formatVariantLabel } from "@/lib/productRegistry";
-import { toast } from "sonner";
 import { trackViewCart, numericVariantId, appendClickIdsToUrl } from "@/lib/adsTracking";
 import { formatPrice } from "@/lib/price";
-import { BLACK_FRIDAY_CART, BLACK_FRIDAY_DELIVERY, isBlackFriday } from "@/lib/blackFriday";
-import { useOfferDate } from "@/hooks/useOfferDate";
 import { useI18n } from "@/i18n/I18nProvider";
 import { freeDeliveryBetweenText } from "@/lib/delivery";
 
 export function CartDrawer() {
-  const now = useOfferDate();
   const { locale } = useI18n();
   const [isOpen, setIsOpen] = React.useState(false);
   const {
@@ -78,9 +72,6 @@ export function CartDrawer() {
     () => Math.round(items.reduce((t, i) => t + parseFloat(i.price.amount) * i.quantity, 0) * 100) / 100,
     [items],
   );
-  const lamps = offerLampCount(items);
-  const blackFriday = isBlackFriday(now) && lamps > 0;
-  const upsell = blackFriday ? BLACK_FRIDAY_CART : cartUpsell(lamps);
 
   // Shopify rekent de automatische korting 'Meer lampen' zelf uit; toon die
   // regels zodra de winkelwagen open staat.
@@ -219,26 +210,9 @@ export function CartDrawer() {
               </div>
 
               <div className="flex-shrink-0 space-y-2 pt-4 border-t bg-background">
-                {upsell && (
-                  <div className="flex items-center gap-2 rounded-lg bg-primary/5 px-3 py-2 text-sm text-foreground">
-                    <Lightbulb className="h-4 w-4 flex-shrink-0 text-primary" />
-                    <span>{upsell}</span>
-                  </div>
-                )}
-                {blackFriday && <p className="text-sm text-foreground" data-no-translate>{BLACK_FRIDAY_DELIVERY}</p>}
                 <div className="flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-400">
                   <Check className="h-4 w-4" />
                   <span>{freeDeliveryBetweenText(new Date(), locale)}</span>
-                </div>
-                {shopifyDiscounts?.map((d) => (
-                  <div key={d.title} className="flex justify-between items-center text-sm text-accent-ink">
-                    <span data-no-translate>{d.title}</span>
-                    <span>−{formatPrice(d.amount)}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between items-center text-sm text-muted-foreground">
-                  <span>Verzending</span>
-                  <span>Gratis</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Totaal</span>
@@ -266,17 +240,7 @@ export function CartDrawer() {
                   )}
                 </Button>
 
-                <div className="grid grid-cols-3 gap-2 pt-1 text-[11px] text-muted-foreground">
-                  <span className="flex items-center gap-1.5"><Truck className="h-3.5 w-3.5 text-primary" />Gratis NL en BE</span>
-                  <span className="flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" />30 dagen retour</span>
-                  <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow</span>
-                </div>
-                <div className="flex items-center gap-2 pb-1">
-                  <IdealIcon className="h-5 w-auto text-foreground/75" />
-                  <BancontactIcon className="h-5 w-auto text-foreground/75" />
-                  <PaypalIcon className="h-5 w-auto text-foreground/75" />
-                  <KlarnaIcon className="h-5 w-auto text-foreground/75" />
-                </div>
+                <p className="text-center text-sm text-muted-foreground">Gratis verzending · 30 dagen bedenktijd · Klarna</p>
               </div>
             </>
           )}

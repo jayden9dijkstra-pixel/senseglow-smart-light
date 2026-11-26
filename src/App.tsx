@@ -9,17 +9,13 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { captureClickIds, initializeAnalytics, trackPageView } from "@/lib/adsTracking";
 import { captureAngle } from "@/lib/angles";
 import { trackSiteEvent, startEngagementTracking } from "@/lib/siteAnalytics";
-// Kernpad blijft direct geladen: dit zijn de pagina's waar advertentieverkeer
-// op landt en waar geconverteerd wordt. Alles daarbuiten wordt pas opgehaald
-// zodra iemand er echt naartoe navigeert — dat houdt de eerste download klein
-// op mobiel, zonder de prerender-headscripts te raken (die lezen alleen
-// routepaden en metadata, niet de componenten zelf).
-import Index from "./pages/Index";
-import ProductDetail from "./pages/ProductDetail";
-import Catalog from "./pages/Catalog";
-import NotFound from "./pages/NotFound";
-import LandingPage from "./pages/LandingPage";
-import WithdrawalForm from "./pages/WithdrawalForm";
+// Routecode wordt alleen opgehaald wanneer die pagina wordt geopend.
+const Index = lazy(() => import("./pages/Index"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Catalog = lazy(() => import("./pages/Catalog"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const WithdrawalForm = lazy(() => import("./pages/WithdrawalForm"));
 import { LANDING_PATHS } from "@/lib/landingPages";
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const Quiz = lazy(() => import("./pages/Quiz"));

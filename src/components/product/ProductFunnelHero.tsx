@@ -79,7 +79,7 @@ export function ProductFunnelHero({
     <section id="kopen" className="container max-w-6xl scroll-mt-24 pb-6 pt-4 md:pt-10">
       <div className="grid gap-6 md:grid-cols-2 md:items-start md:gap-12">
         <div className="min-w-0 md:sticky md:top-24">
-          <FunnelGallery images={images} title={product.node.title} chips={CHIPS[handle] ?? []} activeUrl={pickedImage} />
+          <FunnelGallery images={images} title={product.node.title} chips={CHIPS[handle] ?? []} activeUrl={pickedImage} compact={handle === STEP_PRODUCT_HANDLE} mobileAspect={handle === STEP_PRODUCT_HANDLE ? "aspect-[5/2]" : "aspect-square"} />
         </div>
         {handle === STEP_PRODUCT_HANDLE ? (
           <TrapFunnelPanel product={product} title={cleanTitle(product.node.title)} sub={subtitle} buttonRef={btnRef} onVariantImage={setPickedImage} />

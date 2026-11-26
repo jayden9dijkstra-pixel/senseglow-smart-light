@@ -170,3 +170,11 @@
 - [ ] Publiceren (rechtsvorm en landingspagina's staan nog niet op het openbare domein)
 
 - [x] 26 nov: SG-monogram, favicons, cookiebalk onderaan, homepage opgeschoond, menu Binnen/Buiten/Alle producten/Service
+
+## Mobiele conversieverbetering (26 november 2026)
+- [x] Routecode en 3D uit eerste download; fonts lokaal; landingsfoto preload.
+- [x] Compacte winkelwagen zonder extra kortings-/cadeauregels, berekening ongewijzigd.
+- [x] Gekozen Wall Lamp-setprijs per lamp, getest voor 4/8 lampen.
+- [x] 107 tests en automatische controle geslaagd; 360/390/1440 prijsregel zichtbaar, winkelwagen en uitgesteld 3D gecontroleerd.
+- [ ] Bundelmeting na publicatie; openbare hoofd-JS vóór wijziging 1.100.318 bytes (332.385 gzip).
+- [ ] Publicatie aanvragen.

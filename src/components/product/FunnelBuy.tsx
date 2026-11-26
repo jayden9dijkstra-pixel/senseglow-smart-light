@@ -43,7 +43,7 @@ export function findVariant(variants: Variant[], color: string, size: string) {
 }
 
 /* ---------- galerij ---------- */
-export function FunnelGallery({ images, title, chips = [], mobileAspect = "aspect-square", activeUrl = null }: { images: Img[]; title: string; chips?: string[]; mobileAspect?: string; activeUrl?: string | null }) {
+export function FunnelGallery({ images, title, chips = [], mobileAspect = "aspect-square", activeUrl = null, compact = false }: { images: Img[]; title: string; chips?: string[]; mobileAspect?: string; activeUrl?: string | null; compact?: boolean }) {
   const [active, setActive] = useState(0);
   // Na een variantkeuze springt de hoofdfoto naar die variantfoto uit dezelfde galerij.
   useEffect(() => {
@@ -83,7 +83,7 @@ export function FunnelGallery({ images, title, chips = [], mobileAspect = "aspec
                 onClick={() => setActive(i)}
                 aria-label={`Foto ${i + 1}: ${im.altText ?? title}`}
                 aria-current={i === active}
-                className={`block h-16 w-16 overflow-hidden rounded-xl border-2 bg-white md:h-20 md:w-20 ${i === active ? "border-[#F4A261]" : "border-transparent opacity-80"}`}
+                className={`block ${compact ? "h-12 w-12" : "h-16 w-16"} overflow-hidden rounded-xl border-2 bg-white md:h-20 md:w-20 ${i === active ? "border-[#F4A261]" : "border-transparent opacity-80"}`}
               >
                 <img {...responsiveImg(im.url, "80px")} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
               </button>

@@ -15,3 +15,6 @@
 - Scheduled offer display uses explicit dates in quantityOffer plus the shared useOfferDate boundary clock; default rate calculations remain unchanged for tracking, and Shopify still calculates cart discounts; why: temporary presentation must not change checkout or measurement.
 - Landing buy buttons share canPurchaseVariant and the selected primary offer's availability; why: the repeated button must never bypass the main button's stock check.
 - Header and mobile menu read one menu structure from src/components/layout/navItems.ts; the only logo is SGMonogram (BrandLogo wraps it); why: both menus and every logo stay identical.
+
+- Route pages use dynamic imports; 3D loads only on visibility or interaction, and fonts are local WOFF2; why: mobile landings must not download unrelated pages, charts or 3D libraries.
+- Set unit-price display divides the selected live Shopify set price by its parsed lamp count; why: presentation follows variant and Shopify price updates without changing checkout calculations.

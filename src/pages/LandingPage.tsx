@@ -28,6 +28,7 @@ import { TRADE_NAME_LINE } from "@/lib/businessInfo";
 import { getBeforeAfterPair } from "@/lib/beforeAfterImages";
 import { PurchaseReassurance } from "@/components/product/PurchaseReassurance";
 import { PlacementGuideBonus } from "@/components/product/PlacementGuideBonus";
+import { SetUnitPrice } from "@/components/product/SetUnitPrice";
 import { parseVariantLabel } from "@/lib/productRegistry";
 import { STEP_PRODUCT_HANDLE } from "@/lib/productConfig";
 import NotFound from "./NotFound";
@@ -214,6 +215,7 @@ function OfferCard({ offer, product, sticky, hideImage, solo, viewPath, directCo
       {saving != null && <p className="text-base font-medium text-foreground">{formatPrice(saving)} voordeliger dan 2 sets van 4</p>}
       {picker && <QuantityOfferPicker unitPrice={unit} value={qty} onChange={setQty} />}
       <PerLampPrice unitPrice={unit} qty={count} offer={picker} setLamps={lampsInSet(variant)} compareAt={!picker && variant?.compareAtPrice ? parseFloat(variant.compareAtPrice.amount) : null} />
+      {offer.handle === STEP_PRODUCT_HANDLE && <SetUnitPrice price={unit} lamps={lampsInSet(variant)} />}
       <Button
         ref={btnRef}
         disabled={!available}

@@ -24,6 +24,7 @@ import {
   breadcrumbSchema,
 } from "../src/lib/structuredData";
 import type { ShopifyProduct } from "../src/lib/shopify";
+import { responsiveImg } from "../src/lib/shopifyImage";
 import { getProductContent } from "../src/lib/productContent";
 import { LANDING_PAGES, landingOfferPrice, offerImage, offerProductHref, type LandingPage } from "../src/lib/landingPages";
 import { WHY_HEADING, WHY_CONTACT_TEXT, whyItems } from "../src/lib/whySenseGlow";
@@ -614,6 +615,12 @@ async function main() {
   const byHandle: Record<string, ShopifyProduct> = {};
   for (const prod of catalogProducts) byHandle[prod.node.handle] = prod;
   for (const page of LANDING_PAGES) {
+    const first = page.offers[0];
+    const images = first ? byHandle[first.handle]?.node.images?.edges?.map((e) => e.node) ?? [] : [];
+    // De trapfunnel toont trapfoto's eerst; overige landingspagina's volgen hun scènekeuze.
+    const lcpImage = page.funnel ? images.find((image) => /trap/i.test(image.altText ?? "")) ?? images[0] : first ? offerImage(first, images) : undefined;
+    const lcp = lcpImage ? responsiveImg(lcpImage.url, "(min-width: 768px) 50vw, 100vw") : undefined;
+    const imagePreload = lcp ? `<link rel="preload" as="image" href="${escapeAttr(lcp.src)}"${lcp.srcSet ? ` imagesrcset="${escapeAttr(lcp.srcSet)}" imagesizes="${escapeAttr(lcp.sizes)}"` : ""} fetchpriority="high" />` : "";
     const handles = [...new Set(page.offers.map((o) => o.handle))];
     const schemas: unknown[] = handles
       .filter((h) => byHandle[h])
@@ -626,7 +633,7 @@ async function main() {
     const html = render({ path: page.path, seo: { title: page.title, description: page.description }, schemas, ogType: "website", dutchOnly: true, noindex: page.noindex })
       .replace(
         /<\/head>/i,
-        `    <style>.js-on #prerendered-landing{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
+        `    ${imagePreload}\n    <style>.js-on #prerendered-landing{display:none}</style><script>document.documentElement.classList.add("js-on")</script>\n  </head>`,
       )
       .replace(/(<div id="root">)/i, `$1${landingFallback(page, byHandle)}`);
     writeRoute(page.path, html);
