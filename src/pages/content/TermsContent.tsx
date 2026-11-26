@@ -58,7 +58,7 @@ export const TermsContent = () => {
           </Article>
 
           <Article n={6} title="Levering">
-            <p>SenseGlow verwerkt bestellingen binnen 1-3 werkdagen. De bezorgtijd is 7-14 werkdagen na de bestelling, inclusief verwerking, via DHL. SenseGlow levert in Nederland en België.</p>
+            <p>SenseGlow verwerkt bestellingen binnen 1-3 werkdagen. De bezorgtijd is 7-14 werkdagen na de bestelling, inclusief verwerking, via een vervoerder. SenseGlow levert in Nederland en België.</p>
             <p>Het risico van beschadiging of vermissing van producten berust bij SenseGlow tot het moment van bezorging aan de consument.</p>
           </Article>
 

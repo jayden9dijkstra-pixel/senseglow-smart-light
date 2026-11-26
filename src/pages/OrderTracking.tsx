@@ -446,7 +446,7 @@ const OrderResult = ({
           <dl className="space-y-4 text-sm">
             <div>
               <dt className="text-foreground/75">Verzendmethode</dt>
-              <dd className="text-foreground">{order.fulfillment?.carrier ?? "DHL Standard"}</dd>
+              <dd className="text-foreground">{order.fulfillment?.carrier?.trim() || "Vervoerder"}</dd>
             </div>
             <div>
               <dt className="text-foreground/75">Track en trace</dt>

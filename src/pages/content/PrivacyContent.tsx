@@ -101,7 +101,7 @@ export const PrivacyContent = () => {
             <p className="text-foreground/70">Voor het uitvoeren van onze dienst werken we met de volgende verwerkers/partijen:</p>
             <ul className="space-y-2 text-foreground/70 list-disc pl-6">
               <li><strong>Shopify</strong> (Canada/VS), onze webshop-platform en betaalverwerking. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
-              <li><strong>DHL</strong> (Nederland/EU), bezorging van pakketten. Ontvangt NAW + telefoonnummer.</li>
+              <li><strong>Vervoerders die je pakket bezorgen</strong> (Nederland/EU), bezorging van pakketten. Ontvangen NAW + telefoonnummer.</li>
               <li><strong>Betaalprovider</strong> (Mollie, Stripe, of vergelijkbaar, EU), verwerkt betalingen.</li>
               <li><strong>E-mailprovider</strong>, ontvangt e-mailadres + naam voor transactionele en marketing-mails.</li>
               <li><strong>Google</strong> (VS), advertentiemeting en website-analyse. Alleen na cookie-toestemming. Waarborg: EU-Standard Contractual Clauses (SCC's).</li>
