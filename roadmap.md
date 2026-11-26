@@ -176,5 +176,5 @@
 - [x] Compacte winkelwagen zonder extra kortings-/cadeauregels, berekening ongewijzigd.
 - [x] Gekozen Wall Lamp-setprijs per lamp, getest voor 4/8 lampen.
 - [x] 107 tests en automatische controle geslaagd; 360/390/1440 prijsregel zichtbaar, winkelwagen en uitgesteld 3D gecontroleerd.
-- [ ] Bundelmeting na publicatie; openbare hoofd-JS vóór wijziging 1.100.318 bytes (332.385 gzip).
-- [ ] Publicatie aanvragen.
+- [x] Openbare hoofd-JS gemeten: 1.100.318 → 882.586 bytes; gzip 332.385 → 268.946 bytes. Nieuwe HTML heeft lokale fontpreload en landingsfoto-preload.
+- [x] Publicatie aangevraagd; nieuwe versie via https://www.senseglow.shop/trapverlichting met HTTP 200 gecontroleerd.
