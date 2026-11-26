@@ -11,6 +11,7 @@ export function organizationSchema() {
     name: SITE_NAME,
     url: SITE_URL,
     email: "support@senseglow.shop",
+    logo: `${SITE_URL}/logo-sg-512.png`,
   };
 }
 
