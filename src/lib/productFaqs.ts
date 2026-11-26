@@ -13,7 +13,7 @@ export const purchaseFaqs: ProductFaq[] = [
   },
   {
     question: "Kan ik mijn bestelling retourneren?",
-    answer: "Ja. Je hebt het wettelijke herroepingsrecht van 14 dagen, en bij ons kun je binnen 30 dagen retour aanmelden. Het modelformulier staat op senseglow.shop/herroepingsformulier.",
+    answer: "Ja. Je hebt het wettelijke herroepingsrecht van 14 dagen, en bij ons kun je binnen 30 dagen retour aanmelden. Je stuurt terug naar ons adres in Kimswerd en betaalt alleen de Nederlandse verzendkosten. Defect of verkeerd geleverd? Dan betalen wij. Het modelformulier staat op senseglow.shop/herroepingsformulier.",
   },
 ];
 

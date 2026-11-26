@@ -58,7 +58,7 @@ export const ShippingContent = () => {
                 },
                 {
                   n: "3",
-                  title: "DHL bezorgt",
+                  title: "De vervoerder bezorgt",
                   body: "Levering in 7-14 werkdagen. Via senseglow.shop/volg-je-bestelling volg je 'm met je track-code.",
                 },
               ].map(({ n, title, body }) => (

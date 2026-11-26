@@ -65,7 +65,7 @@ const Sustainability = () => {
           <Card className="border-foreground/10 bg-background">
             <CardContent className="p-6">
               <p className="text-foreground/75 leading-relaxed text-sm">
-                We zijn eerlijk: onze producten worden in Azië gemaakt en verscheept met DHL. Dat is een keuze tussen betaalbaarheid en lokale productie die we niet verbloemen. Wat we wel doen: producten ontwerpen die jaren meegaan in plaats van seizoenen.
+                We zijn eerlijk: onze producten worden in Azië gemaakt en per pakket verzonden. Dat is een keuze tussen betaalbaarheid en lokale productie die we niet verbloemen. Wat we wel doen: producten ontwerpen die jaren meegaan in plaats van seizoenen.
               </p>
             </CardContent>
           </Card>

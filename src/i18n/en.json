@@ -450,7 +450,7 @@
   "Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit is een post- en retouradres, geen bezoekadres of winkel. De verzendkosten voor het terugsturen zijn voor jou, behalve als het product defect of verkeerd geleverd is.": "Return address: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. This is a postal and return address, not a visiting address or shop. The shipping costs for the return are yours, unless the product is defective or was delivered incorrectly.",
   "Terugsturen voor eigen rekening": "Return shipping at your cost",
   "Retourneren": "Returns",
-  "Retourneren, 30 dagen bedenktijd en gratis omruilen | SenseGlow": "Returns, 30 days to decide and free exchanges | SenseGlow",
+  "Retourneren, 30 dagen bedenktijd | SenseGlow": "Returns, 30 days to decide | SenseGlow",
   "Return to Home": "Return to Home",
   "Saaie, statische LED-strip": "Boring, static LED strip",
   "Schakel lamp uit": "Turn the lamp off",
@@ -900,5 +900,12 @@
   "Dat hangt af van hoe vaak de lamp aangaat. Je laadt hem op via USB-C.": "That depends on how often the lamp switches on. You charge it via USB-C.",
   "Overdag opladen in de zon, 's nachts licht": "Charges in the sun by day, light at night",
   "Ideaal voor huurwoningen.": "Ideal for rental homes.",
-  "Laatst bijgewerkt: 15 juni 2026": "Last updated: 15 June 2026"
+  "Laatst bijgewerkt: 15 juni 2026": "Last updated: 15 June 2026",
+  "Niet tevreden? 30 dagen bedenktijd. Terugsturen naar ons adres in Nederland: je betaalt alleen de Nederlandse verzendkosten.": "Not satisfied? 30 days to decide. Return to our address in the Netherlands: you only pay Dutch shipping costs.",
+  "Retour binnen Nederland": "Return within the Netherlands",
+  "Je stuurt terug naar ons adres in Kimswerd en betaalt alleen de Nederlandse verzendkosten. Defect of verkeerd geleverd? Dan betalen wij.": "You return to our address in Kimswerd and only pay Dutch shipping costs. Defective or wrong item? Then we pay.",
+  "Bestelnummer of track-code bij de hand? Volg je pakket via onze volgpagina.": "Order number or tracking code at hand? Follow your package via our tracking page.",
+  "De vervoerder bezorgt": "The carrier delivers",
+  "Deze pagina bestaat niet (meer)": "This page does not exist (anymore)",
+  "Naar de homepage": "Go to the homepage"
 }

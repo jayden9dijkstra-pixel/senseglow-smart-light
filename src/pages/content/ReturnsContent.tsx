@@ -29,7 +29,7 @@ export const ReturnsContent = () => {
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { icon: RotateCcw, title: `${RETURN_DAYS} dagen retour`, sub: "Bovenop je wettelijke 14 dagen." },
-              { icon: Euro, title: "Terugsturen voor eigen rekening", sub: "Behalve als het product defect of verkeerd geleverd is." },
+              { icon: Euro, title: "Retour binnen Nederland", sub: "Je stuurt terug naar ons adres in Kimswerd en betaalt alleen de Nederlandse verzendkosten. Defect of verkeerd geleverd? Dan betalen wij." },
               { icon: FileText, title: "Modelformulier beschikbaar", sub: "Verplicht volgens NL-recht." },
             ].map(({ icon: Icon, title, sub }) => (
               <Card key={title} className="border-foreground/10 bg-background">

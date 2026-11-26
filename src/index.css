@@ -396,3 +396,5 @@ html {
     outline-offset: 2px;
   }
 }
+
+body[data-not-found="true"] [data-bf-banner] { display: none; }

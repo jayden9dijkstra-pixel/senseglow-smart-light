@@ -450,7 +450,7 @@
   "Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit is een post- en retouradres, geen bezoekadres of winkel. De verzendkosten voor het terugsturen zijn voor jou, behalve als het product defect of verkeerd geleverd is.": "Adresse de retour : SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Il s'agit d'une adresse postale et de retour, pas d'un lieu de visite ni d'un magasin. Les frais d'envoi du retour sont à votre charge, sauf si le produit est défectueux ou a été mal livré.",
   "Terugsturen voor eigen rekening": "Renvoi à vos frais",
   "Retourneren": "Retour",
-  "Retourneren, 30 dagen bedenktijd en gratis omruilen | SenseGlow": "Retours, 30 jours de réflexion et échange gratuit | SenseGlow",
+  "Retourneren, 30 dagen bedenktijd | SenseGlow": "Retours, 30 jours de réflexion | SenseGlow",
   "Return to Home": "Retour à l'accueil",
   "Saaie, statische LED-strip": "Bandeau LED statique et ennuyeux",
   "Schakel lamp uit": "Éteindre la lampe",
@@ -830,5 +830,12 @@
   "Dat hangt af van hoe vaak de lamp aangaat. Je laadt hem op via USB-C.": "Cela dépend de la fréquence à laquelle la lampe s'allume. Vous la rechargez en USB-C.",
   "Overdag opladen in de zon, 's nachts licht": "Se recharge au soleil le jour, éclaire la nuit",
   "Ideaal voor huurwoningen.": "Idéal pour les logements en location.",
-  "Laatst bijgewerkt: 15 juni 2026": "Dernière mise à jour: 15 juin 2026"
+  "Laatst bijgewerkt: 15 juni 2026": "Dernière mise à jour: 15 juin 2026",
+  "Niet tevreden? 30 dagen bedenktijd. Terugsturen naar ons adres in Nederland: je betaalt alleen de Nederlandse verzendkosten.": "Pas satisfait ? 30 jours de réflexion. Renvoi à notre adresse aux Pays-Bas : vous ne payez que les frais d'envoi néerlandais.",
+  "Retour binnen Nederland": "Retour aux Pays-Bas",
+  "Je stuurt terug naar ons adres in Kimswerd en betaalt alleen de Nederlandse verzendkosten. Defect of verkeerd geleverd? Dan betalen wij.": "Vous renvoyez à notre adresse à Kimswerd et ne payez que les frais d'envoi néerlandais. Produit défectueux ou erroné ? Nous payons.",
+  "Bestelnummer of track-code bij de hand? Volg je pakket via onze volgpagina.": "Numéro de commande ou code de suivi ? Suivez votre colis via notre page de suivi.",
+  "De vervoerder bezorgt": "Le transporteur livre",
+  "Deze pagina bestaat niet (meer)": "Cette page n'existe pas (plus)",
+  "Naar de homepage": "Vers la page d'accueil"
 }

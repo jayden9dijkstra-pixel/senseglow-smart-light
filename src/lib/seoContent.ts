@@ -59,7 +59,7 @@ export const ROUTE_SEO: Record<string, SeoEntry> = {
       "Bekijk de status van je SenseGlow bestelling. Vul je ordernummer en e-mailadres in en zie direct waar je pakket is.",
   },
   "/retourneren": {
-    title: "Retourneren, 30 dagen bedenktijd en gratis omruilen | SenseGlow",
+    title: "Retourneren, 30 dagen bedenktijd | SenseGlow",
     description:
       "Niet tevreden? Je hebt 30 dagen bedenktijd om je SenseGlow te retourneren. Lees hier hoe je retour aanmeldt, terugbetaling ontvangt en producten omruilt.",
   },

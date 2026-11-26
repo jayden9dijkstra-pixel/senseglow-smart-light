@@ -458,7 +458,7 @@ function DirectRiskReversal() {
     <div className="space-y-1">
       <ul className="space-y-1 text-[15px] leading-snug text-foreground">
         <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span><span className="mr-1 rounded bg-[#FFB3C7] px-1 text-xs font-bold text-[#0B051D]">Klarna</span>Achteraf betalen, of met iDEAL</span></li>
-        <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span>Niet tevreden? 30 dagen bedenktijd en je geld terug</span></li>
+        <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span>Niet tevreden? 30 dagen bedenktijd. Terugsturen naar ons adres in Nederland: je betaalt alleen de Nederlandse verzendkosten.</span></li>
         <li className="flex items-start gap-2"><Check aria-hidden className="mt-0.5 h-4 w-4 flex-none text-primary" /><span>{trapDirectTrust().replace(" · 30 dagen retour", "")}, gratis verzending in NL en BE</span></li>
       </ul>
       <GoogleReviewLine />

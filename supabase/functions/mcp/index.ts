@@ -223,7 +223,7 @@ import { z as z4 } from "npm:zod@^4.4.3";
 
 // src/lib/mcp/private-data.ts
 import { z as z3 } from "npm:zod@^4.4.3";
-var SUPABASE_URL = "https://bepcnohdxsoxhdjlviqu.supabase.co";
+var SUPABASE_URL = "https://c--495b958f-3504-47e7-a019-53d52356d924-prod.lovable.cloud";
 var ANON_KEY = "sb_publishable_QI0uxB61jB3uzWSvX9ogmA_7DIvx3ts";
 var MAX_DAYS = 90;
 var MAX_ROWS = 250;

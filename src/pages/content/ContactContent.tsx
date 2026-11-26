@@ -54,7 +54,7 @@ export const ContactContent = () => {
                 </div>
                 <h3 className="font-semibold text-xl">Bestelling volgen</h3>
                 <p className="text-sm text-foreground/75">
-                  Bestelnummer of track-code bij de hand? Volg je pakket direct via DHL.
+                  Bestelnummer of track-code bij de hand? Volg je pakket via onze volgpagina.
                 </p>
                 <Button
                   onClick={() => navigate("/volg-je-bestelling")}
