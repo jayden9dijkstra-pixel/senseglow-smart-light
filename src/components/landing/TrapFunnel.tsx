@@ -41,7 +41,7 @@ function orderImages(images: Img[]): Img[] {
  * Koopblok van de Wall Lamp: setkaarten (4 of 8), kleur, rode prijs uit Shopify (compare-at), één gloedknop.
  * Gebruikt op de trap-advertentiepagina's en op de Wall Lamp-productpagina.
  */
-export function TrapFunnelPanel({ product, title, sub, buttonRef, path }: { product: ShopifyProduct | undefined; title: string; sub?: string; buttonRef?: React.RefObject<HTMLButtonElement>; path?: string }) {
+export function TrapFunnelPanel({ product, title, sub, buttonRef, path, onVariantImage }: { product: ShopifyProduct | undefined; title: string; sub?: string; buttonRef?: React.RefObject<HTMLButtonElement>; path?: string; onVariantImage?: (url: string | null) => void }) {
   const now = useOfferDate();
   const addItem = useCartStore((s) => s.addItem);
   const variants = useMemo(() => product?.node.variants.edges.map((e) => e.node) ?? [], [product]);
@@ -58,6 +58,13 @@ export function TrapFunnelPanel({ product, title, sub, buttonRef, path }: { prod
   const btnRef = buttonRef ?? ownRef;
   const [showSticky, setShowSticky] = useState(false);
   const viewed = useRef<string | null>(null);
+  // Alleen na een keuze van de bezoeker de variantfoto doorgeven; bij laden blijft foto 1 staan.
+  const pickReady = useRef(false);
+  useEffect(() => {
+    if (!pickReady.current) { pickReady.current = true; return; }
+    onVariantImage?.(variant?.image?.url ?? null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [color, set]);
 
   useEffect(() => {
     if (!path || !product || !variant || viewed.current === variant.id) return;

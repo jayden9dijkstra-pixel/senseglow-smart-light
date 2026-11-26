@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Activity, BatteryCharging, Droplets, Hand, Lightbulb, Magnet, Pointer, RotateCcw, ShieldCheck, Sun, Truck } from "lucide-react";
 import type { ShopifyProduct } from "@/lib/shopify";
 import type { Benefit, BenefitIcon } from "@/lib/productBlueprint";
@@ -43,8 +43,16 @@ export function findVariant(variants: Variant[], color: string, size: string) {
 }
 
 /* ---------- galerij ---------- */
-export function FunnelGallery({ images, title, chips = [], mobileAspect = "aspect-square" }: { images: Img[]; title: string; chips?: string[]; mobileAspect?: string }) {
+export function FunnelGallery({ images, title, chips = [], mobileAspect = "aspect-square", activeUrl = null }: { images: Img[]; title: string; chips?: string[]; mobileAspect?: string; activeUrl?: string | null }) {
   const [active, setActive] = useState(0);
+  // Na een variantkeuze springt de hoofdfoto naar die variantfoto uit dezelfde galerij.
+  useEffect(() => {
+    if (!activeUrl) return;
+    const base = (u: string) => u.split("?")[0];
+    const idx = images.findIndex((im) => base(im.url) === base(activeUrl));
+    if (idx >= 0) setActive(idx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeUrl, images.length]);
   const main = images[Math.min(active, images.length - 1)];
   if (!main) return <div className={`${mobileAspect} w-full animate-pulse rounded-3xl bg-secondary md:aspect-square`} />;
   return (

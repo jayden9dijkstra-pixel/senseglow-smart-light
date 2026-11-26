@@ -33,6 +33,7 @@ export function ProductFunnelHero({
   const offer = isOfferProduct(handle);
   const variants = product.node.variants.edges.map((e) => e.node);
   const current = variant ?? variants[0];
+  const [pickedImage, setPickedImage] = useState<string | null>(null);
   const images = product.node.images?.edges?.map((e) => e.node) ?? [];
   const btnRef = useRef<HTMLButtonElement>(null);
   const [showSticky, setShowSticky] = useState(false);
@@ -78,10 +79,10 @@ export function ProductFunnelHero({
     <section id="kopen" className="container max-w-6xl scroll-mt-24 pb-6 pt-4 md:pt-10">
       <div className="grid gap-6 md:grid-cols-2 md:items-start md:gap-12">
         <div className="min-w-0 md:sticky md:top-24">
-          <FunnelGallery images={images} title={product.node.title} chips={CHIPS[handle] ?? []} />
+          <FunnelGallery images={images} title={product.node.title} chips={CHIPS[handle] ?? []} activeUrl={pickedImage} />
         </div>
         {handle === STEP_PRODUCT_HANDLE ? (
-          <TrapFunnelPanel product={product} title={cleanTitle(product.node.title)} sub={subtitle} buttonRef={btnRef} />
+          <TrapFunnelPanel product={product} title={cleanTitle(product.node.title)} sub={subtitle} buttonRef={btnRef} onVariantImage={setPickedImage} />
         ) : (
           <ProductFunnelPanel
             product={product}
@@ -89,7 +90,10 @@ export function ProductFunnelHero({
             sub={subtitle}
             highlights={blueprintFor(handle)?.benefits ?? []}
             variant={current}
-            onVariantChange={onVariantChange}
+            onVariantChange={(v) => {
+              setPickedImage(v.image?.url ?? null);
+              onVariantChange(v);
+            }}
             qty={qty}
             onQtyChange={onQtyChange}
             onAdd={add}
