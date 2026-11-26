@@ -8,7 +8,7 @@ interface FinalProductCTAProps {
 
 export const FinalProductCTA = ({
   headline = "Ontdek SenseGlow™",
-  subtext = "Gratis verzending NL/BE • 30 dagen gratis retour",
+  subtext = "Gratis verzending NL/BE • 30 dagen retour",
   ctaLabel = "Bekijk SenseGlow",
 }: FinalProductCTAProps) => {
   const scrollToTop = () => {

@@ -124,6 +124,6 @@ export const HOME_FAQS = [
   {
     question: "Mag ik retourneren als het niet bevalt?",
     answer:
-      "Ja, 30 dagen lang, zonder opgaaf van reden. De retourkosten zijn voor onze rekening. Stuur het product in originele staat terug naar Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres) en je hebt binnen 14 dagen je geld retour.",
+      "Ja, 30 dagen lang, zonder opgaaf van reden. Je stuurt het product in originele staat terug naar Tolheksleane 4A, 8821 MD Kimswerd (post- en retouradres); de verzendkosten voor het terugsturen zijn voor jou, behalve als het product defect of verkeerd geleverd is. Je krijgt binnen 14 dagen je geld terug.",
   },
 ];

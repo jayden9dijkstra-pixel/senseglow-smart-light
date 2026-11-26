@@ -29,5 +29,5 @@ export function getProductFaqs(productFaqs: ProductFaq[] | undefined): ProductFa
 /** Verzend- en retourinfo op elke productpagina (ook in de vooraf gerenderde HTML). */
 export const SHIPPING_RETURNS = [
   "Gratis bezorgd. Levering in 7-14 werkdagen",
-  "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. 30 dagen retour, retourkosten zijn voor ons. Je wettelijke herroepingsrecht van 14 dagen blijft gelden.",
+  "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. 30 dagen retour; de verzendkosten voor het terugsturen zijn voor jou, behalve bij een defect of verkeerde levering. Je wettelijke herroepingsrecht van 14 dagen blijft gelden.",
 ];

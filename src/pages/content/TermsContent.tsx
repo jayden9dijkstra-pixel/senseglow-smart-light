@@ -27,7 +27,7 @@ export const TermsContent = () => {
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">Algemene Voorwaarden</h1>
             <p className="text-sm text-foreground/75">
-              Laatst bijgewerkt: 15 juni 2026
+              Laatst bijgewerkt: 26 november 2026
             </p>
           </div>
 
@@ -54,11 +54,11 @@ export const TermsContent = () => {
           </Article>
 
           <Article n={5} title="Prijzen en betaling">
-            <p>Alle prijzen zijn in euro's en inclusief 21% BTW, exclusief verzendkosten (verzending is gratis naar Nederland en België). Betaling vindt plaats via de op de website aangeboden betaalmethoden. SenseGlow gebruikt erkende betaalproviders; betaalgegevens worden niet door SenseGlow zelf opgeslagen.</p>
+            <p>Alle prijzen zijn in euro's en inclusief 21% BTW; verzending is gratis binnen Nederland en België. Betaling vindt plaats via de op de website aangeboden betaalmethoden. SenseGlow gebruikt erkende betaalproviders; betaalgegevens worden niet door SenseGlow zelf opgeslagen.</p>
           </Article>
 
           <Article n={6} title="Levering">
-            <p>Levering in 7-14 werkdagen. SenseGlow levert aan adressen in Nederland en België; verzending naar beide landen is gratis. Levering buiten Nederland en België is op dit moment niet beschikbaar.</p>
+            <p>SenseGlow verwerkt bestellingen binnen 1-3 werkdagen. De bezorgtijd is 7-14 werkdagen na de bestelling, inclusief verwerking, via DHL. SenseGlow levert in Nederland en België.</p>
             <p>Het risico van beschadiging of vermissing van producten berust bij SenseGlow tot het moment van bezorging aan de consument.</p>
           </Article>
 
@@ -69,7 +69,7 @@ export const TermsContent = () => {
           </Article>
 
           <Article n={8} title="Kosten van retournering">
-            <p>De kosten van het retourneren komen voor rekening van SenseGlow. Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit adres is uitsluitend een post- en retouradres en geen bezoekadres.</p>
+            <p>De rechtstreekse kosten van het terugsturen komen voor rekening van de consument, behalve als het product defect of verkeerd geleverd is. Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit adres is uitsluitend een post- en retouradres en geen bezoekadres.</p>
           </Article>
 
           <Article n={9} title="Terugbetaling">

@@ -29,7 +29,7 @@ export const ReturnsContent = () => {
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { icon: RotateCcw, title: `${RETURN_DAYS} dagen retour`, sub: "Bovenop je wettelijke 14 dagen." },
-              { icon: Euro, title: "Retourkosten door ons", sub: "Wij betalen de retourzending, ook zonder defect." },
+              { icon: Euro, title: "Terugsturen voor eigen rekening", sub: "Behalve als het product defect of verkeerd geleverd is." },
               { icon: FileText, title: "Modelformulier beschikbaar", sub: "Verplicht volgens NL-recht." },
             ].map(({ icon: Icon, title, sub }) => (
               <Card key={title} className="border-foreground/10 bg-background">
@@ -51,7 +51,7 @@ export const ReturnsContent = () => {
               {[
                 { n: "1", title: "Mail naar support@senseglow.shop", body: "Vermeld je bestelnummer en welk product je wilt retourneren. Je krijgt binnen 24u werkdagen een retourbevestiging met instructies." },
                 { n: "2", title: "Verpak het product", body: "Bij voorkeur in de originele verpakking. Zorg dat het product onbeschadigd is en compleet (lampen, kabels, montagestrip)." },
-                { n: "3", title: "Verzend terug", body: "Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit is een post- en retouradres, geen bezoekadres of winkel. De retourkosten zijn voor onze rekening; in de retourbevestiging staat hoe je een label krijgt of de kosten vergoed worden." },
+                { n: "3", title: "Verzend terug", body: "Retouradres: SenseGlow (Jayden Ecom), Tolheksleane 4A, 8821 MD Kimswerd. Dit is een post- en retouradres, geen bezoekadres of winkel. De verzendkosten voor het terugsturen zijn voor jou, behalve als het product defect of verkeerd geleverd is." },
                 { n: "4", title: "Wij verwerken en betalen terug", body: "Binnen 14 dagen na ontvangst van de retourzending krijg je het volledige aankoopbedrag terug op dezelfde betaalmethode die je gebruikte bij de bestelling." },
               ].map(({ n, title, body }) => (
                 <Card key={n} className="border-foreground/10 bg-background">

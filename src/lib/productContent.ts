@@ -29,7 +29,7 @@ export interface ProductPageContent {
   finalCta: { headline: string; subtext: string; cta: string };
 }
 
-const TRUST_SUBTEXT = "Gratis verzending NL/BE • 30 dagen gratis retour • Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow";
+const TRUST_SUBTEXT = "Gratis verzending NL/BE • 30 dagen retour • Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow";
 
 // ─── Ambient Motion Bar ────────────────────────────────
 const AMBIENT: ProductPageContent = {

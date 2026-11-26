@@ -76,7 +76,7 @@ export function TrustLine() {
       <ul className="space-y-2 text-base text-foreground">
         <li className="flex items-center gap-3"><Truck className="h-5 w-5 flex-none text-primary" aria-hidden />{deliveryBetweenText(new Date(), locale)}</li>
         <li className="flex items-center gap-3"><Package className="h-5 w-5 flex-none text-primary" aria-hidden />{locale === "en" ? "Free shipping" : locale === "fr" ? "Livraison gratuite" : "Gratis verzending"}</li>
-        <li className="flex items-center gap-3"><RotateCcw className="h-5 w-5 flex-none text-primary" aria-hidden />{locale === "en" ? "30-day returns, return shipping on us" : locale === "fr" ? "Retour sous 30 jours, frais de retour offerts" : "30 dagen retour, retourzending betalen wij"}</li>
+        <li className="flex items-center gap-3"><RotateCcw className="h-5 w-5 flex-none text-primary" aria-hidden />{locale === "en" ? "30-day returns" : locale === "fr" ? "Retour sous 30 jours" : "30 dagen retour"}</li>
         <li className="flex items-center gap-3"><ShieldCheck className="h-5 w-5 flex-none text-primary" aria-hidden />{locale === "en" ? "1 year extra warranty" : locale === "fr" ? "1 an de garantie supplémentaire" : "1 jaar extra garantie"}</li>
       </ul>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-foreground/10 pt-3">

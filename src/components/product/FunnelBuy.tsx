@@ -199,7 +199,7 @@ export function RiskBlock() {
   return (
     <ul className="lift space-y-2 rounded-3xl bg-white p-5 text-base text-foreground">
       <li className="flex gap-3"><Truck aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Bezorgd tussen <strong>{formatDeliveryDate(from)}</strong> en <strong>{formatDeliveryDate(to)}</strong>, gratis</span></li>
-      <li className="flex gap-3"><RotateCcw aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Niet tevreden? 30 dagen geld terug, retour op onze kosten</span></li>
+      <li className="flex gap-3"><RotateCcw aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>Niet tevreden? 30 dagen bedenktijd en je geld terug</span></li>
       <li className="flex gap-3"><ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 flex-none" /><span>1 jaar extra garantie bovenop je wettelijke garantie</span></li>
       <li className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
         <span className="rounded bg-[#FFB3C7] px-1.5 py-0.5 text-sm font-bold text-[#0B051D]">Klarna</span>

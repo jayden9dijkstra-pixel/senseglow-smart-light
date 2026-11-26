@@ -12,7 +12,7 @@ const faqs = HOME_FAQS;
 const trustIcons = [
   { icon: Shield, text: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow" },
   { icon: Truck, text: "Gratis verzending" },
-  { icon: RotateCcw, text: "30 dagen gratis retour" },
+  { icon: RotateCcw, text: "30 dagen retour" },
 ];
 
 export const FAQSection = ({ showTrust = true }: { showTrust?: boolean }) => {

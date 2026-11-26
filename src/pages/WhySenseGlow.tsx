@@ -13,7 +13,7 @@ const PILLARS = [
   {
     icon: ShieldCheck,
     title: "Garantie",
-    body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. 30 dagen retour, retourkosten zijn voor ons.",
+    body: "Naast je wettelijke garantie: 1 jaar extra functionele garantie van SenseGlow. 30 dagen retour; de verzendkosten voor het terugsturen zijn voor jou, behalve bij een defect of verkeerde levering.",
   },
   {
     icon: MessageCircle,
